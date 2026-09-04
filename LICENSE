@@ -1,0 +1,75 @@
+DevKit Free Use License 1.0
+
+Copyright 2026 Alex (Araneus84) and DevKit contributors.
+
+1. Scope and acceptance
+
+This license applies to DevKit's application code, documentation, templates,
+and other project material supplied under these terms (the "Software").
+Third-party material identified under separate licenses is excluded.
+Exercising the permissions below constitutes acceptance of these terms.
+
+2. Permitted use
+
+Permission is granted, without charge, to use, copy, inspect, modify and
+redistribute the Software, subject to this license. Personal, educational,
+nonprofit, internal business and professional use are permitted, including
+use by employees and contractors in paid work and client projects.
+
+3. No sale or monetization of the Software
+
+Without separate written permission from the copyright holder, you may not:
+
+(a) sell, rent, sublicense for a fee, or charge for copies, downloads,
+    distribution of, or access to the Software;
+(b) offer the Software as a paid hosted service, subscription or feature,
+    or monetize access to it through advertising or sponsorship;
+(c) distribute or provide the Software as part of a paid product or service,
+    including a paid bundle, even if the Software is described as free; or
+(d) do any of the above with a modified version or derivative of the Software.
+
+These restrictions concern commercializing the Software itself. They do not
+prohibit using it internally in a business or using it as a tool to deliver
+professional services, scripts or configurations to clients. Charging for
+your own work or generated output is permitted under section 4, provided you
+are not supplying the Software itself as a paid deliverable or service.
+
+4. User content and generated output
+
+You retain your rights in files, code and data you import or write. This
+license imposes no restrictions on the use, modification, distribution or
+sale of commands, scripts, configurations and other output you generate
+with the Software. To the extent the copyright holders have rights in
+template or example fragments incorporated into that output, they grant
+you a perpetual, worldwide, nonexclusive, royalty-free license to use,
+modify, distribute, sublicense and sell those fragments as part of the
+output. Output does not mean a copy or derivative of the DevKit application.
+Separate rights in third-party material still apply.
+
+5. Redistribution and attribution
+
+Redistributed copies and derivatives must include this license, the NOTICE
+file, and applicable third-party notices. Clearly identify any modifications
+you distribute. Keep the Software and derivatives under these terms; you may
+not grant recipients permission to monetize them contrary to section 3.
+No trademark rights or right to imply the original author's endorsement are
+granted. This license does not restrict rights provided by applicable law.
+
+6. Termination
+
+The permissions granted here terminate automatically if you violate these
+terms. They may be reinstated by the copyright holder in writing.
+
+7. No warranty or liability
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT
+HOLDERS AND CONTRIBUTORS ARE NOT LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+8. Additional permission
+
+The copyright holder may grant separate permissions. Contact the maintainer
+through https://github.com/Araneus84/devkit for licensing requests.

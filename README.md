@@ -6,6 +6,12 @@ DevKit is a browser-based command reference and file builder for sysadmins, DevO
 
 The hosted app uses browser-local storage. Drafts do not automatically synchronize between devices or between the local-file and hosted editions. Use the app’s backup/export and restore/import controls to move your work. Download the ZIP or single-file edition for offline use.
 
+## License and responsible use
+
+DevKit uses the [DevKit Free Use License 1.0](LICENSE), with notices in [NOTICE](NOTICE). You may use it personally, at work, and for paid client projects. You may use or sell the scripts/configurations you generate. You may share or modify DevKit under its terms, but may not sell the application, include it in a paid product, charge for hosted access, or monetize copies/derivatives without separate written permission.
+
+This is a custom **source-available** license, not an OSI open-source license. Third-party libraries retain their MIT terms. See [SECURITY.md](SECURITY.md) for privacy, review scope, limits and private vulnerability reporting. Browser drafts and exported backups are not encrypted; use placeholders instead of real credentials.
+
 ## Publishing updates
 
 GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. After editing source files, run `node tools/build.cjs`, commit source and `dist/devkit.html`, then push to `main`. Pages publishes the updated folder edition automatically.
@@ -194,7 +200,7 @@ Requires a modern browser with native dialog elements, JavaScript, local file ac
 
 ## Third-party code
 
-js-yaml 4.1.1 is bundled under its MIT license. See `vendor/LICENSE.js-yaml.txt`.
+js-yaml 4.3.2 is bundled under its MIT license. See `vendor/LICENSE.js-yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==`.
 
 Lezer's Python parser and its common, LR and highlight packages are bundled locally under MIT licenses; see `vendor/LICENSE.lezer.txt` for versions and copyright notices. There are no runtime parser downloads.
 

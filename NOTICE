@@ -1,0 +1,11 @@
+Copyright 2026 Alex (Araneus84), DevKit contributors.
+DevKit is licensed under the DevKit Free Use License 1.0. See LICENSE.
+Personal and workplace use are permitted. Selling or monetizing DevKit,
+including modified versions, requires separate written permission.
+Generated output may be used commercially. See LICENSE for the full terms.
+
+Third-party libraries retain their separate MIT licenses:
+- js-yaml 4.3.2: vendor/LICENSE.js-yaml.txt
+- Lezer Python parser and supporting packages: vendor/LICENSE.lezer.txt
+
+These third-party components are not relicensed under DevKit's terms.
