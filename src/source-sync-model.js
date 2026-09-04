@@ -43,10 +43,11 @@ function sxHclTokens(text){const tokens=[];let i=0;while(i<text.length){const st
  const word=/^[A-Za-z_][A-Za-z0-9_-]*/.exec(text.slice(i));if(word){i+=word[0].length;tokens.push({kind:'word',text:word[0],start,end:i});}else{tokens.push({kind:c,text:c,start,end:++i});}}
  const stack=[];for(const t of tokens){if(['{','[','('].includes(t.kind))stack.push(t.kind);if(['}',']',')'].includes(t.kind)&&stack.pop()!=={'}':'{',']':'[',')':'('}[t.kind])throw Error('Check matching braces, brackets and parentheses.');}if(stack.length)throw Error('Finish the open brace, bracket or parenthesis.');return tokens;
 }
+function sxHclLiteral(value){if(typeof value==='string')return value.replace(/\$\$\{/g,'${').replace(/%%\{/g,'%{');if(Array.isArray(value))return value.map(sxHclLiteral);if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,sxHclLiteral(v)]));return value;}
 function sxTerraform(text){
  const p=DD_PROFILES.terraform,tokens=sxHclTokens(text);let i=0,count=0;
  function node(type,values,slots){if(++count>1500)throw Error('Too many blocks.');return ddNode(p,type,values,slots);}
- function value(key,raw){if(/(?<!\$)\$\{|(?<!%)%\{/.test(raw))return node('expression',{key,value:raw});try{if(/^"/.test(raw)){return node('text',{key,value:JSON.parse(raw).replace(/\$\$\{/g,'${').replace(/%%\{/g,'%{')});}const parsed=JSON.parse(raw);return ddFromValue(p,parsed,key);}catch{}return node('expression',{key,value:raw});}
+ function value(key,raw){if(/(?<!\$)\$\{|(?<!%)%\{/.test(raw))return node('expression',{key,value:raw});try{if(/^"/.test(raw)){return node('text',{key,value:JSON.parse(raw).replace(/\$\$\{/g,'${').replace(/%%\{/g,'%{')});}const parsed=sxHclLiteral(JSON.parse(raw));return ddFromValue(p,parsed,key);}catch{}return node('expression',{key,value:raw});}
  function body(root=false,depth=0){if(depth>20)throw Error('Use at most 20 nested levels.');const out=[];while(i<tokens.length&&tokens[i].kind!=='}'){
  const first=tokens[i];if(first.kind==='comment'){out.push(node(SX_RAW,{text:first.text}));i++;continue;}
  const start=i;let j=i+1;while(j<tokens.length&&!['{','=','}','comment'].includes(tokens[j].kind)&&!text.slice(tokens[j-1].end,tokens[j].start).includes('\n'))j++;

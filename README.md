@@ -26,6 +26,21 @@ Choose **Deep block editors** at the top of a tool's workbench to build a whole 
 
 ## Deep editors
 
+### Built-in syntax round trips
+
+Version 3.7 improves code-to-block reconstruction instead of relying on a single edited field:
+
+- Dockerfile: every original instruction type, ENV variables, COPY shell/JSON forms, shell/exec RUN/CMD/ENTRYPOINT, continuation lines, build ARGs, platform stages, COPY options/multiple sources and port protocols.
+- Bash and PowerShell: the library’s functions, conditions, loops, arrays, commands/parameters and pipelines; PowerShell try/catch/finally. Preambles are preserved when importing scripts without the default startup settings.
+- SQL: the library’s SELECT clauses, nested filters, joins, CTEs, INSERT, UPDATE, DELETE and CREATE TABLE.
+- Jenkins: the library’s Declarative Pipeline stages, parallel branches, environment/credentials, retry/directory steps and post conditions.
+- GitHub Actions/GitLab CI: pipelines expressed by the platform builders return to their specialized blocks. Other valid YAML retains generic data blocks rather than losing vendor-specific keys.
+- Terraform: object and array expressions return to typed nested values when representable.
+
+These adapters do not implement every external language/vendor grammar. Unknown directives, heredocs, custom plugins and other unsupported forms remain as editable code. Jenkins/CI specialized conversion is accepted only when regeneration preserves the supported source/data; unsupported additional settings remain intact in the fallback view. Python and Ansible retain their dedicated parsers.
+
+Validation: `node tests/roundtrip-adapters.cjs` tests fresh-source reconstruction and emitted output; `node tests/roundtrip-browser.cjs` tests automatic sync, multiple edits, reorder/undo, error recovery, draft reload and both app editions.
+
 ### Compact editors and empty starts
 
 New deep-editor drafts start empty. Bash starts with `#!/usr/bin/env bash`; Python starts with `#!/usr/bin/env python3`. Existing saved drafts are restored. **New blank file** clears the working page (Undo is available); **Load starter** explicitly loads an example. Explicitly selected recipes/examples still open their chosen content. Ansible new files start blank and offer a visible first-field suggestion.
@@ -42,7 +57,7 @@ Every deep editor, quick recipe, Ansible builder and original command modal now 
 
 - **Terraform:** typed configuration rebuilds provider/resource/variable/module blocks, arguments and nested blocks. Expressions remain expressions. Comments are retained as code blocks; heredoc-containing blocks are kept as custom code to preserve their contents.
 - **YAML/JSON and Ansible:** text rebuilds nested data blocks. Invalid or incomplete documents keep the typed text and last valid blocks; fix the text before resuming structured editing. Deep editors also offer **Keep as Custom code**. YAML comments/anchors and original formatting remain in the code until a block edit regenerates YAML.
-- **Bash, PowerShell, SQL, Dockerfile and Jenkins:** edits that exactly match a supported field update that field. Existing recognized blocks are retained where possible. Simple new Bash commands, PowerShell variables/output, SELECT queries and Dockerfile instructions become structured blocks. Other syntax is preserved in editable **Custom code** blocks; this is not a complete parser for every language.
+- **Bash, PowerShell, SQL, Dockerfile and Jenkins:** edits that exactly match a supported field update that field. Existing recognized blocks are retained where possible. Simple new Bash commands, PowerShell variables/output, SELECT queries and Dockerfile instructions become structured blocks. The supported nested structures are covered by the adapters above; other syntax is preserved in editable **Custom code** blocks.
 - **CI/CD YAML:** known field edits keep specialized controls; broader source edits use nested YAML data blocks so extra vendor keys remain editable. Jenkins syntax outside supported fields is retained as custom code.
 - **Quick commands:** supported scalar edits retain recipe fields. Other changes use source-line blocks and keep the output filename. The original command modal uses a custom command block for syntax outside its options.
 
