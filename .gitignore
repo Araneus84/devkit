@@ -1,0 +1,9 @@
+# Local development files
+node_modules/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+*.log
+playwright-report/
+test-results/

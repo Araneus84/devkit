@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevKit — Portable Workbench</title>
+<link rel="stylesheet" href="styles/reference.css">
+<link rel="stylesheet" href="styles/ansible-extension.css">
+<link rel="stylesheet" href="styles/ansible-blocks.css">
+<link rel="stylesheet" href="styles/ansible-ux.css">
+<link rel="stylesheet" href="styles/ansible-drag.css">
+<link rel="stylesheet" href="styles/workbench.css">
+<link rel="stylesheet" href="styles/deep-editor.css">
+<link rel="stylesheet" href="styles/file-import.css">
+<link rel="stylesheet" href="styles/python-editor.css">
+<link rel="stylesheet" href="styles/compact-editor.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="icon-btn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Open navigation" title="Open navigation">☰</button>
+  <div class="logo-wrap">
+    <div class="logo-icon">⌘</div>
+    <div class="logo-text">DevKit <span>/ commands</span></div>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Search commands across all sheets..." autocomplete="off" spellcheck="false">
+    <span class="search-kbd">⌘K</span>
+  </div>
+
+  <div class="header-actions">
+    <button class="icon-btn builder-cta" onclick="setSheet('__builder', null)">⚙ <span>Build</span></button>
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+      <span id="theme-icon">🌙</span>
+    </button>
+    <button class="icon-btn" id="history-btn" onclick="togglePanel('history')" title="Copy history">
+      📋
+      <span class="badge" id="history-badge" style="display:none">0</span>
+    </button>
+
+    <!-- Font size slider -->
+    <div class="font-slider-wrap" title="Font size">
+      <span style="font-size:9px">A</span>
+      <input type="range" id="font-slider" min="11" max="17" step="1" value="13"
+        oninput="setFontSize(this.value)" title="Adjust font size">
+      <span style="font-size:13px">A</span>
+    </div>
+
+    <!-- View toggle -->
+    <div class="view-toggle">
+      <button class="view-btn" id="view-comfortable" onclick="setView('comfortable')" title="Comfortable view">☰</button>
+      <button class="view-btn" id="view-compact"     onclick="setView('compact')"     title="Compact view">≡</button>
+      <button class="view-btn" id="view-cards"       onclick="setView('cards')"       title="Card grid view">⊞</button>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar"></div>
+  <div class="sidebar-resizer" id="sidebar-resizer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main" id="main"></div>
+
+</div>
+<div class="mobile-nav-backdrop" id="mobile-nav-backdrop" onclick="toggleMobileNav(false)"></div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <div class="status-item">
+    <div class="status-dot"></div>
+    <span id="status-name">DevKit</span>
+  </div>
+  <div class="status-item" id="status-counts">0 commands</div>
+  <div class="status-spacer"></div>
+  <div class="status-kbd"><kbd>⌘K</kbd> search · <kbd>⚙</kbd> builder · <kbd>Esc</kbd> close · <kbd>⌘B</kbd> sidebar</div>
+</div>
+
+<!-- NOTE EDITOR MODAL -->
+<div class="modal-overlay" id="note-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title">Personal Note</div>
+    <div class="modal-sub" id="note-modal-cmd"></div>
+    <textarea id="note-modal-text" placeholder="Add your notes about this command — context, gotchas, examples..."></textarea>
+    <div class="modal-actions">
+      <button class="btn danger" onclick="deleteNote()">Delete</button>
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveNote()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMAND BUILDER MODAL -->
+<div class="modal-overlay" id="builder-modal" onclick="if(event.target===this)closeBuilder()">
+  <div class="modal builder-modal">
+    <div class="builder-header">
+      <div class="builder-icon">⚙</div>
+      <div class="builder-title-block">
+        <div class="builder-title" id="builder-title">Command Builder</div>
+        <div class="builder-sub" id="builder-sub">Pick the options you need</div>
+      </div>
+    </div>
+    <div class="builder-preview">
+      <span class="builder-preview-label">Preview</span>
+      <span id="builder-preview-text"></span>
+    </div>
+    <div class="builder-body" id="builder-body"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="resetBuilder()">Reset</button>
+      <button class="btn" onclick="closeBuilder()">Cancel</button>
+      <button class="btn primary" onclick="copyBuiltCommand()">Copy command</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY PANEL -->
+<div class="panel" id="history-panel">
+  <div class="panel-header">
+    <div class="panel-title">Copy History</div>
+    <button class="panel-clear" onclick="clearHistory()">Clear all</button>
+    <button class="panel-close" onclick="togglePanel('history')">✕</button>
+  </div>
+  <div class="panel-body" id="history-body"></div>
+</div>
+
+
+
+<script defer src="vendor/js-yaml.min.js"></script>
+<script defer src="vendor/lezer-python.js"></script>
+<script defer src="src/state.js"></script>
+<script defer src="src/command-definitions.js"></script>
+<script defer src="src/reference-data.js"></script>
+<script defer src="src/cicd-data.js"></script>
+<script defer src="src/reference-ui.js"></script>
+<script defer src="src/ansible-extension.js"></script>
+<script defer src="src/ansible-blocks.js"></script>
+<script defer src="src/ansible-ux.js"></script>
+<script defer src="src/ansible-drag.js"></script>
+<script defer src="src/tool-guides.js"></script>
+<script defer src="src/recipe-catalog.js"></script>
+<script defer src="src/workbench.js"></script>
+<script defer src="src/deep-model.js"></script>
+<script defer src="src/deep-editor.js"></script>
+<script defer src="src/deep-hints.js"></script>
+<script defer src="src/file-import.js"></script>
+<script defer src="src/python-model.js"></script>
+<script defer src="src/python-editor.js"></script>
+<script defer src="src/python-ops.js"></script>
+<script defer src="src/cicd-model.js"></script>
+<script defer src="src/cicd-ui.js"></script>
+<script defer src="src/source-sync-model.js"></script>
+<script defer src="src/source-sync-ui.js"></script>
+<script defer src="src/compact-editor.js"></script>
+<script defer src="src/portable.js"></script>
+<script defer src="src/start.js"></script>
+</body>
+</html>

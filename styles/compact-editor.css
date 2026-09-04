@@ -1,0 +1,46 @@
+/* Compact spacing and subdued surfaces, with prominent completion actions. */
+#dk-root .dk-header,#ab-dialog .ab-header{padding:12px 18px}
+#dk-root .dk-header h2,#ab-dialog .ab-header h2{font-size:19px;margin:4px 0}
+#dk-root .dk-header p,#ab-dialog .ab-header p{margin:4px 0;font-size:11px}
+#dk-root .dk-toolbar{padding:8px 14px;gap:5px}
+#dk-root .dk-editor,#dk-root .dk-output{padding:14px}
+#dk-root .dk-field{margin:7px 0;font-size:11px}
+#dk-root .dk-input{padding:7px 9px;border-radius:5px;font-size:12px}
+#dk-root .dk-btn{padding:6px 9px;font-size:11px;border-radius:5px}
+#dk-root .dd-node{margin:5px 0;border-radius:5px;background:transparent}
+#dk-root .dd-node-head{padding:5px 7px;background:color-mix(in srgb,var(--text) 3%,transparent);border-radius:5px}
+#dk-root .dd-node-content{padding:0 9px 8px}
+#dk-root .dd-node-content>.dk-help{margin:7px 0;font-size:10px;line-height:1.5;color:var(--text2)}
+#dk-root .dd-lane{padding-left:8px;margin:8px 0 3px;border-left-width:1px}
+#dk-root .dd-lane-title{margin:7px 0;font-size:10px;letter-spacing:.25px}
+#dk-root .dd-add{margin-top:7px;gap:5px}
+#dk-root .dd-add .primary{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+#dk-root .dd-add .primary:hover{color:var(--accent);border-color:var(--accent)}
+#dk-root .dd-tip{padding:5px 0;border:0;margin:0 0 9px;font-size:10px;line-height:1.5}
+#dk-root .dd-suggestions{margin-top:6px}
+#dk-root .dd-node-head .dk-small{opacity:.65}
+#dk-root .dd-node-head:hover .dk-small,#dk-root .dd-node-head:focus-within .dk-small{opacity:1}
+#ab-dialog .ab-canvas,#ab-dialog .ab-output,#ab-dialog .ab-outline{padding:14px}
+#ab-dialog .ab-field{padding:8px 10px;margin:6px 0;border-radius:5px;background:transparent}
+#ab-dialog .ab-input{padding:7px 9px;font-size:12px}
+#ab-dialog .ab-piece{padding:8px 10px;border-radius:5px}
+#ab-dialog .ab-pieces{gap:5px}
+#ab-dialog .ab-button{padding:6px 9px;font-size:11px}
+#ab-dialog .ab-canvas>h2{font-size:16px;margin:8px 0}
+#ab-dialog .ab-help,#ab-dialog .ab-hint{font-size:11px;line-height:1.5}
+#ab-dialog #au-navigation{margin-bottom:9px}
+#ab-dialog #au-footer{padding:9px 14px;margin:14px -14px 0;box-shadow:none}
+.dx-files{margin:0 0 10px;font-size:11px;color:var(--text2)}
+.dx-files>summary{cursor:pointer;padding:5px 0;width:fit-content}
+.dx-files .df-zone{margin-top:7px;padding:10px}
+.dx-start{margin:0 0 10px;padding:10px;border:1px dashed var(--border);border-radius:6px;font-size:12px;color:var(--text2)}
+.dx-start p{margin:4px 0}
+.dx-completions{border:1px solid var(--accent);border-left:3px solid var(--accent);border-radius:7px;padding:12px;margin:10px 0;background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.dx-completion-title{font-size:13px;color:var(--text)}
+.dx-completions>.dk-help{font-size:11px;margin:5px 0 10px;color:var(--text2)}
+.dx-completion{padding-top:9px;margin-top:9px;border-top:1px solid var(--border)}
+.dx-completion-label{display:block;font-size:12px;font-weight:600;color:var(--text)}
+.dx-completion pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:130px;overflow:auto;padding:10px;border-radius:5px;background:var(--code-bg);color:var(--code);font:12px/1.6 Consolas,monospace;margin:7px 0}
+#ab-dialog .dx-completion .primary{padding:9px 12px;font-size:12px;min-height:36px}
+.dx-completion button:focus-visible,.dx-files summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:760px){#dk-root .dk-editor,#dk-root .dk-output,#ab-dialog .ab-canvas,#ab-dialog .ab-output{padding:10px}.dx-completion button{width:100%}}
