@@ -1,6 +1,6 @@
 # DevKit — portable reference and workbench
 
-**[Download DevKit](https://github.com/Araneus84/devkit/archive/refs/heads/main.zip)** and open `index.html`, or use `dist/devkit.html` for the single-file edition. This repository is private; browser hosting is not enabled yet.
+**[Open DevKit in your browser](https://araneus84.github.io/devkit/)** · [Single-file edition](https://araneus84.github.io/devkit/dist/devkit.html) · [Download for offline use](https://github.com/Araneus84/devkit/archive/refs/heads/main.zip)
 
 DevKit is a browser-based command reference and file builder for sysadmins, DevOps, platform engineers and SREs. It includes Ansible, Terraform, Bash, PowerShell, Python, SQL, containers and separate CI/CD builders. No account or backend is required to use the app.
 
@@ -8,7 +8,7 @@ The hosted app uses browser-local storage. Drafts do not automatically synchroni
 
 ## Publishing updates
 
-Prepared for GitHub Pages from the `main` branch and repository root; enabling public hosting is pending owner approval. The `.nojekyll` file keeps this a plain static site. After editing source files, run `node tools/build.cjs`, commit source and `dist/devkit.html`, then push to `main`. Once Pages is enabled, it publishes the updated folder edition automatically.
+GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. After editing source files, run `node tools/build.cjs`, commit source and `dist/devkit.html`, then push to `main`. Pages publishes the updated folder edition automatically.
 
 
 Open **index.html** in a modern browser. No installation, server, account or internet connection is required. Copy the entire folder to move the app to Windows, macOS or Linux. Unzip downloaded archives first.
