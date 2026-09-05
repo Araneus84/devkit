@@ -15,6 +15,7 @@ const help={
  'python-ops.cjs':'Fix a Python operation definition or generated example.',
  'python-roundtrip.cjs':'Fix Python parse/generate round trips.',
  'python.cjs':'Fix the Python model, package operations, or syntax detection.',
+ 'project-workspace-browser.cjs':'Fix project storage, templates, file trees, tabs, imports, exports, or editor integration.',
  'recipes.cjs':'Fix recipe registration, generated file syntax, or offline assets.',
  'roundtrip-adapters.cjs':'Fix fresh-source reconstruction for the reported language.',
  'roundtrip-browser.cjs':'Fix live code/block reconstruction, history, or draft reload.',
