@@ -23,6 +23,14 @@ For a single file, use **dist/devkit.html**. This is generated from the same sou
 
 ## Using the app
 
+Version 3.8 adds **Saved files** to each tool's workbench. Resume imported files after reload, search, rename, duplicate or delete drafts (deletion has an immediate Undo). **Save as a new copy** creates a separate document. Same-name imports offer **Resume saved draft** or **Import as a new copy**, preserving previous edits. These files live in this browser; export backups to move them elsewhere.
+
+**New blank file** and **Load starter** work even when source syntax is incomplete; Undo restores the source and blocks. Backup imports validate complete editor draft shapes. Damaged existing drafts offer recovery downloads rather than silently replacing their contents. Filenames are checked in both block and source modes. Export status is separate from language validation: exporting is possible for unfinished source, and the target tool remains the final validator.
+
+Enable **Vim controls** above an editable code pane. The preference is optional, saved locally and included in workspace backups. The key guide documents the supported subset: insert/normal modes, motions, line yank/delete/paste, new lines and undo/redo. Mode survives automatic block synchronization. This is a lightweight Vim-style implementation; visual mode, Ex commands, macros and plugins are not implemented. Turn the checkbox off for ordinary textarea editing.
+
+Workspace/reset operations and source-change coordination now use shared functions and explicit Python/source adapters in `src/editor-workspace.js`. Rendering still uses the existing extension layers; this release does not replace the entire UI architecture. `tests/workspace-browser.cjs` covers interrupted workflows and Vim operations in both distributions.
+
 1. Choose a tool in the sidebar, then **Open workbench**.
 2. Select a recipe, fill in its required values, and add optional blocks.
 3. Review the live output. Copy it or download the suggested filename.

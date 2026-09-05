@@ -1,0 +1,23 @@
+/* Optional, deliberately bounded Vim-style textarea controls. No code is executed. */
+let evEnabled=localStorage.getItem('devkit:vim')==='true';
+const evStates=new WeakMap(),evDocuments=new Map();let evRegister='';
+function evAttach(el){if(evStates.has(el))return;const id=el.id+':'+(el.id==='dd-preview'?ddState?.id:el.id==='dk-preview'?dkActive?.id:el.id==='ab-preview'?abState?.kind:currentBuilder?.def?.name);const s=evDocuments.get(id)||{mode:'insert',pending:'',count:'',undo:[],redo:[]};evDocuments.set(id,s);evStates.set(el,s);const row=dkEl('div','dk-actions'),toggle=dkEl('input');toggle.type='checkbox';toggle.checked=evEnabled;toggle.setAttribute('aria-label','Enable Vim controls');const label=dkEl('label','dk-help');label.append(toggle,document.createTextNode(' Vim controls'));const status=dkEl('span','dk-help');row.append(label,status);const help=dkEl('details','dk-help');help.append(dkEl('summary','','Vim key guide'),dkEl('p','','Vim-style subset: Esc normal mode; i/a/I/A insert; h/j/k/l, w/b, 0/$, gg/G move; x delete; dd delete line; yy yank line; p paste line; o/O new line; u undo; Ctrl+R redo. Counts work with motions, x, dd and yy. : commands, macros, visual mode and Vim plugins are not supported. Standard editing is restored when switched off.'));row.append(help);el.before(row);
+ const show=()=>{status.textContent=evEnabled?'VIM · '+s.mode.toUpperCase()+(s.pending?' · '+s.pending:''):'';toggle.checked=evEnabled;};show();toggle.onchange=()=>{evEnabled=toggle.checked;localStorage.setItem('devkit:vim',String(evEnabled));s.mode='insert';show();el.focus();};
+ function snapshot(){s.undo.push({text:el.value,pos:el.selectionStart});if(s.undo.length>80)s.undo.shift();s.redo=[];}
+ function replace(start,end,text){snapshot();el.setRangeText(text,start,end,'end');el.dispatchEvent(new Event('input',{bubbles:true}));}
+ el.addEventListener('beforeinput',()=>{if(evEnabled&&s.mode==='insert')snapshot();});
+ el.addEventListener('keydown',e=>{if(!evEnabled)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();s.mode='normal';s.pending='';s.count='';show();return;}if(s.mode==='insert')return;if(e.ctrlKey&&e.key.toLowerCase()!=='r'||e.metaKey||e.altKey)return;if(e.key==='Tab')return;e.preventDefault();e.stopImmediatePropagation();const text=el.value,pos=el.selectionStart,start=text.lastIndexOf('\n',pos-1)+1,found=text.indexOf('\n',pos),end=found<0?text.length:found;const move=n=>el.setSelectionRange(Math.max(0,Math.min(text.length,n)),Math.max(0,Math.min(text.length,n)));
+ if(/^[1-9]$/.test(e.key)||s.count&&e.key==='0'){s.count+=e.key;return;}const n=Math.min(999,Number(s.count)||1);s.count='';const key=e.key;
+ if(key==='i'||key==='a'||key==='I'||key==='A'){move(key==='a'?pos+1:key==='I'?start:key==='A'?end:pos);s.mode='insert';}
+ else if(key==='h')move(pos-n);else if(key==='l')move(pos+n);else if(key==='0')move(start);else if(key==='$')move(end);
+ else if(key==='j'||key==='k'){const lines=text.split('\n'),line=text.slice(0,pos).split('\n').length-1,target=Math.max(0,Math.min(lines.length-1,line+(key==='j'?n:-n)));move(lines.slice(0,target).reduce((a,l)=>a+l.length+1,0)+Math.min(pos-start,lines[target].length));}
+ else if(key==='w'){let at=pos;for(let i=0;i<n;i++){const m=/\w+\W*|\W+/.exec(text.slice(at));at+=m?m[0].length:0;}move(at);}
+ else if(key==='b'){let at=pos;for(let i=0;i<n;i++){const m=/\w+\W*$|\W+$/.exec(text.slice(0,at));at=m?m.index:0;}move(at);}
+ else if(key==='G')move(text.length);else if(key==='g'&&s.pending==='g'){move(0);s.pending='';}
+ else if(key==='g'||key==='d'||key==='y'){if(s.pending===key){let stop=start;for(let i=0;i<n;i++){const next=text.indexOf('\n',stop);stop=next<0?text.length:next+1;}evRegister=text.slice(start,stop);if(key==='d')replace(start,stop,'');s.pending='';}else{s.pending=key;s.count=String(n);}}
+ else if(key==='x')replace(pos,Math.min(end,pos+n),'');else if(key==='p'&&evRegister)replace(end<text.length?end+1:end,end<text.length?end+1:end,(end===text.length?'\n':'')+evRegister);
+ else if(key==='o'||key==='O'){replace(key==='o'?end:start,key==='o'?end:start,'\n');if(key==='O')move(start);s.mode='insert';}
+ else if(key==='u'||e.ctrlKey&&key.toLowerCase()==='r'){const from=key==='u'?s.undo:s.redo,to=key==='u'?s.redo:s.undo;if(from.length){to.push({text:el.value,pos:el.selectionStart});const previous=from.pop();el.value=previous.text;move(previous.pos);el.dispatchEvent(new Event('input',{bubbles:true}));}}
+ else s.pending='';show();},true);
+}
+const evObserver=new MutationObserver(()=>{for(const el of document.querySelectorAll('#dd-preview,#ab-preview,#dk-preview,#sx-command-preview'))evAttach(el);});evObserver.observe(document.body,{childList:true,subtree:true});

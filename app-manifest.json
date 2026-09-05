@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.7.1",
+  "version": "3.8.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -31,6 +31,8 @@
     "src/source-sync-ui.js",
     "src/compact-editor.js",
     "src/portable.js",
+    "src/editor-workspace.js",
+    "src/vim-controls.js",
     "src/start.js"
   ],
   "styles": [

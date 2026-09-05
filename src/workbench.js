@@ -18,7 +18,7 @@ function dkHome(sheet){
  const body=dkEl('div','dk-home');const guide=dkEl('div','dk-guide');guide.append(dkEl('strong','','A useful starting point'),dkEl('p','',g[1]),dkEl('p','',g[2]));const link=dkEl('a','','Official reference ↗');link.href=g[4];link.target='_blank';link.rel='noopener';guide.append(link);body.append(guide);
  const search=dkEl('input','dk-input');search.placeholder='Find a recipe or command builder…';search.setAttribute('aria-label','Search recipes');body.append(search);const grid=dkEl('div','dk-recipes');body.append(grid);
  function draw(){grid.replaceChildren();const q=search.value.toLowerCase();if(sheet==='ansible'&&!q){grid.append(dkBtn('Open Ansible block builder →',()=>{dkClose();abOpen();},'dk-recipe'));}for(const recipe of tools.filter(r=>(r.title+' '+r.description).toLowerCase().includes(q))){const card=dkBtn('',()=>dkOpenRecipe(recipe.id),'dk-recipe');card.dataset.recipe=recipe.id;card.append(dkEl('strong','',recipe.title),dkEl('p','',recipe.description),dkEl('span','',recipe.legacy?'Command options →':'Guided recipe →'));grid.append(card);}if(!grid.children.length)grid.append(dkEl('p','dk-help','No recipes match. Try a shorter search.'));}search.oninput=draw;draw();
- body.append(dkBtn('Browse all '+SHEETS[sheet].name+' examples',()=>{dkClose();state.searchQuery='';state.activeSheet=sheet;state.activeSection=null;renderSidebar();renderMain();}));root.append(body);
+ body.append(dkBtn('Browse all '+SHEETS[sheet].name+' examples',()=>{dkClose();state.searchQuery='';state.activeSheet=sheet;state.activeSection=null;renderSidebar();renderMain();}));root.append(body);ewRecent(body,sheet);
 }
 function dkOpenRecipe(id){
  dkStopTest();const recipe=DK_RECIPES[id];if(!recipe)return;dkShow();dkUndo=[];dkRedo=[];

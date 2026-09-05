@@ -1,5 +1,5 @@
 /* Explicit backup/restore keeps this app independent of a browser or file location. */
-const DK_BACKUP_KEYS=[...Object.values(STORAGE_KEYS),'devkit_ansible_draft_v1','devkit_ansible_blocks_v2',DK_STORAGE];
+const DK_BACKUP_KEYS=[...Object.values(STORAGE_KEYS),'devkit_ansible_draft_v1','devkit_ansible_blocks_v2',DK_STORAGE,'devkit:vim'];
 function dkBackup(){const data={};for(const key of DK_BACKUP_KEYS){const value=localStorage.getItem(key);if(value!==null)data[key]=value;}return {format:'devkit-backup',version:1,createdAt:new Date().toISOString(),data};}
 function dkValidateBackup(value){
  if(!value||value.format!=='devkit-backup'||value.version!==1||!anMap(value.data))throw Error('This is not a supported DevKit backup.');
@@ -17,6 +17,7 @@ function dkValidateBackup(value){
    if(['devkit:favorites','devkit:expandedSheets'].includes(key)&&(!Array.isArray(parsed)||parsed.some(x=>typeof x!=='string')))throw Error('Invalid list in backup.');
    if(key==='devkit:notes'&&(!anMap(parsed)||Object.values(parsed).some(x=>typeof x!=='string')))throw Error('Invalid notes in backup.');
    if(key==='devkit:history'&&(!Array.isArray(parsed)||parsed.some(x=>!x||typeof x.cmd!=='string'||typeof x.time!=='number')))throw Error('Invalid history in backup.');
+   if(key===DK_STORAGE&&anMap(parsed))for(const [id,draft] of Object.entries(parsed))if((id.startsWith('deep:')||draft?.profile)&&(!ewValidDraft(draft)||draft.id!==id))throw Error('Invalid editor draft: '+(draft?.filename||id));
    if(key===DK_STORAGE&&(!anMap(parsed)||Object.values(parsed).some(x=>!x||typeof x.id!=='string'||!SHEETS[x.sheet]||!Array.isArray(x.blocks))))throw Error('Invalid workbench drafts.');
    if(key==='devkit_ansible_blocks_v2'&&(!anMap(parsed)||parsed.version!==2||!AB_FILES[parsed.kind]||!Array.isArray(parsed.path)||!(anMap(parsed.doc)||Array.isArray(parsed.doc))))throw Error('Invalid Ansible draft.');
   }
