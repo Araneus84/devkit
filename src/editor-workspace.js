@@ -1,8 +1,8 @@
 /* Explicit workspace operations shared by the deep editor adapters. */
 function ewFilenameErrors(name){return typeof name!=='string'||!name.trim()||/[\\/:*?"<>|\r\n]/.test(name)?['Choose a filename without directory separators or reserved characters.']:[];}
 function ewValidDraft(d){
- if(!d||typeof d.id!=='string'||!Object.hasOwn(SHEETS,d.sheet)||typeof d.filename!=='string'||!Object.hasOwn(DD_PROFILES,d.profile))return false;
- const p=DD_PROFILES[d.profile];let count=0;const ids=new Set();
+ if(!d||typeof d.id!=='string'||!Object.hasOwn(SHEETS,d.sheet)||typeof d.filename!=='string'||!dkSchemaProfile(d.profile))return false;
+ const p=dkSchemaProfile(d.profile);let count=0;const ids=new Set();
  function tree(nodes,depth=0){return depth<=21&&Array.isArray(nodes)&&nodes.every(n=>{if(++count>3000||!n||typeof n.id!=='string'||ids.has(n.id)||!Object.hasOwn(p.types,n.type)||!anMap(n.values)||!anMap(n.slots))return false;ids.add(n.id);const type=p.types[n.type];return Object.keys(type.fields).every(k=>typeof n.values[k]==='string')&&Object.keys(n.slots).every(k=>Object.hasOwn(type.slots,k))&&Object.keys(type.slots).every(k=>tree(n.slots[k],depth+1));});}
  return tree(d.blocks)&&['sxCode','pyCode'].every(k=>d[k]===undefined||typeof d[k]==='string');
 }

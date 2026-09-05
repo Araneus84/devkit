@@ -18,6 +18,7 @@ const help={
  'recipes.cjs':'Fix recipe registration, generated file syntax, or offline assets.',
  'roundtrip-adapters.cjs':'Fix fresh-source reconstruction for the reported language.',
  'roundtrip-browser.cjs':'Fix live code/block reconstruction, history, or draft reload.',
+ 'schema-registry-browser.cjs':'Fix schema registration, normalized module metadata, or registry-backed editor behavior.',
  'security-browser.cjs':'Fix unsafe rendering, parser limits, backup validation, privacy, or network isolation.',
  'source-sync-browser.cjs':'Fix two-way source/block synchronization for the reported editor.',
  'uploads.cjs':'Fix file selection/drop, byte preservation, fallback, recovery, or download.',

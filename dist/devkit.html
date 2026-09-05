@@ -34559,7 +34559,7 @@ function ddGenerate(profile,nodes){const errors=ddValidate(profile,nodes);let te
 <script>
 /* One recursive editor for scripts, HCL, SQL and typed documents. */
 let ddState=null,ddHistory=[],ddFuture=[],ddCollapsed=new Set(),ddDrag=null,ddInputSnapshot=false;
-const ddProfile=()=>DD_PROFILES[ddState.profile];
+const ddProfile=()=>dkSchemaProfile(ddState.profile)||DD_PROFILES[ddState.profile];
 function ddFind(id,list=ddState.blocks,parent=null,slot='root'){for(let index=0;index<list.length;index++){const node=list[index];if(node.id===id)return {node,list,index,parent,slot};for(const [key,children] of Object.entries(node.slots)){const found=ddFind(id,children,node,key);if(found)return found;}}return null;}
 function ddLane(parent,slot){return parent?ddFind(parent).node.slots[slot]:ddState.blocks;}
 function ddLaneDef(parent,slot){const def=parent?ddProfile().types[ddFind(parent).node.type].slots[slot]:ddProfile().root;let insideFunction=false,cursor=parent?ddFind(parent):null;while(cursor){if(['function','py_function'].includes(cursor.node.type))insideFunction=true;cursor=cursor.parent?ddFind(cursor.parent.id):null;}return insideFunction?def:{...def,accept:def.accept.filter(t=>t!=='return')};}
@@ -34567,7 +34567,7 @@ function ddSave(){ddState.updatedAt=Date.now();try{dkDrafts[ddState.id]=dkClone(
 function ddRemember(){ddHistory.push(dkClone(ddState));if(ddHistory.length>80)ddHistory.shift();ddFuture=[];}
 function ddChange(fn){if(!ewPrepareChange())return;ddRemember();fn();ddInputSnapshot=false;ddSave();ddRender();}
 function ddFreshIds(n){n.id=ddId();for(const nodes of Object.values(n.slots))nodes.forEach(ddFreshIds);return n;}
-function ddOpen(profileId,sheet,seed,filename,draftKey='default'){const p=DD_PROFILES[profileId];if(!p)return;dkStopTest();dkShow();ddHistory=[];ddFuture=[];ddCollapsed.clear();const id='deep:'+sheet+':'+profileId+':'+draftKey,saved=dkDrafts[id];
+function ddOpen(profileId,sheet,seed,filename,draftKey='default'){const p=dkSchemaProfile(profileId)||DD_PROFILES[profileId];if(!p)return;dkStopTest();dkShow();ddHistory=[];ddFuture=[];ddCollapsed.clear();const id='deep:'+sheet+':'+profileId+':'+draftKey,saved=dkDrafts[id];
  // Keep invalid field values editable; reject malformed saved trees before rendering.
  function shape(nodes,depth=0){return depth<22&&Array.isArray(nodes)&&nodes.every(n=>n&&p.types[n.type]&&anMap(n.values)&&anMap(n.slots)&&Object.keys(p.types[n.type].slots).every(k=>shape(n.slots[k],depth+1)));}
  if(saved&&!ewValidDraft(saved)){ewRecover(saved);return;}
@@ -35249,6 +35249,62 @@ sxParse=function(p,text,previous=[]){if(text.length>1000000||text.includes('\0')
 
 </script>
 <script>
+/* One normalized contract for reference modules, structured profiles, recipes and editor assistance. */
+const DK_SCHEMA_VERSION=1,DK_SCHEMAS=Object.create(null),DK_SCHEMA_ALIASES=Object.create(null);
+const DK_SCHEMA_ASSIST_CATALOG={
+ bash:['echo ""','printf \'%s\\n\' ""','name=""','if [[ -n "${name}" ]]; then','for item in "${items[@]}"; do','while [[ -n "${value}" ]]; do','function name() {','return 0','set -euo pipefail'],
+ powershell:['Write-Output ""','$name = ""','if ($name) {','foreach ($item in $items) {','while ($value) {','function Invoke-Task {','try {','return 0'],
+ python:['import os','from pathlib import Path','def main():','if condition:','for item in items:','while condition:','try:','with open("path") as handle:','return None','print("")'],
+ terraform:['terraform {','required_providers {','provider "" {','variable "" {','locals {','resource "" "" {','data "" "" {','module "" {','output "" {'],
+ sql:['SELECT  FROM ;','WITH name AS (','INSERT INTO  () VALUES ();','UPDATE  SET  WHERE ;','DELETE FROM  WHERE ;','CREATE TABLE  ();','WHERE ','GROUP BY ','ORDER BY ','LIMIT 10;'],
+ dockerfile:['FROM alpine:3.22','ARG NAME=""','WORKDIR /app','COPY . /app','RUN ','ENV NAME=""','EXPOSE 8080','USER app','ENTRYPOINT []','CMD []','HEALTHCHECK CMD '],
+ json:['"name": ""','"enabled": true','"items": []','"config": {}','true','false','null'],
+ yaml:['name: ""','hosts: ""','vars:','tasks:','handlers:','- name: ""','enabled: true','items: []'],
+ github:['name: ""','on:','permissions:','env:','jobs:','runs-on: ubuntu-latest','needs:','steps:','- name: ""','uses: actions/checkout@v4','run: '],
+ gitlab:['stages:','variables:','default:','image:','stage: test','needs:','script:','rules:','artifacts:','cache:','- echo ""'],
+ jenkins:['pipeline {','agent any','options {','environment {','stages {','stage(\'\') {','steps {','sh \'\'','post {','always {'],
+ ansible:['- name: ""','name: ""','hosts: ""','gather_facts: false','become: true','vars:','tasks:','handlers:','ansible.builtin.ping: {}','ansible.builtin.package:','ansible.builtin.service:','ansible.builtin.copy:','ansible.builtin.template:','ansible.builtin.command:','ansible.builtin.shell:'],
+ command:[]
+};
+const DK_SCHEMA_EDITOR={
+ bash:{mode:'text/x-sh',indentUnit:2},powershell:{mode:'application/x-powershell',indentUnit:4},python:{mode:'python',indentUnit:4},terraform:{mode:'text/x-sh',indentUnit:2,structured:true},sql:{mode:'text/x-sql',indentUnit:2},dockerfile:{mode:'dockerfile',indentUnit:2},docker:{mode:'dockerfile',indentUnit:2,assistId:'dockerfile'},json:{mode:{name:'javascript',json:true},indentUnit:2,structured:true},yaml:{mode:'yaml',indentUnit:2,structured:true},ansible:{mode:'yaml',indentUnit:2,structured:true},github:{mode:'yaml',indentUnit:2,structured:true},'github-actions':{mode:'yaml',indentUnit:2,structured:true,assistId:'github'},gitlab:{mode:'yaml',indentUnit:2,structured:true},'gitlab-ci':{mode:'yaml',indentUnit:2,structured:true,assistId:'gitlab'},jenkins:{mode:'groovy',indentUnit:2},cicd:{mode:'yaml',indentUnit:2},command:{mode:null,indentUnit:2}
+};
+const DK_SCHEMA_PROFILE_SHEETS={dockerfile:'docker','github-actions':'cicd','gitlab-ci':'cicd',jenkins:'cicd',yaml:'linux',json:'linux'};
+function dkSchemaEditorDefaults(id){const value=DK_SCHEMA_EDITOR[id]||{mode:null,indentUnit:2};return {assistId:value.assistId||id,mode:value.mode??null,indentUnit:value.indentUnit||2,structured:!!value.structured};}
+function dkSchemaRegister(definition){
+ if(!definition||definition.schemaVersion!==DK_SCHEMA_VERSION||!/^[a-z0-9][a-z0-9-]*$/.test(definition.id))throw Error('Invalid DevKit schema definition.');
+ if(DK_SCHEMAS[definition.id])throw Error('Duplicate DevKit schema: '+definition.id);
+ const schema={kind:'reference',title:definition.id,description:'',sheet:null,profile:null,recipes:[],builders:[],aliases:[],...definition};
+ schema.editor={...dkSchemaEditorDefaults(schema.id),...(schema.editor||{})};schema.assist={id:schema.editor.assistId,catalog:[...(definition.assist?.catalog||DK_SCHEMA_ASSIST_CATALOG[schema.editor.assistId]||[])]};
+ DK_SCHEMAS[schema.id]=schema;for(const alias of schema.aliases){if(DK_SCHEMA_ALIASES[alias]||DK_SCHEMAS[alias])throw Error('Duplicate DevKit schema alias: '+alias);DK_SCHEMA_ALIASES[alias]=schema.id;}return schema;
+}
+function dkSchemaGet(id){return DK_SCHEMAS[id]||DK_SCHEMAS[DK_SCHEMA_ALIASES[id]]||null;}
+function dkSchemaProfile(id){return dkSchemaGet(id)?.profile||null;}
+function dkSchemaEditorId(item){if(item?.el?.id==='ab-preview')return'ansible';if(item?.el?.id==='sx-command-preview')return'command';if(item?.el?.id==='dk-preview')return dkActive?.sheet||'command';return ddState?.profile||'command';}
+function dkSchemaForEditor(item){return dkSchemaGet(dkSchemaEditorId(item))||dkSchemaGet('command');}
+function dkSchemaAudit(){
+ const errors=[];
+ for(const schema of Object.values(DK_SCHEMAS)){
+  if(!schema.title||!schema.editor||!Array.isArray(schema.assist.catalog))errors.push(schema.id+': incomplete schema metadata');
+  if(schema.profile){const p=schema.profile;if(!p.root||!p.types||typeof p.generate!=='function'||typeof p.seed!=='function')errors.push(schema.id+': incomplete structured profile');else{for(const type of p.root.accept)if(!p.types[type])errors.push(schema.id+': unknown root block '+type);for(const [type,def] of Object.entries(p.types)){if(!def.fields||!def.slots)errors.push(schema.id+': incomplete block '+type);for(const slot of Object.values(def.slots||{}))for(const child of slot.accept||[])if(!p.types[child])errors.push(schema.id+': '+type+' accepts unknown block '+child);}}}
+  for(const id of schema.recipes)if(!DK_RECIPES[id])errors.push(schema.id+': missing recipe '+id);
+  for(const key of schema.builders)if(!BUILDERS[key])errors.push(schema.id+': missing builder '+key);
+ }
+ for(const key of Object.keys(SHEETS))if(!DK_SCHEMAS[key])errors.push(key+': sheet has no schema');
+ for(const id of Object.keys(DD_PROFILES))if(!Object.values(DK_SCHEMAS).some(schema=>schema.profile===DD_PROFILES[id]))errors.push(id+': profile has no schema');
+ return errors;
+}
+function dkSchemaBootstrap(){
+ const recipesBySheet=Object.create(null),buildersBySheet=Object.create(null);for(const recipe of Object.values(DK_RECIPES))(recipesBySheet[recipe.sheet]??=[]).push(recipe.id);for(const key of Object.keys(BUILDERS))(buildersBySheet[key.split('::')[0]]??=[]).push(key);
+ for(const [id,sheet] of Object.entries(SHEETS))dkSchemaRegister({schemaVersion:DK_SCHEMA_VERSION,id,title:sheet.name,description:sheet.subtitle||'',sheet,recipes:recipesBySheet[id]||[],builders:buildersBySheet[id]||[],editor:dkSchemaEditorDefaults(id)});
+ for(const [id,profile] of Object.entries(DD_PROFILES)){const existing=DK_SCHEMAS[id],sheetId=DK_SCHEMA_PROFILE_SHEETS[id]||id,sheet=SHEETS[sheetId]||null,editor=dkSchemaEditorDefaults(id),definition={schemaVersion:DK_SCHEMA_VERSION,id,kind:'document',title:profile.title,description:profile.description,sheet,profile,recipes:recipesBySheet[sheetId]||[],builders:buildersBySheet[sheetId]||[],aliases:editor.assistId!==id&&!DK_SCHEMAS[editor.assistId]?[editor.assistId]:[],editor,io:{generate:profile.generate,seed:profile.seed,parse:(text,previous=[])=>sxParse(profile,text,previous)},blocks:{root:profile.root,types:profile.types}};if(existing){Object.assign(existing,definition);existing.assist={id:existing.editor.assistId,catalog:[...(DK_SCHEMA_ASSIST_CATALOG[existing.editor.assistId]||[])]};for(const alias of definition.aliases)DK_SCHEMA_ALIASES[alias]=id;}else dkSchemaRegister(definition);}
+ if(!DK_SCHEMAS.ansible)dkSchemaRegister({schemaVersion:DK_SCHEMA_VERSION,id:'ansible',title:'Ansible',description:SHEETS.ansible?.subtitle||'',sheet:SHEETS.ansible||null,recipes:recipesBySheet.ansible||[],builders:buildersBySheet.ansible||[],editor:dkSchemaEditorDefaults('ansible')});
+ dkSchemaRegister({schemaVersion:DK_SCHEMA_VERSION,id:'command',title:'Command builder',description:'Build a command from structured arguments and flags.',editor:dkSchemaEditorDefaults('command')});
+}
+dkSchemaBootstrap();
+
+</script>
+<script>
 let sxTimer=null;
 function sxCancel(){clearTimeout(sxTimer);sxTimer=null;}
 function sxSelection(el){return {start:el.selectionStart,end:el.selectionEnd,top:el.scrollTop,focus:document.activeElement===el};}
@@ -35387,8 +35443,8 @@ renderBuilderPage=function(q){dkInitialBuilder(q);const header=document.querySel
 /* Explicit workspace operations shared by the deep editor adapters. */
 function ewFilenameErrors(name){return typeof name!=='string'||!name.trim()||/[\\/:*?"<>|\r\n]/.test(name)?['Choose a filename without directory separators or reserved characters.']:[];}
 function ewValidDraft(d){
- if(!d||typeof d.id!=='string'||!Object.hasOwn(SHEETS,d.sheet)||typeof d.filename!=='string'||!Object.hasOwn(DD_PROFILES,d.profile))return false;
- const p=DD_PROFILES[d.profile];let count=0;const ids=new Set();
+ if(!d||typeof d.id!=='string'||!Object.hasOwn(SHEETS,d.sheet)||typeof d.filename!=='string'||!dkSchemaProfile(d.profile))return false;
+ const p=dkSchemaProfile(d.profile);let count=0;const ids=new Set();
  function tree(nodes,depth=0){return depth<=21&&Array.isArray(nodes)&&nodes.every(n=>{if(++count>3000||!n||typeof n.id!=='string'||ids.has(n.id)||!Object.hasOwn(p.types,n.type)||!anMap(n.values)||!anMap(n.slots))return false;ids.add(n.id);const type=p.types[n.type];return Object.keys(type.fields).every(k=>typeof n.values[k]==='string')&&Object.keys(n.slots).every(k=>Object.hasOwn(type.slots,k))&&Object.keys(type.slots).every(k=>tree(n.slots[k],depth+1));});}
  return tree(d.blocks)&&['sxCode','pyCode'].every(k=>d[k]===undefined||typeof d[k]==='string');
 }
@@ -35411,20 +35467,10 @@ const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map(),CE_FOCUS_REQUESTS=new Map();
 let ceVim=localStorage.getItem('devkit:vim')==='true';
 function ceAccessibleName(el,name){const item=CE_EDITORS.get(el);if(!item){el.setAttribute('aria-label',name);return;}item.accessibleName=name;el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',name);}
 function ceLanguage(el){
- if(el.id==='ab-preview')return 'yaml';
- if(el.id==='dd-preview'){
-  const profile=ddState?.profile,filename=ddState?.filename||'';
-  if(['github-actions','gitlab-ci','yaml'].includes(profile))return 'yaml';
-  if(profile==='json')return {name:'javascript',json:true};
-  if(profile==='dockerfile')return 'dockerfile';
-  if(profile==='jenkins')return 'groovy';
-  if(profile==='terraform')return 'text/x-sh';
-  if(profile==='source')return ceFilenameMode(filename);
-  return {bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql'}[profile]||null;
- }
  if(el.id==='sx-command-preview')return null;
- const output=dkActive&&typeof dkOutput==='function'?dkOutput():null;
- return ceFilenameMode(output?.filename||'')||{bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql',docker:'dockerfile',ansible:'yaml',cicd:'yaml'}[dkActive?.sheet]||null;
+ if(el.id==='dd-preview'&&ddState?.profile==='source')return ceFilenameMode(ddState.filename||'');
+ if(el.id==='dk-preview'){const output=dkActive&&typeof dkOutput==='function'?dkOutput():null,fromName=ceFilenameMode(output?.filename||'');if(fromName)return fromName;}
+ return dkSchemaForEditor({el})?.editor.mode??null;
 }
 function ceFilenameMode(name){return /Dockerfile/i.test(name)?'dockerfile':/Jenkinsfile/i.test(name)?'groovy':/\.py$/i.test(name)?'python':/\.ps1$/i.test(name)?'application/x-powershell':/\.sql$/i.test(name)?'text/x-sql':/\.json$/i.test(name)?{name:'javascript',json:true}:/\.ya?ml$/i.test(name)?'yaml':/\.(sh|bash|tf)$/i.test(name)?'text/x-sh':null;}
 function ceIndex(cm,pos){return cm.indexFromPos(pos);}
@@ -35461,22 +35507,8 @@ ceScan();
 </script>
 <script>
 /* Context-aware completions and indentation for every editable code surface. */
-const EA_CATALOG={
- bash:['echo ""','printf \'%s\\n\' ""','name=""','if [[ -n "${name}" ]]; then','for item in "${items[@]}"; do','while [[ -n "${value}" ]]; do','function name() {','return 0','set -euo pipefail'],
- powershell:['Write-Output ""','$name = ""','if ($name) {','foreach ($item in $items) {','while ($value) {','function Invoke-Task {','try {','return 0'],
- python:['import os','from pathlib import Path','def main():','if condition:','for item in items:','while condition:','try:','with open("path") as handle:','return None','print("")'],
- terraform:['terraform {','required_providers {','provider "" {','variable "" {','locals {','resource "" "" {','data "" "" {','module "" {','output "" {'],
- sql:['SELECT  FROM ;','WITH name AS (','INSERT INTO  () VALUES ();','UPDATE  SET  WHERE ;','DELETE FROM  WHERE ;','CREATE TABLE  ();','WHERE ','GROUP BY ','ORDER BY ','LIMIT 10;'],
- dockerfile:['FROM alpine:3.22','ARG NAME=""','WORKDIR /app','COPY . /app','RUN ','ENV NAME=""','EXPOSE 8080','USER app','ENTRYPOINT []','CMD []','HEALTHCHECK CMD '],
- json:['"name": ""','"enabled": true','"items": []','"config": {}','true','false','null'],
- yaml:['name: ""','hosts: ""','vars:','tasks:','handlers:','- name: ""','enabled: true','items: []'],
- github:['name: ""','on:','permissions:','env:','jobs:','runs-on: ubuntu-latest','needs:','steps:','- name: ""','uses: actions/checkout@v4','run: '],
- gitlab:['stages:','variables:','default:','image:','stage: test','needs:','script:','rules:','artifacts:','cache:','- echo ""'],
- jenkins:['pipeline {','agent any','options {','environment {','stages {','stage(\'\') {','steps {','sh \'\'','post {','always {'],
- ansible:['- name: ""','name: ""','hosts: ""','gather_facts: false','become: true','vars:','tasks:','handlers:','ansible.builtin.ping: {}','ansible.builtin.package:','ansible.builtin.service:','ansible.builtin.copy:','ansible.builtin.template:','ansible.builtin.command:','ansible.builtin.shell:']
-};
-function eaProfile(item){if(item.el.id==='ab-preview')return'ansible';if(item.el.id==='sx-command-preview')return'command';if(item.el.id==='dk-preview')return dkActive?.sheet||'command';const id=ddState?.profile;if(id==='github-actions')return'github';if(id==='gitlab-ci')return'gitlab';if(id==='jenkins')return'jenkins';if(id==='yaml')return'yaml';return id||'command';}
-function eaIndentSize(profile){return['python','powershell'].includes(profile)?4:2;}
+function eaProfile(item){return dkSchemaForEditor(item)?.assist.id||'command';}
+function eaIndentSize(profile){return dkSchemaGet(profile)?.editor.indentUnit||2;}
 function eaPrevious(lines,index){for(let i=index-1;i>=0;i--)if(lines[i].trim())return{line:lines[i],index:i};return{line:'',index:-1};}
 function eaYamlNext(profile,lines,index){const prev=eaPrevious(lines,index).line,trim=prev.trim();if(/^[-]?\s*name\s*:/.test(trim)){if(/^\s*-\s+name\s*:/.test(prev)&&lines.slice(0,index).some(x=>/^\s*(tasks|handlers|pre_tasks|post_tasks)\s*:\s*$/.test(x)))return['ansible.builtin.ping: {}','ansible.builtin.command: ""','ansible.builtin.package:'];return profile==='github'?['on:','jobs:']:profile==='gitlab'?['stages:','variables:']:['hosts: ""','gather_facts: false','become: true'];}if(/^hosts\s*:/.test(trim))return['gather_facts: false','become: true','vars:','tasks:'];if(/^(gather_facts|become)\s*:/.test(trim))return['vars:','tasks:','handlers:'];if(/^(tasks|handlers|pre_tasks|post_tasks|steps)\s*:\s*$/.test(trim))return['- name: ""'];if(/^on\s*:\s*$/.test(trim))return['push:','pull_request:','workflow_dispatch:'];if(/^jobs\s*:\s*$/.test(trim))return['build:'];if(/^stages\s*:\s*$/.test(trim))return['- build','- test','- deploy'];if(/^script\s*:\s*$/.test(trim))return['- echo ""'];return[];}
 function eaNext(profile,lines,index){const trim=eaPrevious(lines,index).line.trim();if(['ansible','yaml','github','gitlab'].includes(profile))return eaYamlNext(profile,lines,index);if(profile==='dockerfile'){if(/^FROM\b/i.test(trim))return['WORKDIR /app','COPY . /app','RUN '];if(/^WORKDIR\b/i.test(trim))return['COPY . /app','RUN '];if(/^COPY\b/i.test(trim))return['RUN '];}if(profile==='python'){if(/^#!.*python/.test(trim))return['import os','from pathlib import Path'];if(/^def\b.*:\s*$/.test(trim))return['return None','pass'];if(/^(?:if|for|while|with)\b.*:\s*$/.test(trim)||/^try:\s*$/.test(trim))return['print("")','pass'];}if(profile==='bash'){if(/^#!/.test(trim))return['set -euo pipefail'];if(/(?:\bthen|\bdo|\{)\s*$/.test(trim))return['echo ""'];}if(profile==='powershell'&&/\{\s*$/.test(trim))return['Write-Output ""'];if(profile==='terraform'&&/\{\s*$/.test(trim))return[/^terraform\s*\{/.test(trim)?'required_version = ">= 1.6"':'name = ""'];if(profile==='sql'&&/^SELECT\b/i.test(trim)&&!trim.includes('FROM'))return['FROM '];if(profile==='json'&&/(?:\{|\[)\s*$/.test(trim))return[trim.endsWith('{')?'"name": ""':'""'];if(profile==='jenkins'){if(/^pipeline\s*\{/.test(trim))return['agent any','stages {'];if(/^stage\b.*\{/.test(trim))return['steps {'];if(/^steps\s*\{/.test(trim))return["sh ''"];if(/\{\s*$/.test(trim))return["echo ''"]; }return[];}
@@ -35486,9 +35518,10 @@ function eaSiblingHas(lines,index,indent,key){let first=0,last=lines.length;for(
 function eaCandidates(item){const cm=item.cm,cursor=cm.getCursor(),profile=eaProfile(item),line=cm.getLine(cursor.line)||'',before=line.slice(0,cursor.ch),indent=/^\s*/.exec(before)[0],body=before.slice(indent.length),lines=cm.getValue().split('\n');if(eaInsideEmptySlot(cm,cursor))return[];let fragment=/[A-Za-z_][\w.-]*$/.exec(body)?.[0]||'',start=cursor.ch-fragment.length,candidates=[];
  if(profile==='command'){const token=/[/-][\w-]*$/.exec(body)?.[0]||'';fragment=token;start=cursor.ch-token.length;candidates=(currentBuilder?.def?.flags||[]).map(flag=>flag.flag+(flag.valuePrompt?(flag.join===':'?':':' ')+'""':''));}
  if(profile==='python'){const m=/^\s*(?:import|from)\s+([\w.]*)$/.exec(before);if(m){fragment=m[1];start=cursor.ch-fragment.length;candidates=['os','sys','pathlib','subprocess','json','yaml','requests','httpx','numpy as np','pandas as pd','openpyxl','cv2','boto3','paramiko'];}}
- if(profile==='ansible'&&/ansible(?:\.builtin)?\.[\w.]*$/.test(body)){fragment=/[\w.]+$/.exec(body)[0];start=cursor.ch-fragment.length;candidates=EA_CATALOG.ansible.filter(x=>x.startsWith('ansible.'));}
- if(!candidates.length){if(body.trim()&&!fragment&&profile!=='command')return[];candidates=[...eaNext(profile,lines,cursor.line),...(EA_CATALOG[profile]||[])];}
- const structured=['ansible','yaml','github','gitlab','json','terraform'].includes(profile);const clean=[...new Set(candidates)].filter(text=>!fragment||text.toLowerCase().startsWith(fragment.toLowerCase())).filter(text=>text!==fragment).filter(text=>{const key=structured&&eaFieldKey(text);return !key||!eaSiblingHas(lines,cursor.line,indent.length,key);}).slice(0,5);return clean.map(text=>({text,start,end:cursor.ch,fragment,display:text}));}
+ const schema=dkSchemaGet(profile),catalog=schema?.assist.catalog||[];
+ if(profile==='ansible'&&/ansible(?:\.builtin)?\.[\w.]*$/.test(body)){fragment=/[\w.]+$/.exec(body)[0];start=cursor.ch-fragment.length;candidates=catalog.filter(x=>x.startsWith('ansible.'));}
+ if(!candidates.length){if(body.trim()&&!fragment&&profile!=='command')return[];candidates=[...eaNext(profile,lines,cursor.line),...catalog];}
+ const structured=!!schema?.editor.structured,clean=[...new Set(candidates)].filter(text=>!fragment||text.toLowerCase().startsWith(fragment.toLowerCase())).filter(text=>text!==fragment).filter(text=>{const key=structured&&eaFieldKey(text);return !key||!eaSiblingHas(lines,cursor.line,indent.length,key);}).slice(0,5);return clean.map(text=>({text,start,end:cursor.ch,fragment,display:text}));}
 function eaClear(item){item.assistCompletion=null;if(item.assistMark){item.assistMark.clear();item.assistMark=null;}if(item.assist){item.assist.hidden=true;item.assist.replaceChildren();}}
 function eaUpdate(item){if(!item?.el?.isConnected||item.writing)return;cancelAnimationFrame(item.assistFrame);item.assistFrame=requestAnimationFrame(()=>{eaClear(item);if(ceVim&&!item.cm.state.vim?.insertMode)return;const candidates=eaCandidates(item);if(!candidates.length)return;const completion=candidates[0],cursor=item.cm.getCursor(),suffix=completion.text.slice(completion.fragment.length);if(suffix){const ghost=document.createElement('span');ghost.className='ce-ghost';ghost.textContent=suffix.replace(/\n/g,' ↵ ');item.assistMark=item.cm.setBookmark(cursor,{widget:ghost,insertLeft:false});}item.assistCompletion=completion;item.assist.hidden=false;const lead=document.createElement('span');lead.className='ce-assist-lead';lead.textContent='Tab completes';item.assist.append(lead);for(const candidate of candidates.slice(0,3)){const button=document.createElement('button');button.type='button';button.className='ce-assist-option';button.textContent=candidate.display;button.onclick=()=>eaApply(item,candidate);item.assist.append(button);}});}
 function eaCaretOffset(text){const quotes=text.indexOf('""'),single=text.indexOf("''"),pair=quotes>=0?quotes:single;if(pair>=0)return pair+1;const empty=/\[\]|\{\}/.exec(text);if(empty)return empty.index+1;const gap=/\S  \S/.exec(text);if(gap)return gap.index+2;return text.length;}
