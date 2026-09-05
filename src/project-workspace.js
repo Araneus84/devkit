@@ -45,6 +45,7 @@ function pwDraft(project,file,text=''){
 function pwText(draft){
  if(typeof draft.pyCode==='string'&&(draft.pyDirty||draft.pySyncSig===pySignature(draft.blocks)))return draft.pyCode;
  if(typeof draft.sxCode==='string'&&(draft.sxDirty||draft.sxSignature===sxSignature(draft.blocks)))return draft.sxCode;
+ if(draft.sxYaml&&typeof draft.sxCode==='string')try{return ycRenderDraft(draft);}catch{}
  const out=ddGenerate(dkSchemaProfile(draft.profile)||DD_PROFILES[draft.profile],draft.blocks);return out.text||draft.sxCode||draft.pyCode||'';
 }
 const PW_TEMPLATES={

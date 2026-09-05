@@ -10,7 +10,7 @@ The hosted app uses browser-local storage. Drafts do not automatically synchroni
 
 DevKit uses the [DevKit Free Use License 1.0](LICENSE), with notices in [NOTICE](NOTICE). You may use it personally, at work, and for paid client projects. You may use or sell the scripts/configurations you generate. You may share or modify DevKit under its terms, but may not sell the application, include it in a paid product, charge for hosted access, or monetize copies/derivatives without separate written permission.
 
-This is a custom **source-available** license, not an OSI open-source license. Third-party libraries retain their MIT terms. See [SECURITY.md](SECURITY.md) for privacy, review scope, limits and private vulnerability reporting. Browser drafts and exported backups are not encrypted; use placeholders instead of real credentials.
+This is a custom **source-available** license, not an OSI open-source license. Third-party libraries retain their own terms. See [SECURITY.md](SECURITY.md) for privacy, review scope, limits and private vulnerability reporting. Browser drafts and exported backups are not encrypted; use placeholders instead of real credentials.
 
 ## Publishing updates
 
@@ -22,6 +22,8 @@ Open **index.html** in a modern browser. No installation, server, account or int
 For a single file, use **dist/devkit.html**. This is generated from the same source as the folder edition.
 
 ## Using the app
+
+Version 3.15 adds a locally bundled YAML concrete-syntax-tree parser to the shared document model. Generic YAML, GitHub Actions, GitLab CI, Ansible and project files now keep comments, anchors, aliases, mapping order, sequence-item comments and scalar quote styles while block edits change values, rename keys, reorder items or add structure. Exact source remains untouched until a block changes it; afterward the parser reconciles the changed data into the original YAML document tree. Multi-document files and the same safety budgets work in both app editions. See [docs/yaml-roundtrip.md](docs/yaml-roundtrip.md) for the preservation contract and limits.
 
 Version 3.14 adds a shared offline diagnostic engine to every code editor. Compact diagnostics show precise line and column locations, mark source ranges, and move the caret to a selected issue. Syntax checks cover YAML, JSON and Python; schema rules cover Kubernetes, Docker Compose, GitHub Actions, GitLab CI, Ansible playbooks and package.json. One-click repairs handle indentation tabs, trailing whitespace, final newlines, common missing fields and secret-shaped values. Private keys and common AWS, GitHub, GitLab, Slack and sensitive-assignment patterns are detected locally. Project shared variables warn and refuse to save newly entered secret-shaped values. See [docs/diagnostics.md](docs/diagnostics.md) for scope and extension rules.
 
@@ -90,7 +92,8 @@ Typing valid YAML, including `- name: ""`, creates and selects the corresponding
 Every deep editor, quick recipe, Ansible builder and original command modal now has an editable preview. Type directly, pause briefly, or press **Ctrl/Cmd+Enter** / **Sync code to blocks now**. Block edits update the preview. Deep editor and recipe drafts save typed text immediately; Undo restores earlier code and blocks together. The original command modal remains session-only.
 
 - **Terraform:** typed configuration rebuilds provider/resource/variable/module blocks, arguments and nested blocks. Expressions remain expressions. Comments are retained as code blocks; heredoc-containing blocks are kept as custom code to preserve their contents.
-- **YAML/JSON and Ansible:** text rebuilds nested data blocks. Invalid or incomplete documents keep the typed text and last valid blocks; fix the text before resuming structured editing. Deep editors also offer **Keep as Custom code**. YAML comments/anchors and original formatting remain in the code until a block edit regenerates YAML.
+- **YAML and Ansible:** text rebuilds nested data blocks. Valid source is retained exactly until a block changes it; block changes reconcile into the original YAML document tree so comments, anchors, aliases, ordering and scalar quote styles remain attached. Invalid or incomplete documents keep the typed text and last valid blocks. Deep editors also offer **Keep as Custom code**.
+- **JSON:** text rebuilds nested data blocks. Block edits regenerate consistently indented JSON because JSON has no comments or scalar style metadata.
 - **Bash, PowerShell, SQL, Dockerfile and Jenkins:** edits that exactly match a supported field update that field. Existing recognized blocks are retained where possible. Simple new Bash commands, PowerShell variables/output, SELECT queries and Dockerfile instructions become structured blocks. The supported nested structures are covered by the adapters above; other syntax is preserved in editable **Custom code** blocks.
 - **CI/CD YAML:** known field edits keep specialized controls; broader source edits use nested YAML data blocks so extra vendor keys remain editable. Jenkins syntax outside supported fields is retained as custom code.
 - **Quick commands:** supported scalar edits retain recipe fields. Other changes use source-line blocks and keep the output filename. The original command modal uses a custom command block for syntax outside its options.
@@ -158,9 +161,9 @@ Compose, Kubernetes and package.json recipes can open as fully editable document
 
 Use **Drop a file here to customize it** or **Choose file to customize** in a workbench or builder. Ansible's **Open / drop a file** button leads to the same importer. Files are read locally; they are never uploaded to a server.
 
-Automatic mode opens `.json`, `.yaml` and `.yml` as nested blocks, and `.py` in the connected Python workspace. Terraform, Bash, PowerShell, SQL, Dockerfile and Jenkinsfile use the source/block adapters described above; other UTF-8 files open in an editable source view with their original filename. Choose **Original source text** explicitly to bypass conversion, preserve YAML comments or repair an invalid JSON file.
+Automatic mode opens `.json`, `.yaml` and `.yml` as nested blocks, and `.py` in the connected Python workspace. Terraform, Bash, PowerShell, SQL, Dockerfile and Jenkinsfile use the source/block adapters described above; other UTF-8 files open in an editable source view with their original filename. Choose **Original source text** explicitly to bypass conversion or repair an invalid structured file.
 
-Block imports preserve data, not comments, YAML anchors or original formatting. Source mode preserves original text on import and download; after editing, line endings use the detected original style. JSON holds one root value; YAML may contain multiple documents. Imports require UTF-8 files under 1 MB. Block trees allow 1,500 values and 20 nested levels. Binary files and UTF-16 files are rejected with an explanation. Failed imports leave the current draft intact. Imported files have separate drafts by filename and editor type.
+YAML block imports preserve comments, anchors, aliases, ordering and scalar quote styles through connected code/block edits. Whitespace may be normalized around a changed structure. JSON block imports preserve data and regenerate formatting. Source mode preserves original text on import and download; after editing, line endings use the detected original style. JSON holds one root value; YAML may contain multiple documents. Imports require UTF-8 files under 1 MB. Block trees allow 1,500 values and 20 nested levels. Binary files and UTF-16 files are rejected with an explanation. Failed imports leave the current draft intact. Imported files have separate drafts by filename and editor type.
 
 The editors supply language structure, not every vendor's schema. Runtime variable values, provider-specific Terraform arguments, database schemas and advanced expressions are not validated by the browser. SQL uses PostgreSQL-style syntax. Python pipelines capture text between commands and are intended for small text output.
 
@@ -186,13 +189,14 @@ App files contain no personal notes, favorites or drafts. Those stay in browser 
 - `src/deep-editor.js`: nested editor, compatible moves, file import and per-editor drafts.
 - `src/deep-hints.js`: tool-specific suggested fields and starter integration.
 - `src/file-import.js`: local file picker/drop zones, structured import and original-source editing.
+- `src/yaml-roundtrip.js`: CST-backed YAML reconciliation for comments, anchors, aliases, ordering and scalar styles.
 - `src/python-model.js`: package operations and Python source/block conversion using the locally bundled Lezer parser.
 - `src/python-editor.js`: Python step library, editable preview and synchronization.
 - `src/python-ops.js`: sysadmin/DevOps module catalog, operations steps and starter workflows.
 - `src/ansible-*.js`: the specialized Ansible builder and reference.
 - `src/state.js`, `src/reference-ui.js`, `src/start.js`: reference app state, rendering and startup.
 - `styles/`: matching stylesheets.
-- `vendor/`: the locally bundled YAML library.
+- `vendor/`: locally bundled parsers and editor libraries with their license texts.
 - `tools/build.cjs`: dependency-free single-file builder.
 - `tests/`: repeatable checks.
 
@@ -229,6 +233,8 @@ Requires a modern browser with native dialog elements, JavaScript, local file ac
 ## Third-party code
 
 js-yaml 4.3.2 is bundled under its MIT license. See `vendor/LICENSE.js-yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==`.
+
+yaml 2.9.0 is bundled under its ISC license for concrete-syntax-tree parsing and comment-preserving serialization. See `vendor/LICENSE.yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==`.
 
 Lezer's Python parser and its common, LR and highlight packages are bundled locally under MIT licenses; see `vendor/LICENSE.lezer.txt` for versions and copyright notices. CodeMirror 5.65.21 and cm5-vim 0.0.6 are bundled under their MIT licenses in `vendor/codemirror/`. There are no runtime parser or editor downloads.
 

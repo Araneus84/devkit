@@ -1,9 +1,10 @@
 {
   "name": "DevKit",
-  "version": "3.14.0",
+  "version": "3.15.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
+    "vendor/yaml-cst.min.js",
     "vendor/lezer-python.js",
     "vendor/codemirror/codemirror.js",
     "vendor/codemirror/searchcursor.js",
@@ -42,6 +43,7 @@
     "src/cicd-ui.js",
     "src/source-sync-model.js",
     "src/roundtrip-adapters.js",
+    "src/yaml-roundtrip.js",
     "src/schema-registry.js",
     "src/source-sync-ui.js",
     "src/compact-editor.js",

@@ -25,6 +25,8 @@ const help={
  'security-browser.cjs':'Fix unsafe rendering, parser limits, backup validation, privacy, or network isolation.',
  'source-sync-browser.cjs':'Fix two-way source/block synchronization for the reported editor.',
  'uploads.cjs':'Fix file selection/drop, byte preservation, fallback, recovery, or download.',
+ 'yaml-cst-browser.cjs':'Fix comment-preserving YAML integration across deep, CI/CD, Ansible, project, modular, or standalone editors.',
+ 'yaml-cst-roundtrip.cjs':'Fix the YAML CST reconciliation engine, comments, anchors, aliases, quote styles, ordering, or parser limits.',
  'workspace-browser.cjs':'Fix saved drafts, reset/undo, filename validation, or Vim persistence.'
 };
 const filter=process.env.DEVKIT_TEST_FILTER,tests=fs.readdirSync(path.join(root,'tests')).filter(name=>name.endsWith('.cjs')&&(!filter||name.includes(filter))).sort(),runs=[{name:'portable build',command:process.execPath,args:['tools/build.cjs'],fix:'Fix the manifest, source bundle order, or standalone build.'},...tests.map(name=>({name,command:process.execPath,args:[path.join('tests',name)],fix:help[name]||'Inspect this test log and repair the failing behavior.'}))],report=[];

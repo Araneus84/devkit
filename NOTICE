@@ -4,8 +4,9 @@ Personal and workplace use are permitted. Selling or monetizing DevKit,
 including modified versions, requires separate written permission.
 Generated output may be used commercially. See LICENSE for the full terms.
 
-Third-party libraries retain their separate MIT licenses:
+Third-party libraries retain their separate licenses:
 - js-yaml 4.3.2: vendor/LICENSE.js-yaml.txt
+- yaml 2.9.0 (ISC): vendor/LICENSE.yaml.txt
 - Lezer Python parser and supporting packages: vendor/LICENSE.lezer.txt
 - CodeMirror 5.65.21: vendor/codemirror/LICENSE
 - cm5-vim 0.0.6: vendor/codemirror/LICENSE.vim.txt
