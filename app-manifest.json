@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -48,6 +48,7 @@
     "src/portable.js",
     "src/editor-workspace.js",
     "src/project-workspace.js",
+    "src/project-archive.js",
     "src/code-editor.js",
     "src/editor-assist.js",
     "src/start.js"
