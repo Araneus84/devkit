@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.10.4",
+  "version": "3.11.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -42,6 +42,7 @@
     "src/cicd-ui.js",
     "src/source-sync-model.js",
     "src/roundtrip-adapters.js",
+    "src/schema-registry.js",
     "src/source-sync-ui.js",
     "src/compact-editor.js",
     "src/portable.js",

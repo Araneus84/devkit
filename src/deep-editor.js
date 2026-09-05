@@ -1,6 +1,6 @@
 /* One recursive editor for scripts, HCL, SQL and typed documents. */
 let ddState=null,ddHistory=[],ddFuture=[],ddCollapsed=new Set(),ddDrag=null,ddInputSnapshot=false;
-const ddProfile=()=>DD_PROFILES[ddState.profile];
+const ddProfile=()=>dkSchemaProfile(ddState.profile)||DD_PROFILES[ddState.profile];
 function ddFind(id,list=ddState.blocks,parent=null,slot='root'){for(let index=0;index<list.length;index++){const node=list[index];if(node.id===id)return {node,list,index,parent,slot};for(const [key,children] of Object.entries(node.slots)){const found=ddFind(id,children,node,key);if(found)return found;}}return null;}
 function ddLane(parent,slot){return parent?ddFind(parent).node.slots[slot]:ddState.blocks;}
 function ddLaneDef(parent,slot){const def=parent?ddProfile().types[ddFind(parent).node.type].slots[slot]:ddProfile().root;let insideFunction=false,cursor=parent?ddFind(parent):null;while(cursor){if(['function','py_function'].includes(cursor.node.type))insideFunction=true;cursor=cursor.parent?ddFind(cursor.parent.id):null;}return insideFunction?def:{...def,accept:def.accept.filter(t=>t!=='return')};}
@@ -8,7 +8,7 @@ function ddSave(){ddState.updatedAt=Date.now();try{dkDrafts[ddState.id]=dkClone(
 function ddRemember(){ddHistory.push(dkClone(ddState));if(ddHistory.length>80)ddHistory.shift();ddFuture=[];}
 function ddChange(fn){if(!ewPrepareChange())return;ddRemember();fn();ddInputSnapshot=false;ddSave();ddRender();}
 function ddFreshIds(n){n.id=ddId();for(const nodes of Object.values(n.slots))nodes.forEach(ddFreshIds);return n;}
-function ddOpen(profileId,sheet,seed,filename,draftKey='default'){const p=DD_PROFILES[profileId];if(!p)return;dkStopTest();dkShow();ddHistory=[];ddFuture=[];ddCollapsed.clear();const id='deep:'+sheet+':'+profileId+':'+draftKey,saved=dkDrafts[id];
+function ddOpen(profileId,sheet,seed,filename,draftKey='default'){const p=dkSchemaProfile(profileId)||DD_PROFILES[profileId];if(!p)return;dkStopTest();dkShow();ddHistory=[];ddFuture=[];ddCollapsed.clear();const id='deep:'+sheet+':'+profileId+':'+draftKey,saved=dkDrafts[id];
  // Keep invalid field values editable; reject malformed saved trees before rendering.
  function shape(nodes,depth=0){return depth<22&&Array.isArray(nodes)&&nodes.every(n=>n&&p.types[n.type]&&anMap(n.values)&&anMap(n.slots)&&Object.keys(p.types[n.type].slots).every(k=>shape(n.slots[k],depth+1)));}
  if(saved&&!ewValidDraft(saved)){ewRecover(saved);return;}

@@ -3,20 +3,10 @@ const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map(),CE_FOCUS_REQUESTS=new Map();
 let ceVim=localStorage.getItem('devkit:vim')==='true';
 function ceAccessibleName(el,name){const item=CE_EDITORS.get(el);if(!item){el.setAttribute('aria-label',name);return;}item.accessibleName=name;el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',name);}
 function ceLanguage(el){
- if(el.id==='ab-preview')return 'yaml';
- if(el.id==='dd-preview'){
-  const profile=ddState?.profile,filename=ddState?.filename||'';
-  if(['github-actions','gitlab-ci','yaml'].includes(profile))return 'yaml';
-  if(profile==='json')return {name:'javascript',json:true};
-  if(profile==='dockerfile')return 'dockerfile';
-  if(profile==='jenkins')return 'groovy';
-  if(profile==='terraform')return 'text/x-sh';
-  if(profile==='source')return ceFilenameMode(filename);
-  return {bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql'}[profile]||null;
- }
  if(el.id==='sx-command-preview')return null;
- const output=dkActive&&typeof dkOutput==='function'?dkOutput():null;
- return ceFilenameMode(output?.filename||'')||{bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql',docker:'dockerfile',ansible:'yaml',cicd:'yaml'}[dkActive?.sheet]||null;
+ if(el.id==='dd-preview'&&ddState?.profile==='source')return ceFilenameMode(ddState.filename||'');
+ if(el.id==='dk-preview'){const output=dkActive&&typeof dkOutput==='function'?dkOutput():null,fromName=ceFilenameMode(output?.filename||'');if(fromName)return fromName;}
+ return dkSchemaForEditor({el})?.editor.mode??null;
 }
 function ceFilenameMode(name){return /Dockerfile/i.test(name)?'dockerfile':/Jenkinsfile/i.test(name)?'groovy':/\.py$/i.test(name)?'python':/\.ps1$/i.test(name)?'application/x-powershell':/\.sql$/i.test(name)?'text/x-sql':/\.json$/i.test(name)?{name:'javascript',json:true}:/\.ya?ml$/i.test(name)?'yaml':/\.(sh|bash|tf)$/i.test(name)?'text/x-sh':null;}
 function ceIndex(cm,pos){return cm.indexFromPos(pos);}
