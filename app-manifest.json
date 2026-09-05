@@ -1,10 +1,24 @@
 {
   "name": "DevKit",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
     "vendor/lezer-python.js",
+    "vendor/codemirror/codemirror.js",
+    "vendor/codemirror/searchcursor.js",
+    "vendor/codemirror/dialog.js",
+    "vendor/codemirror/matchbrackets.js",
+    "vendor/codemirror/simple.js",
+    "vendor/codemirror/shell.js",
+    "vendor/codemirror/python.js",
+    "vendor/codemirror/yaml.js",
+    "vendor/codemirror/javascript.js",
+    "vendor/codemirror/dockerfile.js",
+    "vendor/codemirror/powershell.js",
+    "vendor/codemirror/sql.js",
+    "vendor/codemirror/groovy.js",
+    "vendor/codemirror/vim.js",
     "src/state.js",
     "src/command-definitions.js",
     "src/reference-data.js",
@@ -32,11 +46,12 @@
     "src/compact-editor.js",
     "src/portable.js",
     "src/editor-workspace.js",
-    "src/vim-controls.js",
-    "src/code-colors.js",
+    "src/code-editor.js",
     "src/start.js"
   ],
   "styles": [
+    "vendor/codemirror/codemirror.css",
+    "vendor/codemirror/dialog.css",
     "styles/reference.css",
     "styles/ansible-extension.css",
     "styles/ansible-blocks.css",
@@ -47,6 +62,6 @@
     "styles/file-import.css",
     "styles/python-editor.css",
     "styles/compact-editor.css",
-    "styles/code-colors.css"
+    "styles/code-editor.css"
   ]
 }

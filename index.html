@@ -6,6 +6,8 @@
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DevKit — Portable Workbench</title>
+<link rel="stylesheet" href="vendor/codemirror/codemirror.css">
+<link rel="stylesheet" href="vendor/codemirror/dialog.css">
 <link rel="stylesheet" href="styles/reference.css">
 <link rel="stylesheet" href="styles/ansible-extension.css">
 <link rel="stylesheet" href="styles/ansible-blocks.css">
@@ -16,7 +18,7 @@
 <link rel="stylesheet" href="styles/file-import.css">
 <link rel="stylesheet" href="styles/python-editor.css">
 <link rel="stylesheet" href="styles/compact-editor.css">
-<link rel="stylesheet" href="styles/code-colors.css">
+<link rel="stylesheet" href="styles/code-editor.css">
 </head>
 <body>
 
@@ -136,6 +138,20 @@
 
 <script defer src="vendor/js-yaml.min.js"></script>
 <script defer src="vendor/lezer-python.js"></script>
+<script defer src="vendor/codemirror/codemirror.js"></script>
+<script defer src="vendor/codemirror/searchcursor.js"></script>
+<script defer src="vendor/codemirror/dialog.js"></script>
+<script defer src="vendor/codemirror/matchbrackets.js"></script>
+<script defer src="vendor/codemirror/simple.js"></script>
+<script defer src="vendor/codemirror/shell.js"></script>
+<script defer src="vendor/codemirror/python.js"></script>
+<script defer src="vendor/codemirror/yaml.js"></script>
+<script defer src="vendor/codemirror/javascript.js"></script>
+<script defer src="vendor/codemirror/dockerfile.js"></script>
+<script defer src="vendor/codemirror/powershell.js"></script>
+<script defer src="vendor/codemirror/sql.js"></script>
+<script defer src="vendor/codemirror/groovy.js"></script>
+<script defer src="vendor/codemirror/vim.js"></script>
 <script defer src="src/state.js"></script>
 <script defer src="src/command-definitions.js"></script>
 <script defer src="src/reference-data.js"></script>
@@ -163,8 +179,7 @@
 <script defer src="src/compact-editor.js"></script>
 <script defer src="src/portable.js"></script>
 <script defer src="src/editor-workspace.js"></script>
-<script defer src="src/vim-controls.js"></script>
-<script defer src="src/code-colors.js"></script>
+<script defer src="src/code-editor.js"></script>
 <script defer src="src/start.js"></script>
 </body>
 </html>

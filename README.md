@@ -23,13 +23,15 @@ For a single file, use **dist/devkit.html**. This is generated from the same sou
 
 ## Using the app
 
-Version 3.9 adds local syntax coloring to the editable file, Ansible, recipe and command panes. Colors adapt to dark/light themes and distinguish strings, comments, keywords, numbers, variables and configuration keys. The editable textarea retains selection, copy/download, code/block sync and optional Vim controls. Coloring is a lightweight lexical aid, not syntax validation; files above 200,000 characters use plain rendering to keep editing responsive. No external highlighting libraries or network requests are needed. Forced-colors accessibility mode uses native text colors.
+Version 3.9.1 replaces the transparent text-highlighting overlay and limited Vim emulation with a real, locally bundled CodeMirror editor. Text, cursor, selection and syntax colors now share one editing surface and stay inside its visible border. Language modes cover Bash, PowerShell, Python, YAML, JSON, SQL, Dockerfile and Jenkins/Groovy; Terraform uses shell-like highlighting. Code/block synchronization, copy/download and saved drafts continue to use the underlying file text.
+
+Enable **Vim mode** for the maintained cm5-vim keymap: motions and counts, operators such as `dw`, `dd` and `cw`, visual mode, registers, `/` search, and Ex commands are supported. DevKit already saves drafts automatically; `:w` therefore keeps the current browser draft. The editor and Vim implementation are bundled locally and make no runtime network requests.
 
 Version 3.8 adds **Saved files** to each tool's workbench. Resume imported files after reload, search, rename, duplicate or delete drafts (deletion has an immediate Undo). **Save as a new copy** creates a separate document. Same-name imports offer **Resume saved draft** or **Import as a new copy**, preserving previous edits. These files live in this browser; export backups to move them elsewhere.
 
 **New blank file** and **Load starter** work even when source syntax is incomplete; Undo restores the source and blocks. Backup imports validate complete editor draft shapes. Damaged existing drafts offer recovery downloads rather than silently replacing their contents. Filenames are checked in both block and source modes. Export status is separate from language validation: exporting is possible for unfinished source, and the target tool remains the final validator.
 
-Enable **Vim controls** above an editable code pane. The preference is optional, saved locally and included in workspace backups. The key guide documents the supported subset: insert/normal modes, motions, line yank/delete/paste, new lines and undo/redo. Mode survives automatic block synchronization. This is a lightweight Vim-style implementation; visual mode, Ex commands, macros and plugins are not implemented. Turn the checkbox off for ordinary textarea editing.
+The Vim preference is optional, saved locally and included in workspace backups. Mode and undo history survive automatic block synchronization. Turn the checkbox off to return to standard editor controls.
 
 Workspace/reset operations and source-change coordination now use shared functions and explicit Python/source adapters in `src/editor-workspace.js`. Rendering still uses the existing extension layers; this release does not replace the entire UI architecture. `tests/workspace-browser.cjs` covers interrupted workflows and Vim operations in both distributions.
 
@@ -212,7 +214,7 @@ Requires a modern browser with native dialog elements, JavaScript, local file ac
 
 js-yaml 4.3.2 is bundled under its MIT license. See `vendor/LICENSE.js-yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==`.
 
-Lezer's Python parser and its common, LR and highlight packages are bundled locally under MIT licenses; see `vendor/LICENSE.lezer.txt` for versions and copyright notices. There are no runtime parser downloads.
+Lezer's Python parser and its common, LR and highlight packages are bundled locally under MIT licenses; see `vendor/LICENSE.lezer.txt` for versions and copyright notices. CodeMirror 5.65.21 and cm5-vim 0.0.6 are bundled under their MIT licenses in `vendor/codemirror/`. There are no runtime parser or editor downloads.
 
 Python package references: [NumPy statistics](https://numpy.org/doc/stable/reference/routines.statistics.html), [pandas file I/O](https://pandas.pydata.org/docs/user_guide/io.html), [openpyxl tutorial](https://openpyxl.readthedocs.io/en/3.1/tutorial.html), and [OpenCV image I/O](https://docs.opencv.org/4.12.0/d4/da8/group__imgcodecs.html).
 
