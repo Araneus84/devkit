@@ -574,6 +574,7 @@ function openBuilder(builderKey) {
   renderBuilderBody(def);
   updateBuilderPreview();
   document.getElementById('builder-modal').classList.add('open');
+  if (typeof ceFocusRequest === 'function') ceFocusRequest('sx-command-preview');
 }
 
 function closeBuilder() {

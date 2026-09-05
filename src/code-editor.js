@@ -1,5 +1,5 @@
 /* CodeMirror keeps the real editing surface, language colors and Vim behavior together. */
-const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map();
+const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map(),CE_FOCUS_REQUESTS=new Map();
 let ceVim=localStorage.getItem('devkit:vim')==='true';
 function ceAccessibleName(el,name){const item=CE_EDITORS.get(el);if(!item){el.setAttribute('aria-label',name);return;}item.accessibleName=name;el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',name);}
 function ceLanguage(el){
@@ -22,6 +22,8 @@ function ceFilenameMode(name){return /Dockerfile/i.test(name)?'dockerfile':/Jenk
 function ceIndex(cm,pos){return cm.indexFromPos(pos);}
 function ceDocumentId(el){return el.id+':'+(el.id==='dd-preview'?ddState?.id:el.id==='dk-preview'?dkActive?.id:el.id==='ab-preview'?abState?.kind:currentBuilder?.def?.name);}
 function ceStatus(item,mode){item.status.textContent=ceVim?'VIM · '+String(mode?.mode||'normal').toUpperCase()+(mode?.subMode?' · '+String(mode.subMode).toUpperCase():''):'';}
+function ceFocusItem(item,position='end'){requestAnimationFrame(()=>{if(!item.el.isConnected)return;item.cm.focus();if(position==='end')item.cm.setCursor(item.cm.posFromIndex(item.cm.getValue().length));else if(position==='start')item.cm.setCursor(0,0);});}
+function ceFocusRequest(id,position='end'){const el=document.getElementById(id),item=el&&CE_EDITORS.get(el);if(item){ceFocusItem(item,position);return;}CE_FOCUS_REQUESTS.set(id,position);}
 function ceSetVim(enabled){ceVim=enabled;localStorage.setItem('devkit:vim',String(enabled));for(const item of CE_EDITORS.values()){item.toggle.checked=enabled;const cursor=item.cm.getCursor('head');item.cm.setOption('keyMap',enabled?'vim':'default');item.cm.setCursor(cursor);ceStatus(item,enabled?{mode:'normal'}:null);item.cm.focus();}}
 CodeMirror.Vim.defineEx('write','w',cm=>{const item=[...CE_EDITORS.values()].find(x=>x.cm===cm);if(!item)return;item.el.value=cm.getValue();item.el.dispatchEvent(new Event('input',{bubbles:true}));if(ddState&&item.el.id==='dd-preview')ddSave();else if(abState&&item.el.id==='ab-preview')abSave();ceStatus(item,{mode:'normal'});});
 function ceAttach(el){
@@ -36,7 +38,7 @@ function ceAttach(el){
  cm.on('scroll',()=>{const info=cm.getScrollInfo();el.scrollTop=info.top;el.scrollLeft=info.left;});
  cm.on('vim-mode-change',mode=>{ceStatus(item,mode);if(typeof eaUpdate==='function')eaUpdate(item);});
  cm.on('blur',()=>el.dispatchEvent(new Event('change',{bubbles:true})));
- requestAnimationFrame(()=>cm.refresh());
+ requestAnimationFrame(()=>{cm.refresh();if(CE_FOCUS_REQUESTS.has(el.id)){const position=CE_FOCUS_REQUESTS.get(el.id);CE_FOCUS_REQUESTS.delete(el.id);cm.focus();if(position==='end')cm.setCursor(cm.posFromIndex(cm.getValue().length));else if(position==='start')cm.setCursor(0,0);}});
 }
 function ceScan(){for(const [el,item] of CE_EDITORS)if(!el.isConnected){CE_DOCUMENTS.set(item.documentId,{history:item.cm.getHistory()});CE_EDITORS.delete(el);}for(const el of document.querySelectorAll('#dd-preview,#ab-preview,#dk-preview,#sx-command-preview'))if(el.getClientRects().length)ceAttach(el);}
 new MutationObserver(()=>requestAnimationFrame(ceScan)).observe(document.body,{childList:true,subtree:true});

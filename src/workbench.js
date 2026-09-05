@@ -25,12 +25,12 @@ function dkOpenRecipe(id){
  const saved=dkDrafts[id];const keys=new Set(recipe.parts.map(p=>p.key));
  dkActive=saved&&Array.isArray(saved.blocks)&&saved.blocks.every(b=>b&&keys.has(b.key)&&anMap(b.values))?dkClone(saved):{id,sheet:recipe.sheet,shell:recipe.sheet==='powershell'?'powershell':'posix',blocks:recipe.parts.filter(p=>p.required).map(p=>({key:p.key,values:dkPartValues(p)}))};
  if(!dkActive.blocks.length&&recipe.parts.length)dkActive.blocks.push({key:recipe.parts[0].key,values:dkPartValues(recipe.parts[0])});
- dkRender();
+ dkRender();if(typeof ceFocusRequest==='function')ceFocusRequest('dk-preview');
 }
 function dkOpenExample(sheet,item){
  const aware=Object.values(DK_RECIPES).find(r=>r.legacy===sheet+'::'+item.cmd);if(aware){dkOpenRecipe(aware.id);return;}
  dkShow();dkUndo=[];dkRedo=[];const id='example:'+sheet+':'+cmdId(sheet,item.cmd);
- dkActive=dkDrafts[id]?dkClone(dkDrafts[id]):{id,sheet,example:{description:item.desc,original:item.cmd,platform:item.platform||''},blocks:item.cmd.split('\n').map(line=>({key:'line',values:{text:line}}))};dkRender();
+ dkActive=dkDrafts[id]?dkClone(dkDrafts[id]):{id,sheet,example:{description:item.desc,original:item.cmd,platform:item.platform||''},blocks:item.cmd.split('\n').map(line=>({key:'line',values:{text:line}}))};dkRender();if(typeof ceFocusRequest==='function')ceFocusRequest('dk-preview');
 }
 function dkDefinition(block){if(dkActive.example)return dkP('line','Example line','The text is preserved exactly, including leading spaces.',{text:dkF('Text','multiline','')});return dkGetRecipe().parts.find(p=>p.key===block.key);}
 function dkValidField(field,value){

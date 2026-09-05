@@ -12,7 +12,7 @@ function ddOpen(profileId,sheet,seed,filename,draftKey='default'){const p=DD_PRO
  // Keep invalid field values editable; reject malformed saved trees before rendering.
  function shape(nodes,depth=0){return depth<22&&Array.isArray(nodes)&&nodes.every(n=>n&&p.types[n.type]&&anMap(n.values)&&anMap(n.slots)&&Object.keys(p.types[n.type].slots).every(k=>shape(n.slots[k],depth+1)));}
  if(saved&&!ewValidDraft(saved)){ewRecover(saved);return;}
- ddState=saved&&saved.profile===profileId&&shape(saved.blocks)?dkClone(saved):{id,sheet,profile:profileId,filename:filename||p.filename,...dxInitial(p,seed)};ddRender();ddSave();
+ ddState=saved&&saved.profile===profileId&&shape(saved.blocks)?dkClone(saved):{id,sheet,profile:profileId,filename:filename||p.filename,...dxInitial(p,seed)};ddRender();ddSave();if(typeof ceFocusRequest==='function')ceFocusRequest('dd-preview');
 }
 function ddSeedFromRecipe(id){const r=DK_RECIPES[id],p=DD_PROFILES[/\.json$/.test(r.filename)?'json':'yaml'];const blocks=r.parts.map(part=>({key:part.key,values:dkPartValues(part)}));const text=r.generate(Object.fromEntries(blocks.map(b=>[b.key,b.values])),blocks,{shell:'posix'});const docs=p.id==='json'?[JSON.parse(text)]:jsyaml.loadAll(text);return {profile:p.id,nodes:docs.map(d=>ddFromValue(p,d)),filename:r.filename};}
 const DD_SEEDS={docker:['docker:compose'],k8s:['k8s:deployment','k8s:configmap'],npm:['npm:package'],terraform:[],ansible:[]};
