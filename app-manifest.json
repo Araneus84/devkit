@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.10.3",
+  "version": "3.10.4",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
