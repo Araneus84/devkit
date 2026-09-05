@@ -23,6 +23,8 @@ For a single file, use **dist/devkit.html**. This is generated from the same sou
 
 ## Using the app
 
+Version 3.9.2 keeps block controls usable and clearly explains when invalid source has temporarily paused them. Ansible can repair tab-indented YAML with a visible suggestion, and every deep editor provides a button to discard invalid source and resume the last valid blocks. Tab inserts spaces in ordinary editing and Vim insert mode. Source-mode uploads retain their detected line endings after edits, ordinary Bash commands reconstruct command blocks, and the original command builder now mounts its editor correctly.
+
 Version 3.9.1 replaces the transparent text-highlighting overlay and limited Vim emulation with a real, locally bundled CodeMirror editor. Text, cursor, selection and syntax colors now share one editing surface and stay inside its visible border. Language modes cover Bash, PowerShell, Python, YAML, JSON, SQL, Dockerfile and Jenkins/Groovy; Terraform uses shell-like highlighting. Code/block synchronization, copy/download and saved drafts continue to use the underlying file text.
 
 Enable **Vim mode** for the maintained cm5-vim keymap: motions and counts, operators such as `dw`, `dd` and `cw`, visual mode, registers, `/` search, and Ex commands are supported. DevKit already saves drafts automatically; `:w` therefore keeps the current browser draft. The editor and Vim implementation are bundled locally and make no runtime network requests.

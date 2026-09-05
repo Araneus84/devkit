@@ -1,6 +1,7 @@
 /* CodeMirror keeps the real editing surface, language colors and Vim behavior together. */
 const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map();
 let ceVim=localStorage.getItem('devkit:vim')==='true';
+function ceAccessibleName(el,name){const item=CE_EDITORS.get(el);if(!item){el.setAttribute('aria-label',name);return;}item.accessibleName=name;el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',name);}
 function ceLanguage(el){
  if(el.id==='ab-preview')return 'yaml';
  if(el.id==='dd-preview'){
@@ -13,7 +14,9 @@ function ceLanguage(el){
   if(profile==='source')return ceFilenameMode(filename);
   return {bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql'}[profile]||null;
  }
- return ceFilenameMode(dkOutput?.()?.filename||'')||{bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql',docker:'dockerfile',ansible:'yaml',cicd:'yaml'}[dkActive?.sheet]||null;
+ if(el.id==='sx-command-preview')return null;
+ const output=dkActive&&typeof dkOutput==='function'?dkOutput():null;
+ return ceFilenameMode(output?.filename||'')||{bash:'text/x-sh',powershell:'application/x-powershell',python:'python',sql:'text/x-sql',docker:'dockerfile',ansible:'yaml',cicd:'yaml'}[dkActive?.sheet]||null;
 }
 function ceFilenameMode(name){return /Dockerfile/i.test(name)?'dockerfile':/Jenkinsfile/i.test(name)?'groovy':/\.py$/i.test(name)?'python':/\.ps1$/i.test(name)?'application/x-powershell':/\.sql$/i.test(name)?'text/x-sql':/\.json$/i.test(name)?{name:'javascript',json:true}:/\.ya?ml$/i.test(name)?'yaml':/\.(sh|bash|tf)$/i.test(name)?'text/x-sh':null;}
 function ceIndex(cm,pos){return cm.indexFromPos(pos);}
@@ -26,6 +29,7 @@ function ceAttach(el){
  const initialStart=el.selectionStart||0,initialEnd=el.selectionEnd||initialStart,row=dkEl('div','ce-controls dk-actions'),toggle=dkEl('input');toggle.type='checkbox';toggle.checked=ceVim;toggle.setAttribute('aria-label','Enable Vim controls');const label=dkEl('label','dk-help');label.append(toggle,document.createTextNode(' Vim mode'));const status=dkEl('span','ce-vim-status');status.setAttribute('role','status');const help=dkEl('details','dk-help');help.append(dkEl('summary','','Vim key guide'),dkEl('p','','Full Vim keymap: motions and counts, operators such as dw/dd/cw, insert and visual modes, registers, search with / or ?, and Ex commands such as :w and :set. DevKit saves automatically; :w keeps the draft in browser storage. Disable Vim mode here to return to ordinary editing.'));row.append(label,status,help);el.before(row);
  const accessibleName=el.getAttribute('aria-label')||'Code editor',documentId=ceDocumentId(el),saved=CE_DOCUMENTS.get(documentId);el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');
  const cm=CodeMirror.fromTextArea(el,{mode:ceLanguage(el),lineNumbers:true,lineWrapping:false,inputStyle:'contenteditable',indentUnit:2,tabSize:2,indentWithTabs:false,keyMap:ceVim?'vim':'default',matchBrackets:true,viewportMargin:20,extraKeys:{'Ctrl-Enter':()=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',ctrlKey:true,bubbles:true}));},'Cmd-Enter':()=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',metaKey:true,bubbles:true}));}}});cm.getInputField().setAttribute('aria-label',accessibleName);
+ cm.getWrapperElement().addEventListener('keydown',event=>{const inserting=!ceVim||cm.state.vim?.insertMode;if(event.key!=='Tab'||!inserting)return;event.preventDefault();event.stopPropagation();cm.execCommand(event.shiftKey?'indentLess':'insertSoftTab');},true);
  const item={el,cm,row,toggle,status,documentId,accessibleName,writing:false,last:el.value,size:''};CE_EDITORS.set(el,item);if(saved?.history)try{cm.setHistory(saved.history);}catch{}cm.setSelection(cm.posFromIndex(initialStart),cm.posFromIndex(initialEnd));cm.setSize('100%','100%');toggle.onchange=()=>ceSetVim(toggle.checked);ceStatus(item,ceVim?{mode:'normal'}:null);
  cm.on('change',()=>{if(item.writing)return;item.last=cm.getValue();el.value=item.last;el.setSelectionRange(ceIndex(cm,cm.getCursor('anchor')),ceIndex(cm,cm.getCursor('head')));el.dispatchEvent(new Event('input',{bubbles:true}));setTimeout(()=>{if(el.isConnected)CE_DOCUMENTS.set(documentId,{history:cm.getHistory()});});});
  cm.on('cursorActivity',()=>{const anchor=ceIndex(cm,cm.getCursor('anchor')),head=ceIndex(cm,cm.getCursor('head'));el.setSelectionRange(anchor,head);});
