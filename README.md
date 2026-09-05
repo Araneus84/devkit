@@ -14,7 +14,7 @@ This is a custom **source-available** license, not an OSI open-source license. T
 
 ## Publishing updates
 
-GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. After editing source files, run `node tools/build.cjs`, commit source and `dist/devkit.html`, then push to `main`. Pages publishes the updated folder edition automatically.
+GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. Create a branch, make the change, run `npm test`, commit source and the rebuilt `dist/devkit.html`, then open a pull request. The protected `main` branch requires the **DevKit QA gate** to pass before merge. GitHub Pages publishes the merged folder edition automatically.
 
 
 Open **index.html** in a modern browser. No installation, server, account or internet connection is required. Copy the entire folder to move the app to Windows, macOS or Linux. Unzip downloaded archives first.
@@ -22,6 +22,10 @@ Open **index.html** in a modern browser. No installation, server, account or int
 For a single file, use **dist/devkit.html**. This is generated from the same source as the folder edition.
 
 ## Using the app
+
+Version 3.10 adds context-aware completion to every code surface. Start a known field, keyword, instruction or module name and the editor shows the remaining text as a ghost suggestion plus clickable choices. Press **Tab** to accept the first choice. For example, `ho` becomes `hosts: ""`; the cursor lands inside the quotes. Press **Enter** after a YAML field, Python block, shell construct, HCL/Groovy brace, JSON container or Docker continuation to insert the correct indentation and show the next likely block. Suggestions also work in Vim insert mode; normal mode keeps Vim commands in control.
+
+The repository now includes a GitHub Actions QA gate. `npm test` rebuilds the standalone HTML and runs every model and browser test. Failed checks add a GitHub annotation, a readable Actions job summary, and a downloadable log bundle that identifies the failed suite and the area to repair. See [CONTRIBUTING.md](CONTRIBUTING.md) for the protected-branch workflow and local commands.
 
 Version 3.9.2 keeps block controls usable and clearly explains when invalid source has temporarily paused them. Ansible can repair tab-indented YAML with a visible suggestion, and every deep editor provides a button to discard invalid source and resume the last valid blocks. Tab inserts spaces in ordinary editing and Vim insert mode. Source-mode uploads retain their detected line endings after edits, ordinary Bash commands reconstruct command blocks, and the original command builder now mounts its editor correctly.
 

@@ -1,0 +1,13 @@
+{
+  "name": "devkit-workbench",
+  "version": "3.10.0",
+  "private": true,
+  "description": "Offline command reference and structured file builder",
+  "scripts": {
+    "build": "node tools/build.cjs",
+    "test": "node tools/test-all.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
