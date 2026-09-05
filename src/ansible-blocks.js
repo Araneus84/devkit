@@ -125,10 +125,10 @@ function abOpen(){
  abFocus=document.activeElement;
  if(!abState){try{const saved=JSON.parse(localStorage.getItem(AB_KEY));if(saved?.version===2&&AB_FILES[saved.kind]&&Array.isArray(saved.path)&&(anMap(saved.doc)||Array.isArray(saved.doc)))abState=saved;}catch(e){}if(!abState)abState=abDefault('playbook');}
  if(abGet()===undefined)abState.path=[];
- const dialog=document.getElementById('ab-dialog');if(!dialog.open)dialog.showModal();abRender();document.getElementById('ab-close').focus();
+ const dialog=document.getElementById('ab-dialog');if(!dialog.open)dialog.showModal();abRender();document.getElementById('ab-close').focus();if(typeof ceFocusRequest==='function')ceFocusRequest('ab-preview');
 }
 function abClose(){document.getElementById('ab-dialog').close();abFocus?.focus();}
-function abReset(kind){abEdit(()=>{abState=abDefault(kind);});}
+function abReset(kind){abEdit(()=>{abState=abDefault(kind);});if(typeof ceFocusRequest==='function')ceFocusRequest('ab-preview');}
 function abRender(){
  const type=abType(),value=abGet();if(value===undefined){abState.path=[];return abRender();}
  document.getElementById('ab-file-label').textContent=AB_FILES[abState.kind].filename;
