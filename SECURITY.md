@@ -4,7 +4,7 @@ DevKit is a static browser application. It reads selected files locally and gene
 
 ## Saved content
 
-Drafts, notes and command history use browser localStorage. They and exported backups are **not encrypted**. Other pages on the same origin, browser extensions with access, or someone using the same browser profile may access saved content. Use environment-variable references and placeholders instead of real credentials. Keep exported backups private. Clear this site's browser data to remove saved content; this also removes drafts, so export anything needed first.
+Drafts, notes, project history and command history use browser localStorage. They and exported backups are **not encrypted**. Other pages on the same origin, browser extensions with access, or someone using the same browser profile may access saved content. Use environment-variable references and placeholders instead of real credentials. DevKit's local secret-pattern warnings reduce accidental storage but cannot identify every credential. Keep exported backups private. Clear this site's browser data to remove saved content; this also removes drafts, so export anything needed first.
 
 ## Reporting a vulnerability
 

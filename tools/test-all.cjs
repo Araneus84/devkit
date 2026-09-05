@@ -8,6 +8,7 @@ const help={
  'code-editor-browser.cjs':'Fix editor geometry, input, Vim, syntax coloring, or editor mounting.',
  'compact-editor.cjs':'Fix blank starts, starter actions, compact layout, or completion visibility.',
  'deep.cjs':'Fix a deep-editor data model or generated syntax.',
+ 'diagnostics-browser.cjs':'Fix inline syntax/schema diagnostics, secret detection, repair actions, source ranges, or safe project variables.',
  'editor-assist-browser.cjs':'Fix Tab completion, suggestions, or Enter indentation for the named language.',
  'interactions-browser.cjs':'Fix pointer/keyboard block controls or invalid-source recovery.',
  'ops-browser.cjs':'Fix Python operations, module search, or generated dependencies.',
