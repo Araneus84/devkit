@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -33,6 +33,7 @@
     "src/portable.js",
     "src/editor-workspace.js",
     "src/vim-controls.js",
+    "src/code-colors.js",
     "src/start.js"
   ],
   "styles": [
@@ -45,6 +46,7 @@
     "styles/deep-editor.css",
     "styles/file-import.css",
     "styles/python-editor.css",
-    "styles/compact-editor.css"
+    "styles/compact-editor.css",
+    "styles/code-colors.css"
   ]
 }

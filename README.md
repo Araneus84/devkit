@@ -23,6 +23,8 @@ For a single file, use **dist/devkit.html**. This is generated from the same sou
 
 ## Using the app
 
+Version 3.9 adds local syntax coloring to the editable file, Ansible, recipe and command panes. Colors adapt to dark/light themes and distinguish strings, comments, keywords, numbers, variables and configuration keys. The editable textarea retains selection, copy/download, code/block sync and optional Vim controls. Coloring is a lightweight lexical aid, not syntax validation; files above 200,000 characters use plain rendering to keep editing responsive. No external highlighting libraries or network requests are needed. Forced-colors accessibility mode uses native text colors.
+
 Version 3.8 adds **Saved files** to each tool's workbench. Resume imported files after reload, search, rename, duplicate or delete drafts (deletion has an immediate Undo). **Save as a new copy** creates a separate document. Same-name imports offer **Resume saved draft** or **Import as a new copy**, preserving previous edits. These files live in this browser; export backups to move them elsewhere.
 
 **New blank file** and **Load starter** work even when source syntax is incomplete; Undo restores the source and blocks. Backup imports validate complete editor draft shapes. Damaged existing drafts offer recovery downloads rather than silently replacing their contents. Filenames are checked in both block and source modes. Export status is separate from language validation: exporting is possible for unfinished source, and the target tool remains the final validator.
