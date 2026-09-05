@@ -23,6 +23,8 @@ For a single file, use **dist/devkit.html**. This is generated from the same sou
 
 ## Using the app
 
+Version 3.10.1 keeps the caret in the first editable placeholder after completion and suppresses suggestions while that placeholder is empty. Repeated **Tab** presses cannot insert the same field again, and structured editors omit keys that already exist among the current block's siblings.
+
 Version 3.10 adds context-aware completion to every code surface. Start a known field, keyword, instruction or module name and the editor shows the remaining text as a ghost suggestion plus clickable choices. Press **Tab** to accept the first choice. For example, `ho` becomes `hosts: ""`; the cursor lands inside the quotes. Press **Enter** after a YAML field, Python block, shell construct, HCL/Groovy brace, JSON container or Docker continuation to insert the correct indentation and show the next likely block. Suggestions also work in Vim insert mode; normal mode keeps Vim commands in control.
 
 The repository now includes a GitHub Actions QA gate. `npm test` rebuilds the standalone HTML and runs every model and browser test. Failed checks add a GitHub annotation, a readable Actions job summary, and a downloadable log bundle that identifies the failed suite and the area to repair. See [CONTRIBUTING.md](CONTRIBUTING.md) for the protected-branch workflow and local commands.
