@@ -1,5 +1,5 @@
 /* Explicit backup/restore keeps this app independent of a browser or file location. */
-const DK_BACKUP_KEYS=[...Object.values(STORAGE_KEYS),'devkit_ansible_draft_v1','devkit_ansible_blocks_v2',DK_STORAGE,'devkit:vim','devkit:projects:v1','devkit:projects:v2'];
+const DK_BACKUP_KEYS=[...Object.values(STORAGE_KEYS),'devkit_ansible_draft_v1','devkit_ansible_blocks_v2',DK_STORAGE,'devkit:vim','devkit:editor-mode-v1','devkit:projects:v1','devkit:projects:v2'];
 function dkBackup(){const data={};for(const key of DK_BACKUP_KEYS){const value=localStorage.getItem(key);if(value!==null)data[key]=value;}return {format:'devkit-backup',version:1,createdAt:new Date().toISOString(),data};}
 function dkValidateBackup(value){
  if(!value||value.format!=='devkit-backup'||value.version!==1||!anMap(value.data))throw Error('This is not a supported DevKit backup.');
@@ -22,6 +22,7 @@ function dkValidateBackup(value){
    if(['devkit:projects:v1','devkit:projects:v2'].includes(key)){const projects=pwMigrate(parsed),drafts=JSON.parse(value.data[DK_STORAGE]||'{}');for(const project of Object.values(projects.projects))pwValidateProject(project,drafts);}
    if(key==='devkit_ansible_blocks_v2'&&(!anMap(parsed)||parsed.version!==2||!AB_FILES[parsed.kind]||!Array.isArray(parsed.path)||!(anMap(parsed.doc)||Array.isArray(parsed.doc))))throw Error('Invalid Ansible draft.');
   }
+  if(key==='devkit:editor-mode-v1'&&!['guided','standard','expert'].includes(raw))throw Error('Invalid editor mode.');
   output[key]=raw;
  }
  return output;
