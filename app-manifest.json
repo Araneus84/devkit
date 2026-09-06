@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.18.0",
+  "version": "3.19.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -31,6 +31,7 @@
     "src/ansible-drag.js",
     "src/tool-guides.js",
     "src/recipe-catalog.js",
+    "src/recipe-packs.js",
     "src/workbench.js",
     "src/deep-model.js",
     "src/deep-editor.js",
@@ -49,6 +50,7 @@
     "src/source-sync-ui.js",
     "src/compact-editor.js",
     "src/portable.js",
+    "src/recipe-packs-ui.js",
     "src/editor-workspace.js",
     "src/project-workspace.js",
     "src/project-archive.js",
@@ -78,6 +80,7 @@
     "styles/diagnostics.css",
     "styles/editor-modes.css",
     "styles/unified-search.css",
-    "styles/cicd-graph.css"
+    "styles/cicd-graph.css",
+    "styles/recipe-packs.css"
   ]
 }

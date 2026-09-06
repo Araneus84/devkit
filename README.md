@@ -6,6 +6,8 @@ DevKit is a browser-based command reference and file builder for sysadmins, DevO
 
 Version 3.18 adds a dependency-aware visual pipeline map to the GitHub Actions, GitLab CI, and Jenkins builders. Job dependencies update generated code immediately, unsafe cycles and invalid GitLab stage links are disabled, and map cards jump to their editable blocks.
 
+Version 3.19 adds portable JSON-only recipe packs. Imported packs can define guided fields, optional blocks and fixed output templates, but cannot run scripts, inject interface HTML or access the network. Packs participate in module browsing, unified search and workspace backups.
+
 The hosted app uses browser-local storage. Drafts do not automatically synchronize between devices or between the local-file and hosted editions. Use the app’s backup/export and restore/import controls to move your work. Download the ZIP or single-file edition for offline use.
 
 ## License and responsible use

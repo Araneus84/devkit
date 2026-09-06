@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://araneus84.github.io/devkit/schemas/recipe-pack-v1.schema.json",
+  "title": "DevKit recipe pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "id", "name", "recipes"],
+  "properties": {
+    "format": {"const": "devkit-recipe-pack"},
+    "version": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{0,63}$"},
+    "name": {"type": "string", "minLength": 1, "maxLength": 120},
+    "description": {"type": "string", "maxLength": 1000},
+    "author": {"type": "string", "maxLength": 120},
+    "recipes": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"$ref": "#/$defs/recipe"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"},
+    "field": {"type": "object", "additionalProperties": false, "required": ["label", "type", "value"], "properties": {"label": {"type": "string", "maxLength": 120}, "type": {"enum": ["text", "multiline", "token", "identifier", "dns", "package", "cmdpath", "number", "boolean", "choice", "list", "pairs"]}, "value": {}, "hint": {"type": "string", "maxLength": 500}, "required": {"type": "boolean"}, "min": {"type": "integer"}, "max": {"type": "integer"}, "choices": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"type": "string", "maxLength": 300}}}},
+    "part": {"type": "object", "additionalProperties": false, "required": ["key", "label", "fields"], "properties": {"key": {"$ref": "#/$defs/id"}, "label": {"type": "string", "maxLength": 120}, "hint": {"type": "string", "maxLength": 1000}, "required": {"type": "boolean"}, "fields": {"type": "object", "maxProperties": 20, "additionalProperties": {"$ref": "#/$defs/field"}}}},
+    "segment": {"type": "object", "additionalProperties": false, "required": ["template"], "properties": {"part": {"$ref": "#/$defs/id"}, "template": {"type": "string", "maxLength": 20000}}},
+    "recipe": {"type": "object", "additionalProperties": false, "required": ["id", "sheet", "title", "parts", "output"], "properties": {"id": {"$ref": "#/$defs/id"}, "sheet": {"$ref": "#/$defs/id"}, "title": {"type": "string", "maxLength": 120}, "description": {"type": "string", "maxLength": 1000}, "filename": {"type": "string", "minLength": 1, "maxLength": 180}, "check": {"type": "string", "maxLength": 1000}, "parts": {"type": "array", "minItems": 1, "maxItems": 30, "items": {"$ref": "#/$defs/part"}}, "output": {"type": "array", "minItems": 1, "maxItems": 60, "items": {"$ref": "#/$defs/segment"}}}}
+  }
+}

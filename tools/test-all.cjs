@@ -21,6 +21,8 @@ const help={
  'project-archive-browser.cjs':'Fix project ZIP portability, snapshot history, line diffs, migration, or safe restore.',
  'project-workspace-browser.cjs':'Fix project storage, templates, file trees, tabs, imports, exports, or editor integration.',
  'recipes.cjs':'Fix recipe registration, generated file syntax, or offline assets.',
+ 'recipe-packs.cjs':'Fix the JSON-only recipe-pack contract, template interpreter, limits, quoting, IDs, or malicious-input rejection.',
+ 'recipe-packs-browser.cjs':'Fix recipe-pack storage, import, management, search/schema integration, backup validation, inert rendering, or responsive offline behavior.',
  'roundtrip-adapters.cjs':'Fix fresh-source reconstruction for the reported language.',
  'roundtrip-browser.cjs':'Fix live code/block reconstruction, history, or draft reload.',
  'schema-registry-browser.cjs':'Fix schema registration, normalized module metadata, or registry-backed editor behavior.',
