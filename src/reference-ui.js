@@ -488,9 +488,9 @@ function renderFavorites(q) {
   updateStatusCount(total, 'Favorites');
 }
 
-function updateStatusCount(count, name) {
+function updateStatusCount(count, name, noun = 'command') {
   document.getElementById('status-name').textContent = name;
-  document.getElementById('status-counts').textContent = `${count} command${count === 1 ? '' : 's'}`;
+  document.getElementById('status-counts').textContent = `${count} ${noun}${count === 1 ? '' : 's'}`;
 }
 
 function toggleSection(id) {

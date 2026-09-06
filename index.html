@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="styles/project-workspace.css">
 <link rel="stylesheet" href="styles/diagnostics.css">
 <link rel="stylesheet" href="styles/editor-modes.css">
+<link rel="stylesheet" href="styles/unified-search.css">
 </head>
 <body>
 
@@ -36,7 +37,7 @@
 
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" id="search" placeholder="Search commands across all sheets..." autocomplete="off" spellcheck="false">
+    <input type="text" id="search" placeholder="Describe what you need: restart a service, build a pipeline…" aria-label="Search all DevKit tools by command or intent" aria-controls="main" autocomplete="off" spellcheck="false">
     <span class="search-kbd">⌘K</span>
   </div>
 
@@ -192,6 +193,7 @@
 <script defer src="src/editor-assist.js"></script>
 <script defer src="src/diagnostics.js"></script>
 <script defer src="src/editor-modes.js"></script>
+<script defer src="src/unified-search.js"></script>
 <script defer src="src/start.js"></script>
 </body>
 </html>
