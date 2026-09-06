@@ -10,6 +10,7 @@ const help={
  'deep.cjs':'Fix a deep-editor data model or generated syntax.',
  'diagnostics-browser.cjs':'Fix inline syntax/schema diagnostics, secret detection, repair actions, source ranges, or safe project variables.',
  'editor-assist-browser.cjs':'Fix Tab completion, suggestions, or Enter indentation for the named language.',
+ 'editor-modes-browser.cjs':'Fix Guided, Standard or Expert layout, persistence, backup portability, shared-document safety, or editor coverage.',
  'interactions-browser.cjs':'Fix pointer/keyboard block controls or invalid-source recovery.',
  'ops-browser.cjs':'Fix Python operations, module search, or generated dependencies.',
  'python-browser.cjs':'Fix Python code/block sync, parsing, imports, or responsive UI.',
