@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.17.0",
+  "version": "3.18.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -41,6 +41,7 @@
     "src/python-ops.js",
     "src/cicd-model.js",
     "src/cicd-ui.js",
+    "src/cicd-graph.js",
     "src/source-sync-model.js",
     "src/roundtrip-adapters.js",
     "src/yaml-roundtrip.js",
@@ -76,6 +77,7 @@
     "styles/project-workspace.css",
     "styles/diagnostics.css",
     "styles/editor-modes.css",
-    "styles/unified-search.css"
+    "styles/unified-search.css",
+    "styles/cicd-graph.css"
   ]
 }

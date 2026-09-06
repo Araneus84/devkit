@@ -4,6 +4,7 @@ const help={
  'ansible-live-sync.cjs':'Fix Ansible parsing, completion repair, focus, or undo behavior.',
  'browser-deep.cjs':'Fix deep-editor rendering, drag/drop, history, imports, downloads, or responsive preview.',
  'cicd-browser.cjs':'Fix the GitHub Actions, GitLab CI, or Jenkins interactive builders.',
+ 'cicd-graph-browser.cjs':'Fix visual pipeline nodes, dependency editing, graph validation, map navigation, or responsive layout.',
  'cicd.cjs':'Fix CI/CD generation or structural validation.',
  'code-editor-browser.cjs':'Fix editor geometry, input, Vim, syntax coloring, or editor mounting.',
  'compact-editor.cjs':'Fix blank starts, starter actions, compact layout, or completion visibility.',
