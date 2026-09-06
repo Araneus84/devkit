@@ -25,6 +25,7 @@ const help={
  'schema-registry-browser.cjs':'Fix schema registration, normalized module metadata, or registry-backed editor behavior.',
  'security-browser.cjs':'Fix unsafe rendering, parser limits, backup validation, privacy, or network isolation.',
  'source-sync-browser.cjs':'Fix two-way source/block synchronization for the reported editor.',
+ 'unified-search-browser.cjs':'Fix fuzzy intent ranking, unified index coverage, result actions, filters, keyboard navigation, safe rendering, mobile layout, or offline behavior.',
  'uploads.cjs':'Fix file selection/drop, byte preservation, fallback, recovery, or download.',
  'yaml-cst-browser.cjs':'Fix comment-preserving YAML integration across deep, CI/CD, Ansible, project, modular, or standalone editors.',
  'yaml-cst-roundtrip.cjs':'Fix the YAML CST reconciliation engine, comments, anchors, aliases, quote styles, ordering, or parser limits.',

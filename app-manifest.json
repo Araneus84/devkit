@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.16.0",
+  "version": "3.17.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -55,6 +55,7 @@
     "src/editor-assist.js",
     "src/diagnostics.js",
     "src/editor-modes.js",
+    "src/unified-search.js",
     "src/start.js"
   ],
   "styles": [
@@ -74,6 +75,7 @@
     "styles/editor-assist.css",
     "styles/project-workspace.css",
     "styles/diagnostics.css",
-    "styles/editor-modes.css"
+    "styles/editor-modes.css",
+    "styles/unified-search.css"
   ]
 }
