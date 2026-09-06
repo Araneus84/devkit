@@ -4,6 +4,8 @@
 
 DevKit is a browser-based command reference and file builder for sysadmins, DevOps, platform engineers and SREs. It includes Ansible, Terraform, Bash, PowerShell, Python, SQL, containers and separate CI/CD builders. No account or backend is required to use the app.
 
+Version 3.18 adds a dependency-aware visual pipeline map to the GitHub Actions, GitLab CI, and Jenkins builders. Job dependencies update generated code immediately, unsafe cycles and invalid GitLab stage links are disabled, and map cards jump to their editable blocks.
+
 The hosted app uses browser-local storage. Drafts do not automatically synchronize between devices or between the local-file and hosted editions. Use the app’s backup/export and restore/import controls to move your work. Download the ZIP or single-file edition for offline use.
 
 ## License and responsible use
