@@ -4,7 +4,7 @@
 
 DevKit is a browser-based command reference and file builder for sysadmins, DevOps, platform engineers and SREs. It includes Ansible, Terraform, Bash, PowerShell, Python, SQL, containers and separate CI/CD builders. No account or backend is required to use the app.
 
-Version 3.20 adds an optional, dependency-free local companion for installed-tool detection, read-only Git status, and controlled validation or formatting. It binds only to loopback, creates a one-time token at launch, accepts fixed operations, never invokes a shell, and stores submitted files only in disposable temporary directories. DevKit remains an offline static app when the companion is not running. See [docs/local-companion.md](docs/local-companion.md).
+Version 3.20.1 adds an optional, dependency-free local companion for installed-tool detection, read-only Git status, and controlled validation or formatting. It binds only to loopback, creates a one-time token at launch, accepts fixed operations, never invokes a shell, and stores submitted files only in disposable temporary directories. Hosted pages use the browser's explicit Local Network Access permission. DevKit remains an offline static app when the companion is not running. See [docs/local-companion.md](docs/local-companion.md).
 
 Version 3.18 adds a dependency-aware visual pipeline map to the GitHub Actions, GitLab CI, and Jenkins builders. Job dependencies update generated code immediately, unsafe cycles and invalid GitLab stage links are disabled, and map cards jump to their editable blocks.
 
