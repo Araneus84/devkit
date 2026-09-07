@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.19.0",
+  "version": "3.20.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -58,6 +58,7 @@
     "src/editor-assist.js",
     "src/diagnostics.js",
     "src/editor-modes.js",
+    "src/local-companion.js",
     "src/unified-search.js",
     "src/start.js"
   ],
@@ -81,6 +82,7 @@
     "styles/editor-modes.css",
     "styles/unified-search.css",
     "styles/cicd-graph.css",
-    "styles/recipe-packs.css"
+    "styles/recipe-packs.css",
+    "styles/local-companion.css"
   ]
 }

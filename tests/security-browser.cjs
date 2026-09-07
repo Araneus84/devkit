@@ -23,11 +23,11 @@ const {chromium}=require(process.env.DEVKIT_PLAYWRIGHT||'playwright'),assert=req
    const parsed=jsyaml.load('a: &a {__proto__: {polluted: true}}\nb: {<<: *a}');assert(!({}).polluted&&!parsed.b.polluted,'Prototype polluted');
    let binary=false;try{await dfRead(new File([new Uint8Array([255,254,65,0])],'bad.txt'));}catch{binary=true;}assert(binary,'UTF16 accepted');
    dkClose();dkTransfer();assert(document.querySelector('#dk-root').textContent.includes('not encrypted'),'Privacy notice missing');
-   assert(document.querySelector('meta[http-equiv="Content-Security-Policy"]').content.includes("connect-src 'none'"),'Network policy missing');
+   const policy=document.querySelector('meta[http-equiv="Content-Security-Policy"]').content,connect=policy.match(/(?:^|;)\s*connect-src\s+([^;]+)/)?.[1]?.trim();assert(connect==='http://127.0.0.1:* http://localhost:*','Loopback-only network policy missing');
    await new Promise((resolve,reject)=>{const url=URL.createObjectURL(new Blob(['onmessage=()=>postMessage(/hello/.test("hello"))'],{type:'text/javascript'}));const worker=new Worker(url);const timeout=setTimeout(()=>{worker.terminate();reject(Error('Local regex worker blocked'));},2000);worker.onmessage=e=>{clearTimeout(timeout);worker.terminate();URL.revokeObjectURL(url);e.data?resolve():reject(Error('Worker failed'));};worker.onerror=reject;worker.postMessage('test');});
    const notices=document.getElementById('dk-license-notices');if(notices)assert(notices.content.textContent.includes('DevKit Free Use License 1.0')&&notices.content.textContent.includes('Permission is hereby granted')&&notices.content.textContent.includes('Copyright Eemeli Aro'),'Bundled license notices missing');
    return true;
   });assert(result);assert.deepEqual(errors,[]);assert.deepEqual(network,[]);await page.close();
  }
- console.log('PASS: markup stays inert, backup prototype rejection, unsafe/cyclic/oversized YAML rejection, parser depth/merge budgets, UTF16 rejection, privacy notices and no unexpected network requests in both editions.');
+ console.log('PASS: markup stays inert, backup prototype rejection, unsafe/cyclic/oversized YAML rejection, parser depth/merge budgets, UTF16 rejection, privacy notices, loopback-only policy and no unexpected network requests in both editions.');
  }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

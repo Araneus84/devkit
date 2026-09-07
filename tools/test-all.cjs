@@ -8,6 +8,8 @@ const help={
  'cicd.cjs':'Fix CI/CD generation or structural validation.',
  'code-editor-browser.cjs':'Fix editor geometry, input, Vim, syntax coloring, or editor mounting.',
  'compact-editor.cjs':'Fix blank starts, starter actions, compact layout, or completion visibility.',
+ 'companion.cjs':'Fix loopback binding, authentication, request limits, fixed tool commands, Git status, validation, formatting, or protocol security.',
+ 'companion-browser.cjs':'Fix optional companion connection, local-tool UI, validation/formatting controls, search, standalone parity, or responsive layout.',
  'deep.cjs':'Fix a deep-editor data model or generated syntax.',
  'diagnostics-browser.cjs':'Fix inline syntax/schema diagnostics, secret detection, repair actions, source ranges, or safe project variables.',
  'editor-assist-browser.cjs':'Fix Tab completion, suggestions, or Enter indentation for the named language.',

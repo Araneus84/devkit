@@ -4,6 +4,8 @@
 
 DevKit is a browser-based command reference and file builder for sysadmins, DevOps, platform engineers and SREs. It includes Ansible, Terraform, Bash, PowerShell, Python, SQL, containers and separate CI/CD builders. No account or backend is required to use the app.
 
+Version 3.20 adds an optional, dependency-free local companion for installed-tool detection, read-only Git status, and controlled validation or formatting. It binds only to loopback, creates a one-time token at launch, accepts fixed operations, never invokes a shell, and stores submitted files only in disposable temporary directories. DevKit remains an offline static app when the companion is not running. See [docs/local-companion.md](docs/local-companion.md).
+
 Version 3.18 adds a dependency-aware visual pipeline map to the GitHub Actions, GitLab CI, and Jenkins builders. Job dependencies update generated code immediately, unsafe cycles and invalid GitLab stage links are disabled, and map cards jump to their editable blocks.
 
 Version 3.19 adds portable JSON-only recipe packs. Imported packs can define guided fields, optional blocks and fixed output templates, but cannot run scripts, inject interface HTML or access the network. Packs participate in module browsing, unified search and workspace backups.
@@ -22,6 +24,8 @@ GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` 
 
 
 Open **index.html** in a modern browser. No installation, server, account or internet connection is required. Copy the entire folder to move the app to Windows, macOS or Linux. Unzip downloaded archives first.
+
+To use locally installed validators, start the optional service with `npm run companion` or `node companion/devkit-companion.cjs --root .`, then open **Local** in DevKit and enter the printed URL and token. Node.js 18 or newer is required only for this optional feature.
 
 For a single file, use **dist/devkit.html**. This is generated from the same source as the folder edition.
 

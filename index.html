@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; worker-src blob:; child-src blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src http://127.0.0.1:* http://localhost:*; worker-src blob:; child-src blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DevKit — Portable Workbench</title>
@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="styles/unified-search.css">
 <link rel="stylesheet" href="styles/cicd-graph.css">
 <link rel="stylesheet" href="styles/recipe-packs.css">
+<link rel="stylesheet" href="styles/local-companion.css">
 </head>
 <body>
 
@@ -198,6 +199,7 @@
 <script defer src="src/editor-assist.js"></script>
 <script defer src="src/diagnostics.js"></script>
 <script defer src="src/editor-modes.js"></script>
+<script defer src="src/local-companion.js"></script>
 <script defer src="src/unified-search.js"></script>
 <script defer src="src/start.js"></script>
 </body>
