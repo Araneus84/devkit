@@ -1,7 +1,22 @@
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),ctx=vm.createContext({console});
-for(const file of ['vendor/js-yaml.min.js','src/command-definitions.js','src/reference-data.js','src/cicd-data.js','src/tool-guides.js','src/recipe-catalog.js','src/deep-model.js','src/cicd-model.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx,{filename:file});
-vm.runInContext(String.raw`(()=>{
+const fs = require('node:fs'),
+  path = require('node:path'),
+  vm = require('node:vm'),
+  assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '..'),
+  ctx = vm.createContext({ console });
+for (const file of [
+  'vendor/js-yaml.min.js',
+  'src/command-definitions.js',
+  'src/reference-data.js',
+  'src/cicd-data.js',
+  'src/tool-guides.js',
+  'src/recipe-catalog.js',
+  'src/deep-model.js',
+  'src/cicd-model.js',
+])
+  vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), ctx, { filename: file });
+vm.runInContext(
+  String.raw`(()=>{
  const check=(ok,msg)=>{if(!ok)throw Error(msg);};
  for(const id of ['github-actions','gitlab-ci','jenkins']){const p=DD_PROFILES[id],out=ddGenerate(p,p.seed(p));check(!out.errors.length,id+': '+out.errors);check(out.text.length>100,'Empty starter');if(id!=='jenkins')check(jsyaml.load(out.text,{schema:jsyaml.JSON_SCHEMA}),'YAML parse');}
  const gh=DD_PROFILES['github-actions'],g=(t,v={},s={})=>ddNode(gh,t,v,s),tree=gh.seed(gh),w=tree[0],job=w.slots.jobs[0];
@@ -12,6 +27,10 @@ vm.runInContext(String.raw`(()=>{
  stages.push(l('stage',{name:'deploy'},{jobs:[l('job',{name:'deploy',needs:'unit_tests',when:'manual'},{script:[l('command')],artifacts:[l('artifacts')],cache:[l('cache')],rules:[l('rule')]})]}));
  let out=ddGenerate(gl,pipeline);check(!out.errors.length,out.errors);data=jsyaml.load(out.text);check(data.deploy.stage==='deploy'&&data.deploy.rules[0].if.includes('main'),'GitLab nesting');stages.reverse();check(ddGenerate(gl,pipeline).errors.some(x=>x.includes('later stage')),'Forward dependency accepted');stages[0].slots.jobs[0].values.needs='';out=ddGenerate(gl,pipeline);check(!out.errors.length,out.errors);check(jsyaml.load(out.text).stages[0]==='deploy','Stage reorder lost');stages[0].slots.jobs[0].values.name='variables';check(ddGenerate(gl,pipeline).errors.length,'Reserved name accepted');
  const jp=DD_PROFILES.jenkins,j=(t,v={},s={})=>ddNode(jp,t,v,s),jt=jp.seed(jp),r=jt[0];r.slots.env.push(j('credential'));r.slots.stages.push(j('parallel',{}, {branches:[j('stage',{name:'Linux'},{steps:[j('retry',{}, {steps:[j('sh',{text:"echo 'hi'\necho \u0024HOME"})]})]}),j('stage',{name:'Windows'},{steps:[j('bat')]})]}));out=ddGenerate(jp,jt);check(!out.errors.length,out.errors);check(out.text.includes("credentials('api-token')")&&out.text.includes('parallel {')&&out.text.includes('retry(3)'),'Jenkins constructs missing');check(out.text.includes("\\'hi\\'\\necho \u0024HOME"),'Groovy escaping incorrect');r.slots.post.push(j('post',{}, {steps:[j('echo')]}));check(ddGenerate(jp,jt).errors.some(x=>x.includes('Duplicate')),'Duplicate post condition accepted');
-})()`,ctx);
-assert.equal(vm.runInContext('SHEETS.cicd.sections.length',ctx),3);console.log('PASS: CI/CD starters, YAML parsing, secret references, matrix values, dependency errors, stage reordering and Groovy escaping.');
-
+})()`,
+  ctx,
+);
+assert.equal(vm.runInContext('SHEETS.cicd.sections.length', ctx), 3);
+console.log(
+  'PASS: CI/CD starters, YAML parsing, secret references, matrix values, dependency errors, stage reordering and Groovy escaping.',
+);

@@ -1,0 +1,452 @@
+{
+  "name": "Bash",
+  "icon": "$_",
+  "iconBg": "#4eaa25",
+  "subtitle": "Linux/macOS shell",
+  "meta": "GNU bash",
+  "sections": [
+    {
+      "id": "bash-files",
+      "title": "Files & Directories",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "ls -lah",
+          "desc": "List all files with sizes in human-readable format"
+        },
+        {
+          "cmd": "cd /path/to/dir",
+          "desc": "Change directory"
+        },
+        {
+          "cmd": "pwd",
+          "desc": "Print current working directory"
+        },
+        {
+          "cmd": "mkdir -p path/to/new/dir",
+          "desc": "Create directory and all parents if needed"
+        },
+        {
+          "cmd": "rm -rf path/to/dir",
+          "desc": "Remove directory and contents (CAREFUL!)"
+        },
+        {
+          "cmd": "cp -r source dest",
+          "desc": "Copy file or directory recursively"
+        },
+        {
+          "cmd": "mv old new",
+          "desc": "Move or rename file"
+        },
+        {
+          "cmd": "touch file.txt",
+          "desc": "Create empty file or update timestamp"
+        },
+        {
+          "cmd": "ln -s target linkname",
+          "desc": "Create symbolic link"
+        },
+        {
+          "cmd": "du -sh *",
+          "desc": "Show size of each item in current directory"
+        },
+        {
+          "cmd": "df -h",
+          "desc": "Show disk space usage of all mounted filesystems"
+        }
+      ]
+    },
+    {
+      "id": "bash-text",
+      "title": "Text Processing",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "cat file.txt",
+          "desc": "Print file contents"
+        },
+        {
+          "cmd": "less file.txt",
+          "desc": "View file with paging (q to quit)"
+        },
+        {
+          "cmd": "head -n 20 file.txt",
+          "desc": "Show first 20 lines"
+        },
+        {
+          "cmd": "tail -n 50 file.txt",
+          "desc": "Show last 50 lines"
+        },
+        {
+          "cmd": "tail -f log.txt",
+          "desc": "Follow file in real-time (logs)"
+        },
+        {
+          "cmd": "grep \"pattern\" file.txt",
+          "desc": "Search for pattern in file"
+        },
+        {
+          "cmd": "grep -r \"pattern\" .",
+          "desc": "Recursive search in all files"
+        },
+        {
+          "cmd": "grep -i -v \"pattern\"",
+          "desc": "Case insensitive (-i), invert match (-v)"
+        },
+        {
+          "cmd": "sed \"s/old/new/g\" file.txt",
+          "desc": "Replace text — g for all occurrences"
+        },
+        {
+          "cmd": "sed -i \"s/old/new/g\" file.txt",
+          "desc": "Replace and save changes in place"
+        },
+        {
+          "cmd": "awk '{print $1}' file.txt",
+          "desc": "Print first column of each line"
+        },
+        {
+          "cmd": "sort file.txt | uniq -c | sort -rn",
+          "desc": "Count and sort occurrences of lines"
+        },
+        {
+          "cmd": "wc -l file.txt",
+          "desc": "Count lines in file"
+        },
+        {
+          "cmd": "cut -d \",\" -f 2 file.csv",
+          "desc": "Extract column 2 from CSV"
+        }
+      ]
+    },
+    {
+      "id": "bash-find",
+      "title": "Search & Find",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "find . -name \"*.txt\"",
+          "desc": "Find all .txt files recursively"
+        },
+        {
+          "cmd": "find . -type f -mtime -7",
+          "desc": "Files modified in last 7 days"
+        },
+        {
+          "cmd": "find . -size +100M",
+          "desc": "Files larger than 100MB"
+        },
+        {
+          "cmd": "find . -name \"*.log\" -delete",
+          "desc": "Find and delete matching files"
+        },
+        {
+          "cmd": "find . -type f -exec chmod 644 {} \\;",
+          "desc": "Run command on each found file"
+        },
+        {
+          "cmd": "locate filename",
+          "desc": "Quick search using indexed database"
+        },
+        {
+          "cmd": "which command",
+          "desc": "Show path of executable command"
+        },
+        {
+          "cmd": "whereis command",
+          "desc": "Locate binary, source, manual page"
+        }
+      ]
+    },
+    {
+      "id": "bash-permissions",
+      "title": "Permissions & Users",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "chmod 755 file",
+          "desc": "Set permissions (rwxr-xr-x)"
+        },
+        {
+          "cmd": "chmod +x script.sh",
+          "desc": "Make file executable"
+        },
+        {
+          "cmd": "chown user:group file",
+          "desc": "Change file ownership"
+        },
+        {
+          "cmd": "chown -R user dir/",
+          "desc": "Recursively change ownership"
+        },
+        {
+          "cmd": "sudo command",
+          "desc": "Run command as root"
+        },
+        {
+          "cmd": "sudo -i",
+          "desc": "Become root with login shell"
+        },
+        {
+          "cmd": "whoami",
+          "desc": "Print current user"
+        },
+        {
+          "cmd": "id username",
+          "desc": "Show user ID and groups"
+        },
+        {
+          "cmd": "passwd",
+          "desc": "Change current user password"
+        }
+      ]
+    },
+    {
+      "id": "bash-process",
+      "title": "Processes & Jobs",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "ps aux",
+          "desc": "List all running processes with details"
+        },
+        {
+          "cmd": "ps aux | grep nginx",
+          "desc": "Find specific process"
+        },
+        {
+          "cmd": "top, htop",
+          "desc": "Interactive process viewer (htop is nicer)"
+        },
+        {
+          "cmd": "kill 1234",
+          "desc": "Send TERM signal to process by PID"
+        },
+        {
+          "cmd": "kill -9 1234",
+          "desc": "Force kill process (SIGKILL)"
+        },
+        {
+          "cmd": "killall process_name",
+          "desc": "Kill all processes by name"
+        },
+        {
+          "cmd": "command &",
+          "desc": "Run command in background"
+        },
+        {
+          "cmd": "jobs",
+          "desc": "List background jobs"
+        },
+        {
+          "cmd": "fg %1",
+          "desc": "Bring job 1 to foreground"
+        },
+        {
+          "cmd": "nohup command &",
+          "desc": "Run command immune to hangups (survives logout)"
+        },
+        {
+          "cmd": "screen, tmux",
+          "desc": "Persistent terminal sessions"
+        }
+      ]
+    },
+    {
+      "id": "bash-network",
+      "title": "Networking",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "ping host.com",
+          "desc": "Test connectivity to host"
+        },
+        {
+          "cmd": "curl -O https://url",
+          "desc": "Download file via HTTP"
+        },
+        {
+          "cmd": "curl -X POST -d \"data\" url",
+          "desc": "Send POST request with data"
+        },
+        {
+          "cmd": "curl -H \"Authorization: Bearer TOKEN\" url",
+          "desc": "Request with custom header"
+        },
+        {
+          "cmd": "wget https://url",
+          "desc": "Download file (more retry-friendly than curl)"
+        },
+        {
+          "cmd": "ssh user@host",
+          "desc": "SSH into remote server"
+        },
+        {
+          "cmd": "ssh -i key.pem user@host",
+          "desc": "SSH with specific key"
+        },
+        {
+          "cmd": "scp file user@host:/path",
+          "desc": "Copy file to remote server"
+        },
+        {
+          "cmd": "rsync -avz src/ user@host:/dest/",
+          "desc": "Sync directories — fast incremental copy"
+        },
+        {
+          "cmd": "netstat -tulpn",
+          "desc": "Show listening ports and processes"
+        },
+        {
+          "cmd": "ss -tulpn",
+          "desc": "Modern replacement for netstat"
+        },
+        {
+          "cmd": "dig domain.com",
+          "desc": "DNS lookup"
+        },
+        {
+          "cmd": "nslookup domain.com",
+          "desc": "Alternative DNS lookup"
+        }
+      ]
+    },
+    {
+      "id": "bash-archives",
+      "title": "Archives & Compression",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "tar -czvf archive.tar.gz dir/",
+          "desc": "Create gzipped tar archive"
+        },
+        {
+          "cmd": "tar -xzvf archive.tar.gz",
+          "desc": "Extract gzipped tar archive"
+        },
+        {
+          "cmd": "tar -tzvf archive.tar.gz",
+          "desc": "List contents without extracting"
+        },
+        {
+          "cmd": "zip -r archive.zip dir/",
+          "desc": "Create zip archive"
+        },
+        {
+          "cmd": "unzip archive.zip",
+          "desc": "Extract zip archive"
+        },
+        {
+          "cmd": "gzip file.txt",
+          "desc": "Compress file (creates file.txt.gz)"
+        },
+        {
+          "cmd": "gunzip file.txt.gz",
+          "desc": "Decompress gzip file"
+        }
+      ]
+    },
+    {
+      "id": "bash-scripting",
+      "title": "Scripting Basics",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "#!/bin/bash",
+          "desc": "Shebang line — first line of bash script"
+        },
+        {
+          "cmd": "var=\"value\"; echo $var",
+          "desc": "Variable assignment and use"
+        },
+        {
+          "cmd": "if [ \"$x\" -eq 1 ]; then echo \"yes\"; fi",
+          "desc": "If statement with numeric comparison"
+        },
+        {
+          "cmd": "if [ -f \"file.txt\" ]; then echo \"exists\"; fi",
+          "desc": "Test if file exists"
+        },
+        {
+          "cmd": "for i in 1 2 3; do echo $i; done",
+          "desc": "For loop"
+        },
+        {
+          "cmd": "while read line; do echo $line; done < file",
+          "desc": "Read file line by line"
+        },
+        {
+          "cmd": "function name() { echo \"$1\"; }",
+          "desc": "Define function — $1 is first argument"
+        },
+        {
+          "cmd": "echo $?",
+          "desc": "Show exit code of last command"
+        },
+        {
+          "cmd": "cmd1 && cmd2",
+          "desc": "Run cmd2 only if cmd1 succeeds"
+        },
+        {
+          "cmd": "cmd1 || cmd2",
+          "desc": "Run cmd2 only if cmd1 fails"
+        },
+        {
+          "cmd": "cmd > file 2>&1",
+          "desc": "Redirect stdout and stderr to file"
+        },
+        {
+          "cmd": "cmd1 | cmd2",
+          "desc": "Pipe output of cmd1 to cmd2"
+        }
+      ]
+    },
+    {
+      "id": "bash-system",
+      "title": "System Info",
+      "color": "#f76c6c",
+      "cmds": [
+        {
+          "cmd": "uname -a",
+          "desc": "Show kernel and system info"
+        },
+        {
+          "cmd": "lsb_release -a",
+          "desc": "Show Linux distribution info"
+        },
+        {
+          "cmd": "free -h",
+          "desc": "Show memory usage"
+        },
+        {
+          "cmd": "uptime",
+          "desc": "Show system uptime and load"
+        },
+        {
+          "cmd": "lscpu",
+          "desc": "Show CPU info"
+        },
+        {
+          "cmd": "lsblk",
+          "desc": "List block devices"
+        },
+        {
+          "cmd": "date",
+          "desc": "Show current date and time"
+        },
+        {
+          "cmd": "history",
+          "desc": "Show command history"
+        },
+        {
+          "cmd": "!! / !$",
+          "desc": "Repeat last command / use last argument"
+        },
+        {
+          "cmd": "Ctrl+R",
+          "desc": "Reverse search through history"
+        }
+      ]
+    }
+  ]
+}

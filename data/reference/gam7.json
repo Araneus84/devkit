@@ -1,0 +1,285 @@
+{
+  "name": "GAM7",
+  "icon": "🅖",
+  "iconBg": "#4f8ef7",
+  "subtitle": "Google Workspace Admin CLI",
+  "meta": "v7.43+",
+  "sections": [
+    {
+      "id": "gam-diag",
+      "title": "Diagnostics & Info",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "gam version",
+          "desc": "Show GAM version, Python version, OS, and config path"
+        },
+        {
+          "cmd": "gam info domain",
+          "desc": "Get domain info, customer ID, total user count — also tests connectivity"
+        },
+        {
+          "cmd": "gam info customer",
+          "desc": "Show customer account details including address and contact info"
+        },
+        {
+          "cmd": "gam print users",
+          "desc": "List all users in the domain"
+        },
+        {
+          "cmd": "gam print users query \"email:name*\"",
+          "desc": "Search users by email pattern (wildcard supported)"
+        },
+        {
+          "cmd": "gam print users query \"isSuspended=true\"",
+          "desc": "List all suspended users"
+        },
+        {
+          "cmd": "gam print users fields name,primaryEmail,suspended,orgUnitPath",
+          "desc": "List users with specific fields only"
+        },
+        {
+          "cmd": "gam print ous",
+          "desc": "List all Organizational Units and their paths"
+        }
+      ]
+    },
+    {
+      "id": "gam-users",
+      "title": "User Management",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "gam info user user@domain.com",
+          "desc": "Show detailed info about a user including groups, aliases, licenses"
+        },
+        {
+          "cmd": "gam create user user@domain.com firstname First lastname Last password Temp123!",
+          "desc": "Create a new user account"
+        },
+        {
+          "cmd": "gam update user user@domain.com suspended true",
+          "desc": "Suspend a user account"
+        },
+        {
+          "cmd": "gam update user user@domain.com suspended false",
+          "desc": "Unsuspend / restore a user account"
+        },
+        {
+          "cmd": "gam update user user@domain.com ou \"/OUName\"",
+          "desc": "Move user to a different Organizational Unit"
+        },
+        {
+          "cmd": "gam update user user@domain.com password NewPass123!",
+          "desc": "Set a new password for a user"
+        },
+        {
+          "cmd": "gam update user user@domain.com changepassword true",
+          "desc": "Force password change at next login"
+        },
+        {
+          "cmd": "gam delete user user@domain.com",
+          "desc": "Delete a user — moves to trash, recoverable for 20 days"
+        },
+        {
+          "cmd": "gam undelete user user@domain.com",
+          "desc": "Restore a recently deleted user from trash"
+        },
+        {
+          "cmd": "gam update user user@domain.com admin true",
+          "desc": "Grant super admin privileges to a user"
+        }
+      ]
+    },
+    {
+      "id": "gam-mail",
+      "title": "Gmail & Mail",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "gam user user@domain.com show gmailprofile",
+          "desc": "Show Gmail mailbox stats: message count, thread count, historyId"
+        },
+        {
+          "cmd": "gam user user@domain.com show forwardingaddresses",
+          "desc": "Show all configured forwarding addresses and verification status"
+        },
+        {
+          "cmd": "gam user user@domain.com show filters",
+          "desc": "List all Gmail filters set up for the user"
+        },
+        {
+          "cmd": "gam user user@domain.com show delegates",
+          "desc": "Show who has delegate access to the mailbox"
+        },
+        {
+          "cmd": "gam user user@domain.com show sendas",
+          "desc": "Show send-as aliases configured in Gmail settings"
+        },
+        {
+          "cmd": "gam user user@domain.com add forwardingaddress dest@domain.com",
+          "desc": "Add and verify a forwarding address"
+        },
+        {
+          "cmd": "gam user user@domain.com update forward enabled true forwardto dest@domain.com",
+          "desc": "Enable active email forwarding"
+        },
+        {
+          "cmd": "gam user user@domain.com add alias alias@domain.com",
+          "desc": "Add an email alias to a user"
+        },
+        {
+          "cmd": "gam user user@domain.com delete alias alias@domain.com",
+          "desc": "Remove an alias from a user"
+        }
+      ]
+    },
+    {
+      "id": "gam-drive",
+      "title": "Drive & Storage",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "gam user user@domain.com show diskusage",
+          "desc": "Show Drive storage usage for the user"
+        },
+        {
+          "cmd": "gam user user@domain.com print filelist",
+          "desc": "List all Drive files owned by the user"
+        },
+        {
+          "cmd": "gam user user@domain.com print filelist fields name,size,owners,modifiedtime",
+          "desc": "List files with size, owner, and last modified date"
+        },
+        {
+          "cmd": "gam user user@domain.com print filelist > files.csv",
+          "desc": "Export full file list to a CSV file"
+        },
+        {
+          "cmd": "gam user src@domain.com transfer drive dest@domain.com",
+          "desc": "Transfer all Drive files to another user"
+        },
+        {
+          "cmd": "gam user src@domain.com transfer ownership dest@domain.com",
+          "desc": "Transfer file ownership to another user"
+        },
+        {
+          "cmd": "gam print shareddrives",
+          "desc": "List all shared drives in the domain"
+        }
+      ]
+    },
+    {
+      "id": "gam-licenses",
+      "title": "Licenses",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "gam user user@domain.com print licenses",
+          "desc": "Show all licenses assigned to a specific user"
+        },
+        {
+          "cmd": "gam print licenses",
+          "desc": "Print all license counts across the entire org"
+        },
+        {
+          "cmd": "gam user user@domain.com add license 1010020026",
+          "desc": "Assign Google Workspace Enterprise Standard license"
+        },
+        {
+          "cmd": "gam user user@domain.com add license 1010340001",
+          "desc": "Assign Archived User license (~$4/mo) — preserves data at low cost"
+        },
+        {
+          "cmd": "gam user user@domain.com delete license 1010020026",
+          "desc": "Remove a specific license — use SKU from print licenses"
+        },
+        {
+          "cmd": "gam user user@domain.com add license 1010340001 && gam user user@domain.com delete license 1010020026",
+          "desc": "SAFE: Add archived FIRST then remove full license — prevents data loss"
+        }
+      ]
+    },
+    {
+      "id": "gam-groups",
+      "title": "Groups",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "gam print groups",
+          "desc": "List all groups in the domain"
+        },
+        {
+          "cmd": "gam info group group@domain.com",
+          "desc": "Show group details, settings, and member count"
+        },
+        {
+          "cmd": "gam print group-members group group@domain.com",
+          "desc": "List all members of a specific group"
+        },
+        {
+          "cmd": "gam update group group@domain.com add member user@domain.com",
+          "desc": "Add a user to a group"
+        },
+        {
+          "cmd": "gam update group group@domain.com remove member user@domain.com",
+          "desc": "Remove a user from a group"
+        },
+        {
+          "cmd": "gam create group group@domain.com name \"Group Name\"",
+          "desc": "Create a new group"
+        }
+      ]
+    },
+    {
+      "id": "gam-vault",
+      "title": "Vault & Compliance",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "gam print vaultmatters",
+          "desc": "List all Vault matters in the organization"
+        },
+        {
+          "cmd": "gam create vaultmatter name \"Matter Name\"",
+          "desc": "Create a new Vault matter"
+        },
+        {
+          "cmd": "gam create vaultexport matter MATTER_ID name \"Export\" corpus mail accounts user@domain.com",
+          "desc": "Export a user's Gmail via Vault"
+        },
+        {
+          "cmd": "gam create vaultexport matter MATTER_ID name \"Export\" corpus drive accounts user@domain.com",
+          "desc": "Export a user's Drive via Vault"
+        },
+        {
+          "cmd": "gam info vaultexport matter MATTER_ID exportid EXPORT_ID",
+          "desc": "Check status of a running Vault export"
+        }
+      ]
+    },
+    {
+      "id": "gam-bulk",
+      "title": "Bulk Operations",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "gam all users show gmailprofile",
+          "desc": "Run a command against every user in the domain"
+        },
+        {
+          "cmd": "gam group group@domain.com print filelist",
+          "desc": "Run against all members of a group"
+        },
+        {
+          "cmd": "gam ou \"/OUName\" print users",
+          "desc": "Run against all users in a specific OU"
+        },
+        {
+          "cmd": "gam csv users.csv gam user ~primaryEmail suspend",
+          "desc": "Bulk action from CSV — ~primaryEmail maps to CSV column"
+        }
+      ]
+    }
+  ]
+}

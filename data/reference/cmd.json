@@ -1,0 +1,366 @@
+{
+  "name": "CMD",
+  "icon": "C:\\",
+  "iconBg": "#1f1f1f",
+  "subtitle": "Windows Command Prompt",
+  "meta": "cmd.exe",
+  "sections": [
+    {
+      "id": "cmd-files",
+      "title": "Files & Directories",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "dir",
+          "desc": "List directory contents"
+        },
+        {
+          "cmd": "dir /s /b *.txt",
+          "desc": "Recursive bare format listing"
+        },
+        {
+          "cmd": "cd C:\\path",
+          "desc": "Change directory"
+        },
+        {
+          "cmd": "cd ..",
+          "desc": "Go up one level"
+        },
+        {
+          "cmd": "mkdir dirname",
+          "desc": "Create directory"
+        },
+        {
+          "cmd": "rmdir /s /q dirname",
+          "desc": "Remove directory and contents quietly"
+        },
+        {
+          "cmd": "del filename",
+          "desc": "Delete file"
+        },
+        {
+          "cmd": "copy source dest",
+          "desc": "Copy file"
+        },
+        {
+          "cmd": "xcopy /s /e source dest",
+          "desc": "Copy directory recursively including empty folders"
+        },
+        {
+          "cmd": "robocopy src dest /mir",
+          "desc": "Mirror directory (deletes extras in dest)"
+        },
+        {
+          "cmd": "move oldname newname",
+          "desc": "Move or rename file"
+        },
+        {
+          "cmd": "type file.txt",
+          "desc": "Display file contents"
+        },
+        {
+          "cmd": "attrib +h file.txt",
+          "desc": "Set file as hidden"
+        }
+      ]
+    },
+    {
+      "id": "cmd-system",
+      "title": "System Info",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "systeminfo",
+          "desc": "Show detailed system configuration"
+        },
+        {
+          "cmd": "hostname",
+          "desc": "Show computer name"
+        },
+        {
+          "cmd": "whoami",
+          "desc": "Show current logged in user"
+        },
+        {
+          "cmd": "whoami /groups",
+          "desc": "Show groups current user belongs to"
+        },
+        {
+          "cmd": "ver",
+          "desc": "Show Windows version"
+        },
+        {
+          "cmd": "date /t",
+          "desc": "Show current date"
+        },
+        {
+          "cmd": "time /t",
+          "desc": "Show current time"
+        },
+        {
+          "cmd": "wmic cpu get name",
+          "desc": "Get CPU name"
+        },
+        {
+          "cmd": "wmic logicaldisk get size,freespace,caption",
+          "desc": "Show disk usage"
+        },
+        {
+          "cmd": "tasklist",
+          "desc": "List running processes"
+        },
+        {
+          "cmd": "tasklist /fi \"imagename eq notepad.exe\"",
+          "desc": "Filter task list"
+        },
+        {
+          "cmd": "taskkill /im notepad.exe /f",
+          "desc": "Force kill process by name"
+        },
+        {
+          "cmd": "taskkill /pid 1234 /f",
+          "desc": "Force kill by process ID"
+        }
+      ]
+    },
+    {
+      "id": "cmd-network",
+      "title": "Networking",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "ipconfig",
+          "desc": "Show network configuration"
+        },
+        {
+          "cmd": "ipconfig /all",
+          "desc": "Detailed network info including DNS, DHCP, MAC"
+        },
+        {
+          "cmd": "ipconfig /release && ipconfig /renew",
+          "desc": "Release and renew DHCP lease"
+        },
+        {
+          "cmd": "ipconfig /flushdns",
+          "desc": "Clear DNS resolver cache"
+        },
+        {
+          "cmd": "ping google.com",
+          "desc": "Test connectivity to host"
+        },
+        {
+          "cmd": "ping -t google.com",
+          "desc": "Continuous ping (Ctrl+C to stop)"
+        },
+        {
+          "cmd": "tracert google.com",
+          "desc": "Show network route to host"
+        },
+        {
+          "cmd": "nslookup google.com",
+          "desc": "DNS lookup"
+        },
+        {
+          "cmd": "netstat -ano",
+          "desc": "Show all connections with PIDs"
+        },
+        {
+          "cmd": "netstat -ano | findstr \"443\"",
+          "desc": "Filter netstat output"
+        },
+        {
+          "cmd": "arp -a",
+          "desc": "Show ARP cache"
+        },
+        {
+          "cmd": "route print",
+          "desc": "Show routing table"
+        },
+        {
+          "cmd": "net use",
+          "desc": "Show mapped network drives"
+        },
+        {
+          "cmd": "net use Z: \\\\server\\share",
+          "desc": "Map network drive"
+        }
+      ]
+    },
+    {
+      "id": "cmd-users",
+      "title": "Users & Groups",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "net user",
+          "desc": "List all local users"
+        },
+        {
+          "cmd": "net user username",
+          "desc": "Show details for specific user"
+        },
+        {
+          "cmd": "net user username password /add",
+          "desc": "Create local user"
+        },
+        {
+          "cmd": "net user username /delete",
+          "desc": "Delete local user"
+        },
+        {
+          "cmd": "net user username newpassword",
+          "desc": "Change user password"
+        },
+        {
+          "cmd": "net localgroup",
+          "desc": "List local groups"
+        },
+        {
+          "cmd": "net localgroup Administrators username /add",
+          "desc": "Add user to admin group"
+        },
+        {
+          "cmd": "net session",
+          "desc": "Show active network sessions"
+        }
+      ]
+    },
+    {
+      "id": "cmd-services",
+      "title": "Services & Tasks",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "sc query",
+          "desc": "List all services and states"
+        },
+        {
+          "cmd": "sc query servicename",
+          "desc": "Query specific service"
+        },
+        {
+          "cmd": "sc start servicename",
+          "desc": "Start service"
+        },
+        {
+          "cmd": "sc stop servicename",
+          "desc": "Stop service"
+        },
+        {
+          "cmd": "sc config servicename start= auto",
+          "desc": "Set service to auto-start"
+        },
+        {
+          "cmd": "schtasks /query /fo LIST",
+          "desc": "List all scheduled tasks"
+        },
+        {
+          "cmd": "schtasks /create /tn \"MyTask\" /tr \"C:\\script.bat\" /sc daily",
+          "desc": "Create scheduled task"
+        },
+        {
+          "cmd": "schtasks /delete /tn \"MyTask\" /f",
+          "desc": "Delete scheduled task"
+        }
+      ]
+    },
+    {
+      "id": "cmd-batch",
+      "title": "Batch Scripting",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "@echo off",
+          "desc": "Suppress command echoing in batch file"
+        },
+        {
+          "cmd": "set var=value",
+          "desc": "Set variable"
+        },
+        {
+          "cmd": "echo %var%",
+          "desc": "Print variable value"
+        },
+        {
+          "cmd": "if \"%var%\"==\"value\" (echo yes)",
+          "desc": "If statement"
+        },
+        {
+          "cmd": "if exist file.txt echo exists",
+          "desc": "Check if file exists"
+        },
+        {
+          "cmd": "for %%i in (*.txt) do echo %%i",
+          "desc": "For loop in batch file (use %i in cmd)"
+        },
+        {
+          "cmd": "for /f \"tokens=*\" %%a in (file.txt) do echo %%a",
+          "desc": "Read file line by line"
+        },
+        {
+          "cmd": "call other.bat",
+          "desc": "Call another batch file"
+        },
+        {
+          "cmd": "goto :label",
+          "desc": "Jump to label"
+        },
+        {
+          "cmd": "pause",
+          "desc": "Wait for keypress"
+        },
+        {
+          "cmd": "exit /b 0",
+          "desc": "Exit script with code"
+        }
+      ]
+    },
+    {
+      "id": "cmd-search",
+      "title": "Search & Misc",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "findstr \"pattern\" file.txt",
+          "desc": "Search for pattern in file (like grep)"
+        },
+        {
+          "cmd": "findstr /s /i \"pattern\" *.log",
+          "desc": "Recursive case-insensitive search"
+        },
+        {
+          "cmd": "where command",
+          "desc": "Find location of executable"
+        },
+        {
+          "cmd": "tree /f",
+          "desc": "Show directory tree with files"
+        },
+        {
+          "cmd": "cls",
+          "desc": "Clear screen"
+        },
+        {
+          "cmd": "cmd /c command",
+          "desc": "Run command and close window"
+        },
+        {
+          "cmd": "cmd /k command",
+          "desc": "Run command and keep window open"
+        },
+        {
+          "cmd": "shutdown /s /t 0",
+          "desc": "Shutdown immediately"
+        },
+        {
+          "cmd": "shutdown /r /t 60",
+          "desc": "Restart in 60 seconds"
+        },
+        {
+          "cmd": "shutdown /a",
+          "desc": "Abort scheduled shutdown"
+        }
+      ]
+    }
+  ]
+}

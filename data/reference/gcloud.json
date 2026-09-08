@@ -1,0 +1,271 @@
+{
+  "name": "gcloud",
+  "icon": "GC",
+  "iconBg": "#4285f4",
+  "subtitle": "Google Cloud CLI",
+  "meta": "gcloud SDK",
+  "sections": [
+    {
+      "id": "gc-auth",
+      "title": "Authentication & Config",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "gcloud auth login",
+          "desc": "Login via browser"
+        },
+        {
+          "cmd": "gcloud auth list",
+          "desc": "List authenticated accounts"
+        },
+        {
+          "cmd": "gcloud auth activate-service-account --key-file=key.json",
+          "desc": "Authenticate as service account"
+        },
+        {
+          "cmd": "gcloud config list",
+          "desc": "Show current configuration"
+        },
+        {
+          "cmd": "gcloud config set project PROJECT_ID",
+          "desc": "Set active project"
+        },
+        {
+          "cmd": "gcloud projects list",
+          "desc": "List accessible projects"
+        },
+        {
+          "cmd": "gcloud config configurations list",
+          "desc": "List configuration profiles"
+        },
+        {
+          "cmd": "gcloud config configurations create work",
+          "desc": "Create new configuration profile"
+        },
+        {
+          "cmd": "gcloud config configurations activate work",
+          "desc": "Switch to configuration profile"
+        },
+        {
+          "cmd": "gcloud version",
+          "desc": "Show installed component versions"
+        },
+        {
+          "cmd": "gcloud components update",
+          "desc": "Update gcloud SDK"
+        }
+      ]
+    },
+    {
+      "id": "gc-compute",
+      "title": "Compute Engine (VMs)",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "gcloud compute instances list",
+          "desc": "List all VMs"
+        },
+        {
+          "cmd": "gcloud compute instances describe instance-name",
+          "desc": "Show VM details"
+        },
+        {
+          "cmd": "gcloud compute instances create my-vm --machine-type=e2-medium --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud",
+          "desc": "Create Ubuntu VM"
+        },
+        {
+          "cmd": "gcloud compute instances start instance-name",
+          "desc": "Start stopped VM"
+        },
+        {
+          "cmd": "gcloud compute instances stop instance-name",
+          "desc": "Stop running VM"
+        },
+        {
+          "cmd": "gcloud compute instances delete instance-name",
+          "desc": "Delete VM"
+        },
+        {
+          "cmd": "gcloud compute ssh instance-name",
+          "desc": "SSH into VM (auto-configures keys)"
+        },
+        {
+          "cmd": "gcloud compute scp file.txt instance-name:~/",
+          "desc": "Copy file to VM"
+        },
+        {
+          "cmd": "gcloud compute disks list",
+          "desc": "List persistent disks"
+        },
+        {
+          "cmd": "gcloud compute disks snapshot my-disk --snapshot-names=backup",
+          "desc": "Create disk snapshot"
+        },
+        {
+          "cmd": "gcloud compute firewall-rules list",
+          "desc": "List firewall rules"
+        }
+      ]
+    },
+    {
+      "id": "gc-storage",
+      "title": "Cloud Storage (gsutil)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "gsutil ls",
+          "desc": "List buckets"
+        },
+        {
+          "cmd": "gsutil ls gs://bucket/",
+          "desc": "List bucket contents"
+        },
+        {
+          "cmd": "gsutil ls -l gs://bucket/**",
+          "desc": "Recursive listing with sizes"
+        },
+        {
+          "cmd": "gsutil cp file.txt gs://bucket/",
+          "desc": "Upload file"
+        },
+        {
+          "cmd": "gsutil cp gs://bucket/file.txt .",
+          "desc": "Download file"
+        },
+        {
+          "cmd": "gsutil -m cp -r dir/ gs://bucket/dir/",
+          "desc": "Recursive multi-threaded copy"
+        },
+        {
+          "cmd": "gsutil rsync -r local/ gs://bucket/path/",
+          "desc": "Sync directory to bucket"
+        },
+        {
+          "cmd": "gsutil rm gs://bucket/file.txt",
+          "desc": "Delete object"
+        },
+        {
+          "cmd": "gsutil rm -r gs://bucket/path/",
+          "desc": "Delete folder recursively"
+        },
+        {
+          "cmd": "gsutil mb gs://new-bucket",
+          "desc": "Create bucket"
+        },
+        {
+          "cmd": "gsutil rb gs://bucket",
+          "desc": "Remove empty bucket"
+        },
+        {
+          "cmd": "gsutil signurl -d 1h key.json gs://bucket/file.pdf",
+          "desc": "Generate signed URL"
+        }
+      ]
+    },
+    {
+      "id": "gc-gke",
+      "title": "GKE (Kubernetes)",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "gcloud container clusters list",
+          "desc": "List GKE clusters"
+        },
+        {
+          "cmd": "gcloud container clusters get-credentials my-cluster --zone=us-central1-a",
+          "desc": "Configure kubectl for cluster"
+        },
+        {
+          "cmd": "gcloud container clusters create my-cluster --num-nodes=3 --zone=us-central1-a",
+          "desc": "Create cluster"
+        },
+        {
+          "cmd": "gcloud container clusters resize my-cluster --num-nodes=5 --zone=us-central1-a",
+          "desc": "Resize cluster"
+        },
+        {
+          "cmd": "gcloud container clusters upgrade my-cluster --master --zone=us-central1-a",
+          "desc": "Upgrade cluster master"
+        },
+        {
+          "cmd": "gcloud container node-pools list --cluster=my-cluster --zone=us-central1-a",
+          "desc": "List node pools"
+        }
+      ]
+    },
+    {
+      "id": "gc-iam",
+      "title": "IAM & Service Accounts",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "gcloud iam service-accounts list",
+          "desc": "List service accounts"
+        },
+        {
+          "cmd": "gcloud iam service-accounts create sa-name --display-name=\"Display Name\"",
+          "desc": "Create service account"
+        },
+        {
+          "cmd": "gcloud iam service-accounts keys list --iam-account=sa@project.iam.gserviceaccount.com",
+          "desc": "List keys for service account"
+        },
+        {
+          "cmd": "gcloud iam service-accounts keys create key.json --iam-account=sa@project.iam.gserviceaccount.com",
+          "desc": "Create new key"
+        },
+        {
+          "cmd": "gcloud projects get-iam-policy PROJECT_ID",
+          "desc": "Get IAM policy for project"
+        },
+        {
+          "cmd": "gcloud projects add-iam-policy-binding PROJECT_ID --member=\"user:alex@example.com\" --role=\"roles/viewer\"",
+          "desc": "Grant role to user"
+        },
+        {
+          "cmd": "gcloud projects remove-iam-policy-binding PROJECT_ID --member=\"user:alex@example.com\" --role=\"roles/viewer\"",
+          "desc": "Revoke role from user"
+        }
+      ]
+    },
+    {
+      "id": "gc-misc",
+      "title": "Cloud Run, Functions & Logs",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "gcloud run services list",
+          "desc": "List Cloud Run services"
+        },
+        {
+          "cmd": "gcloud run deploy my-service --image=gcr.io/project/image --region=us-central1",
+          "desc": "Deploy container to Cloud Run"
+        },
+        {
+          "cmd": "gcloud run services delete my-service --region=us-central1",
+          "desc": "Delete Cloud Run service"
+        },
+        {
+          "cmd": "gcloud functions list",
+          "desc": "List Cloud Functions"
+        },
+        {
+          "cmd": "gcloud functions deploy my-func --runtime=python311 --trigger-http --entry-point=main",
+          "desc": "Deploy HTTP-triggered function"
+        },
+        {
+          "cmd": "gcloud logging read \"severity>=ERROR\" --limit=20",
+          "desc": "Read recent error logs"
+        },
+        {
+          "cmd": "gcloud logging tail \"resource.type=cloud_run_revision\"",
+          "desc": "Tail logs for Cloud Run"
+        },
+        {
+          "cmd": "gcloud sql instances list",
+          "desc": "List Cloud SQL instances"
+        }
+      ]
+    }
+  ]
+}

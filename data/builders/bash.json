@@ -1,0 +1,434 @@
+{
+  "bash::find . -name \"*.txt\"": {
+    "name": "find",
+    "description": "Build a find command with filters",
+    "base": "find",
+    "args": [
+      {
+        "key": "path",
+        "label": "Search path",
+        "placeholder": ".",
+        "required": true,
+        "default": "."
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-name",
+        "desc": "Match by filename pattern (case-sensitive)",
+        "valuePrompt": "Pattern (e.g. *.log)",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-iname",
+        "desc": "Match by filename pattern (case-insensitive)",
+        "valuePrompt": "Pattern",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-type f",
+        "desc": "Match only files"
+      },
+      {
+        "flag": "-type d",
+        "desc": "Match only directories"
+      },
+      {
+        "flag": "-type l",
+        "desc": "Match only symbolic links"
+      },
+      {
+        "flag": "-size",
+        "desc": "Filter by file size",
+        "valuePrompt": "Size (e.g. +100M, -1k, +1G)",
+        "join": " "
+      },
+      {
+        "flag": "-mtime",
+        "desc": "Modified time in days (+N = older, -N = newer)",
+        "valuePrompt": "Days (e.g. -7)",
+        "join": " "
+      },
+      {
+        "flag": "-mmin",
+        "desc": "Modified time in minutes",
+        "valuePrompt": "Minutes (e.g. -60)",
+        "join": " "
+      },
+      {
+        "flag": "-user",
+        "desc": "Files owned by user",
+        "valuePrompt": "Username",
+        "join": " "
+      },
+      {
+        "flag": "-perm",
+        "desc": "Files with specific permissions",
+        "valuePrompt": "Mode (e.g. 644, /u+x)",
+        "join": " "
+      },
+      {
+        "flag": "-empty",
+        "desc": "Empty files or directories only"
+      },
+      {
+        "flag": "-not",
+        "desc": "Negate the next condition"
+      },
+      {
+        "flag": "-maxdepth",
+        "desc": "Limit recursion depth",
+        "valuePrompt": "Depth",
+        "valueDefault": "2",
+        "join": " "
+      },
+      {
+        "flag": "-mindepth",
+        "desc": "Minimum depth before matching",
+        "valuePrompt": "Depth",
+        "valueDefault": "1",
+        "join": " "
+      },
+      {
+        "flag": "-delete",
+        "desc": "Delete matching files (CAREFUL!)"
+      },
+      {
+        "flag": "-print",
+        "desc": "Print full path (default action)"
+      },
+      {
+        "flag": "-print0",
+        "desc": "Print null-separated (use with xargs -0)"
+      },
+      {
+        "flag": "-exec",
+        "desc": "Execute command on each match",
+        "valuePrompt": "Command (use {} for file, end with \\;)",
+        "join": " "
+      }
+    ]
+  },
+  "bash::grep \"pattern\" file.txt": {
+    "name": "grep",
+    "description": "Build a grep search command",
+    "base": "grep",
+    "args": [
+      {
+        "key": "pattern",
+        "label": "Pattern",
+        "placeholder": "search text or regex",
+        "required": true,
+        "quote": true
+      },
+      {
+        "key": "file",
+        "label": "File / path",
+        "placeholder": "file.txt or directory",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-i",
+        "desc": "Case-insensitive matching"
+      },
+      {
+        "flag": "-r",
+        "desc": "Recursive search through directories"
+      },
+      {
+        "flag": "-R",
+        "desc": "Recursive, following symlinks"
+      },
+      {
+        "flag": "-v",
+        "desc": "Invert match — show lines NOT matching"
+      },
+      {
+        "flag": "-n",
+        "desc": "Show line numbers"
+      },
+      {
+        "flag": "-c",
+        "desc": "Count matching lines only"
+      },
+      {
+        "flag": "-l",
+        "desc": "Print only filenames with matches"
+      },
+      {
+        "flag": "-L",
+        "desc": "Print only filenames WITHOUT matches"
+      },
+      {
+        "flag": "-w",
+        "desc": "Match whole words only"
+      },
+      {
+        "flag": "-x",
+        "desc": "Match whole lines only"
+      },
+      {
+        "flag": "-E",
+        "desc": "Extended regex (egrep mode)"
+      },
+      {
+        "flag": "-P",
+        "desc": "Perl-compatible regex (PCRE)"
+      },
+      {
+        "flag": "-F",
+        "desc": "Fixed string (no regex)"
+      },
+      {
+        "flag": "-A",
+        "desc": "Show N lines AFTER match",
+        "valuePrompt": "Lines",
+        "valueDefault": "3",
+        "join": " "
+      },
+      {
+        "flag": "-B",
+        "desc": "Show N lines BEFORE match",
+        "valuePrompt": "Lines",
+        "valueDefault": "3",
+        "join": " "
+      },
+      {
+        "flag": "-C",
+        "desc": "Show N lines AROUND match (context)",
+        "valuePrompt": "Lines",
+        "valueDefault": "3",
+        "join": " "
+      },
+      {
+        "flag": "--include",
+        "desc": "Only search files matching glob",
+        "valuePrompt": "Glob (e.g. *.py)",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--exclude",
+        "desc": "Skip files matching glob",
+        "valuePrompt": "Glob (e.g. *.log)",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--exclude-dir",
+        "desc": "Skip directories matching pattern",
+        "valuePrompt": "Dir name (e.g. node_modules)",
+        "join": "="
+      },
+      {
+        "flag": "--color=always",
+        "desc": "Force colored output (useful when piping)"
+      }
+    ]
+  },
+  "bash::rsync -avz src/ user@host:/dest/": {
+    "name": "rsync",
+    "description": "Build a rsync sync command",
+    "base": "rsync",
+    "args": [
+      {
+        "key": "source",
+        "label": "Source",
+        "placeholder": "src/ or user@host:/path/",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination",
+        "placeholder": "dest/ or user@host:/path/",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-a",
+        "desc": "Archive mode (preserves permissions, times, symlinks)"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose output"
+      },
+      {
+        "flag": "-z",
+        "desc": "Compress during transfer (faster over network)"
+      },
+      {
+        "flag": "-h",
+        "desc": "Human-readable numbers"
+      },
+      {
+        "flag": "-P",
+        "desc": "Show progress AND keep partial files on interrupt"
+      },
+      {
+        "flag": "--progress",
+        "desc": "Show progress during transfer"
+      },
+      {
+        "flag": "--partial",
+        "desc": "Keep partially transferred files"
+      },
+      {
+        "flag": "--delete",
+        "desc": "Delete extra files at destination (mirror)"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview without actually copying"
+      },
+      {
+        "flag": "-n",
+        "desc": "Same as --dry-run (shorter)"
+      },
+      {
+        "flag": "--exclude",
+        "desc": "Exclude files matching pattern",
+        "valuePrompt": "Pattern (e.g. *.tmp)",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--include",
+        "desc": "Include files matching pattern",
+        "valuePrompt": "Pattern",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--exclude-from",
+        "desc": "Exclude patterns from file",
+        "valuePrompt": "Filename",
+        "join": "="
+      },
+      {
+        "flag": "-e",
+        "desc": "Use custom remote shell command",
+        "valuePrompt": "Command (e.g. \"ssh -p 2222\")",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--bwlimit",
+        "desc": "Limit bandwidth (KB/s)",
+        "valuePrompt": "Speed",
+        "valueDefault": "1000",
+        "join": "="
+      },
+      {
+        "flag": "--max-size",
+        "desc": "Skip files larger than size",
+        "valuePrompt": "Size (e.g. 100M)",
+        "join": "="
+      },
+      {
+        "flag": "--checksum",
+        "desc": "Use checksum to determine changes (slower but safer)"
+      },
+      {
+        "flag": "-u",
+        "desc": "Skip files newer at destination (update only)"
+      },
+      {
+        "flag": "--remove-source-files",
+        "desc": "Remove source files after successful copy"
+      }
+    ]
+  },
+  "bash::tar -czvf archive.tar.gz dir/": {
+    "name": "tar",
+    "description": "Build a tar archive command",
+    "base": "tar",
+    "args": [
+      {
+        "key": "mode",
+        "label": "Operation",
+        "type": "select",
+        "options": [
+          {
+            "value": "-c",
+            "label": "-c Create archive"
+          },
+          {
+            "value": "-x",
+            "label": "-x Extract archive"
+          },
+          {
+            "value": "-t",
+            "label": "-t List contents"
+          }
+        ],
+        "required": true,
+        "default": "-c"
+      },
+      {
+        "key": "archive",
+        "label": "Archive file",
+        "placeholder": "archive.tar.gz",
+        "required": true
+      },
+      {
+        "key": "target",
+        "label": "Target (for create only)",
+        "placeholder": "dir/ or file",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-z",
+        "desc": "Use gzip compression (.tar.gz / .tgz)"
+      },
+      {
+        "flag": "-j",
+        "desc": "Use bzip2 compression (.tar.bz2)"
+      },
+      {
+        "flag": "-J",
+        "desc": "Use xz compression (.tar.xz)"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose — show files being processed"
+      },
+      {
+        "flag": "-f",
+        "desc": "Required — specify archive filename (auto-added)",
+        "hidden": true,
+        "alwaysOn": true
+      },
+      {
+        "flag": "-p",
+        "desc": "Preserve permissions"
+      },
+      {
+        "flag": "--exclude",
+        "desc": "Exclude files matching pattern",
+        "valuePrompt": "Pattern (e.g. *.log)",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "-C",
+        "desc": "Change to directory before processing",
+        "valuePrompt": "Directory path",
+        "join": " "
+      },
+      {
+        "flag": "--strip-components",
+        "desc": "Strip N leading path components on extract",
+        "valuePrompt": "Number",
+        "valueDefault": "1",
+        "join": "="
+      }
+    ]
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "name": "Netgear / TP-Link",
+  "icon": "NG",
+  "iconBg": "#b11116",
+  "subtitle": "Netgear ProSAFE & TP-Link Omada CLI",
+  "meta": "ProSAFE / Omada",
+  "sections": [
+    {
+      "id": "ng-basics",
+      "title": "Netgear ProSAFE Basics",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "enable",
+          "desc": "Enter privileged EXEC mode"
+        },
+        {
+          "cmd": "configure",
+          "desc": "Enter global configuration mode"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit current mode"
+        },
+        {
+          "cmd": "end",
+          "desc": "Return to privileged EXEC"
+        },
+        {
+          "cmd": "show running-config",
+          "desc": "Show current running configuration"
+        },
+        {
+          "cmd": "show startup-config",
+          "desc": "Show saved startup configuration"
+        },
+        {
+          "cmd": "show version",
+          "desc": "Firmware version and hardware info"
+        },
+        {
+          "cmd": "show interface all",
+          "desc": "All interface statuses"
+        },
+        {
+          "cmd": "show ip interface brief",
+          "desc": "IP addresses on all interfaces"
+        },
+        {
+          "cmd": "show vlan",
+          "desc": "VLAN table"
+        },
+        {
+          "cmd": "show mac-addr-table",
+          "desc": "MAC address table"
+        },
+        {
+          "cmd": "show arp",
+          "desc": "ARP table"
+        },
+        {
+          "cmd": "show spanning-tree active",
+          "desc": "Active STP ports"
+        },
+        {
+          "cmd": "show lldp neighbors",
+          "desc": "LLDP neighbor info"
+        },
+        {
+          "cmd": "show logging",
+          "desc": "System log"
+        }
+      ]
+    },
+    {
+      "id": "ng-vlan",
+      "title": "VLAN & Interface Config",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "vlan database",
+          "desc": "Enter VLAN database mode"
+        },
+        {
+          "cmd": "vlan 10",
+          "desc": "Create VLAN 10"
+        },
+        {
+          "cmd": "vlan name 10 SERVERS",
+          "desc": "Name VLAN 10"
+        },
+        {
+          "cmd": "no vlan 10",
+          "desc": "Delete VLAN 10"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit VLAN database mode"
+        },
+        {
+          "cmd": "interface 0/1",
+          "desc": "Enter port 0/1 config"
+        },
+        {
+          "cmd": "vlan participation include 10",
+          "desc": "Add port to VLAN 10 (untagged)"
+        },
+        {
+          "cmd": "vlan participation exclude 10",
+          "desc": "Remove port from VLAN 10"
+        },
+        {
+          "cmd": "vlan pvid 10",
+          "desc": "Set PVID (native/access VLAN) for this port"
+        },
+        {
+          "cmd": "vlan tagging 10",
+          "desc": "Set VLAN 10 as tagged (trunk) on this port"
+        },
+        {
+          "cmd": "spanning-tree portmode fast",
+          "desc": "Enable PortFast equivalent"
+        },
+        {
+          "cmd": "ip address 192.168.1.10 255.255.255.0",
+          "desc": "Set IP on L3 VLAN interface"
+        },
+        {
+          "cmd": "ip default-gateway 192.168.1.1",
+          "desc": "Set default gateway"
+        }
+      ]
+    },
+    {
+      "id": "ng-save",
+      "title": "Save & Backup (Netgear)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "copy running-config startup-config",
+          "desc": "Save running config to startup"
+        },
+        {
+          "cmd": "write memory",
+          "desc": "Shorthand save command"
+        },
+        {
+          "cmd": "copy running-config tftp://10.0.0.1/backup.cfg",
+          "desc": "Back up config to TFTP"
+        },
+        {
+          "cmd": "copy tftp://10.0.0.1/backup.cfg running-config",
+          "desc": "Restore config from TFTP"
+        },
+        {
+          "cmd": "copy system:running-config nvram:startup-config",
+          "desc": "Explicit save to NVRAM"
+        },
+        {
+          "cmd": "clear config",
+          "desc": "Reset to factory defaults"
+        },
+        {
+          "cmd": "reload",
+          "desc": "Reboot switch"
+        }
+      ]
+    },
+    {
+      "id": "ng-omada",
+      "title": "TP-Link Omada CLI",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "enable",
+          "desc": "Enter privileged mode"
+        },
+        {
+          "cmd": "configure",
+          "desc": "Enter global configuration mode"
+        },
+        {
+          "cmd": "show system-info",
+          "desc": "Model, firmware, MAC, serial"
+        },
+        {
+          "cmd": "show interface ethernet 1/0/1",
+          "desc": "Detailed info for port 1/0/1"
+        },
+        {
+          "cmd": "show vlan 10",
+          "desc": "VLAN 10 details"
+        },
+        {
+          "cmd": "interface ethernet 1/0/1",
+          "desc": "Enter port configuration"
+        },
+        {
+          "cmd": "switchport mode access",
+          "desc": "Set as access port"
+        },
+        {
+          "cmd": "switchport access vlan 10",
+          "desc": "Assign access VLAN"
+        },
+        {
+          "cmd": "switchport mode trunk",
+          "desc": "Set as trunk port"
+        },
+        {
+          "cmd": "switchport trunk allowed vlan 10,20,30",
+          "desc": "Set allowed VLANs on trunk"
+        },
+        {
+          "cmd": "spanning-tree portfast",
+          "desc": "Enable PortFast on port"
+        },
+        {
+          "cmd": "copy running-config startup-config",
+          "desc": "Save config"
+        },
+        {
+          "cmd": "copy startup-config tftp://10.0.0.1/backup.cfg",
+          "desc": "Back up to TFTP"
+        }
+      ]
+    },
+    {
+      "id": "ng-boxconfig",
+      "title": "Out-of-Box Initial Setup (Netgear)",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "--- Default IP: 192.168.0.1 (most models) ---",
+          "desc": "STEP 1: Connect PC directly and browse to 192.168.0.1 or use console"
+        },
+        {
+          "cmd": "Username: admin / Password: password",
+          "desc": "STEP 2: Default credentials (change immediately!)"
+        },
+        {
+          "cmd": "enable",
+          "desc": "STEP 3: Enter privileged mode via console"
+        },
+        {
+          "cmd": "configure",
+          "desc": "STEP 4: Enter global config"
+        },
+        {
+          "cmd": "hostname SWITCH-01",
+          "desc": "STEP 5: Set hostname"
+        },
+        {
+          "cmd": "username admin password YourStr0ngPass privilege 15",
+          "desc": "STEP 6: Change admin password"
+        },
+        {
+          "cmd": "ip address 192.168.1.10 255.255.255.0",
+          "desc": "STEP 7: Set management IP on VLAN 1"
+        },
+        {
+          "cmd": "ip default-gateway 192.168.1.1",
+          "desc": "STEP 8: Set default gateway"
+        },
+        {
+          "cmd": "crypto key generate rsa",
+          "desc": "STEP 9: Generate SSH keys"
+        },
+        {
+          "cmd": "ip ssh server enable",
+          "desc": "STEP 10: Enable SSH server"
+        },
+        {
+          "cmd": "no ip telnet server enable",
+          "desc": "STEP 11: Disable Telnet"
+        },
+        {
+          "cmd": "sntp server 10.0.0.1",
+          "desc": "STEP 12: Set time server"
+        },
+        {
+          "cmd": "logging host 10.0.0.5",
+          "desc": "STEP 13: Set syslog server"
+        },
+        {
+          "cmd": "write memory",
+          "desc": "STEP 14: SAVE the configuration"
+        }
+      ]
+    }
+  ]
+}

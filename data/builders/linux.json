@@ -1,0 +1,293 @@
+{
+  "linux::systemctl status servicename": {
+    "name": "systemctl",
+    "description": "Manage systemd services",
+    "base": "systemctl",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "options": [
+          {
+            "value": "status",
+            "label": "status — show service state"
+          },
+          {
+            "value": "start",
+            "label": "start — start service"
+          },
+          {
+            "value": "stop",
+            "label": "stop — stop service"
+          },
+          {
+            "value": "restart",
+            "label": "restart — stop and start"
+          },
+          {
+            "value": "reload",
+            "label": "reload — reload config"
+          },
+          {
+            "value": "enable",
+            "label": "enable — start on boot"
+          },
+          {
+            "value": "disable",
+            "label": "disable — do not start on boot"
+          },
+          {
+            "value": "mask",
+            "label": "mask — prevent any start"
+          },
+          {
+            "value": "unmask",
+            "label": "unmask — remove mask"
+          },
+          {
+            "value": "is-active",
+            "label": "is-active — check if running"
+          },
+          {
+            "value": "is-enabled",
+            "label": "is-enabled — check if enabled"
+          },
+          {
+            "value": "list-units",
+            "label": "list-units — list loaded units"
+          }
+        ],
+        "required": true,
+        "default": "status"
+      },
+      {
+        "key": "service",
+        "label": "Service name (optional for list)",
+        "placeholder": "nginx or docker",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--no-pager",
+        "desc": "Do not pipe output through pager"
+      },
+      {
+        "flag": "--full",
+        "desc": "Do not truncate output"
+      },
+      {
+        "flag": "--type=service",
+        "desc": "List only service units (for list-units)"
+      },
+      {
+        "flag": "--state=failed",
+        "desc": "Filter by state (failed, active, inactive)"
+      }
+    ]
+  },
+  "linux::journalctl -u servicename -f": {
+    "name": "journalctl",
+    "description": "Query systemd journal logs",
+    "base": "journalctl",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-u",
+        "desc": "Show logs for specific service",
+        "valuePrompt": "nginx or docker",
+        "join": " "
+      },
+      {
+        "flag": "-f",
+        "desc": "Follow — stream new logs in real time"
+      },
+      {
+        "flag": "-n",
+        "desc": "Show last N lines",
+        "valuePrompt": "Lines",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "-p",
+        "desc": "Filter by priority",
+        "valuePrompt": "err | warning | info | debug",
+        "join": " "
+      },
+      {
+        "flag": "-b",
+        "desc": "Show logs from current boot only"
+      },
+      {
+        "flag": "-b -1",
+        "desc": "Show logs from previous boot"
+      },
+      {
+        "flag": "--since",
+        "desc": "Show logs since time",
+        "valuePrompt": "\"1 hour ago\" or \"2025-01-01 00:00:00\"",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--until",
+        "desc": "Show logs until time",
+        "valuePrompt": "\"now\" or timestamp",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-o short-iso",
+        "desc": "ISO timestamp format"
+      },
+      {
+        "flag": "-o json-pretty",
+        "desc": "JSON output"
+      },
+      {
+        "flag": "--no-pager",
+        "desc": "Output without pager"
+      },
+      {
+        "flag": "--disk-usage",
+        "desc": "Show how much disk logs are using"
+      },
+      {
+        "flag": "--vacuum-time",
+        "desc": "Delete logs older than duration",
+        "valuePrompt": "7d | 2w | 1month",
+        "join": "="
+      }
+    ]
+  },
+  "linux::useradd -m -s /bin/bash username": {
+    "name": "useradd",
+    "description": "Create a new Linux user",
+    "base": "useradd",
+    "args": [
+      {
+        "key": "username",
+        "label": "Username",
+        "placeholder": "alice",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-m",
+        "desc": "Create home directory at /home/username"
+      },
+      {
+        "flag": "-s",
+        "desc": "Login shell",
+        "valuePrompt": "/bin/bash | /bin/zsh | /sbin/nologin",
+        "valueDefault": "/bin/bash",
+        "join": " "
+      },
+      {
+        "flag": "-c",
+        "desc": "Comment (full name)",
+        "valuePrompt": "\"Alice Smith\"",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-G",
+        "desc": "Supplementary groups",
+        "valuePrompt": "sudo,docker,www-data",
+        "join": " "
+      },
+      {
+        "flag": "-g",
+        "desc": "Primary group",
+        "valuePrompt": "groupname or GID",
+        "join": " "
+      },
+      {
+        "flag": "-d",
+        "desc": "Custom home directory",
+        "valuePrompt": "/opt/alice",
+        "join": " "
+      },
+      {
+        "flag": "-u",
+        "desc": "Specify UID",
+        "valuePrompt": "1001",
+        "join": " "
+      },
+      {
+        "flag": "-e",
+        "desc": "Account expiry date",
+        "valuePrompt": "YYYY-MM-DD",
+        "join": " "
+      },
+      {
+        "flag": "-r",
+        "desc": "Create system account (no home, no password)"
+      }
+    ]
+  },
+  "linux::ss -tulpn": {
+    "name": "ss / netstat",
+    "description": "Show socket and network connections",
+    "base": "ss",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "TCP sockets"
+      },
+      {
+        "flag": "-u",
+        "desc": "UDP sockets"
+      },
+      {
+        "flag": "-l",
+        "desc": "Listening sockets only"
+      },
+      {
+        "flag": "-p",
+        "desc": "Show process using the socket"
+      },
+      {
+        "flag": "-n",
+        "desc": "Numeric addresses (no DNS)"
+      },
+      {
+        "flag": "-a",
+        "desc": "All sockets (listening and connected)"
+      },
+      {
+        "flag": "-e",
+        "desc": "Show detailed socket information"
+      },
+      {
+        "flag": "-s",
+        "desc": "Summary statistics"
+      },
+      {
+        "flag": "state established",
+        "desc": "Only established connections",
+        "join": " "
+      },
+      {
+        "flag": "state listening",
+        "desc": "Only listening sockets",
+        "join": " "
+      },
+      {
+        "flag": "sport = :80",
+        "desc": "Filter by source port",
+        "join": " ",
+        "valuePrompt": "Port number (e.g. :443)",
+        "join2": " "
+      },
+      {
+        "flag": "| grep LISTEN",
+        "desc": "Pipe: grep for LISTEN"
+      }
+    ]
+  }
+}

@@ -1,0 +1,462 @@
+{
+  "name": "FortiGate",
+  "icon": "FG",
+  "iconBg": "#da2020",
+  "subtitle": "FortiOS firewall & switch CLI",
+  "meta": "FortiOS 7.x",
+  "sections": [
+    {
+      "id": "fg-basics",
+      "title": "Modes & Navigation",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "config system global",
+          "desc": "Enter system global configuration context"
+        },
+        {
+          "cmd": "config firewall policy",
+          "desc": "Enter firewall policy configuration"
+        },
+        {
+          "cmd": "edit 1",
+          "desc": "Edit entry number 1 in current context"
+        },
+        {
+          "cmd": "set <param> <value>",
+          "desc": "Set a parameter value in current edit context"
+        },
+        {
+          "cmd": "append <param> <value>",
+          "desc": "Append value to a list parameter (e.g. add an address to a group)"
+        },
+        {
+          "cmd": "next",
+          "desc": "Move to next entry in a config table"
+        },
+        {
+          "cmd": "end",
+          "desc": "Commit changes and exit to root context"
+        },
+        {
+          "cmd": "abort",
+          "desc": "Discard changes and exit without saving"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit current context (going up one level)"
+        },
+        {
+          "cmd": "get",
+          "desc": "Show current settings in this context"
+        },
+        {
+          "cmd": "show",
+          "desc": "Show full configuration of current context"
+        },
+        {
+          "cmd": "show full-configuration",
+          "desc": "Show all settings including defaults"
+        },
+        {
+          "cmd": "?",
+          "desc": "Context-sensitive help — show available commands"
+        },
+        {
+          "cmd": "tree",
+          "desc": "Show all available sub-commands in current context as tree"
+        }
+      ]
+    },
+    {
+      "id": "fg-show",
+      "title": "Show / Diagnostics",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "get system status",
+          "desc": "Serial number, firmware version, license, hostname"
+        },
+        {
+          "cmd": "get system performance status",
+          "desc": "CPU, memory, session counts, uptime"
+        },
+        {
+          "cmd": "get hardware status",
+          "desc": "Hardware model, temperature, fan, PSU"
+        },
+        {
+          "cmd": "get system interface",
+          "desc": "All interfaces — IP, status, speed"
+        },
+        {
+          "cmd": "get system interface physical",
+          "desc": "Physical interface stats and link state"
+        },
+        {
+          "cmd": "get router info routing-table all",
+          "desc": "Full routing table"
+        },
+        {
+          "cmd": "get router info routing-table details 0.0.0.0",
+          "desc": "Default route details"
+        },
+        {
+          "cmd": "get system arp",
+          "desc": "ARP table"
+        },
+        {
+          "cmd": "diagnose firewall iprope show 100004 0",
+          "desc": "Show active firewall sessions"
+        },
+        {
+          "cmd": "diagnose sys session list",
+          "desc": "List all active sessions"
+        },
+        {
+          "cmd": "diagnose sys session filter dport 443",
+          "desc": "Filter sessions by destination port"
+        },
+        {
+          "cmd": "diagnose debug flow",
+          "desc": "Packet flow debug — trace why traffic is allowed/blocked"
+        },
+        {
+          "cmd": "diagnose debug flow filter addr 10.0.0.1",
+          "desc": "Debug flow for specific IP"
+        },
+        {
+          "cmd": "diagnose debug flow show iprope enable",
+          "desc": "Enable policy matching in flow debug"
+        },
+        {
+          "cmd": "diagnose debug enable",
+          "desc": "Start debug output to console"
+        },
+        {
+          "cmd": "diagnose debug disable",
+          "desc": "Stop debug output"
+        },
+        {
+          "cmd": "diagnose debug reset",
+          "desc": "Reset all debug settings"
+        },
+        {
+          "cmd": "get vpn ssl monitor",
+          "desc": "Show SSL-VPN active sessions"
+        },
+        {
+          "cmd": "get vpn ipsec tunnel summary",
+          "desc": "IPsec VPN tunnel status summary"
+        },
+        {
+          "cmd": "diagnose vpn tunnel list",
+          "desc": "Detailed IPsec tunnel info"
+        }
+      ]
+    },
+    {
+      "id": "fg-interfaces",
+      "title": "Interface Config",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "config system interface",
+          "desc": "Enter interface configuration context"
+        },
+        {
+          "cmd": "edit port1",
+          "desc": "Edit port1 (WAN typically)"
+        },
+        {
+          "cmd": "set mode static",
+          "desc": "Static IP mode"
+        },
+        {
+          "cmd": "set mode dhcp",
+          "desc": "DHCP client mode (for WAN)"
+        },
+        {
+          "cmd": "set ip 192.168.1.1 255.255.255.0",
+          "desc": "Set IP address and mask"
+        },
+        {
+          "cmd": "set allowaccess ping https ssh",
+          "desc": "Allow ping, HTTPS, SSH management on this interface"
+        },
+        {
+          "cmd": "set description \"WAN-PRIMARY\"",
+          "desc": "Set interface description"
+        },
+        {
+          "cmd": "set alias WAN-ISP1",
+          "desc": "Short alias for the interface"
+        },
+        {
+          "cmd": "set role wan",
+          "desc": "Set interface role (wan/lan/dmz/undefined)"
+        },
+        {
+          "cmd": "end",
+          "desc": "Save and exit interface config"
+        }
+      ]
+    },
+    {
+      "id": "fg-policy",
+      "title": "Firewall Policies",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "config firewall policy",
+          "desc": "Enter firewall policy table"
+        },
+        {
+          "cmd": "edit 0",
+          "desc": "Create new policy (0 = auto-assign ID)"
+        },
+        {
+          "cmd": "set name \"LAN-to-WAN\"",
+          "desc": "Policy name"
+        },
+        {
+          "cmd": "set srcintf \"port2\"",
+          "desc": "Source interface"
+        },
+        {
+          "cmd": "set dstintf \"port1\"",
+          "desc": "Destination interface"
+        },
+        {
+          "cmd": "set srcaddr \"all\"",
+          "desc": "Source address object"
+        },
+        {
+          "cmd": "set dstaddr \"all\"",
+          "desc": "Destination address object"
+        },
+        {
+          "cmd": "set action accept",
+          "desc": "Allow traffic matching this policy"
+        },
+        {
+          "cmd": "set action deny",
+          "desc": "Block traffic matching this policy"
+        },
+        {
+          "cmd": "set schedule \"always\"",
+          "desc": "Active at all times"
+        },
+        {
+          "cmd": "set service \"ALL\"",
+          "desc": "Match all services/ports"
+        },
+        {
+          "cmd": "set nat enable",
+          "desc": "Enable source NAT (masquerade) on this policy"
+        },
+        {
+          "cmd": "set logtraffic all",
+          "desc": "Log all traffic (matched and unmatched)"
+        },
+        {
+          "cmd": "set status enable",
+          "desc": "Enable this policy"
+        },
+        {
+          "cmd": "end",
+          "desc": "Save policy"
+        },
+        {
+          "cmd": "show firewall policy",
+          "desc": "Show all configured policies"
+        },
+        {
+          "cmd": "diagnose firewall iprope lookup 10.0.0.1 8.8.8.8 0 17 0",
+          "desc": "Test which policy matches src/dst/proto/dport"
+        }
+      ]
+    },
+    {
+      "id": "fg-routing",
+      "title": "Routing",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "config router static",
+          "desc": "Enter static routing config"
+        },
+        {
+          "cmd": "edit 1",
+          "desc": "Edit/create static route entry 1"
+        },
+        {
+          "cmd": "set dst 0.0.0.0 0.0.0.0",
+          "desc": "Default route destination"
+        },
+        {
+          "cmd": "set gateway 203.0.113.1",
+          "desc": "Next-hop gateway"
+        },
+        {
+          "cmd": "set device port1",
+          "desc": "Egress interface"
+        },
+        {
+          "cmd": "set distance 10",
+          "desc": "Administrative distance (lower = preferred)"
+        },
+        {
+          "cmd": "end",
+          "desc": "Save routing config"
+        },
+        {
+          "cmd": "config router ospf",
+          "desc": "Enter OSPF configuration"
+        },
+        {
+          "cmd": "config router bgp",
+          "desc": "Enter BGP configuration"
+        },
+        {
+          "cmd": "get router info routing-table all",
+          "desc": "View routing table"
+        }
+      ]
+    },
+    {
+      "id": "fg-save",
+      "title": "Save, Backup & Restore",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "execute backup config tftp backup.conf 10.0.0.1",
+          "desc": "Back up full config to TFTP server"
+        },
+        {
+          "cmd": "execute backup config ftp backup.conf 10.0.0.1 user pass",
+          "desc": "Back up config to FTP server"
+        },
+        {
+          "cmd": "execute restore config tftp backup.conf 10.0.0.1",
+          "desc": "Restore config from TFTP"
+        },
+        {
+          "cmd": "execute backup config flash backup.conf",
+          "desc": "Save config to internal flash"
+        },
+        {
+          "cmd": "execute restore config flash backup.conf",
+          "desc": "Restore from internal flash backup"
+        },
+        {
+          "cmd": "execute factoryreset",
+          "desc": "Full factory reset — ERASES EVERYTHING"
+        },
+        {
+          "cmd": "execute reboot",
+          "desc": "Reboot the device"
+        },
+        {
+          "cmd": "diagnose hardware deviceinfo disk",
+          "desc": "Show disk usage (flash usage for logs/config)"
+        },
+        {
+          "cmd": "execute cfg save",
+          "desc": "Manually trigger config save (usually auto on end)"
+        }
+      ]
+    },
+    {
+      "id": "fg-boxconfig",
+      "title": "Out-of-Box Initial Setup",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "--- Connect via console (9600 baud) or via default IP 192.168.1.99 ---",
+          "desc": "STEP 1: Console cable or browser to https://192.168.1.99"
+        },
+        {
+          "cmd": "Username: admin / Password: (blank)",
+          "desc": "STEP 2: Default creds — admin with no password"
+        },
+        {
+          "cmd": "config system global",
+          "desc": "STEP 3: Enter global config"
+        },
+        {
+          "cmd": "set hostname FG-EDGE-01",
+          "desc": "STEP 4: Set hostname"
+        },
+        {
+          "cmd": "set timezone 04",
+          "desc": "STEP 5: Set timezone (04 = US Eastern; run \"set timezone ?\" for list)"
+        },
+        {
+          "cmd": "end",
+          "desc": "STEP 6: Save global config"
+        },
+        {
+          "cmd": "config system admin",
+          "desc": "STEP 7: Enter admin user config"
+        },
+        {
+          "cmd": "edit admin",
+          "desc": "STEP 8: Edit the default admin user"
+        },
+        {
+          "cmd": "set password YourStr0ngPassword",
+          "desc": "STEP 9: Set admin password (critical!)"
+        },
+        {
+          "cmd": "end",
+          "desc": "STEP 10: Save — you will need to re-login"
+        },
+        {
+          "cmd": "config system interface",
+          "desc": "STEP 11: Configure interfaces"
+        },
+        {
+          "cmd": "edit port1",
+          "desc": "STEP 12: Edit WAN interface"
+        },
+        {
+          "cmd": "set mode dhcp",
+          "desc": "STEP 13: Set WAN to DHCP (or static with set mode static)"
+        },
+        {
+          "cmd": "set allowaccess ping",
+          "desc": "STEP 14: Allow ping only on WAN"
+        },
+        {
+          "cmd": "next",
+          "desc": "STEP 15: Move to next interface"
+        },
+        {
+          "cmd": "edit port2",
+          "desc": "STEP 16: Edit LAN interface"
+        },
+        {
+          "cmd": "set ip 192.168.10.1 255.255.255.0",
+          "desc": "STEP 17: Set LAN IP"
+        },
+        {
+          "cmd": "set allowaccess ping https ssh",
+          "desc": "STEP 18: Allow management on LAN"
+        },
+        {
+          "cmd": "end",
+          "desc": "STEP 19: Save interface config"
+        },
+        {
+          "cmd": "config router static",
+          "desc": "STEP 20: Set default route if WAN is static"
+        },
+        {
+          "cmd": "execute backup config tftp initial-config.conf 10.0.0.1",
+          "desc": "FINAL: Back up your initial config immediately"
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-
 /* ─────────────────────────────────────────
    STATE & STORAGE
 ───────────────────────────────────────── */
@@ -16,8 +15,12 @@ const STORAGE_KEYS = {
 };
 
 function loadJSON(key, fallback) {
-  try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
-  catch { localStorage.removeItem(key); return fallback; }
+  try {
+    return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+  } catch {
+    localStorage.removeItem(key);
+    return fallback;
+  }
 }
 
 const state = {
@@ -37,12 +40,15 @@ const state = {
 
 function save(key) {
   if (key === 'theme') localStorage.setItem(STORAGE_KEYS.theme, state.theme);
-  if (key === 'favorites') localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify([...state.favorites]));
+  if (key === 'favorites')
+    localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify([...state.favorites]));
   if (key === 'notes') localStorage.setItem(STORAGE_KEYS.notes, JSON.stringify(state.notes));
   if (key === 'history') localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(state.history));
   if (key === 'activeSheet') localStorage.setItem(STORAGE_KEYS.activeSheet, state.activeSheet);
-  if (key === 'expandedSheets') localStorage.setItem(STORAGE_KEYS.expandedSheets, JSON.stringify([...state.expandedSheets]));
-  if (key === 'activeSection') localStorage.setItem(STORAGE_KEYS.activeSection, state.activeSection || '');
+  if (key === 'expandedSheets')
+    localStorage.setItem(STORAGE_KEYS.expandedSheets, JSON.stringify([...state.expandedSheets]));
+  if (key === 'activeSection')
+    localStorage.setItem(STORAGE_KEYS.activeSection, state.activeSection || '');
   if (key === 'viewMode') localStorage.setItem(STORAGE_KEYS.viewMode, state.viewMode);
   if (key === 'fontSize') localStorage.setItem(STORAGE_KEYS.fontSize, state.fontSize);
   if (key === 'sidebarWidth') localStorage.setItem(STORAGE_KEYS.sidebarWidth, state.sidebarWidth);

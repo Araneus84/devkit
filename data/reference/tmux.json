@@ -1,0 +1,228 @@
+{
+  "name": "tmux",
+  "icon": "◫",
+  "iconBg": "#1bb91f",
+  "subtitle": "Terminal multiplexer",
+  "meta": "tmux 3.x",
+  "sections": [
+    {
+      "id": "tmx-sessions",
+      "title": "Sessions",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "tmux",
+          "desc": "Start new unnamed tmux session"
+        },
+        {
+          "cmd": "tmux new -s mysession",
+          "desc": "Start new named session"
+        },
+        {
+          "cmd": "tmux ls",
+          "desc": "List active sessions"
+        },
+        {
+          "cmd": "tmux attach -t mysession",
+          "desc": "Attach to session by name"
+        },
+        {
+          "cmd": "tmux attach -t 0",
+          "desc": "Attach to session by number"
+        },
+        {
+          "cmd": "tmux kill-session -t mysession",
+          "desc": "Kill specific session"
+        },
+        {
+          "cmd": "tmux kill-server",
+          "desc": "Kill all tmux sessions"
+        },
+        {
+          "cmd": "tmux rename-session -t old new",
+          "desc": "Rename session"
+        },
+        {
+          "cmd": "Prefix + d",
+          "desc": "Detach from session (default prefix is Ctrl+b)"
+        },
+        {
+          "cmd": "Prefix + $",
+          "desc": "Rename current session"
+        },
+        {
+          "cmd": "Prefix + s",
+          "desc": "List sessions interactively (switch)"
+        }
+      ]
+    },
+    {
+      "id": "tmx-windows",
+      "title": "Windows (Tabs)",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "Prefix + c",
+          "desc": "Create new window"
+        },
+        {
+          "cmd": "Prefix + n / Prefix + p",
+          "desc": "Next / previous window"
+        },
+        {
+          "cmd": "Prefix + 0-9",
+          "desc": "Switch to window by number"
+        },
+        {
+          "cmd": "Prefix + w",
+          "desc": "List windows interactively"
+        },
+        {
+          "cmd": "Prefix + &",
+          "desc": "Close current window"
+        },
+        {
+          "cmd": "Prefix + ,",
+          "desc": "Rename current window"
+        },
+        {
+          "cmd": "Prefix + f",
+          "desc": "Find window by name"
+        },
+        {
+          "cmd": "Prefix + .",
+          "desc": "Move window to different position/index"
+        }
+      ]
+    },
+    {
+      "id": "tmx-panes",
+      "title": "Panes (Splits)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "Prefix + %",
+          "desc": "Split pane vertically (side by side)"
+        },
+        {
+          "cmd": "Prefix + \"",
+          "desc": "Split pane horizontally (top/bottom)"
+        },
+        {
+          "cmd": "Prefix + Arrow",
+          "desc": "Navigate to pane in direction"
+        },
+        {
+          "cmd": "Prefix + o",
+          "desc": "Cycle to next pane"
+        },
+        {
+          "cmd": "Prefix + q",
+          "desc": "Show pane numbers (press number to jump)"
+        },
+        {
+          "cmd": "Prefix + x",
+          "desc": "Close current pane (confirms)"
+        },
+        {
+          "cmd": "Prefix + z",
+          "desc": "Toggle pane zoom (full screen)"
+        },
+        {
+          "cmd": "Prefix + {  / Prefix + }",
+          "desc": "Swap pane with previous / next"
+        },
+        {
+          "cmd": "Prefix + Ctrl+Arrow",
+          "desc": "Resize pane by 1 cell"
+        },
+        {
+          "cmd": "Prefix + Space",
+          "desc": "Cycle through pane layouts"
+        },
+        {
+          "cmd": "Prefix + !",
+          "desc": "Convert current pane to its own window"
+        }
+      ]
+    },
+    {
+      "id": "tmx-copy",
+      "title": "Copy Mode & Scrolling",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "Prefix + [",
+          "desc": "Enter copy mode (use arrows/page up to scroll)"
+        },
+        {
+          "cmd": "q",
+          "desc": "Exit copy mode"
+        },
+        {
+          "cmd": "Space",
+          "desc": "Start selection in copy mode"
+        },
+        {
+          "cmd": "Enter",
+          "desc": "Copy selection and exit"
+        },
+        {
+          "cmd": "Prefix + ]",
+          "desc": "Paste copied content"
+        },
+        {
+          "cmd": "/ pattern",
+          "desc": "Search forward in copy mode"
+        },
+        {
+          "cmd": "? pattern",
+          "desc": "Search backward in copy mode"
+        },
+        {
+          "cmd": "n / N",
+          "desc": "Next / previous search match"
+        }
+      ]
+    },
+    {
+      "id": "tmx-misc",
+      "title": "Misc & Config",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "Prefix + ?",
+          "desc": "Show all key bindings"
+        },
+        {
+          "cmd": "Prefix + :",
+          "desc": "Enter command mode"
+        },
+        {
+          "cmd": ":setw synchronize-panes on",
+          "desc": "Type same command in all panes"
+        },
+        {
+          "cmd": ":source-file ~/.tmux.conf",
+          "desc": "Reload tmux config"
+        },
+        {
+          "cmd": "Prefix + t",
+          "desc": "Show big clock"
+        },
+        {
+          "cmd": "tmux source ~/.tmux.conf",
+          "desc": "Reload config from shell"
+        },
+        {
+          "cmd": "set -g mouse on",
+          "desc": "Enable mouse support (in .tmux.conf)"
+        },
+        {
+          "cmd": "set -g prefix C-a",
+          "desc": "Change prefix to Ctrl+a (in .tmux.conf)"
+        }
+      ]
+    }
+  ]
+}

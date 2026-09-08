@@ -1,0 +1,357 @@
+{
+  "name": "Ansible",
+  "icon": "🔧",
+  "iconBg": "#ee0000",
+  "subtitle": "Automation & config management",
+  "meta": "Ansible 2.x",
+  "sections": [
+    {
+      "id": "an-adhoc",
+      "title": "Ad-hoc Commands",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "ansible all -m ping",
+          "desc": "Ping all hosts in inventory"
+        },
+        {
+          "cmd": "ansible all -m setup",
+          "desc": "Gather all facts from hosts"
+        },
+        {
+          "cmd": "ansible webservers -a \"uptime\"",
+          "desc": "Run shell command on group of hosts"
+        },
+        {
+          "cmd": "ansible all -m shell -a \"df -h\"",
+          "desc": "Run shell command (supports pipes/redirects)"
+        },
+        {
+          "cmd": "ansible all -m command -a \"uptime\" -o",
+          "desc": "One-line output format"
+        },
+        {
+          "cmd": "ansible all -m copy -a \"src=/file dest=/tmp/file\"",
+          "desc": "Copy file to all hosts"
+        },
+        {
+          "cmd": "ansible all -m file -a \"path=/tmp/dir state=directory mode=0755\"",
+          "desc": "Create directory with permissions"
+        },
+        {
+          "cmd": "ansible all -m service -a \"name=nginx state=restarted\" -b",
+          "desc": "Restart service with become (sudo)"
+        },
+        {
+          "cmd": "ansible all -m package -a \"name=git state=present\" -b",
+          "desc": "Install package across distros"
+        },
+        {
+          "cmd": "ansible all -m user -a \"name=alex state=present\" -b",
+          "desc": "Create user"
+        }
+      ]
+    },
+    {
+      "id": "an-playbook",
+      "title": "Playbooks",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "ansible-playbook site.yml",
+          "desc": "Run a playbook"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --check",
+          "desc": "Dry run — show what would change without applying"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --diff",
+          "desc": "Show diffs of file changes"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --check --diff",
+          "desc": "Dry run with diff output — preview changes"
+        },
+        {
+          "cmd": "ansible-playbook site.yml -i inventory.ini",
+          "desc": "Run with specific inventory file"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --limit webservers",
+          "desc": "Limit run to specific hosts/group"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --tags \"config,deploy\"",
+          "desc": "Run only tasks with these tags"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --skip-tags \"slow\"",
+          "desc": "Skip tasks with these tags"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --start-at-task \"task name\"",
+          "desc": "Resume from specific task"
+        },
+        {
+          "cmd": "ansible-playbook site.yml -e \"version=1.2.3\"",
+          "desc": "Pass extra variables"
+        },
+        {
+          "cmd": "ansible-playbook site.yml -e \"@vars.yml\"",
+          "desc": "Pass variables from file"
+        },
+        {
+          "cmd": "ansible-playbook site.yml -vvv",
+          "desc": "Increase verbosity (-v to -vvvv)"
+        }
+      ]
+    },
+    {
+      "id": "an-inventory",
+      "title": "Inventory",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "ansible-inventory --list",
+          "desc": "Show entire inventory as JSON"
+        },
+        {
+          "cmd": "ansible-inventory --graph",
+          "desc": "Show inventory as tree structure"
+        },
+        {
+          "cmd": "ansible-inventory --host hostname",
+          "desc": "Show variables for specific host"
+        },
+        {
+          "cmd": "ansible all --list-hosts",
+          "desc": "List hosts that would be targeted"
+        },
+        {
+          "cmd": "ansible webservers --list-hosts",
+          "desc": "List hosts in specific group"
+        },
+        {
+          "cmd": "[webservers]\nweb1.example.com\nweb2.example.com",
+          "desc": "Basic INI inventory format"
+        },
+        {
+          "cmd": "[webservers:vars]\nansible_user=admin",
+          "desc": "Set group variables in INI inventory"
+        },
+        {
+          "cmd": "web[01:50].example.com",
+          "desc": "Inventory pattern — host ranges"
+        }
+      ]
+    },
+    {
+      "id": "an-roles",
+      "title": "Roles & Galaxy",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "ansible-galaxy init my_role",
+          "desc": "Create skeleton for new role"
+        },
+        {
+          "cmd": "ansible-galaxy install user.role_name",
+          "desc": "Install role from Ansible Galaxy"
+        },
+        {
+          "cmd": "ansible-galaxy install -r requirements.yml",
+          "desc": "Install all roles from requirements file"
+        },
+        {
+          "cmd": "ansible-galaxy list",
+          "desc": "List installed roles"
+        },
+        {
+          "cmd": "ansible-galaxy remove user.role_name",
+          "desc": "Remove installed role"
+        },
+        {
+          "cmd": "ansible-galaxy collection install community.general",
+          "desc": "Install a collection"
+        },
+        {
+          "cmd": "ansible-galaxy collection list",
+          "desc": "List installed collections"
+        }
+      ]
+    },
+    {
+      "id": "an-vault",
+      "title": "Vault (Encryption)",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "ansible-vault create secret.yml",
+          "desc": "Create new encrypted file"
+        },
+        {
+          "cmd": "ansible-vault edit secret.yml",
+          "desc": "Edit encrypted file"
+        },
+        {
+          "cmd": "ansible-vault view secret.yml",
+          "desc": "View encrypted file"
+        },
+        {
+          "cmd": "ansible-vault encrypt file.yml",
+          "desc": "Encrypt existing file"
+        },
+        {
+          "cmd": "ansible-vault decrypt file.yml",
+          "desc": "Decrypt file"
+        },
+        {
+          "cmd": "ansible-vault rekey secret.yml",
+          "desc": "Change password on vault file"
+        },
+        {
+          "cmd": "ansible-vault encrypt_string \"password\" --name \"db_pass\"",
+          "desc": "Encrypt single string for use in playbook"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --ask-vault-pass",
+          "desc": "Prompt for vault password"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --vault-password-file ~/.vault_pass",
+          "desc": "Use password from file"
+        }
+      ]
+    },
+    {
+      "id": "an-tasks",
+      "title": "Common Task Modules",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "- name: Install nginx\n  apt:\n    name: nginx\n    state: present",
+          "desc": "Install package on Debian/Ubuntu"
+        },
+        {
+          "cmd": "- name: Start service\n  service:\n    name: nginx\n    state: started\n    enabled: yes",
+          "desc": "Start and enable service"
+        },
+        {
+          "cmd": "- name: Copy file\n  copy:\n    src: file.txt\n    dest: /etc/file.txt\n    mode: \"0644\"",
+          "desc": "Copy file with permissions"
+        },
+        {
+          "cmd": "- name: Template config\n  template:\n    src: nginx.conf.j2\n    dest: /etc/nginx/nginx.conf",
+          "desc": "Render Jinja2 template to file"
+        },
+        {
+          "cmd": "- name: Add line\n  lineinfile:\n    path: /etc/hosts\n    line: \"1.2.3.4 host\"",
+          "desc": "Ensure line exists in file"
+        },
+        {
+          "cmd": "- name: Replace text\n  replace:\n    path: /etc/file\n    regexp: \"old\"\n    replace: \"new\"",
+          "desc": "Replace text matching regex"
+        },
+        {
+          "cmd": "- name: Run command\n  command: /usr/bin/script.sh\n  args:\n    creates: /tmp/done",
+          "desc": "Run command only if file does not exist"
+        },
+        {
+          "cmd": "- name: Clone repo\n  git:\n    repo: https://github.com/user/repo\n    dest: /opt/app",
+          "desc": "Clone or update git repository"
+        }
+      ]
+    },
+    {
+      "id": "an-control",
+      "title": "Control Flow",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "when: ansible_os_family == \"Debian\"",
+          "desc": "Run task only if condition true"
+        },
+        {
+          "cmd": "when: item.state == \"present\"",
+          "desc": "Conditional with loop variable"
+        },
+        {
+          "cmd": "loop: \"{{ users }}\"",
+          "desc": "Iterate over a list"
+        },
+        {
+          "cmd": "loop:\n  - alice\n  - bob",
+          "desc": "Inline loop list"
+        },
+        {
+          "cmd": "with_items: \"{{ packages }}\"",
+          "desc": "Legacy loop syntax — still works"
+        },
+        {
+          "cmd": "register: result",
+          "desc": "Save task output to variable"
+        },
+        {
+          "cmd": "failed_when: result.rc != 0",
+          "desc": "Custom failure condition"
+        },
+        {
+          "cmd": "changed_when: false",
+          "desc": "Never report changed (for read-only tasks)"
+        },
+        {
+          "cmd": "ignore_errors: yes",
+          "desc": "Continue playbook even if task fails"
+        },
+        {
+          "cmd": "notify: restart nginx",
+          "desc": "Trigger handler on change"
+        },
+        {
+          "cmd": "tags: [config, deploy]",
+          "desc": "Add tags to task"
+        },
+        {
+          "cmd": "become: yes\nbecome_user: root",
+          "desc": "Run task as another user (sudo)"
+        }
+      ]
+    },
+    {
+      "id": "an-debug",
+      "title": "Debug & Testing",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "- debug:\n    msg: \"Value is {{ var }}\"",
+          "desc": "Print message during playbook run"
+        },
+        {
+          "cmd": "- debug:\n    var: result",
+          "desc": "Dump variable contents"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --syntax-check",
+          "desc": "Check playbook syntax only"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --list-tasks",
+          "desc": "List tasks without running"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --list-hosts",
+          "desc": "List hosts that would be affected"
+        },
+        {
+          "cmd": "ansible-lint playbook.yml",
+          "desc": "Lint playbook for best practices (separate tool)"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --step",
+          "desc": "Confirm each task before running"
+        }
+      ]
+    }
+  ]
+}

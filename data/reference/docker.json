@@ -1,0 +1,279 @@
+{
+  "name": "Docker",
+  "icon": "🐳",
+  "iconBg": "#2496ed",
+  "subtitle": "Container management",
+  "meta": "Docker 24+",
+  "sections": [
+    {
+      "id": "dc-containers",
+      "title": "Containers",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "docker run image",
+          "desc": "Run container from image"
+        },
+        {
+          "cmd": "docker run -d --name web -p 8080:80 nginx",
+          "desc": "Detached, named, with port mapping"
+        },
+        {
+          "cmd": "docker run -it ubuntu bash",
+          "desc": "Interactive with terminal — run bash in Ubuntu"
+        },
+        {
+          "cmd": "docker run --rm image",
+          "desc": "Auto-remove container after exit"
+        },
+        {
+          "cmd": "docker run -v /host:/container image",
+          "desc": "Mount volume from host"
+        },
+        {
+          "cmd": "docker run -e VAR=value image",
+          "desc": "Set environment variable"
+        },
+        {
+          "cmd": "docker ps",
+          "desc": "List running containers"
+        },
+        {
+          "cmd": "docker ps -a",
+          "desc": "List all containers including stopped"
+        },
+        {
+          "cmd": "docker stop container",
+          "desc": "Gracefully stop container"
+        },
+        {
+          "cmd": "docker start container",
+          "desc": "Start stopped container"
+        },
+        {
+          "cmd": "docker restart container",
+          "desc": "Restart container"
+        },
+        {
+          "cmd": "docker rm container",
+          "desc": "Remove stopped container"
+        },
+        {
+          "cmd": "docker rm -f container",
+          "desc": "Force remove (even running)"
+        }
+      ]
+    },
+    {
+      "id": "dc-exec",
+      "title": "Logs & Exec",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "docker logs container",
+          "desc": "Show container logs"
+        },
+        {
+          "cmd": "docker logs -f --tail 100 container",
+          "desc": "Follow logs starting from last 100 lines"
+        },
+        {
+          "cmd": "docker exec -it container bash",
+          "desc": "Open shell inside running container"
+        },
+        {
+          "cmd": "docker exec container ls /",
+          "desc": "Run single command in container"
+        },
+        {
+          "cmd": "docker inspect container",
+          "desc": "Detailed container info (JSON)"
+        },
+        {
+          "cmd": "docker stats",
+          "desc": "Live resource usage stats"
+        },
+        {
+          "cmd": "docker top container",
+          "desc": "Show processes inside container"
+        },
+        {
+          "cmd": "docker cp file container:/path",
+          "desc": "Copy file to container"
+        },
+        {
+          "cmd": "docker cp container:/path file",
+          "desc": "Copy file from container"
+        }
+      ]
+    },
+    {
+      "id": "dc-images",
+      "title": "Images",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "docker images",
+          "desc": "List local images"
+        },
+        {
+          "cmd": "docker pull image:tag",
+          "desc": "Download image from registry"
+        },
+        {
+          "cmd": "docker push user/image:tag",
+          "desc": "Upload image to registry"
+        },
+        {
+          "cmd": "docker build -t name:tag .",
+          "desc": "Build image from Dockerfile"
+        },
+        {
+          "cmd": "docker build --no-cache -t name .",
+          "desc": "Build ignoring cache"
+        },
+        {
+          "cmd": "docker tag old:tag new:tag",
+          "desc": "Tag image with new name"
+        },
+        {
+          "cmd": "docker rmi image",
+          "desc": "Remove image"
+        },
+        {
+          "cmd": "docker image prune -a",
+          "desc": "Remove all unused images"
+        },
+        {
+          "cmd": "docker history image",
+          "desc": "Show image layers"
+        },
+        {
+          "cmd": "docker save image > image.tar",
+          "desc": "Export image to file"
+        },
+        {
+          "cmd": "docker load < image.tar",
+          "desc": "Import image from file"
+        }
+      ]
+    },
+    {
+      "id": "dc-compose",
+      "title": "Docker Compose",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "docker compose up",
+          "desc": "Start all services from compose file"
+        },
+        {
+          "cmd": "docker compose up -d",
+          "desc": "Start in detached/background mode"
+        },
+        {
+          "cmd": "docker compose up --build",
+          "desc": "Force rebuild before starting"
+        },
+        {
+          "cmd": "docker compose down",
+          "desc": "Stop and remove all containers"
+        },
+        {
+          "cmd": "docker compose down -v",
+          "desc": "Also remove named volumes"
+        },
+        {
+          "cmd": "docker compose ps",
+          "desc": "List services from this compose file"
+        },
+        {
+          "cmd": "docker compose logs -f service",
+          "desc": "Follow logs for a service"
+        },
+        {
+          "cmd": "docker compose exec service bash",
+          "desc": "Open shell in service"
+        },
+        {
+          "cmd": "docker compose restart service",
+          "desc": "Restart specific service"
+        },
+        {
+          "cmd": "docker compose pull",
+          "desc": "Pull latest images for all services"
+        }
+      ]
+    },
+    {
+      "id": "dc-net",
+      "title": "Networks & Volumes",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "docker network ls",
+          "desc": "List networks"
+        },
+        {
+          "cmd": "docker network create mynet",
+          "desc": "Create new network"
+        },
+        {
+          "cmd": "docker network connect mynet container",
+          "desc": "Connect container to network"
+        },
+        {
+          "cmd": "docker network inspect mynet",
+          "desc": "Detailed network info"
+        },
+        {
+          "cmd": "docker volume ls",
+          "desc": "List volumes"
+        },
+        {
+          "cmd": "docker volume create myvol",
+          "desc": "Create named volume"
+        },
+        {
+          "cmd": "docker volume inspect myvol",
+          "desc": "Show volume details and path"
+        },
+        {
+          "cmd": "docker volume prune",
+          "desc": "Remove unused volumes"
+        }
+      ]
+    },
+    {
+      "id": "dc-clean",
+      "title": "Cleanup",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "docker system prune",
+          "desc": "Remove stopped containers, unused networks, dangling images"
+        },
+        {
+          "cmd": "docker system prune -a --volumes",
+          "desc": "Aggressive cleanup including all unused images and volumes"
+        },
+        {
+          "cmd": "docker system df",
+          "desc": "Show disk usage by Docker objects"
+        },
+        {
+          "cmd": "docker container prune",
+          "desc": "Remove all stopped containers"
+        },
+        {
+          "cmd": "docker image prune",
+          "desc": "Remove dangling images"
+        },
+        {
+          "cmd": "docker builder prune",
+          "desc": "Clean build cache"
+        }
+      ]
+    }
+  ]
+}

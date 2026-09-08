@@ -1,7 +1,20 @@
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),context=vm.createContext({console});
-for(const file of ['vendor/js-yaml.min.js','src/command-definitions.js','src/reference-data.js','src/tool-guides.js','src/recipe-catalog.js','src/deep-model.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context,{filename:file});
-const results=vm.runInContext(`(()=>{
+const fs = require('node:fs'),
+  path = require('node:path'),
+  vm = require('node:vm'),
+  assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '..'),
+  context = vm.createContext({ console });
+for (const file of [
+  'vendor/js-yaml.min.js',
+  'src/command-definitions.js',
+  'src/reference-data.js',
+  'src/tool-guides.js',
+  'src/recipe-catalog.js',
+  'src/deep-model.js',
+])
+  vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), context, { filename: file });
+const results = vm.runInContext(
+  `(()=>{
  const files=[];const check=(ok,msg)=>{if(!ok)throw Error(msg);};
  for(const p of Object.values(DD_PROFILES)){const seed=p.seed(p),out=ddGenerate(p,seed);check(!out.errors.length,p.id+': '+out.errors);files.push({name:'starter-'+p.filename,text:out.text});}
  for(const id of ['bash','powershell','python']){
@@ -23,7 +36,15 @@ const results=vm.runInContext(`(()=>{
  for(const [name,node] of [['insert',insert],['update',update],['delete',del]]){const out=ddGenerate(sql,[node]);check(!out.errors.length,out.errors);files.push({name:name+'.sql',text:out.text});}
  check(ddGenerate(sql,[q('delete')]).errors.length,'Empty filtered DELETE accepted');
  return files;
-})()`,context);
-for(const file of results)assert(file.text&&!file.text.includes('undefined'),file.name);
-if(process.env.DEVKIT_TEST_OUTPUT){fs.mkdirSync(process.env.DEVKIT_TEST_OUTPUT,{recursive:true});for(const file of results)fs.writeFileSync(path.join(process.env.DEVKIT_TEST_OUTPUT,file.name),file.text);}
-console.log('PASS: eight recursive editors, nested scripts, typed data, HCL escaping, SQL joins/CTEs and structural validation.');
+})()`,
+  context,
+);
+for (const file of results) assert(file.text && !file.text.includes('undefined'), file.name);
+if (process.env.DEVKIT_TEST_OUTPUT) {
+  fs.mkdirSync(process.env.DEVKIT_TEST_OUTPUT, { recursive: true });
+  for (const file of results)
+    fs.writeFileSync(path.join(process.env.DEVKIT_TEST_OUTPUT, file.name), file.text);
+}
+console.log(
+  'PASS: eight recursive editors, nested scripts, typed data, HCL escaping, SQL joins/CTEs and structural validation.',
+);

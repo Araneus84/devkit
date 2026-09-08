@@ -1,14 +1,20 @@
 {
   "name": "devkit-workbench",
-  "version": "3.20.1",
+  "version": "3.21.0",
   "private": true,
   "description": "Offline command reference and structured file builder",
   "scripts": {
     "build": "node tools/build.cjs",
-    "test": "node tools/test-all.cjs",
+    "generate": "node -e \"require('./tools/lib/catalogs.cjs').writeCatalogs()\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "node tools/check.cjs && npm run format:check",
+    "test": "npm run check && node tools/test-all.cjs",
+    "test:one": "node tools/test-all.cjs",
     "companion": "node companion/devkit-companion.cjs --root ."
   },
   "devDependencies": {
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "prettier": "3.9.6"
   }
 }

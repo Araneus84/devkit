@@ -1,0 +1,394 @@
+{
+  "name": "Aruba / HPE",
+  "icon": "AR",
+  "iconBg": "#ff6600",
+  "subtitle": "Aruba OS-Switch & CX CLI",
+  "meta": "ArubaOS / CX",
+  "sections": [
+    {
+      "id": "aruba-basics",
+      "title": "Modes & Navigation (OS-Switch)",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "enable",
+          "desc": "Enter manager/privileged mode"
+        },
+        {
+          "cmd": "configure",
+          "desc": "Enter global configuration mode"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit current level"
+        },
+        {
+          "cmd": "end",
+          "desc": "Return to manager mode from anywhere"
+        },
+        {
+          "cmd": "menu",
+          "desc": "Launch the console menu (old-style Procurve UI)"
+        },
+        {
+          "cmd": "setup",
+          "desc": "Run setup wizard"
+        },
+        {
+          "cmd": "no <command>",
+          "desc": "Remove/negate a configuration"
+        },
+        {
+          "cmd": "?",
+          "desc": "Context help at any point"
+        }
+      ]
+    },
+    {
+      "id": "aruba-show",
+      "title": "Show / Verification (OS-Switch)",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "show running-config",
+          "desc": "Current active configuration"
+        },
+        {
+          "cmd": "show config",
+          "desc": "Show saved configuration (startup)"
+        },
+        {
+          "cmd": "show system",
+          "desc": "System info — model, firmware, uptime, serial"
+        },
+        {
+          "cmd": "show version",
+          "desc": "Firmware version and build"
+        },
+        {
+          "cmd": "show interfaces brief",
+          "desc": "All ports — status, speed, duplex, VLAN"
+        },
+        {
+          "cmd": "show interfaces 1/1",
+          "desc": "Detailed stats for port 1/1"
+        },
+        {
+          "cmd": "show ip",
+          "desc": "IP configuration summary — address, gateway, DNS"
+        },
+        {
+          "cmd": "show vlans",
+          "desc": "All VLANs with names and port membership"
+        },
+        {
+          "cmd": "show vlan 10",
+          "desc": "Details for VLAN 10"
+        },
+        {
+          "cmd": "show mac-address",
+          "desc": "MAC address table"
+        },
+        {
+          "cmd": "show mac-address 1/1",
+          "desc": "MAC addresses learned on port 1/1"
+        },
+        {
+          "cmd": "show arp",
+          "desc": "ARP table"
+        },
+        {
+          "cmd": "show lldp info remote-device",
+          "desc": "LLDP neighbors (similar to CDP)"
+        },
+        {
+          "cmd": "show spanning-tree",
+          "desc": "STP status"
+        },
+        {
+          "cmd": "show trunks",
+          "desc": "LACP / trunk groups status"
+        },
+        {
+          "cmd": "show log",
+          "desc": "System event log"
+        },
+        {
+          "cmd": "show tech all",
+          "desc": "Full diagnostic dump — for TAC support cases"
+        }
+      ]
+    },
+    {
+      "id": "aruba-interfaces",
+      "title": "Interface Config (OS-Switch)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "interface 1/1",
+          "desc": "Enter port 1/1 configuration"
+        },
+        {
+          "cmd": "interface 1/1-1/24",
+          "desc": "Configure ports 1/1 through 1/24"
+        },
+        {
+          "cmd": "name SERVER-01",
+          "desc": "Set port description/name"
+        },
+        {
+          "cmd": "disable",
+          "desc": "Administratively disable the port"
+        },
+        {
+          "cmd": "enable",
+          "desc": "Re-enable the port"
+        },
+        {
+          "cmd": "speed-duplex auto",
+          "desc": "Set auto negotiation (default)"
+        },
+        {
+          "cmd": "speed-duplex 1000-full",
+          "desc": "Force 1Gbps full duplex"
+        },
+        {
+          "cmd": "untagged vlan 10",
+          "desc": "Set port as untagged (access) member of VLAN 10"
+        },
+        {
+          "cmd": "tagged vlan 10",
+          "desc": "Set port as tagged (trunk) member of VLAN 10"
+        },
+        {
+          "cmd": "tagged vlan 10,20,30",
+          "desc": "Allow multiple VLANs tagged on port"
+        },
+        {
+          "cmd": "no untagged vlan 1",
+          "desc": "Remove port from VLAN 1 untagged"
+        },
+        {
+          "cmd": "spanning-tree admin-edge-port",
+          "desc": "Enable edge port (PortFast equivalent)"
+        },
+        {
+          "cmd": "spanning-tree bpdu-protection",
+          "desc": "BPDU guard on this port"
+        }
+      ]
+    },
+    {
+      "id": "aruba-vlan",
+      "title": "VLANs (OS-Switch)",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "vlan 10",
+          "desc": "Create VLAN 10"
+        },
+        {
+          "cmd": "name SERVERS",
+          "desc": "Name the VLAN (inside vlan config)"
+        },
+        {
+          "cmd": "ip address 10.10.10.1/24",
+          "desc": "Assign IP to VLAN interface (Layer 3)"
+        },
+        {
+          "cmd": "no vlan 10",
+          "desc": "Delete VLAN 10"
+        },
+        {
+          "cmd": "vlan 10 name SERVERS",
+          "desc": "Create and name VLAN in one command"
+        },
+        {
+          "cmd": "ip default-gateway 192.168.1.1",
+          "desc": "Set default gateway (Layer 2 switch)"
+        }
+      ]
+    },
+    {
+      "id": "aruba-cx-basics",
+      "title": "ArubaOS-CX Basics",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "show version",
+          "desc": "AOS-CX version info"
+        },
+        {
+          "cmd": "show interface all",
+          "desc": "Status of all interfaces"
+        },
+        {
+          "cmd": "show interface 1/1/1",
+          "desc": "Detailed info for specific interface"
+        },
+        {
+          "cmd": "show vlan",
+          "desc": "VLAN table"
+        },
+        {
+          "cmd": "show ip route",
+          "desc": "Routing table"
+        },
+        {
+          "cmd": "show mac-address-table",
+          "desc": "MAC address table"
+        },
+        {
+          "cmd": "show lldp neighbor-info",
+          "desc": "LLDP neighbor info"
+        },
+        {
+          "cmd": "interface 1/1/1",
+          "desc": "Enter interface config (CX uses 1/1/1 format)"
+        },
+        {
+          "cmd": "vlan access 10",
+          "desc": "Set interface as access port on VLAN 10 (CX)"
+        },
+        {
+          "cmd": "vlan trunk allowed 10,20",
+          "desc": "Set trunk allowed VLANs (CX)"
+        },
+        {
+          "cmd": "vlan trunk native 1",
+          "desc": "Set native VLAN on trunk (CX)"
+        },
+        {
+          "cmd": "no shutdown",
+          "desc": "Bring up interface (CX)"
+        },
+        {
+          "cmd": "checkpoint commit",
+          "desc": "Commit pending changes to running config (CX)"
+        },
+        {
+          "cmd": "show checkpoint",
+          "desc": "Show configuration checkpoints (CX)"
+        }
+      ]
+    },
+    {
+      "id": "aruba-save",
+      "title": "Save, Backup & Restore",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "write memory",
+          "desc": "Save running config to startup (OS-Switch)"
+        },
+        {
+          "cmd": "copy running-config startup-config",
+          "desc": "Alternate save command (OS-Switch)"
+        },
+        {
+          "cmd": "copy running-config tftp 10.0.0.1 backup.cfg",
+          "desc": "Back up config to TFTP server"
+        },
+        {
+          "cmd": "copy tftp 10.0.0.1 backup.cfg running-config",
+          "desc": "Restore config from TFTP"
+        },
+        {
+          "cmd": "copy running-config usb flash:/backup.cfg",
+          "desc": "Back up to USB drive"
+        },
+        {
+          "cmd": "erase startup-config",
+          "desc": "Factory reset — clears saved config"
+        },
+        {
+          "cmd": "boot system flash primary",
+          "desc": "Boot from primary flash image"
+        },
+        {
+          "cmd": "--- ArubaOS-CX backup ---",
+          "desc": "CX uses different backup commands:"
+        },
+        {
+          "cmd": "copy running-config tftp://10.0.0.1/backup.cfg",
+          "desc": "Back up CX config to TFTP"
+        },
+        {
+          "cmd": "copy checkpoint latest running-config",
+          "desc": "Restore from latest checkpoint (CX)"
+        }
+      ]
+    },
+    {
+      "id": "aruba-boxconfig",
+      "title": "Out-of-Box Initial Setup",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "--- Connect via console (115200 baud on newer, 9600 on older) ---",
+          "desc": "STEP 1: Console cable to the console/serial port"
+        },
+        {
+          "cmd": "Press ENTER to start setup",
+          "desc": "STEP 2: Some models launch setup wizard automatically"
+        },
+        {
+          "cmd": "manager",
+          "desc": "STEP 3: Default username on fresh ProCurve/Aruba"
+        },
+        {
+          "cmd": "(blank password)",
+          "desc": "STEP 4: No password on fresh device — just press Enter"
+        },
+        {
+          "cmd": "configure",
+          "desc": "STEP 5: Enter global config mode"
+        },
+        {
+          "cmd": "hostname SWITCH-01",
+          "desc": "STEP 6: Set hostname"
+        },
+        {
+          "cmd": "password manager user-name admin plaintext MyStr0ngPass",
+          "desc": "STEP 7: Set manager password"
+        },
+        {
+          "cmd": "vlan 1",
+          "desc": "STEP 8: Enter VLAN 1 (default management VLAN)"
+        },
+        {
+          "cmd": "ip address 192.168.1.10/24",
+          "desc": "STEP 9: Set management IP"
+        },
+        {
+          "cmd": "exit",
+          "desc": "STEP 10: Back to global config"
+        },
+        {
+          "cmd": "ip default-gateway 192.168.1.1",
+          "desc": "STEP 11: Set default gateway"
+        },
+        {
+          "cmd": "snmp-server community public operator",
+          "desc": "STEP 12: Set SNMP community (optional)"
+        },
+        {
+          "cmd": "time timezone -480",
+          "desc": "STEP 13: Set timezone offset in minutes"
+        },
+        {
+          "cmd": "timesync ntp",
+          "desc": "STEP 14: Enable NTP sync"
+        },
+        {
+          "cmd": "ntp server 10.0.0.1 iburst",
+          "desc": "STEP 15: Set NTP server"
+        },
+        {
+          "cmd": "write memory",
+          "desc": "STEP 16: SAVE the configuration"
+        }
+      ]
+    }
+  ]
+}

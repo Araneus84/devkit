@@ -1,0 +1,295 @@
+{
+  "name": "Networking",
+  "icon": "⇆",
+  "iconBg": "#0891b2",
+  "subtitle": "Diagnostic & analysis tools",
+  "meta": "nmap, dig, etc.",
+  "sections": [
+    {
+      "id": "net-connectivity",
+      "title": "Connectivity Tests",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "ping host.com",
+          "desc": "Test basic reachability"
+        },
+        {
+          "cmd": "ping -c 4 host.com",
+          "desc": "Send only 4 ping packets"
+        },
+        {
+          "cmd": "ping -i 0.2 host.com",
+          "desc": "Faster ping interval (0.2 sec)"
+        },
+        {
+          "cmd": "traceroute host.com",
+          "desc": "Show network path to host"
+        },
+        {
+          "cmd": "mtr host.com",
+          "desc": "Combination of ping + traceroute (live updating)"
+        },
+        {
+          "cmd": "nc -zv host.com 443",
+          "desc": "Test if TCP port is open"
+        },
+        {
+          "cmd": "nc -zv host.com 20-25",
+          "desc": "Scan port range"
+        },
+        {
+          "cmd": "nc -lvp 4444",
+          "desc": "Listen on port 4444 (server mode)"
+        },
+        {
+          "cmd": "nc host.com 80 < request.txt",
+          "desc": "Send file content as connection input"
+        },
+        {
+          "cmd": "telnet host.com 25",
+          "desc": "Test/interact with TCP service (e.g. SMTP)"
+        }
+      ]
+    },
+    {
+      "id": "net-dns",
+      "title": "DNS Lookup",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "dig example.com",
+          "desc": "Standard DNS lookup"
+        },
+        {
+          "cmd": "dig example.com MX",
+          "desc": "Get MX records"
+        },
+        {
+          "cmd": "dig example.com TXT",
+          "desc": "Get TXT records (SPF, DKIM, etc.)"
+        },
+        {
+          "cmd": "dig example.com NS",
+          "desc": "Get nameservers"
+        },
+        {
+          "cmd": "dig +short example.com",
+          "desc": "Just the answer, no extra info"
+        },
+        {
+          "cmd": "dig +trace example.com",
+          "desc": "Trace from root nameservers down"
+        },
+        {
+          "cmd": "dig @8.8.8.8 example.com",
+          "desc": "Query specific DNS server (Google DNS)"
+        },
+        {
+          "cmd": "dig -x 8.8.8.8",
+          "desc": "Reverse DNS lookup (PTR)"
+        },
+        {
+          "cmd": "nslookup example.com",
+          "desc": "Alternative DNS lookup"
+        },
+        {
+          "cmd": "host example.com",
+          "desc": "Simple DNS lookup"
+        },
+        {
+          "cmd": "whois example.com",
+          "desc": "Domain ownership info"
+        }
+      ]
+    },
+    {
+      "id": "net-nmap",
+      "title": "Nmap Scanning",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "nmap 192.168.1.0/24",
+          "desc": "Scan entire subnet for live hosts"
+        },
+        {
+          "cmd": "nmap -sn 192.168.1.0/24",
+          "desc": "Ping scan only — discover hosts without port scan"
+        },
+        {
+          "cmd": "nmap host.com",
+          "desc": "Default scan of common 1000 ports"
+        },
+        {
+          "cmd": "nmap -p 80,443,8080 host.com",
+          "desc": "Scan specific ports"
+        },
+        {
+          "cmd": "nmap -p 1-65535 host.com",
+          "desc": "Scan ALL ports (slow!)"
+        },
+        {
+          "cmd": "nmap -p- host.com",
+          "desc": "Shorthand for all ports"
+        },
+        {
+          "cmd": "nmap -sV host.com",
+          "desc": "Service version detection"
+        },
+        {
+          "cmd": "nmap -O host.com",
+          "desc": "OS detection"
+        },
+        {
+          "cmd": "nmap -A host.com",
+          "desc": "Aggressive scan (OS, services, scripts, traceroute)"
+        },
+        {
+          "cmd": "nmap -sU host.com",
+          "desc": "UDP scan (requires root)"
+        },
+        {
+          "cmd": "nmap -sS host.com",
+          "desc": "SYN stealth scan (requires root)"
+        },
+        {
+          "cmd": "nmap --script vuln host.com",
+          "desc": "Run vulnerability detection scripts"
+        }
+      ]
+    },
+    {
+      "id": "net-local",
+      "title": "Local Interfaces & Routes",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "ip addr show",
+          "desc": "Show all network interfaces (Linux)"
+        },
+        {
+          "cmd": "ip route show",
+          "desc": "Show routing table"
+        },
+        {
+          "cmd": "ip -s link",
+          "desc": "Show interface statistics"
+        },
+        {
+          "cmd": "ifconfig (macOS/older Linux)",
+          "desc": "Show interfaces"
+        },
+        {
+          "cmd": "route -n (Linux)",
+          "desc": "Routing table (numeric)"
+        },
+        {
+          "cmd": "netstat -rn",
+          "desc": "Routing table (cross-platform)"
+        },
+        {
+          "cmd": "ss -tulpn",
+          "desc": "Listening sockets with PIDs (modern)"
+        },
+        {
+          "cmd": "netstat -tulpn",
+          "desc": "Listening sockets (older)"
+        },
+        {
+          "cmd": "lsof -i -P -n",
+          "desc": "All open network sockets with PIDs"
+        },
+        {
+          "cmd": "lsof -i :8080",
+          "desc": "Find process listening on port 8080"
+        },
+        {
+          "cmd": "arp -a",
+          "desc": "Show ARP table (MAC ↔ IP)"
+        }
+      ]
+    },
+    {
+      "id": "net-capture",
+      "title": "Packet Capture & Analysis",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "sudo tcpdump -i any",
+          "desc": "Capture traffic on all interfaces"
+        },
+        {
+          "cmd": "sudo tcpdump -i eth0 port 80",
+          "desc": "Capture HTTP traffic on eth0"
+        },
+        {
+          "cmd": "sudo tcpdump -i any host 1.2.3.4",
+          "desc": "Capture traffic to/from specific IP"
+        },
+        {
+          "cmd": "sudo tcpdump -i any -w capture.pcap",
+          "desc": "Save capture to file"
+        },
+        {
+          "cmd": "sudo tcpdump -r capture.pcap",
+          "desc": "Read previously saved capture"
+        },
+        {
+          "cmd": "sudo tcpdump -i any -A port 80",
+          "desc": "Print ASCII output of packets"
+        },
+        {
+          "cmd": "sudo tcpdump -c 100 -i any",
+          "desc": "Capture only 100 packets"
+        },
+        {
+          "cmd": "tshark -i eth0",
+          "desc": "CLI version of Wireshark"
+        },
+        {
+          "cmd": "wireshark capture.pcap",
+          "desc": "Open pcap in GUI"
+        }
+      ]
+    },
+    {
+      "id": "net-http",
+      "title": "HTTP Diagnostics",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "curl -v https://example.com",
+          "desc": "Verbose HTTP request"
+        },
+        {
+          "cmd": "curl -I https://example.com",
+          "desc": "HTTP headers only"
+        },
+        {
+          "cmd": "curl -w \"@-\" -o /dev/null -s url <<< \"%{time_total}\\n\"",
+          "desc": "Total request time"
+        },
+        {
+          "cmd": "wget --spider https://example.com",
+          "desc": "Check URL without downloading"
+        },
+        {
+          "cmd": "httpie: http GET example.com",
+          "desc": "HTTPie — friendlier HTTP CLI (separate tool)"
+        },
+        {
+          "cmd": "ab -n 100 -c 10 https://example.com/",
+          "desc": "Apache Bench — load test"
+        },
+        {
+          "cmd": "wrk -t12 -c400 -d30s https://example.com",
+          "desc": "Modern HTTP benchmark tool"
+        },
+        {
+          "cmd": "siege -c 10 -t 1M https://example.com",
+          "desc": "Siege load testing"
+        }
+      ]
+    }
+  ]
+}

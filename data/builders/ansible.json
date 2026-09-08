@@ -1,0 +1,230 @@
+{
+  "ansible::ansible-playbook site.yml": {
+    "name": "ansible-playbook",
+    "description": "Run an Ansible playbook",
+    "base": "ansible-playbook",
+    "args": [
+      {
+        "key": "playbook",
+        "label": "Playbook file",
+        "placeholder": "site.yml",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-i",
+        "desc": "Inventory file or host",
+        "valuePrompt": "inventory.ini or host,",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--limit",
+        "desc": "Limit to hosts/groups",
+        "valuePrompt": "webservers or host1,host2",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--tags",
+        "desc": "Only run tasks with these tags",
+        "valuePrompt": "deploy,config",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--skip-tags",
+        "desc": "Skip tasks with these tags",
+        "valuePrompt": "slow,debug",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--check",
+        "desc": "Dry run — do not make changes"
+      },
+      {
+        "flag": "--diff",
+        "desc": "Show diffs of changed files"
+      },
+      {
+        "flag": "-e",
+        "desc": "Extra variable",
+        "valuePrompt": "key=value or @vars.yml",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--start-at-task",
+        "desc": "Start from specific task",
+        "valuePrompt": "Task name",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose (-vv or -vvv for more)"
+      },
+      {
+        "flag": "--ask-vault-pass",
+        "desc": "Prompt for vault password"
+      },
+      {
+        "flag": "--vault-password-file",
+        "desc": "Vault password file",
+        "valuePrompt": "~/.vault_pass",
+        "join": " "
+      },
+      {
+        "flag": "--become",
+        "desc": "Run operations with sudo"
+      },
+      {
+        "flag": "--become-user",
+        "desc": "User to become (default root)",
+        "valuePrompt": "root",
+        "join": "="
+      },
+      {
+        "flag": "--ask-become-pass",
+        "desc": "Prompt for sudo password"
+      },
+      {
+        "flag": "--forks",
+        "desc": "Parallel processes",
+        "valuePrompt": "Count",
+        "valueDefault": "10",
+        "join": " "
+      },
+      {
+        "flag": "--step",
+        "desc": "Confirm each task interactively"
+      },
+      {
+        "flag": "--syntax-check",
+        "desc": "Only check syntax, do not run"
+      },
+      {
+        "flag": "--list-tasks",
+        "desc": "List tasks without executing"
+      },
+      {
+        "flag": "--list-hosts",
+        "desc": "List target hosts without executing"
+      }
+    ]
+  },
+  "ansible::ansible all -m ping": {
+    "name": "ansible ad-hoc",
+    "description": "Run ad-hoc command on hosts",
+    "base": "ansible",
+    "args": [
+      {
+        "key": "hosts",
+        "label": "Hosts / group",
+        "placeholder": "all or webservers",
+        "required": true
+      },
+      {
+        "key": "module",
+        "label": "Module",
+        "type": "select",
+        "options": [
+          {
+            "value": "-m ping",
+            "label": "ping — connectivity test"
+          },
+          {
+            "value": "-m setup",
+            "label": "setup — gather facts"
+          },
+          {
+            "value": "-m shell",
+            "label": "shell — run shell command"
+          },
+          {
+            "value": "-m command",
+            "label": "command — run command"
+          },
+          {
+            "value": "-m copy",
+            "label": "copy — copy file"
+          },
+          {
+            "value": "-m file",
+            "label": "file — manage files/dirs"
+          },
+          {
+            "value": "-m service",
+            "label": "service — manage services"
+          },
+          {
+            "value": "-m package",
+            "label": "package — install packages"
+          },
+          {
+            "value": "-m user",
+            "label": "user — manage users"
+          },
+          {
+            "value": "-m git",
+            "label": "git — clone/update repo"
+          }
+        ],
+        "required": true,
+        "default": "-m ping"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-a",
+        "desc": "Module arguments",
+        "valuePrompt": "e.g. \"name=nginx state=started\"",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Inventory file",
+        "valuePrompt": "inventory.ini",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-b",
+        "desc": "Become (sudo)"
+      },
+      {
+        "flag": "-u",
+        "desc": "Remote user",
+        "valuePrompt": "username",
+        "join": " "
+      },
+      {
+        "flag": "-k",
+        "desc": "Prompt for SSH password"
+      },
+      {
+        "flag": "--ask-become-pass",
+        "desc": "Prompt for sudo password"
+      },
+      {
+        "flag": "-f",
+        "desc": "Forks (parallel)",
+        "valuePrompt": "Count",
+        "valueDefault": "10",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "One-line output"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose"
+      }
+    ]
+  }
+}

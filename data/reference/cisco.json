@@ -1,0 +1,561 @@
+{
+  "name": "Cisco IOS",
+  "icon": "CI",
+  "iconBg": "#1ba0d7",
+  "subtitle": "Cisco IOS / IOS-XE switches & routers",
+  "meta": "IOS 15+ / IOS-XE",
+  "sections": [
+    {
+      "id": "cisco-basics",
+      "title": "Modes & Navigation",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "enable",
+          "desc": "Enter privileged EXEC mode (enable mode) from user mode"
+        },
+        {
+          "cmd": "configure terminal",
+          "desc": "Enter global configuration mode from privileged EXEC"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit current mode (go up one level)"
+        },
+        {
+          "cmd": "end",
+          "desc": "Return directly to privileged EXEC from any config mode"
+        },
+        {
+          "cmd": "Ctrl+Z",
+          "desc": "Same as end — immediately exit to privileged EXEC"
+        },
+        {
+          "cmd": "?",
+          "desc": "Context-sensitive help — list available commands at current point"
+        },
+        {
+          "cmd": "show ?",
+          "desc": "List all show commands available"
+        },
+        {
+          "cmd": "do show running-config",
+          "desc": "Run show commands from inside config mode"
+        },
+        {
+          "cmd": "no <command>",
+          "desc": "Negate / remove a configuration command"
+        },
+        {
+          "cmd": "disable",
+          "desc": "Exit privileged EXEC back to user EXEC mode"
+        }
+      ]
+    },
+    {
+      "id": "cisco-show",
+      "title": "Show / Verification",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "show running-config",
+          "desc": "Show current active configuration in RAM"
+        },
+        {
+          "cmd": "show startup-config",
+          "desc": "Show configuration saved in NVRAM (loads on boot)"
+        },
+        {
+          "cmd": "show version",
+          "desc": "IOS version, uptime, hardware model, serial number"
+        },
+        {
+          "cmd": "show interfaces",
+          "desc": "Detailed status and statistics for all interfaces"
+        },
+        {
+          "cmd": "show interfaces GigabitEthernet0/1",
+          "desc": "Status and stats for specific interface"
+        },
+        {
+          "cmd": "show interfaces status",
+          "desc": "Compact table: speed, duplex, VLAN, connected/notconnect"
+        },
+        {
+          "cmd": "show ip interface brief",
+          "desc": "Quick table of all interfaces: IP, status, protocol"
+        },
+        {
+          "cmd": "show ip route",
+          "desc": "Full routing table"
+        },
+        {
+          "cmd": "show ip route 10.0.0.0",
+          "desc": "Show best route to specific network"
+        },
+        {
+          "cmd": "show vlan brief",
+          "desc": "VLAN list with name, status, and ports"
+        },
+        {
+          "cmd": "show vlan id 10",
+          "desc": "Details for a specific VLAN"
+        },
+        {
+          "cmd": "show mac address-table",
+          "desc": "MAC address table — which MAC on which port"
+        },
+        {
+          "cmd": "show mac address-table interface Gi0/1",
+          "desc": "MACs learned on specific interface"
+        },
+        {
+          "cmd": "show arp",
+          "desc": "ARP table — IP to MAC mapping"
+        },
+        {
+          "cmd": "show cdp neighbors",
+          "desc": "Cisco Discovery Protocol — show connected Cisco devices"
+        },
+        {
+          "cmd": "show cdp neighbors detail",
+          "desc": "CDP with IP addresses and platform info"
+        },
+        {
+          "cmd": "show spanning-tree",
+          "desc": "STP status for all VLANs"
+        },
+        {
+          "cmd": "show spanning-tree vlan 10",
+          "desc": "STP for specific VLAN — root, port roles, state"
+        },
+        {
+          "cmd": "show etherchannel summary",
+          "desc": "Port-channel / LAG status and member ports"
+        },
+        {
+          "cmd": "show ip ospf neighbor",
+          "desc": "OSPF neighbor adjacencies"
+        },
+        {
+          "cmd": "show ip bgp summary",
+          "desc": "BGP neighbor summary table"
+        },
+        {
+          "cmd": "show logging",
+          "desc": "System log buffer"
+        },
+        {
+          "cmd": "show clock",
+          "desc": "Current system time"
+        },
+        {
+          "cmd": "show inventory",
+          "desc": "Hardware inventory — serial numbers and part numbers"
+        },
+        {
+          "cmd": "show environment",
+          "desc": "Temperature, power supply, and fan status"
+        }
+      ]
+    },
+    {
+      "id": "cisco-interfaces",
+      "title": "Interface Config",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "interface GigabitEthernet0/1",
+          "desc": "Enter interface configuration mode"
+        },
+        {
+          "cmd": "interface range GigabitEthernet0/1-24",
+          "desc": "Configure multiple interfaces at once"
+        },
+        {
+          "cmd": "interface range Gi0/1-4, Gi0/8",
+          "desc": "Configure non-contiguous interfaces"
+        },
+        {
+          "cmd": "description SERVER-LINK-01",
+          "desc": "Set interface description (label)"
+        },
+        {
+          "cmd": "no shutdown",
+          "desc": "Enable (bring up) the interface"
+        },
+        {
+          "cmd": "shutdown",
+          "desc": "Disable (bring down) the interface"
+        },
+        {
+          "cmd": "speed 1000",
+          "desc": "Set interface speed (10/100/1000/auto)"
+        },
+        {
+          "cmd": "duplex full",
+          "desc": "Set duplex (half/full/auto)"
+        },
+        {
+          "cmd": "ip address 192.168.1.1 255.255.255.0",
+          "desc": "Assign IP address to layer 3 interface"
+        },
+        {
+          "cmd": "no ip address",
+          "desc": "Remove IP address from interface"
+        },
+        {
+          "cmd": "ip helper-address 10.0.0.10",
+          "desc": "DHCP relay — forward broadcasts to DHCP server"
+        },
+        {
+          "cmd": "spanning-tree portfast",
+          "desc": "Enable PortFast — skip STP listening/learning for end devices"
+        },
+        {
+          "cmd": "spanning-tree bpduguard enable",
+          "desc": "Shut port if BPDU received (protect against rogue switches)"
+        },
+        {
+          "cmd": "storm-control broadcast level 20",
+          "desc": "Limit broadcast traffic to 20% of bandwidth"
+        }
+      ]
+    },
+    {
+      "id": "cisco-vlan",
+      "title": "VLANs & Trunking",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "vlan 10",
+          "desc": "Create VLAN 10 (or enter its config)"
+        },
+        {
+          "cmd": "name SERVERS",
+          "desc": "Name the VLAN (inside vlan config mode)"
+        },
+        {
+          "cmd": "no vlan 10",
+          "desc": "Delete VLAN 10"
+        },
+        {
+          "cmd": "switchport mode access",
+          "desc": "Set port as access port (single VLAN, for end devices)"
+        },
+        {
+          "cmd": "switchport access vlan 10",
+          "desc": "Assign access port to VLAN 10"
+        },
+        {
+          "cmd": "switchport mode trunk",
+          "desc": "Set port as trunk (carries multiple VLANs)"
+        },
+        {
+          "cmd": "switchport trunk encapsulation dot1q",
+          "desc": "Set 802.1Q trunk encapsulation (needed on some platforms)"
+        },
+        {
+          "cmd": "switchport trunk allowed vlan 10,20,30",
+          "desc": "Allow only specific VLANs on trunk"
+        },
+        {
+          "cmd": "switchport trunk allowed vlan add 40",
+          "desc": "Add VLAN 40 to existing trunk allowed list"
+        },
+        {
+          "cmd": "switchport trunk native vlan 999",
+          "desc": "Set native VLAN on trunk (untagged traffic)"
+        },
+        {
+          "cmd": "switchport nonegotiate",
+          "desc": "Disable DTP negotiation — set trunk statically"
+        },
+        {
+          "cmd": "interface vlan 10",
+          "desc": "Create/enter SVI (Switch Virtual Interface) for VLAN 10"
+        }
+      ]
+    },
+    {
+      "id": "cisco-routing",
+      "title": "Routing",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "ip routing",
+          "desc": "Enable IP routing on a Layer 3 switch"
+        },
+        {
+          "cmd": "ip route 0.0.0.0 0.0.0.0 192.168.1.254",
+          "desc": "Default route (default gateway) — all unknown traffic goes here"
+        },
+        {
+          "cmd": "ip route 10.10.0.0 255.255.0.0 192.168.1.1",
+          "desc": "Static route to a specific network"
+        },
+        {
+          "cmd": "no ip route 10.10.0.0 255.255.0.0",
+          "desc": "Remove a static route"
+        },
+        {
+          "cmd": "router ospf 1",
+          "desc": "Enable OSPF process 1"
+        },
+        {
+          "cmd": "network 192.168.1.0 0.0.0.255 area 0",
+          "desc": "Advertise network in OSPF area 0"
+        },
+        {
+          "cmd": "router bgp 65000",
+          "desc": "Enable BGP with AS number 65000"
+        },
+        {
+          "cmd": "neighbor 10.0.0.1 remote-as 65001",
+          "desc": "Define BGP neighbor in AS 65001"
+        }
+      ]
+    },
+    {
+      "id": "cisco-security",
+      "title": "Security & Access",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "enable secret MyStr0ngPass",
+          "desc": "Set encrypted enable password (always use secret not password)"
+        },
+        {
+          "cmd": "service password-encryption",
+          "desc": "Encrypt all plaintext passwords in config"
+        },
+        {
+          "cmd": "username admin privilege 15 secret MyPass",
+          "desc": "Create local admin user with full privilege"
+        },
+        {
+          "cmd": "line console 0",
+          "desc": "Enter console line configuration"
+        },
+        {
+          "cmd": "line vty 0 15",
+          "desc": "Enter VTY (Telnet/SSH) lines 0-15 config"
+        },
+        {
+          "cmd": "transport input ssh",
+          "desc": "Allow only SSH on VTY lines (disable Telnet)"
+        },
+        {
+          "cmd": "login local",
+          "desc": "Use local username database for authentication"
+        },
+        {
+          "cmd": "exec-timeout 10 0",
+          "desc": "Auto-logout after 10 minutes of inactivity"
+        },
+        {
+          "cmd": "ip domain-name company.local",
+          "desc": "Set domain name (required for SSH key generation)"
+        },
+        {
+          "cmd": "crypto key generate rsa modulus 2048",
+          "desc": "Generate RSA key pair for SSH"
+        },
+        {
+          "cmd": "ip ssh version 2",
+          "desc": "Force SSH version 2 only"
+        },
+        {
+          "cmd": "switchport port-security",
+          "desc": "Enable port security on interface"
+        },
+        {
+          "cmd": "switchport port-security maximum 2",
+          "desc": "Allow max 2 MAC addresses on port"
+        },
+        {
+          "cmd": "switchport port-security violation restrict",
+          "desc": "Action on violation: restrict (drop, log) or shutdown"
+        },
+        {
+          "cmd": "no ip http server",
+          "desc": "Disable HTTP management (use HTTPS only)"
+        },
+        {
+          "cmd": "no ip http secure-server",
+          "desc": "Disable HTTPS management"
+        }
+      ]
+    },
+    {
+      "id": "cisco-save",
+      "title": "Save, Backup & Restore",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "copy running-config startup-config",
+          "desc": "Save config to NVRAM — persists after reboot"
+        },
+        {
+          "cmd": "write memory",
+          "desc": "Shorthand for copy running-config startup-config"
+        },
+        {
+          "cmd": "write erase",
+          "desc": "Erase startup-config — factory reset on next reload"
+        },
+        {
+          "cmd": "erase startup-config",
+          "desc": "Same as write erase — removes saved config"
+        },
+        {
+          "cmd": "copy running-config tftp:",
+          "desc": "Back up running config to TFTP server"
+        },
+        {
+          "cmd": "copy tftp: running-config",
+          "desc": "Restore config from TFTP server"
+        },
+        {
+          "cmd": "copy running-config scp://user@10.0.0.1/backup.cfg",
+          "desc": "Back up config via SCP (more secure than TFTP)"
+        },
+        {
+          "cmd": "copy scp://user@10.0.0.1/backup.cfg running-config",
+          "desc": "Restore config via SCP"
+        },
+        {
+          "cmd": "archive",
+          "desc": "Enter archive config mode for automated backups"
+        },
+        {
+          "cmd": "path tftp://10.0.0.1/configs/$h",
+          "desc": "Set archive path ($h = hostname)"
+        },
+        {
+          "cmd": "write-memory",
+          "desc": "Trigger archive write (inside archive config mode)"
+        },
+        {
+          "cmd": "reload",
+          "desc": "Reboot the device"
+        },
+        {
+          "cmd": "reload in 30",
+          "desc": "Schedule reload in 30 minutes (safety net for remote changes)"
+        },
+        {
+          "cmd": "reload cancel",
+          "desc": "Cancel a scheduled reload"
+        }
+      ]
+    },
+    {
+      "id": "cisco-boxconfig",
+      "title": "Out-of-Box Initial Setup",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "--- STEP 1: Connect via console (9600 8N1) ---",
+          "desc": "Use PuTTY/minicom on the console port before any network config exists"
+        },
+        {
+          "cmd": "enable",
+          "desc": "STEP 2: Enter privileged mode (no password on factory fresh device)"
+        },
+        {
+          "cmd": "configure terminal",
+          "desc": "STEP 3: Enter global config mode"
+        },
+        {
+          "cmd": "hostname SW-CORE-01",
+          "desc": "STEP 4: Set a meaningful hostname"
+        },
+        {
+          "cmd": "no ip domain-lookup",
+          "desc": "STEP 5: Disable DNS lookup (prevents typo hangs)"
+        },
+        {
+          "cmd": "ip domain-name company.local",
+          "desc": "STEP 6: Set domain name"
+        },
+        {
+          "cmd": "enable secret YourStr0ngPassword",
+          "desc": "STEP 7: Set enable secret (always use secret, not password)"
+        },
+        {
+          "cmd": "username admin privilege 15 secret YourStr0ngPassword",
+          "desc": "STEP 8: Create local admin account"
+        },
+        {
+          "cmd": "crypto key generate rsa modulus 2048",
+          "desc": "STEP 9: Generate SSH keys"
+        },
+        {
+          "cmd": "ip ssh version 2",
+          "desc": "STEP 10: Force SSH v2"
+        },
+        {
+          "cmd": "line vty 0 15",
+          "desc": "STEP 11: Configure remote access lines"
+        },
+        {
+          "cmd": "transport input ssh",
+          "desc": "STEP 12: SSH only on VTY — no Telnet"
+        },
+        {
+          "cmd": "login local",
+          "desc": "STEP 13: Use local user database"
+        },
+        {
+          "cmd": "exec-timeout 15 0",
+          "desc": "STEP 14: Auto-logout after 15 min idle"
+        },
+        {
+          "cmd": "exit",
+          "desc": "STEP 15: Back to global config"
+        },
+        {
+          "cmd": "interface vlan 1",
+          "desc": "STEP 16: Enter management VLAN interface"
+        },
+        {
+          "cmd": "ip address 192.168.1.10 255.255.255.0",
+          "desc": "STEP 17: Set management IP"
+        },
+        {
+          "cmd": "no shutdown",
+          "desc": "STEP 18: Enable the management interface"
+        },
+        {
+          "cmd": "exit",
+          "desc": "STEP 19: Back to global config"
+        },
+        {
+          "cmd": "ip default-gateway 192.168.1.1",
+          "desc": "STEP 20: Set default gateway (for Layer 2 switch)"
+        },
+        {
+          "cmd": "service password-encryption",
+          "desc": "STEP 21: Encrypt all plaintext passwords"
+        },
+        {
+          "cmd": "banner motd # Authorized access only. All sessions are monitored. #",
+          "desc": "STEP 22: Set login banner"
+        },
+        {
+          "cmd": "ntp server 10.0.0.1",
+          "desc": "STEP 23: Set NTP server for accurate timestamps"
+        },
+        {
+          "cmd": "logging host 10.0.0.5",
+          "desc": "STEP 24: Send logs to syslog server"
+        },
+        {
+          "cmd": "copy running-config startup-config",
+          "desc": "STEP 25: SAVE — always save after initial setup"
+        }
+      ]
+    }
+  ]
+}

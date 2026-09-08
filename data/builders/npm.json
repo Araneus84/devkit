@@ -1,0 +1,96 @@
+{
+  "npm::npm install package-name": {
+    "name": "npm install",
+    "description": "Install npm packages",
+    "base": "npm install",
+    "args": [
+      {
+        "key": "package",
+        "label": "Package(s)",
+        "placeholder": "react react-dom or leave empty for all",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--save-dev",
+        "desc": "Save as devDependency"
+      },
+      {
+        "flag": "--save-optional",
+        "desc": "Save as optionalDependency"
+      },
+      {
+        "flag": "--save-exact",
+        "desc": "Save exact version (no ^ or ~)"
+      },
+      {
+        "flag": "--no-save",
+        "desc": "Install without saving to package.json"
+      },
+      {
+        "flag": "--global",
+        "desc": "Install globally"
+      },
+      {
+        "flag": "--legacy-peer-deps",
+        "desc": "Bypass peer dependency conflicts"
+      },
+      {
+        "flag": "--force",
+        "desc": "Force reinstall even if up to date"
+      },
+      {
+        "flag": "--production",
+        "desc": "Skip devDependencies"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview without installing"
+      },
+      {
+        "flag": "--prefer-offline",
+        "desc": "Use cache when available"
+      }
+    ]
+  },
+  "npm::npm run script-name": {
+    "name": "npm run",
+    "description": "Run a package.json script",
+    "base": "npm run",
+    "args": [
+      {
+        "key": "script",
+        "label": "Script name",
+        "placeholder": "build or dev or test",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--",
+        "desc": "Pass arguments to the script after this flag",
+        "valuePrompt": "--port 3001 --watch",
+        "join": " "
+      },
+      {
+        "flag": "--if-present",
+        "desc": "Do not error if script does not exist"
+      },
+      {
+        "flag": "--silent",
+        "desc": "Suppress npm log output"
+      },
+      {
+        "flag": "--workspace",
+        "desc": "Run in specific workspace",
+        "valuePrompt": "workspace-name",
+        "join": "="
+      },
+      {
+        "flag": "--workspaces",
+        "desc": "Run in all workspaces"
+      }
+    ]
+  }
+}

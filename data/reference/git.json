@@ -1,0 +1,295 @@
+{
+  "name": "Git",
+  "icon": "⎇",
+  "iconBg": "#f05033",
+  "subtitle": "Version control",
+  "meta": "git 2.x",
+  "sections": [
+    {
+      "id": "git-setup",
+      "title": "Setup & Config",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "git config --global user.name \"Your Name\"",
+          "desc": "Set name for commits"
+        },
+        {
+          "cmd": "git config --global user.email \"you@example.com\"",
+          "desc": "Set email for commits"
+        },
+        {
+          "cmd": "git config --global init.defaultBranch main",
+          "desc": "Set default branch name"
+        },
+        {
+          "cmd": "git config --list",
+          "desc": "Show all Git configuration"
+        },
+        {
+          "cmd": "git init",
+          "desc": "Initialize new repository in current directory"
+        },
+        {
+          "cmd": "git clone https://github.com/user/repo.git",
+          "desc": "Clone remote repository"
+        },
+        {
+          "cmd": "git clone --depth 1 url",
+          "desc": "Shallow clone — only latest commit"
+        }
+      ]
+    },
+    {
+      "id": "git-basic",
+      "title": "Daily Workflow",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "git status",
+          "desc": "Show working tree status"
+        },
+        {
+          "cmd": "git add file.txt",
+          "desc": "Stage specific file"
+        },
+        {
+          "cmd": "git add .",
+          "desc": "Stage all changes in current directory"
+        },
+        {
+          "cmd": "git add -p",
+          "desc": "Interactively stage changes hunk-by-hunk"
+        },
+        {
+          "cmd": "git commit -m \"message\"",
+          "desc": "Commit staged changes with message"
+        },
+        {
+          "cmd": "git commit -am \"message\"",
+          "desc": "Stage tracked files and commit in one"
+        },
+        {
+          "cmd": "git commit --amend",
+          "desc": "Modify the most recent commit"
+        },
+        {
+          "cmd": "git push",
+          "desc": "Push commits to remote"
+        },
+        {
+          "cmd": "git push -u origin branch",
+          "desc": "Push and set upstream tracking"
+        },
+        {
+          "cmd": "git pull",
+          "desc": "Fetch and merge from remote"
+        },
+        {
+          "cmd": "git pull --rebase",
+          "desc": "Pull with rebase instead of merge"
+        },
+        {
+          "cmd": "git fetch",
+          "desc": "Fetch from remote without merging"
+        }
+      ]
+    },
+    {
+      "id": "git-branches",
+      "title": "Branches",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "git branch",
+          "desc": "List local branches"
+        },
+        {
+          "cmd": "git branch -a",
+          "desc": "List all branches including remote"
+        },
+        {
+          "cmd": "git branch new-branch",
+          "desc": "Create new branch"
+        },
+        {
+          "cmd": "git checkout branch-name",
+          "desc": "Switch to branch"
+        },
+        {
+          "cmd": "git switch branch-name",
+          "desc": "Modern alternative to checkout"
+        },
+        {
+          "cmd": "git checkout -b new-branch",
+          "desc": "Create and switch to new branch"
+        },
+        {
+          "cmd": "git switch -c new-branch",
+          "desc": "Modern: create and switch"
+        },
+        {
+          "cmd": "git branch -d branch-name",
+          "desc": "Delete merged branch"
+        },
+        {
+          "cmd": "git branch -D branch-name",
+          "desc": "Force delete branch (even unmerged)"
+        },
+        {
+          "cmd": "git push origin --delete branch",
+          "desc": "Delete remote branch"
+        },
+        {
+          "cmd": "git merge other-branch",
+          "desc": "Merge other-branch into current"
+        },
+        {
+          "cmd": "git rebase main",
+          "desc": "Rebase current branch onto main"
+        }
+      ]
+    },
+    {
+      "id": "git-history",
+      "title": "History & Diff",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "git log",
+          "desc": "Show commit history"
+        },
+        {
+          "cmd": "git log --oneline --graph --all",
+          "desc": "Compact graph of all branches"
+        },
+        {
+          "cmd": "git log -p file.txt",
+          "desc": "Show changes for specific file"
+        },
+        {
+          "cmd": "git log --author=\"name\"",
+          "desc": "Filter by author"
+        },
+        {
+          "cmd": "git log --since=\"2 weeks ago\"",
+          "desc": "Filter by date"
+        },
+        {
+          "cmd": "git diff",
+          "desc": "Show unstaged changes"
+        },
+        {
+          "cmd": "git diff --staged",
+          "desc": "Show staged changes"
+        },
+        {
+          "cmd": "git diff branch1 branch2",
+          "desc": "Compare two branches"
+        },
+        {
+          "cmd": "git show HEAD",
+          "desc": "Show details of latest commit"
+        },
+        {
+          "cmd": "git blame file.txt",
+          "desc": "Show who changed each line"
+        }
+      ]
+    },
+    {
+      "id": "git-undo",
+      "title": "Undo & Reset",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "git restore file.txt",
+          "desc": "Discard unstaged changes to file"
+        },
+        {
+          "cmd": "git restore --staged file.txt",
+          "desc": "Unstage file (keep changes)"
+        },
+        {
+          "cmd": "git reset HEAD~1",
+          "desc": "Undo last commit, keep changes staged"
+        },
+        {
+          "cmd": "git reset --soft HEAD~1",
+          "desc": "Undo commit, keep changes staged"
+        },
+        {
+          "cmd": "git reset --hard HEAD~1",
+          "desc": "Undo commit AND discard changes (DESTRUCTIVE)"
+        },
+        {
+          "cmd": "git revert <commit>",
+          "desc": "Create new commit that undoes specified commit"
+        },
+        {
+          "cmd": "git checkout -- file.txt",
+          "desc": "Discard changes to file (older syntax)"
+        },
+        {
+          "cmd": "git clean -fd",
+          "desc": "Remove untracked files and directories"
+        },
+        {
+          "cmd": "git reflog",
+          "desc": "Show all HEAD movements — recover lost commits"
+        }
+      ]
+    },
+    {
+      "id": "git-stash",
+      "title": "Stash & Remote",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "git stash",
+          "desc": "Temporarily save uncommitted changes"
+        },
+        {
+          "cmd": "git stash push -m \"message\"",
+          "desc": "Stash with descriptive message"
+        },
+        {
+          "cmd": "git stash list",
+          "desc": "List all stashes"
+        },
+        {
+          "cmd": "git stash pop",
+          "desc": "Restore latest stash and remove it"
+        },
+        {
+          "cmd": "git stash apply stash@{1}",
+          "desc": "Apply specific stash without removing"
+        },
+        {
+          "cmd": "git stash drop",
+          "desc": "Delete latest stash"
+        },
+        {
+          "cmd": "git remote -v",
+          "desc": "List remotes with URLs"
+        },
+        {
+          "cmd": "git remote add origin url",
+          "desc": "Add a new remote"
+        },
+        {
+          "cmd": "git remote set-url origin url",
+          "desc": "Change remote URL"
+        },
+        {
+          "cmd": "git tag v1.0.0",
+          "desc": "Create a tag at current commit"
+        },
+        {
+          "cmd": "git push --tags",
+          "desc": "Push all tags to remote"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,27 @@
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');const root=path.resolve(__dirname,'..'),ctx=vm.createContext({console});
-for(const f of ['vendor/js-yaml.min.js','src/command-definitions.js','src/reference-data.js','src/tool-guides.js','src/recipe-catalog.js','src/deep-model.js','src/cicd-model.js','src/source-sync-model.js','src/roundtrip-adapters.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx,{filename:f});
-vm.runInContext(`const dkClone=x=>JSON.parse(JSON.stringify(x));function ddFreshIds(n){n.id=ddId();Object.values(n.slots).forEach(xs=>xs.forEach(ddFreshIds));return n;}const anMap=x=>!!x&&typeof x==='object'&&!Array.isArray(x);`,ctx);
-vm.runInContext(String.raw`(()=>{
+const fs = require('node:fs'),
+  path = require('node:path'),
+  vm = require('node:vm'),
+  assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '..'),
+  ctx = vm.createContext({ console });
+for (const f of [
+  'vendor/js-yaml.min.js',
+  'src/command-definitions.js',
+  'src/reference-data.js',
+  'src/tool-guides.js',
+  'src/recipe-catalog.js',
+  'src/deep-model.js',
+  'src/cicd-model.js',
+  'src/source-sync-model.js',
+  'src/roundtrip-adapters.js',
+])
+  vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), ctx, { filename: f });
+vm.runInContext(
+  `const dkClone=x=>JSON.parse(JSON.stringify(x));function ddFreshIds(n){n.id=ddId();Object.values(n.slots).forEach(xs=>xs.forEach(ddFreshIds));return n;}const anMap=x=>!!x&&typeof x==='object'&&!Array.isArray(x);`,
+  ctx,
+);
+vm.runInContext(
+  String.raw`(()=>{
  const check=(ok,message)=>{if(!ok)throw Error(message);},types=nodes=>nodes.flatMap(n=>[n.type,...Object.values(n.slots).flatMap(types)]);
  function round(id,nodes){const p=DD_PROFILES[id],before=p.generate(nodes),parsed=sxParse(p,before,[]),errors=ddValidate(p,parsed);check(!errors.length,id+': '+errors);check(!types(parsed).includes(SX_RAW),id+' unexpectedly became Custom code: '+types(parsed));check(!types(parsed).includes('raw'),id+' unexpectedly became an advanced statement: '+types(parsed));if(id.includes('github')||id==='gitlab-ci'){check(parsed[0].type===nodes[0].type,id+' became generic YAML');check(rtStable(jsyaml.load(p.generate(parsed)))===rtStable(jsyaml.load(before)),id+' changed data');}else check(rtComparable(p.generate(parsed))===rtComparable(before),id+' changed source');return parsed;}
  for(const id of ['bash','powershell']){const p=DD_PROFILES[id],n=(t,v={},s={})=>ddNode(p,t,v,s),ps=id==='powershell';const nodes=[n('comment'),n('variable',{name:'message',value:"quote ' and value"}),n('arrayVariable'),n('function',{}, {body:[n('if',{}, {then:[n('print')],else:[n('print',{value:'other'})]}),n('while',{}, {body:[n('print')]}),n('foreach',{}, {body:[n('print')]}),n('foreach',{source:'array variable',items:'items'},{body:[n('print')]}),n('return')]}),n('pipeline',{}, {commands:[n('command',{}, {args:[n(ps?'parameter':'argument',ps?{name:'Path',kind:'value',value:'./folder'}:{value:'first'})]}),n('command',{program:ps?'Out-String':'cat'})]})];if(ps)nodes.push(n('try',{}, {body:[n('print')],catch:[n('print')],finally:[n('print')]}));round(id,nodes);const edited=p.generate(nodes).replace('message','greeting').replaceAll('other','changed');const parsed=sxParse(p,edited,nodes);check(!types(parsed).includes(SX_RAW),id+' multiple edits discarded structure');}
@@ -10,5 +30,9 @@ vm.runInContext(String.raw`(()=>{
  {const p=DD_PROFILES.jenkins,n=(t,v={},s={})=>ddNode(p,t,v,s),nodes=p.seed(p),r=nodes[0];r.values.agent='label';r.slots.env=[n('variable'),n('credential')];r.slots.stages.push(n('parallel',{}, {branches:[n('stage',{name:'one'},{steps:[n('retry',{}, {steps:[n('directory',{}, {steps:[n('archive'),n('junit'),n('sh',{text:"echo 'quoted'\necho next"})]})]})]}),n('stage',{name:'two'},{steps:[n('bat')]})]}));round('jenkins',nodes);}
  {const p=DD_PROFILES.terraform,n=(t,v={},s={})=>ddNode(p,t,v,s);const nodes=[n('locals',{}, {body:[n('object',{key:'tags'},{items:[n('text',{key:'Name',value:'\u0024{literal}'}),n('expression',{key:'region',value:'var.region'})]}),n('array',{key:'items'},{items:[n('text',{value:'\u0024{literal}'}),n('text',{value:'$\u0024{literal}'})]})]})];const parsed=round('terraform',nodes);check(parsed[0].slots.body[0].type==='object'&&parsed[0].slots.body[1].type==='array','HCL typed values not reconstructed');}
  for(const id of ['github-actions','gitlab-ci']){const p=DD_PROFILES[id],n=(t,v={},s={})=>ddNode(p,t,v,s),nodes=p.seed(p);if(id==='github-actions'){nodes[0].slots.env=[n('secret')];const job=nodes[0].slots.jobs[0];job.slots.matrix=[n('axis')];job.slots.steps.push(n('run',{condition:'success()'}));}else{const job=nodes[0].slots.stages[0].slots.jobs[0];job.slots.rules=[n('rule')];job.slots.artifacts=[n('artifacts')];job.slots.cache=[n('cache')];job.slots.variables=[n('variable')];job.slots.before=[n('command')];job.slots.after=[n('command')];}round(id,nodes);}
-})()`,ctx);console.log('PASS: fresh-code reconstruction for Dockerfile, nested Bash/PowerShell, SQL statements/clauses/CTEs, Jenkins, GitHub Actions and GitLab CI; multiline/escaping and unknown syntax boundaries.');
-
+})()`,
+  ctx,
+);
+console.log(
+  'PASS: fresh-code reconstruction for Dockerfile, nested Bash/PowerShell, SQL statements/clauses/CTEs, Jenkins, GitHub Actions and GitLab CI; multiline/escaping and unknown syntax boundaries.',
+);

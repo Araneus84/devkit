@@ -1,7 +1,142 @@
-const {chromium}=require(process.env.DEVKIT_PLAYWRIGHT||'playwright'),assert=require('node:assert/strict'),path=require('node:path'),{pathToFileURL}=require('node:url');
-(async()=>{const browser=await chromium.launch({headless:true,...(process.env.DEVKIT_CHROME?{executablePath:process.env.DEVKIT_CHROME}:{})});try{for(const entry of ['index.html','dist/devkit.html']){const page=await browser.newPage({viewport:{width:1500,height:950}}),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(pathToFileURL(path.resolve(__dirname,'..',entry)).href);await page.evaluate(()=>{localStorage.clear();emMode='standard';emApply();dkDrafts={};ddOpen('yaml','k8s');});await page.waitForFunction(()=>[...CE_EDITORS.values()].some(item=>item.el.id==='dd-preview'&&item.el.isConnected));
- const before=await page.evaluate(()=>({state:JSON.stringify(ddState),code:ddOutput().text,grid:getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns}));const group=page.locator('#dk-root').getByRole('group',{name:'Editing experience'});assert.equal(await group.count(),1);assert.equal(await group.getByRole('button',{name:'Standard',exact:true}).getAttribute('aria-pressed'),'true');await group.getByRole('button',{name:'Guided',exact:true}).click();const guided=await page.evaluate(()=>({mode:emMode,stored:localStorage.getItem(EM_STORAGE),state:JSON.stringify(ddState),code:ddOutput().text,root:document.getElementById('dk-root').dataset.editorMode,grid:getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns,backup:dkBackup().data[EM_STORAGE]}));assert.equal(guided.mode,'guided');assert.equal(guided.stored,'guided');assert.equal(guided.root,'guided');assert.equal(guided.state,before.state);assert.equal(guided.code,before.code);assert.notEqual(guided.grid,before.grid);assert.equal(guided.backup,'guided');await assert.rejects(page.evaluate(()=>dkValidateBackup({format:'devkit-backup',version:1,data:{[EM_STORAGE]:'turbo'}})));
- await group.getByRole('button',{name:'Expert',exact:true}).click();const expert=await page.evaluate(()=>{const cm=[...CE_EDITORS.values()].find(item=>item.el.id==='dd-preview'&&item.el.isConnected).cm;return{state:JSON.stringify(ddState),code:ddOutput().text,mode:emMode,grid:getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns,tip:getComputedStyle(document.querySelector('.dd-tip')).display,left:cm.getScrollInfo().left,visibleText:cm.getWrapperElement().querySelector('.CodeMirror-line').textContent};});assert.equal(expert.mode,'expert');assert.equal(expert.state,before.state);assert.equal(expert.code,before.code);assert.notEqual(expert.grid,guided.grid);assert.equal(expert.tip,'none');assert.equal(expert.left,0);assert(expert.visibleText.length);await page.reload();assert.equal(await page.evaluate(()=>emMode),'expert');
- await page.evaluate(()=>dkOpenRecipe(Object.keys(DK_RECIPES)[0]));await page.waitForFunction(()=>[...CE_EDITORS.values()].some(item=>item.el.id==='dk-preview'&&item.el.isConnected));const quickState=await page.evaluate(()=>JSON.stringify(dkActive)),quickGroup=page.locator('#dk-root').getByRole('group',{name:'Editing experience'});assert.equal(await quickGroup.count(),1);await quickGroup.getByRole('button',{name:'Standard',exact:true}).click();assert.equal(await page.evaluate(()=>JSON.stringify(dkActive)),quickState);
- await page.evaluate(()=>ddOpen('python','python'));await page.waitForFunction(()=>[...CE_EDITORS.values()].some(item=>item.el.id==='dd-preview'&&item.el.isConnected));assert.equal(await page.locator('#dk-root').getByRole('group',{name:'Editing experience'}).count(),1);const pythonState=await page.evaluate(()=>JSON.stringify(ddState));await page.locator('#dk-root').getByRole('button',{name:'Guided',exact:true}).click();assert.equal(await page.evaluate(()=>JSON.stringify(ddState)),pythonState);
- await page.evaluate(()=>abOpen());await page.waitForFunction(()=>[...CE_EDITORS.values()].some(item=>item.el.id==='ab-preview'&&item.el.isConnected));const ansible=await page.evaluate(()=>({state:JSON.stringify(abState),code:document.getElementById('ab-preview').value}));const ansibleGroup=page.locator('#ab-dialog').getByRole('group',{name:'Editing experience'});assert.equal(await ansibleGroup.count(),1);await ansibleGroup.getByRole('button',{name:'Expert',exact:true}).click();assert.deepEqual(await page.evaluate(()=>({state:JSON.stringify(abState),code:document.getElementById('ab-preview').value})),ansible);assert.equal(await page.locator('#ab-dialog').getAttribute('data-editor-mode'),'expert');assert.deepEqual(errors,[]);await page.close();}console.log('PASS: Guided, Standard and Expert views persist, travel in backups, cover shared editors and never mutate the live document in both editions.');}finally{await browser.close();}})().catch(error=>{console.error(error);process.exitCode=1;});
+const { chromium } = require(process.env.DEVKIT_PLAYWRIGHT || 'playwright'),
+  assert = require('node:assert/strict'),
+  path = require('node:path'),
+  { pathToFileURL } = require('node:url');
+(async () => {
+  const browser = await chromium.launch({
+    headless: true,
+    ...(process.env.DEVKIT_CHROME ? { executablePath: process.env.DEVKIT_CHROME } : {}),
+  });
+  try {
+    for (const entry of ['index.html', 'dist/devkit.html']) {
+      const page = await browser.newPage({ viewport: { width: 1500, height: 950 } }),
+        errors = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      await page.goto(pathToFileURL(path.resolve(__dirname, '..', entry)).href);
+      await page.evaluate(() => {
+        localStorage.clear();
+        emMode = 'standard';
+        emApply();
+        dkDrafts = {};
+        ddOpen('yaml', 'k8s');
+      });
+      await page.waitForFunction(() =>
+        [...CE_EDITORS.values()].some((item) => item.el.id === 'dd-preview' && item.el.isConnected),
+      );
+      const before = await page.evaluate(() => ({
+        state: JSON.stringify(ddState),
+        code: ddOutput().text,
+        grid: getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns,
+      }));
+      const group = page.locator('#dk-root').getByRole('group', { name: 'Editing experience' });
+      assert.equal(await group.count(), 1);
+      assert.equal(
+        await group
+          .getByRole('button', { name: 'Standard', exact: true })
+          .getAttribute('aria-pressed'),
+        'true',
+      );
+      await group.getByRole('button', { name: 'Guided', exact: true }).click();
+      const guided = await page.evaluate(() => ({
+        mode: emMode,
+        stored: localStorage.getItem(EM_STORAGE),
+        state: JSON.stringify(ddState),
+        code: ddOutput().text,
+        root: document.getElementById('dk-root').dataset.editorMode,
+        grid: getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns,
+        backup: dkBackup().data[EM_STORAGE],
+      }));
+      assert.equal(guided.mode, 'guided');
+      assert.equal(guided.stored, 'guided');
+      assert.equal(guided.root, 'guided');
+      assert.equal(guided.state, before.state);
+      assert.equal(guided.code, before.code);
+      assert.notEqual(guided.grid, before.grid);
+      assert.equal(guided.backup, 'guided');
+      await assert.rejects(
+        page.evaluate(() =>
+          dkValidateBackup({
+            format: 'devkit-backup',
+            version: 1,
+            data: { [EM_STORAGE]: 'turbo' },
+          }),
+        ),
+      );
+      await group.getByRole('button', { name: 'Expert', exact: true }).click();
+      const expert = await page.evaluate(() => {
+        const cm = [...CE_EDITORS.values()].find(
+          (item) => item.el.id === 'dd-preview' && item.el.isConnected,
+        ).cm;
+        return {
+          state: JSON.stringify(ddState),
+          code: ddOutput().text,
+          mode: emMode,
+          grid: getComputedStyle(document.querySelector('.dk-layout')).gridTemplateColumns,
+          tip: getComputedStyle(document.querySelector('.dd-tip')).display,
+          left: cm.getScrollInfo().left,
+          visibleText: cm.getWrapperElement().querySelector('.CodeMirror-line').textContent,
+        };
+      });
+      assert.equal(expert.mode, 'expert');
+      assert.equal(expert.state, before.state);
+      assert.equal(expert.code, before.code);
+      assert.notEqual(expert.grid, guided.grid);
+      assert.equal(expert.tip, 'none');
+      assert.equal(expert.left, 0);
+      assert(expert.visibleText.length);
+      await page.reload();
+      assert.equal(await page.evaluate(() => emMode), 'expert');
+      await page.evaluate(() => dkOpenRecipe(Object.keys(DK_RECIPES)[0]));
+      await page.waitForFunction(() =>
+        [...CE_EDITORS.values()].some((item) => item.el.id === 'dk-preview' && item.el.isConnected),
+      );
+      const quickState = await page.evaluate(() => JSON.stringify(dkActive)),
+        quickGroup = page.locator('#dk-root').getByRole('group', { name: 'Editing experience' });
+      assert.equal(await quickGroup.count(), 1);
+      await quickGroup.getByRole('button', { name: 'Standard', exact: true }).click();
+      assert.equal(await page.evaluate(() => JSON.stringify(dkActive)), quickState);
+      await page.evaluate(() => ddOpen('python', 'python'));
+      await page.waitForFunction(() =>
+        [...CE_EDITORS.values()].some((item) => item.el.id === 'dd-preview' && item.el.isConnected),
+      );
+      assert.equal(
+        await page.locator('#dk-root').getByRole('group', { name: 'Editing experience' }).count(),
+        1,
+      );
+      const pythonState = await page.evaluate(() => JSON.stringify(ddState));
+      await page.locator('#dk-root').getByRole('button', { name: 'Guided', exact: true }).click();
+      assert.equal(await page.evaluate(() => JSON.stringify(ddState)), pythonState);
+      await page.evaluate(() => abOpen());
+      await page.waitForFunction(() =>
+        [...CE_EDITORS.values()].some((item) => item.el.id === 'ab-preview' && item.el.isConnected),
+      );
+      const ansible = await page.evaluate(() => ({
+        state: JSON.stringify(abState),
+        code: document.getElementById('ab-preview').value,
+      }));
+      const ansibleGroup = page
+        .locator('#ab-dialog')
+        .getByRole('group', { name: 'Editing experience' });
+      assert.equal(await ansibleGroup.count(), 1);
+      await ansibleGroup.getByRole('button', { name: 'Expert', exact: true }).click();
+      assert.deepEqual(
+        await page.evaluate(() => ({
+          state: JSON.stringify(abState),
+          code: document.getElementById('ab-preview').value,
+        })),
+        ansible,
+      );
+      assert.equal(await page.locator('#ab-dialog').getAttribute('data-editor-mode'), 'expert');
+      assert.deepEqual(errors, []);
+      await page.close();
+    }
+    console.log(
+      'PASS: Guided, Standard and Expert views persist, travel in backups, cover shared editors and never mutate the live document in both editions.',
+    );
+  } finally {
+    await browser.close();
+  }
+})().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

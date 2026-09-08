@@ -1,0 +1,240 @@
+{
+  "name": "npm & Node",
+  "icon": "ⓝ",
+  "iconBg": "#cb3837",
+  "subtitle": "Node.js package manager",
+  "meta": "npm / node",
+  "sections": [
+    {
+      "id": "npm-basics",
+      "title": "Init & Install",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "npm init",
+          "desc": "Create new package.json interactively"
+        },
+        {
+          "cmd": "npm init -y",
+          "desc": "Create package.json with defaults (no prompts)"
+        },
+        {
+          "cmd": "npm install",
+          "desc": "Install all dependencies from package.json"
+        },
+        {
+          "cmd": "npm install package-name",
+          "desc": "Install package and add to dependencies"
+        },
+        {
+          "cmd": "npm install package-name@1.2.3",
+          "desc": "Install specific version"
+        },
+        {
+          "cmd": "npm install --save-dev package",
+          "desc": "Install as dev dependency"
+        },
+        {
+          "cmd": "npm install -g package",
+          "desc": "Install globally"
+        },
+        {
+          "cmd": "npm install --production",
+          "desc": "Skip devDependencies (use in CI/prod)"
+        },
+        {
+          "cmd": "npm install package --legacy-peer-deps",
+          "desc": "Bypass peer dependency conflicts"
+        },
+        {
+          "cmd": "npm ci",
+          "desc": "Clean install from lockfile — use in CI for reproducibility"
+        },
+        {
+          "cmd": "npm uninstall package",
+          "desc": "Remove package"
+        }
+      ]
+    },
+    {
+      "id": "npm-scripts",
+      "title": "Scripts & Run",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "npm run",
+          "desc": "List all available scripts"
+        },
+        {
+          "cmd": "npm run script-name",
+          "desc": "Run a script from package.json"
+        },
+        {
+          "cmd": "npm start",
+          "desc": "Run \"start\" script (shortcut)"
+        },
+        {
+          "cmd": "npm test",
+          "desc": "Run \"test\" script (shortcut)"
+        },
+        {
+          "cmd": "npm run dev",
+          "desc": "Run development script (common convention)"
+        },
+        {
+          "cmd": "npm run build",
+          "desc": "Run build script (common convention)"
+        },
+        {
+          "cmd": "npx package-name",
+          "desc": "Run package without installing globally"
+        },
+        {
+          "cmd": "npx create-react-app my-app",
+          "desc": "Common usage: scaffold new project"
+        }
+      ]
+    },
+    {
+      "id": "npm-update",
+      "title": "Update & Audit",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "npm outdated",
+          "desc": "Check for outdated packages"
+        },
+        {
+          "cmd": "npm update",
+          "desc": "Update all packages within version ranges"
+        },
+        {
+          "cmd": "npm update package",
+          "desc": "Update specific package"
+        },
+        {
+          "cmd": "npm install package@latest",
+          "desc": "Install latest version regardless of range"
+        },
+        {
+          "cmd": "npm audit",
+          "desc": "Check for security vulnerabilities"
+        },
+        {
+          "cmd": "npm audit fix",
+          "desc": "Auto-fix security issues"
+        },
+        {
+          "cmd": "npm audit fix --force",
+          "desc": "Force-fix even with breaking changes"
+        },
+        {
+          "cmd": "npm view package",
+          "desc": "Show info about a package"
+        },
+        {
+          "cmd": "npm view package versions",
+          "desc": "List all available versions"
+        }
+      ]
+    },
+    {
+      "id": "npm-meta",
+      "title": "Workspaces & Misc",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "npm list",
+          "desc": "List installed packages (top level)"
+        },
+        {
+          "cmd": "npm list -g --depth=0",
+          "desc": "List globally installed packages"
+        },
+        {
+          "cmd": "npm list package",
+          "desc": "Show installed version of specific package"
+        },
+        {
+          "cmd": "npm cache clean --force",
+          "desc": "Clear npm cache"
+        },
+        {
+          "cmd": "npm config get registry",
+          "desc": "Show current registry URL"
+        },
+        {
+          "cmd": "npm config set registry https://registry.npmjs.org/",
+          "desc": "Set registry URL"
+        },
+        {
+          "cmd": "npm login",
+          "desc": "Login to npm registry"
+        },
+        {
+          "cmd": "npm publish",
+          "desc": "Publish package to registry"
+        },
+        {
+          "cmd": "npm version patch / minor / major",
+          "desc": "Bump version per semver"
+        },
+        {
+          "cmd": "npm workspace name install",
+          "desc": "Run install in specific workspace"
+        }
+      ]
+    },
+    {
+      "id": "node-cli",
+      "title": "Node.js CLI",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "node --version",
+          "desc": "Show Node.js version"
+        },
+        {
+          "cmd": "node script.js",
+          "desc": "Run a JavaScript file"
+        },
+        {
+          "cmd": "node",
+          "desc": "Open Node.js REPL"
+        },
+        {
+          "cmd": "node -e \"console.log('hello')\"",
+          "desc": "Execute inline code"
+        },
+        {
+          "cmd": "node --inspect script.js",
+          "desc": "Run with debugger (chrome://inspect)"
+        },
+        {
+          "cmd": "node --watch script.js",
+          "desc": "Auto-restart on file changes (Node 18+)"
+        },
+        {
+          "cmd": "NODE_ENV=production node app.js",
+          "desc": "Run with environment variable"
+        },
+        {
+          "cmd": "nvm use 20",
+          "desc": "Switch Node version (requires nvm)"
+        },
+        {
+          "cmd": "nvm install --lts",
+          "desc": "Install latest LTS Node version"
+        },
+        {
+          "cmd": "pnpm install",
+          "desc": "Alternative — faster, more efficient package manager"
+        },
+        {
+          "cmd": "yarn install",
+          "desc": "Alternative package manager"
+        }
+      ]
+    }
+  ]
+}

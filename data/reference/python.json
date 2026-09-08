@@ -1,0 +1,301 @@
+{
+  "name": "Python",
+  "icon": "🐍",
+  "iconBg": "#3776ab",
+  "subtitle": "Python 3.x essentials",
+  "meta": "Python 3",
+  "sections": [
+    {
+      "id": "py-basics",
+      "title": "Variables & Types",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "x = 5; y = \"hello\"; z = 3.14",
+          "desc": "Variable assignment — Python is dynamically typed"
+        },
+        {
+          "cmd": "type(x)",
+          "desc": "Check the type of a variable"
+        },
+        {
+          "cmd": "isinstance(x, int)",
+          "desc": "Check if variable is of a specific type"
+        },
+        {
+          "cmd": "str(123), int(\"456\"), float(\"3.14\")",
+          "desc": "Type conversion between strings and numbers"
+        },
+        {
+          "cmd": "f\"Hello {name}, you are {age}\"",
+          "desc": "F-string for string interpolation"
+        },
+        {
+          "cmd": "a, b = 1, 2; a, b = b, a",
+          "desc": "Tuple unpacking and swap variables"
+        }
+      ]
+    },
+    {
+      "id": "py-strings",
+      "title": "Strings",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "s.upper(), s.lower(), s.title()",
+          "desc": "Convert string case"
+        },
+        {
+          "cmd": "s.strip(), s.lstrip(), s.rstrip()",
+          "desc": "Remove whitespace from string"
+        },
+        {
+          "cmd": "s.split(\",\")",
+          "desc": "Split string into list by delimiter"
+        },
+        {
+          "cmd": "\",\".join([\"a\",\"b\",\"c\"])",
+          "desc": "Join list into string with separator"
+        },
+        {
+          "cmd": "s.replace(\"old\", \"new\")",
+          "desc": "Replace substring in string"
+        },
+        {
+          "cmd": "s.startswith(\"pre\"), s.endswith(\".txt\")",
+          "desc": "Check string start or end"
+        },
+        {
+          "cmd": "\"abc\" in \"abcdef\"",
+          "desc": "Check if substring is in string"
+        },
+        {
+          "cmd": "s[2:5], s[::-1], s[::2]",
+          "desc": "Slicing — substring, reverse, every other character"
+        }
+      ]
+    },
+    {
+      "id": "py-lists",
+      "title": "Lists & Tuples",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "lst = [1, 2, 3]; lst.append(4)",
+          "desc": "Create list and append an item"
+        },
+        {
+          "cmd": "lst.extend([5, 6])",
+          "desc": "Append multiple items from iterable"
+        },
+        {
+          "cmd": "lst.insert(0, \"first\")",
+          "desc": "Insert item at specific index"
+        },
+        {
+          "cmd": "lst.remove(value); lst.pop(index)",
+          "desc": "Remove by value or by index"
+        },
+        {
+          "cmd": "sorted(lst), lst.sort(reverse=True)",
+          "desc": "Sort list — sorted returns new, .sort modifies in place"
+        },
+        {
+          "cmd": "[x*2 for x in lst if x > 0]",
+          "desc": "List comprehension with filter"
+        },
+        {
+          "cmd": "len(lst), min(lst), max(lst), sum(lst)",
+          "desc": "Common list operations"
+        },
+        {
+          "cmd": "list(zip(a, b))",
+          "desc": "Pair up two lists into tuples"
+        },
+        {
+          "cmd": "list(enumerate(lst))",
+          "desc": "Get index and value pairs from list"
+        }
+      ]
+    },
+    {
+      "id": "py-dicts",
+      "title": "Dictionaries & Sets",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "d = {\"key\": \"value\", \"n\": 42}",
+          "desc": "Create a dictionary"
+        },
+        {
+          "cmd": "d.get(\"key\", \"default\")",
+          "desc": "Safe access with default if key missing"
+        },
+        {
+          "cmd": "d.keys(), d.values(), d.items()",
+          "desc": "Iterate keys, values, or both"
+        },
+        {
+          "cmd": "d.update({\"new\": 1})",
+          "desc": "Merge dictionary with another"
+        },
+        {
+          "cmd": "{k: v for k, v in items if v > 0}",
+          "desc": "Dictionary comprehension"
+        },
+        {
+          "cmd": "s = {1, 2, 3}; s.add(4)",
+          "desc": "Create a set and add element"
+        },
+        {
+          "cmd": "s1 & s2, s1 | s2, s1 - s2",
+          "desc": "Set operations: intersection, union, difference"
+        }
+      ]
+    },
+    {
+      "id": "py-control",
+      "title": "Control Flow",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "if x > 0: pass\nelif x == 0: pass\nelse: pass",
+          "desc": "If/elif/else conditional"
+        },
+        {
+          "cmd": "for i in range(10): print(i)",
+          "desc": "For loop with range"
+        },
+        {
+          "cmd": "while condition: pass",
+          "desc": "While loop"
+        },
+        {
+          "cmd": "break, continue, pass",
+          "desc": "Loop control keywords"
+        },
+        {
+          "cmd": "try:\n    pass\nexcept Exception as e:\n    print(e)",
+          "desc": "Try/except for error handling"
+        },
+        {
+          "cmd": "with open(\"file.txt\") as f: data = f.read()",
+          "desc": "Context manager — auto closes file"
+        },
+        {
+          "cmd": "x = \"yes\" if condition else \"no\"",
+          "desc": "Ternary conditional expression"
+        }
+      ]
+    },
+    {
+      "id": "py-functions",
+      "title": "Functions & Lambdas",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "def greet(name, greeting=\"Hello\"):\n    return f\"{greeting}, {name}\"",
+          "desc": "Function with default argument"
+        },
+        {
+          "cmd": "def fn(*args, **kwargs): pass",
+          "desc": "Variable arguments — args is tuple, kwargs is dict"
+        },
+        {
+          "cmd": "square = lambda x: x**2",
+          "desc": "Lambda — anonymous one-line function"
+        },
+        {
+          "cmd": "list(map(lambda x: x*2, lst))",
+          "desc": "Apply function to every item"
+        },
+        {
+          "cmd": "list(filter(lambda x: x>0, lst))",
+          "desc": "Filter items by condition"
+        },
+        {
+          "cmd": "from functools import reduce; reduce(lambda a,b: a+b, lst)",
+          "desc": "Reduce list to single value"
+        }
+      ]
+    },
+    {
+      "id": "py-files",
+      "title": "File I/O",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "with open(\"file.txt\", \"r\") as f: data = f.read()",
+          "desc": "Read entire file as string"
+        },
+        {
+          "cmd": "with open(\"file.txt\") as f: lines = f.readlines()",
+          "desc": "Read file lines into list"
+        },
+        {
+          "cmd": "with open(\"file.txt\", \"w\") as f: f.write(\"hello\")",
+          "desc": "Write to file — overwrites existing"
+        },
+        {
+          "cmd": "with open(\"file.txt\", \"a\") as f: f.write(\"more\")",
+          "desc": "Append to file"
+        },
+        {
+          "cmd": "import json; json.load(open(\"data.json\"))",
+          "desc": "Load JSON file"
+        },
+        {
+          "cmd": "json.dump(data, open(\"out.json\", \"w\"), indent=2)",
+          "desc": "Write JSON file with indentation"
+        },
+        {
+          "cmd": "import csv; csv.reader(open(\"data.csv\"))",
+          "desc": "Read CSV file"
+        },
+        {
+          "cmd": "import os; os.listdir(\".\"), os.path.exists(\"file\")",
+          "desc": "List directory or check file existence"
+        }
+      ]
+    },
+    {
+      "id": "py-modules",
+      "title": "Common Modules",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "import datetime; datetime.datetime.now()",
+          "desc": "Current date and time"
+        },
+        {
+          "cmd": "from datetime import timedelta; now + timedelta(days=7)",
+          "desc": "Date arithmetic"
+        },
+        {
+          "cmd": "import random; random.choice(lst), random.randint(1,10)",
+          "desc": "Random selection and integers"
+        },
+        {
+          "cmd": "import re; re.findall(r\"\\d+\", text)",
+          "desc": "Regex — find all matches"
+        },
+        {
+          "cmd": "import requests; r = requests.get(url); r.json()",
+          "desc": "HTTP request and parse JSON response"
+        },
+        {
+          "cmd": "import subprocess; subprocess.run([\"ls\", \"-la\"], capture_output=True)",
+          "desc": "Run shell command and capture output"
+        },
+        {
+          "cmd": "import sys; sys.argv, sys.exit(0)",
+          "desc": "Command line arguments and exit"
+        },
+        {
+          "cmd": "import pathlib; Path(\"file.txt\").read_text()",
+          "desc": "Modern path manipulation"
+        }
+      ]
+    }
+  ]
+}

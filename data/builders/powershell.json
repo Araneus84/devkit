@@ -1,0 +1,293 @@
+{
+  "powershell::Get-ChildItem -Recurse -Filter \"*.log\"": {
+    "name": "Get-ChildItem",
+    "description": "List directory contents with filters",
+    "base": "Get-ChildItem",
+    "args": [
+      {
+        "key": "path",
+        "label": "Path",
+        "placeholder": "C:\\Logs or . for current",
+        "required": false,
+        "default": "."
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-Recurse",
+        "desc": "Search recursively through subdirectories"
+      },
+      {
+        "flag": "-Filter",
+        "desc": "Filter by filename pattern",
+        "valuePrompt": "*.log or *.txt",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-Include",
+        "desc": "Include matching names (use with -Recurse)",
+        "valuePrompt": "*.log",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-Exclude",
+        "desc": "Exclude matching names",
+        "valuePrompt": "*.tmp",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-File",
+        "desc": "Return only files (no directories)"
+      },
+      {
+        "flag": "-Directory",
+        "desc": "Return only directories"
+      },
+      {
+        "flag": "-Hidden",
+        "desc": "Include hidden items"
+      },
+      {
+        "flag": "-Depth",
+        "desc": "Limit recursion depth",
+        "valuePrompt": "Number",
+        "valueDefault": "3",
+        "join": " "
+      },
+      {
+        "flag": "-ErrorAction SilentlyContinue",
+        "desc": "Suppress access denied errors"
+      },
+      {
+        "flag": "| Where-Object { $_.Length -gt 1MB }",
+        "desc": "Pipe: filter files larger than 1MB"
+      },
+      {
+        "flag": "| Sort-Object Length -Descending",
+        "desc": "Pipe: sort by size descending"
+      },
+      {
+        "flag": "| Select-Object Name, Length, LastWriteTime",
+        "desc": "Pipe: show specific columns"
+      }
+    ]
+  },
+  "powershell::Get-Process | Where-Object {$_.CPU -gt 100}": {
+    "name": "Get-Process",
+    "description": "List and filter running processes",
+    "base": "Get-Process",
+    "args": [
+      {
+        "key": "name",
+        "label": "Process name (optional)",
+        "placeholder": "notepad or chrome",
+        "required": false,
+        "quote": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "| Where-Object { $_.CPU -gt",
+        "desc": "Filter by CPU usage greater than N",
+        "valuePrompt": "CPU seconds (e.g. 100)",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "| Where-Object { $_.WorkingSet -gt 500MB }",
+        "desc": "Pipe: filter by memory > 500MB"
+      },
+      {
+        "flag": "| Sort-Object CPU -Descending",
+        "desc": "Pipe: sort by CPU usage"
+      },
+      {
+        "flag": "| Sort-Object WorkingSet -Descending",
+        "desc": "Pipe: sort by memory usage"
+      },
+      {
+        "flag": "| Select-Object Name, CPU, Id, Company",
+        "desc": "Pipe: show selected columns"
+      },
+      {
+        "flag": "| Stop-Process -Force",
+        "desc": "Pipe: kill matching processes (CAREFUL!)"
+      },
+      {
+        "flag": "-IncludeUserName",
+        "desc": "Include the owning username (needs elevation)"
+      }
+    ]
+  },
+  "powershell::Get-EventLog -LogName System -Newest 20": {
+    "name": "Get-EventLog",
+    "description": "Query Windows event logs",
+    "base": "Get-EventLog",
+    "args": [
+      {
+        "key": "log",
+        "label": "Log name",
+        "type": "select",
+        "options": [
+          {
+            "value": "-LogName System",
+            "label": "System"
+          },
+          {
+            "value": "-LogName Application",
+            "label": "Application"
+          },
+          {
+            "value": "-LogName Security",
+            "label": "Security"
+          }
+        ],
+        "required": true,
+        "default": "-LogName System"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-Newest",
+        "desc": "Return only the N newest entries",
+        "valuePrompt": "Count",
+        "valueDefault": "50",
+        "join": " "
+      },
+      {
+        "flag": "-EntryType Error",
+        "desc": "Only Error entries"
+      },
+      {
+        "flag": "-EntryType Warning",
+        "desc": "Only Warning entries"
+      },
+      {
+        "flag": "-Source",
+        "desc": "Filter by event source",
+        "valuePrompt": "Source name (e.g. Disk)",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-EventID",
+        "desc": "Filter by specific Event ID",
+        "valuePrompt": "Event ID number",
+        "join": " "
+      },
+      {
+        "flag": "-After",
+        "desc": "Events after date",
+        "valuePrompt": "Date (e.g. \"2025-01-01\")",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-Before",
+        "desc": "Events before date",
+        "valuePrompt": "Date",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-ComputerName",
+        "desc": "Query a remote computer",
+        "valuePrompt": "Hostname",
+        "join": " "
+      },
+      {
+        "flag": "| Format-List",
+        "desc": "Pipe: show full details for each entry"
+      },
+      {
+        "flag": "| Export-Csv events.csv -NoTypeInformation",
+        "desc": "Pipe: export to CSV"
+      }
+    ]
+  },
+  "powershell::Invoke-WebRequest -Uri https://url": {
+    "name": "Invoke-WebRequest",
+    "description": "Make HTTP requests with PowerShell",
+    "base": "Invoke-WebRequest",
+    "args": [
+      {
+        "key": "uri",
+        "label": "URL",
+        "placeholder": "https://api.example.com",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-Method",
+        "desc": "HTTP method",
+        "valuePrompt": "GET | POST | PUT | DELETE | PATCH",
+        "valueDefault": "GET",
+        "join": " "
+      },
+      {
+        "flag": "-Body",
+        "desc": "Request body",
+        "valuePrompt": "JSON string or @{key='value'}",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-ContentType",
+        "desc": "Content-Type header",
+        "valuePrompt": "application/json",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-Headers",
+        "desc": "Headers hashtable",
+        "valuePrompt": "@{Authorization='Bearer TOKEN'}",
+        "join": " "
+      },
+      {
+        "flag": "-Credential",
+        "desc": "Use stored credentials",
+        "valuePrompt": "$cred",
+        "join": " "
+      },
+      {
+        "flag": "-UseBasicParsing",
+        "desc": "Skip HTML parsing (faster, no IE engine)"
+      },
+      {
+        "flag": "-OutFile",
+        "desc": "Save response to file",
+        "valuePrompt": "output.json",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-SessionVariable",
+        "desc": "Store session for cookie reuse",
+        "valuePrompt": "session",
+        "join": " "
+      },
+      {
+        "flag": "-WebSession",
+        "desc": "Reuse a stored session",
+        "valuePrompt": "$session",
+        "join": " "
+      },
+      {
+        "flag": "-SkipCertificateCheck",
+        "desc": "Allow invalid SSL certs (PS 6+)"
+      },
+      {
+        "flag": "-TimeoutSec",
+        "desc": "Request timeout in seconds",
+        "valuePrompt": "Seconds",
+        "valueDefault": "30",
+        "join": " "
+      }
+    ]
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "curl::curl -X POST -d '{\"key\":\"value\"}' -H \"Content-Type: application/json\" url": {
+    "name": "curl",
+    "description": "Build a curl HTTP request",
+    "base": "curl",
+    "args": [
+      {
+        "key": "url",
+        "label": "URL",
+        "placeholder": "https://api.example.com/endpoint",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-X",
+        "desc": "HTTP method",
+        "valuePrompt": "GET | POST | PUT | DELETE | PATCH",
+        "valueDefault": "POST",
+        "join": " "
+      },
+      {
+        "flag": "-H",
+        "desc": "Add header",
+        "valuePrompt": "Header (e.g. \"Content-Type: application/json\")",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-d",
+        "desc": "Request body data",
+        "valuePrompt": "Data (e.g. '{\"key\":\"value\"}' or @file.json)",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-u",
+        "desc": "Basic auth",
+        "valuePrompt": "username:password",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "Save output to file",
+        "valuePrompt": "Filename",
+        "join": " "
+      },
+      {
+        "flag": "-O",
+        "desc": "Save with original filename"
+      },
+      {
+        "flag": "-L",
+        "desc": "Follow redirects"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose output"
+      },
+      {
+        "flag": "-s",
+        "desc": "Silent (no progress bar)"
+      },
+      {
+        "flag": "-i",
+        "desc": "Include response headers in output"
+      },
+      {
+        "flag": "-I",
+        "desc": "HEAD request only (headers)"
+      },
+      {
+        "flag": "-k",
+        "desc": "Allow insecure SSL (skip cert check)"
+      },
+      {
+        "flag": "--max-time",
+        "desc": "Maximum total time",
+        "valuePrompt": "Seconds",
+        "valueDefault": "30",
+        "join": " "
+      },
+      {
+        "flag": "--connect-timeout",
+        "desc": "Connection timeout",
+        "valuePrompt": "Seconds",
+        "valueDefault": "5",
+        "join": " "
+      },
+      {
+        "flag": "-F",
+        "desc": "Multipart form data",
+        "valuePrompt": "field=value or file=@path",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--cookie",
+        "desc": "Send cookies",
+        "valuePrompt": "name=value or filename",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-A",
+        "desc": "User-Agent string",
+        "valuePrompt": "User agent",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-x",
+        "desc": "Use proxy",
+        "valuePrompt": "Proxy URL",
+        "join": " "
+      }
+    ]
+  }
+}

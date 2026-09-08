@@ -1,10 +1,70 @@
-/* No build dependencies: node tools/build.cjs */
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
-const root=path.resolve(__dirname,'..');let html=fs.readFileSync(path.join(root,'index.html'),'utf8');const manifest=JSON.parse(fs.readFileSync(path.join(root,'app-manifest.json'),'utf8'));
-for(const file of manifest.javascript){const content=fs.readFileSync(path.join(root,file),'utf8');new vm.Script(content,{filename:file});html=html.replace(`<script defer src="${file}"></script>`,()=>'<script>\n'+content.replace(/<\/script/gi,'<\\/script')+'\n</script>');}
-for(const file of manifest.styles){const content=fs.readFileSync(path.join(root,file),'utf8');html=html.replace(`<link rel="stylesheet" href="${file}">`,()=>'<style>\n'+content+'\n</style>');}
-if(/<(script|link)[^>]+(?:src|href)="(?:src|styles|vendor)\//.test(html))throw Error('Unbundled asset remains.');
-// Keep complete license notices in the standalone distribution, too.
-const notices=['LICENSE','NOTICE','vendor/LICENSE.js-yaml.txt','vendor/LICENSE.yaml.txt','vendor/LICENSE.lezer.txt','vendor/codemirror/LICENSE','vendor/codemirror/LICENSE.vim.txt'].map(file=>file+'\n\n'+fs.readFileSync(path.join(root,file),'utf8')).join('\n\n');
-html=html.replace('</body>',()=>'<template id="dk-license-notices">'+notices.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</template>\n</body>');
-fs.mkdirSync(path.join(root,'dist'),{recursive:true});fs.writeFileSync(path.join(root,'dist','devkit.html'),html);console.log('Built dist/devkit.html ('+Buffer.byteLength(html)+' bytes)');
+#!/usr/bin/env node
+'use strict';
+
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const {
+  ROOT,
+  INDEX_PATH,
+  DIST_PATH,
+  validateProject,
+  assertIndexOrder,
+  assetPattern,
+} = require('./lib/project.cjs');
+const { writeCatalogs } = require('./lib/catalogs.cjs');
+
+const NOTICE_FILES = [
+  'LICENSE',
+  'NOTICE',
+  'vendor/LICENSE.js-yaml.txt',
+  'vendor/LICENSE.yaml.txt',
+  'vendor/LICENSE.lezer.txt',
+  'vendor/codemirror/LICENSE',
+  'vendor/codemirror/LICENSE.vim.txt',
+];
+
+function inlineScript(html, file) {
+  const source = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  new vm.Script(source, { filename: file });
+  const inline = `<script>\n${source.replace(/<\/script/gi, '<\\/script')}\n</script>`;
+  return html.replace(assetPattern(file), () => inline);
+}
+
+function inlineStyle(html, file) {
+  const source = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  const inline = `<style>\n${source}\n</style>`;
+  return html.replace(assetPattern(file), () => inline);
+}
+
+function licenseNotice() {
+  const text = NOTICE_FILES.map(
+    (file) => `${file}\n\n${fs.readFileSync(path.join(ROOT, file), 'utf8')}`,
+  ).join('\n\n');
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `<template id="dk-license-notices">${escaped}</template>\n`;
+}
+
+function renderStandalone() {
+  const { manifest } = validateProject();
+  let html = fs.readFileSync(INDEX_PATH, 'utf8');
+  assertIndexOrder(html, manifest);
+  for (const file of manifest.javascript) html = inlineScript(html, file);
+  for (const file of manifest.styles) html = inlineStyle(html, file);
+  if (/<(?:script|link)[^>]+(?:src|href)="(?:src|styles|vendor)\//.test(html)) {
+    throw new Error('The standalone build still contains an external application asset.');
+  }
+  return html.replace('</body>', () => `${licenseNotice()}</body>`);
+}
+
+function build() {
+  writeCatalogs();
+  const html = renderStandalone();
+  fs.mkdirSync(path.dirname(DIST_PATH), { recursive: true });
+  fs.writeFileSync(DIST_PATH, html);
+  console.log(`Built ${path.relative(ROOT, DIST_PATH)} (${Buffer.byteLength(html)} bytes)`);
+}
+
+if (require.main === module) build();
+
+module.exports = { NOTICE_FILES, renderStandalone, build };

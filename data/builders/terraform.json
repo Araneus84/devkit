@@ -1,0 +1,183 @@
+{
+  "terraform::terraform plan": {
+    "name": "terraform plan",
+    "description": "Preview infrastructure changes",
+    "base": "terraform plan",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-out",
+        "desc": "Save plan to file for later apply",
+        "valuePrompt": "Filename (e.g. tfplan)",
+        "join": "="
+      },
+      {
+        "flag": "-var",
+        "desc": "Set input variable",
+        "valuePrompt": "key=value",
+        "join": "=",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-var-file",
+        "desc": "Load variables from file",
+        "valuePrompt": "prod.tfvars",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "-target",
+        "desc": "Limit to specific resource",
+        "valuePrompt": "aws_instance.web",
+        "join": "=",
+        "repeatable": true
+      },
+      {
+        "flag": "-refresh-only",
+        "desc": "Only refresh state, no changes"
+      },
+      {
+        "flag": "-refresh=false",
+        "desc": "Skip state refresh (faster)"
+      },
+      {
+        "flag": "-destroy",
+        "desc": "Plan a destroy instead of apply"
+      },
+      {
+        "flag": "-detailed-exitcode",
+        "desc": "Exit codes: 0=no changes 1=error 2=changes"
+      },
+      {
+        "flag": "-compact-warnings",
+        "desc": "Shorter warning messages"
+      },
+      {
+        "flag": "-parallelism",
+        "desc": "Number of parallel operations",
+        "valuePrompt": "Count",
+        "valueDefault": "10",
+        "join": "="
+      }
+    ]
+  },
+  "terraform::terraform apply": {
+    "name": "terraform apply",
+    "description": "Apply infrastructure changes",
+    "base": "terraform apply",
+    "args": [
+      {
+        "key": "planfile",
+        "label": "Plan file (optional)",
+        "placeholder": "tfplan (from terraform plan -out)",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-auto-approve",
+        "desc": "Skip interactive confirmation"
+      },
+      {
+        "flag": "-var",
+        "desc": "Set input variable",
+        "valuePrompt": "key=value",
+        "join": "=",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-var-file",
+        "desc": "Load variables from file",
+        "valuePrompt": "prod.tfvars",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "-target",
+        "desc": "Apply only specific resource",
+        "valuePrompt": "resource.name",
+        "join": "=",
+        "repeatable": true
+      },
+      {
+        "flag": "-replace",
+        "desc": "Force replace specific resource",
+        "valuePrompt": "resource.name",
+        "join": "=",
+        "repeatable": true
+      },
+      {
+        "flag": "-refresh-only",
+        "desc": "Update state only, no infrastructure changes"
+      },
+      {
+        "flag": "-parallelism",
+        "desc": "Parallel operations",
+        "valuePrompt": "Count",
+        "valueDefault": "10",
+        "join": "="
+      },
+      {
+        "flag": "-compact-warnings",
+        "desc": "Shorter warning messages"
+      }
+    ]
+  },
+  "terraform::terraform state list": {
+    "name": "terraform state",
+    "description": "Manage Terraform state",
+    "base": "terraform state",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "options": [
+          {
+            "value": "list",
+            "label": "list — list all resources"
+          },
+          {
+            "value": "show",
+            "label": "show — show resource details"
+          },
+          {
+            "value": "mv",
+            "label": "mv — rename/move resource"
+          },
+          {
+            "value": "rm",
+            "label": "rm — remove from state"
+          },
+          {
+            "value": "pull",
+            "label": "pull — download remote state"
+          },
+          {
+            "value": "push",
+            "label": "push — upload local state"
+          }
+        ],
+        "required": true,
+        "default": "list"
+      },
+      {
+        "key": "resource",
+        "label": "Resource address (for show/mv/rm)",
+        "placeholder": "aws_instance.web",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-state",
+        "desc": "Path to alternate state file",
+        "valuePrompt": "terraform.tfstate",
+        "join": "=",
+        "quote": true
+      }
+    ]
+  }
+}

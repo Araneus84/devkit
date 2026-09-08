@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+
+src/reference-data.js linguist-generated=true
+src/command-definitions.js linguist-generated=true
+dist/devkit.html linguist-generated=true -whitespace

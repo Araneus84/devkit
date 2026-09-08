@@ -1,0 +1,387 @@
+{
+  "name": "Juniper",
+  "icon": "JN",
+  "iconBg": "#84bd00",
+  "subtitle": "Junos OS switches & routers",
+  "meta": "Junos OS",
+  "sections": [
+    {
+      "id": "junos-basics",
+      "title": "Modes & Navigation",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "cli",
+          "desc": "Enter CLI from shell (if dropped to shell)"
+        },
+        {
+          "cmd": "configure",
+          "desc": "Enter configuration mode from operational mode"
+        },
+        {
+          "cmd": "configure exclusive",
+          "desc": "Enter config mode with exclusive lock — others cannot edit"
+        },
+        {
+          "cmd": "configure private",
+          "desc": "Enter private config mode — changes isolated until commit"
+        },
+        {
+          "cmd": "exit",
+          "desc": "Exit configuration mode back to operational mode"
+        },
+        {
+          "cmd": "commit",
+          "desc": "Apply (commit) pending configuration changes"
+        },
+        {
+          "cmd": "commit confirmed 5",
+          "desc": "Commit with 5-minute auto-rollback — confirm with another commit or it reverts"
+        },
+        {
+          "cmd": "commit check",
+          "desc": "Validate configuration without applying"
+        },
+        {
+          "cmd": "rollback 0",
+          "desc": "Revert to last committed config"
+        },
+        {
+          "cmd": "rollback 1",
+          "desc": "Revert to the previous commit (Junos keeps 50 rollbacks)"
+        },
+        {
+          "cmd": "show | compare",
+          "desc": "Show diff between candidate and running config"
+        },
+        {
+          "cmd": "discard",
+          "desc": "Discard all uncommitted changes"
+        },
+        {
+          "cmd": "set",
+          "desc": "Set a configuration parameter"
+        },
+        {
+          "cmd": "delete",
+          "desc": "Delete a configuration parameter or hierarchy"
+        },
+        {
+          "cmd": "?",
+          "desc": "Context-sensitive help"
+        },
+        {
+          "cmd": "| display set",
+          "desc": "Pipe modifier — show config in set command format"
+        },
+        {
+          "cmd": "| no-more",
+          "desc": "Pipe modifier — disable paging (like --no-more)"
+        }
+      ]
+    },
+    {
+      "id": "junos-show",
+      "title": "Show / Verification",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "show version",
+          "desc": "Junos version, model, hostname, uptime"
+        },
+        {
+          "cmd": "show system information",
+          "desc": "Hardware and software summary"
+        },
+        {
+          "cmd": "show interfaces terse",
+          "desc": "All interfaces — brief status table"
+        },
+        {
+          "cmd": "show interfaces ge-0/0/0",
+          "desc": "Detailed info for specific interface"
+        },
+        {
+          "cmd": "show interfaces ge-0/0/0 detail",
+          "desc": "Full detailed stats for interface"
+        },
+        {
+          "cmd": "show route",
+          "desc": "Full routing table"
+        },
+        {
+          "cmd": "show route 0.0.0.0/0",
+          "desc": "Default route lookup"
+        },
+        {
+          "cmd": "show route protocol static",
+          "desc": "Only static routes"
+        },
+        {
+          "cmd": "show arp",
+          "desc": "ARP table"
+        },
+        {
+          "cmd": "show ethernet-switching table",
+          "desc": "MAC address table (EX switches)"
+        },
+        {
+          "cmd": "show vlans",
+          "desc": "VLAN table — all VLANs with member interfaces"
+        },
+        {
+          "cmd": "show spanning-tree interface",
+          "desc": "STP port roles and states"
+        },
+        {
+          "cmd": "show lldp neighbors",
+          "desc": "LLDP neighbor devices"
+        },
+        {
+          "cmd": "show ospf neighbor",
+          "desc": "OSPF neighbor adjacencies"
+        },
+        {
+          "cmd": "show bgp summary",
+          "desc": "BGP neighbor status table"
+        },
+        {
+          "cmd": "show chassis hardware",
+          "desc": "Hardware inventory — FPC, PIC, modules"
+        },
+        {
+          "cmd": "show chassis environment",
+          "desc": "Temperature, fans, power supplies"
+        },
+        {
+          "cmd": "show chassis alarms",
+          "desc": "Active hardware alarms"
+        },
+        {
+          "cmd": "show log messages",
+          "desc": "System message log"
+        },
+        {
+          "cmd": "show log messages | last 50",
+          "desc": "Last 50 log lines"
+        },
+        {
+          "cmd": "show configuration",
+          "desc": "Full current committed config"
+        },
+        {
+          "cmd": "show configuration | display set",
+          "desc": "Config as set commands (easy to copy/paste)"
+        }
+      ]
+    },
+    {
+      "id": "junos-interfaces",
+      "title": "Interface Config",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "set interfaces ge-0/0/0 description \"UPLINK-SW01\"",
+          "desc": "Set interface description"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 unit 0 family ethernet-switching interface-mode access",
+          "desc": "Set as access port"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members VLAN10",
+          "desc": "Add to access VLAN"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 unit 0 family ethernet-switching interface-mode trunk",
+          "desc": "Set as trunk port"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members all",
+          "desc": "Allow all VLANs on trunk"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 unit 0 family inet address 10.0.0.1/24",
+          "desc": "Set IP on Layer 3 interface"
+        },
+        {
+          "cmd": "delete interfaces ge-0/0/0 disable",
+          "desc": "Enable interface (remove disable statement)"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 disable",
+          "desc": "Disable interface"
+        },
+        {
+          "cmd": "set interfaces ge-0/0/0 ether-options speed 1g",
+          "desc": "Force 1G speed"
+        }
+      ]
+    },
+    {
+      "id": "junos-vlan",
+      "title": "VLANs",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "set vlans SERVERS vlan-id 10",
+          "desc": "Create VLAN named SERVERS with ID 10"
+        },
+        {
+          "cmd": "set vlans SERVERS description \"Server Farm\"",
+          "desc": "Set VLAN description"
+        },
+        {
+          "cmd": "set vlans SERVERS l3-interface irb.10",
+          "desc": "Attach Layer 3 IRB interface to VLAN"
+        },
+        {
+          "cmd": "set interfaces irb unit 10 family inet address 10.10.10.1/24",
+          "desc": "Set IP on IRB (SVI equivalent)"
+        },
+        {
+          "cmd": "delete vlans SERVERS",
+          "desc": "Delete VLAN"
+        },
+        {
+          "cmd": "show vlans",
+          "desc": "Show all VLANs and their members"
+        }
+      ]
+    },
+    {
+      "id": "junos-save",
+      "title": "Save, Backup & Restore",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "commit",
+          "desc": "Apply changes to running config (Junos saves on commit)"
+        },
+        {
+          "cmd": "save /var/home/admin/backup.conf",
+          "desc": "Save current config to a file on device"
+        },
+        {
+          "cmd": "load override /var/home/admin/backup.conf",
+          "desc": "Replace entire config with file (CAREFUL)"
+        },
+        {
+          "cmd": "load merge /var/home/admin/additions.conf",
+          "desc": "Merge config file with current config"
+        },
+        {
+          "cmd": "load replace /var/home/admin/patch.conf",
+          "desc": "Replace specific sections from file"
+        },
+        {
+          "cmd": "request system configuration rescue save",
+          "desc": "Save rescue config (rollback to it if both rollbacks fail)"
+        },
+        {
+          "cmd": "rollback rescue",
+          "desc": "Load rescue config"
+        },
+        {
+          "cmd": "file copy /var/home/admin/backup.conf ftp://user:pass@10.0.0.1/",
+          "desc": "Copy config file to FTP server"
+        },
+        {
+          "cmd": "file copy scp://user@10.0.0.1/backup.conf /var/home/admin/",
+          "desc": "Copy config from remote via SCP"
+        },
+        {
+          "cmd": "request system snapshot",
+          "desc": "Snapshot current Junos to backup partition"
+        },
+        {
+          "cmd": "request system reboot",
+          "desc": "Reboot the device"
+        },
+        {
+          "cmd": "request system zeroize",
+          "desc": "Factory reset — destroys all config and data"
+        }
+      ]
+    },
+    {
+      "id": "junos-boxconfig",
+      "title": "Out-of-Box Initial Setup",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "--- Connect via console (9600 baud) ---",
+          "desc": "STEP 1: Console cable to ME or console port"
+        },
+        {
+          "cmd": "login: root / Password: (blank)",
+          "desc": "STEP 2: Default login — root with no password"
+        },
+        {
+          "cmd": "cli",
+          "desc": "STEP 3: Enter Junos CLI from shell"
+        },
+        {
+          "cmd": "configure",
+          "desc": "STEP 4: Enter configuration mode"
+        },
+        {
+          "cmd": "set system host-name SW-CORE-01",
+          "desc": "STEP 5: Set hostname"
+        },
+        {
+          "cmd": "set system root-authentication plain-text-password",
+          "desc": "STEP 6: Set root password (prompted)"
+        },
+        {
+          "cmd": "set system login user admin class super-user",
+          "desc": "STEP 7: Create admin user"
+        },
+        {
+          "cmd": "set system login user admin authentication plain-text-password",
+          "desc": "STEP 8: Set admin password (prompted)"
+        },
+        {
+          "cmd": "set system services ssh",
+          "desc": "STEP 9: Enable SSH service"
+        },
+        {
+          "cmd": "set system services ssh root-login deny",
+          "desc": "STEP 10: Disable direct root SSH login"
+        },
+        {
+          "cmd": "set system time-zone America/New_York",
+          "desc": "STEP 11: Set timezone"
+        },
+        {
+          "cmd": "set system ntp server 10.0.0.1",
+          "desc": "STEP 12: Set NTP server"
+        },
+        {
+          "cmd": "set system syslog host 10.0.0.5 any any",
+          "desc": "STEP 13: Send logs to syslog server"
+        },
+        {
+          "cmd": "set interfaces me0 unit 0 family inet address 192.168.1.10/24",
+          "desc": "STEP 14: Set management IP on me0 (management interface)"
+        },
+        {
+          "cmd": "set routing-options static route 0.0.0.0/0 next-hop 192.168.1.1",
+          "desc": "STEP 15: Set default route"
+        },
+        {
+          "cmd": "commit check",
+          "desc": "STEP 16: Validate before applying"
+        },
+        {
+          "cmd": "commit",
+          "desc": "STEP 17: APPLY — saves and activates config"
+        },
+        {
+          "cmd": "save /var/home/admin/initial-config.conf",
+          "desc": "STEP 18: Save initial config to file"
+        }
+      ]
+    }
+  ]
+}
