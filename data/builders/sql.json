@@ -1,0 +1,69 @@
+{
+  "sql::SELECT * FROM table WHERE col = \"value\";": {
+    "name": "SELECT query builder",
+    "description": "Build a SELECT query with filters",
+    "base": "SELECT",
+    "args": [
+      {
+        "key": "cols",
+        "label": "Columns",
+        "placeholder": "* or col1, col2, col3",
+        "required": true,
+        "default": "*"
+      },
+      {
+        "key": "table",
+        "label": "FROM table",
+        "placeholder": "users",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "WHERE",
+        "desc": "Filter condition",
+        "valuePrompt": "id = 1 AND status = \"active\"",
+        "join": " ",
+        "quote": false
+      },
+      {
+        "flag": "JOIN",
+        "desc": "JOIN another table",
+        "valuePrompt": "orders ON users.id = orders.user_id",
+        "join": " "
+      },
+      {
+        "flag": "GROUP BY",
+        "desc": "Group results",
+        "valuePrompt": "column_name",
+        "join": " "
+      },
+      {
+        "flag": "HAVING",
+        "desc": "Filter on aggregates",
+        "valuePrompt": "COUNT(*) > 5",
+        "join": " "
+      },
+      {
+        "flag": "ORDER BY",
+        "desc": "Sort results",
+        "valuePrompt": "created_at DESC",
+        "join": " "
+      },
+      {
+        "flag": "LIMIT",
+        "desc": "Limit row count",
+        "valuePrompt": "Number",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "OFFSET",
+        "desc": "Skip first N rows (pagination)",
+        "valuePrompt": "Number",
+        "valueDefault": "0",
+        "join": " "
+      }
+    ]
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "name": "PowerShell",
+  "icon": "PS",
+  "iconBg": "#012456",
+  "subtitle": "Windows PowerShell & Core",
+  "meta": "PS 5.1 / 7+",
+  "sections": [
+    {
+      "id": "ps-files",
+      "title": "Files & Directories",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "Get-ChildItem (alias: ls, dir, gci)",
+          "desc": "List directory contents"
+        },
+        {
+          "cmd": "Get-ChildItem -Recurse -Filter \"*.log\"",
+          "desc": "Recursive find by file extension"
+        },
+        {
+          "cmd": "Set-Location C:\\path (alias: cd)",
+          "desc": "Change directory"
+        },
+        {
+          "cmd": "Get-Location (alias: pwd)",
+          "desc": "Print current location"
+        },
+        {
+          "cmd": "New-Item -ItemType Directory -Path \"new\\dir\"",
+          "desc": "Create directory"
+        },
+        {
+          "cmd": "Remove-Item -Recurse -Force path",
+          "desc": "Delete file or directory forcefully"
+        },
+        {
+          "cmd": "Copy-Item src dest -Recurse",
+          "desc": "Copy file or directory"
+        },
+        {
+          "cmd": "Move-Item old new",
+          "desc": "Move or rename item"
+        },
+        {
+          "cmd": "Get-Content file.txt",
+          "desc": "Read file contents (like cat)"
+        },
+        {
+          "cmd": "Get-Content -Tail 50 -Wait log.txt",
+          "desc": "Tail follow file (like tail -f)"
+        },
+        {
+          "cmd": "Set-Content file.txt \"data\"",
+          "desc": "Write string to file (overwrites)"
+        },
+        {
+          "cmd": "Add-Content file.txt \"more\"",
+          "desc": "Append to file"
+        }
+      ]
+    },
+    {
+      "id": "ps-objects",
+      "title": "Objects & Pipeline",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "Get-Process | Where-Object {$_.CPU -gt 100}",
+          "desc": "Filter pipeline by property"
+        },
+        {
+          "cmd": "Get-Process | Select-Object Name, CPU",
+          "desc": "Pick specific properties"
+        },
+        {
+          "cmd": "Get-Process | Sort-Object CPU -Descending",
+          "desc": "Sort by property"
+        },
+        {
+          "cmd": "Get-Process | Group-Object Company",
+          "desc": "Group results by property"
+        },
+        {
+          "cmd": "Get-Process | Measure-Object CPU -Sum -Average",
+          "desc": "Aggregate statistics"
+        },
+        {
+          "cmd": "Get-Service | ForEach-Object { $_.Name }",
+          "desc": "Iterate over pipeline objects"
+        },
+        {
+          "cmd": "$var = Get-Process notepad",
+          "desc": "Store result in variable"
+        },
+        {
+          "cmd": "$var.Name, $var.Id",
+          "desc": "Access object properties"
+        },
+        {
+          "cmd": "1..10 | ForEach-Object { Write-Host $_ }",
+          "desc": "Range with iteration"
+        }
+      ]
+    },
+    {
+      "id": "ps-text",
+      "title": "Text & Search",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "Select-String -Path *.log -Pattern \"error\"",
+          "desc": "Search for pattern in files (like grep)"
+        },
+        {
+          "cmd": "Get-Content file.txt | Select-String \"pattern\"",
+          "desc": "Search piped content"
+        },
+        {
+          "cmd": "\"hello\" -replace \"h\", \"j\"",
+          "desc": "String replace with regex"
+        },
+        {
+          "cmd": "\"a,b,c\" -split \",\"",
+          "desc": "Split string into array"
+        },
+        {
+          "cmd": "$arr -join \",\"",
+          "desc": "Join array into string"
+        },
+        {
+          "cmd": "\"text\".ToUpper(), \"text\".ToLower()",
+          "desc": "Change string case"
+        },
+        {
+          "cmd": "\"hello\" -match \"ll\"",
+          "desc": "Regex match — returns boolean"
+        },
+        {
+          "cmd": "\"hello world\" -like \"*world*\"",
+          "desc": "Wildcard match"
+        }
+      ]
+    },
+    {
+      "id": "ps-processes",
+      "title": "Processes & Services",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "Get-Process",
+          "desc": "List all running processes"
+        },
+        {
+          "cmd": "Get-Process -Name notepad",
+          "desc": "Find specific process by name"
+        },
+        {
+          "cmd": "Stop-Process -Name notepad -Force",
+          "desc": "Kill process by name"
+        },
+        {
+          "cmd": "Start-Process notepad.exe",
+          "desc": "Launch a program"
+        },
+        {
+          "cmd": "Get-Service",
+          "desc": "List all services"
+        },
+        {
+          "cmd": "Get-Service -Name \"wuauserv\"",
+          "desc": "Get specific service status"
+        },
+        {
+          "cmd": "Start-Service / Stop-Service / Restart-Service",
+          "desc": "Control service state"
+        },
+        {
+          "cmd": "Set-Service -Name svc -StartupType Automatic",
+          "desc": "Change service startup type"
+        }
+      ]
+    },
+    {
+      "id": "ps-system",
+      "title": "System & Info",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "Get-ComputerInfo",
+          "desc": "Show comprehensive system information"
+        },
+        {
+          "cmd": "Get-HotFix",
+          "desc": "List installed Windows updates"
+        },
+        {
+          "cmd": "Get-WmiObject Win32_BIOS",
+          "desc": "Get BIOS information"
+        },
+        {
+          "cmd": "Get-Volume / Get-PSDrive",
+          "desc": "List drives and volumes"
+        },
+        {
+          "cmd": "Get-EventLog -LogName System -Newest 20",
+          "desc": "View recent system event log entries"
+        },
+        {
+          "cmd": "$PSVersionTable",
+          "desc": "Show PowerShell version info"
+        },
+        {
+          "cmd": "Get-ExecutionPolicy",
+          "desc": "View current script execution policy"
+        },
+        {
+          "cmd": "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser",
+          "desc": "Allow local scripts to run"
+        }
+      ]
+    },
+    {
+      "id": "ps-network",
+      "title": "Networking",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "Test-Connection google.com",
+          "desc": "Ping-like connectivity test"
+        },
+        {
+          "cmd": "Test-NetConnection google.com -Port 443",
+          "desc": "Test connectivity to specific port"
+        },
+        {
+          "cmd": "Resolve-DnsName google.com",
+          "desc": "DNS lookup"
+        },
+        {
+          "cmd": "Get-NetIPAddress",
+          "desc": "Show network IP addresses"
+        },
+        {
+          "cmd": "Get-NetAdapter",
+          "desc": "List network adapters"
+        },
+        {
+          "cmd": "Invoke-WebRequest -Uri https://url",
+          "desc": "HTTP request (like curl/wget)"
+        },
+        {
+          "cmd": "Invoke-RestMethod -Uri url -Method POST -Body $json",
+          "desc": "REST API call with JSON"
+        },
+        {
+          "cmd": "Get-NetTCPConnection -State Listen",
+          "desc": "List listening TCP ports"
+        }
+      ]
+    },
+    {
+      "id": "ps-aduser",
+      "title": "Active Directory",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "Get-ADUser -Identity username",
+          "desc": "Get AD user info (requires RSAT)"
+        },
+        {
+          "cmd": "Get-ADUser -Filter * -Properties EmailAddress",
+          "desc": "List all users with email"
+        },
+        {
+          "cmd": "New-ADUser -Name \"John Doe\" -SamAccountName jdoe",
+          "desc": "Create new AD user"
+        },
+        {
+          "cmd": "Set-ADUser -Identity jdoe -Enabled $true",
+          "desc": "Enable or modify AD user"
+        },
+        {
+          "cmd": "Get-ADGroupMember -Identity \"Domain Admins\"",
+          "desc": "List group members"
+        },
+        {
+          "cmd": "Add-ADGroupMember -Identity \"GroupName\" -Members jdoe",
+          "desc": "Add user to group"
+        },
+        {
+          "cmd": "Reset-ADAccountPassword -Identity jdoe",
+          "desc": "Reset AD password"
+        },
+        {
+          "cmd": "Unlock-ADAccount -Identity jdoe",
+          "desc": "Unlock AD account"
+        }
+      ]
+    },
+    {
+      "id": "ps-scripting",
+      "title": "Scripting Basics",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "$var = \"hello\"",
+          "desc": "Variable assignment"
+        },
+        {
+          "cmd": "if ($x -eq 5) { \"match\" } else { \"no\" }",
+          "desc": "If/else — use -eq, -ne, -gt, -lt"
+        },
+        {
+          "cmd": "foreach ($i in 1..10) { Write-Host $i }",
+          "desc": "Foreach loop with range"
+        },
+        {
+          "cmd": "while ($condition) { ... }",
+          "desc": "While loop"
+        },
+        {
+          "cmd": "function Greet([string]$name) { \"Hello $name\" }",
+          "desc": "Function with typed parameter"
+        },
+        {
+          "cmd": "try { ... } catch { Write-Error $_ }",
+          "desc": "Error handling"
+        },
+        {
+          "cmd": "param([string]$Name, [int]$Age)",
+          "desc": "Script parameters at top of .ps1"
+        },
+        {
+          "cmd": ". .\\script.ps1",
+          "desc": "Source/dot-source another script"
+        },
+        {
+          "cmd": "Import-Module ModuleName",
+          "desc": "Load a PowerShell module"
+        },
+        {
+          "cmd": "Get-Help command-name -Full",
+          "desc": "Show detailed help for any cmdlet"
+        }
+      ]
+    }
+  ]
+}

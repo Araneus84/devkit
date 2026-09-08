@@ -16,7 +16,12 @@ function highlight(text, q) {
 }
 
 function escapeHTML(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function cmdId(sheetKey, cmd) {
@@ -72,7 +77,7 @@ function renderSidebar() {
           <span class="sub-count">${cmdCount}</span>
         </div>`;
 
-    sheet.sections.forEach(section => {
+    sheet.sections.forEach((section) => {
       const secActive = isActive && state.activeSection === section.id;
       html += `<div class="nav-sub-item ${secActive ? 'active' : ''}" onclick="setSheet('${key}', '${section.id}', this)">
         <span class="sub-dot" style="background:${section.color}"></span>
@@ -102,7 +107,7 @@ function toggleSheetExpand(key, event) {
 
 function expandAllSheets(event) {
   if (event) event.stopPropagation();
-  Object.keys(SHEETS).forEach(key => state.expandedSheets.add(key));
+  Object.keys(SHEETS).forEach((key) => state.expandedSheets.add(key));
   save('expandedSheets');
   renderSidebar();
 }
@@ -159,7 +164,10 @@ function renderMain() {
   const main = document.getElementById('main');
   const q = state.searchQuery.toLowerCase();
 
-  if (q) { renderSearchResults(q); return; }
+  if (q) {
+    renderSearchResults(q);
+    return;
+  }
 
   if (state.activeSheet === '__favorites') {
     renderFavorites(q);
@@ -177,16 +185,25 @@ function renderSearchResults(q) {
   for (const [sheetKey, sheet] of Object.entries(SHEETS)) {
     let group = '';
     let groupTotal = 0;
-    sheet.sections.forEach(section => {
-      const matches = section.cmds.filter(c => `${sheet.name} ${section.title} ${c.cmd} ${c.desc} ${c.platform || ''}`.toLowerCase().includes(q));
-      if (matches.length) { group += renderSectionHTML(sheetKey, section, matches, q); groupTotal += matches.length; }
+    sheet.sections.forEach((section) => {
+      const matches = section.cmds.filter((c) =>
+        `${sheet.name} ${section.title} ${c.cmd} ${c.desc} ${c.platform || ''}`
+          .toLowerCase()
+          .includes(q),
+      );
+      if (matches.length) {
+        group += renderSectionHTML(sheetKey, section, matches, q);
+        groupTotal += matches.length;
+      }
     });
     if (groupTotal) {
       total += groupTotal;
       html += `<div class="page-header" style="margin-top:22px"><div class="page-icon" style="background:${sheet.iconBg}20;color:${sheet.iconBg};border:1px solid ${sheet.iconBg}40">${sheet.icon}</div><div class="page-title-block"><div class="page-title">${escapeHTML(sheet.name)}</div><div class="page-subtitle">${groupTotal} matching command${groupTotal === 1 ? '' : 's'}</div></div></div>${group}`;
     }
   }
-  if (!total) html += '<div class="empty"><div class="empty-icon">🔍</div><p><strong>No commands match your search.</strong><br>Try a tool, distro, flag, or command name.</p></div>';
+  if (!total)
+    html +=
+      '<div class="empty"><div class="empty-icon">🔍</div><p><strong>No commands match your search.</strong><br>Try a tool, distro, flag, or command name.</p></div>';
   main.innerHTML = html;
   const count = document.getElementById('search-result-count');
   if (count) count.textContent = `${total} result${total === 1 ? '' : 's'}`;
@@ -199,10 +216,12 @@ function renderSheet(key, q) {
 
   // Filter to a single section if one is active
   const sectionsToShow = state.activeSection
-    ? sheet.sections.filter(s => s.id === state.activeSection)
+    ? sheet.sections.filter((s) => s.id === state.activeSection)
     : sheet.sections;
 
-  const activeSec = state.activeSection ? sheet.sections.find(s => s.id === state.activeSection) : null;
+  const activeSec = state.activeSection
+    ? sheet.sections.find((s) => s.id === state.activeSection)
+    : null;
   const subtitleText = activeSec ? `${sheet.name} · ${activeSec.title}` : sheet.subtitle;
 
   const main = document.getElementById('main');
@@ -233,10 +252,14 @@ function renderSheet(key, q) {
   let totalVisible = 0;
   let sectionsHtml = '';
 
-  sectionsToShow.forEach(section => {
-    const filteredCmds = section.cmds.filter(c => {
+  sectionsToShow.forEach((section) => {
+    const filteredCmds = section.cmds.filter((c) => {
       if (!q) return true;
-      return c.cmd.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || section.title.toLowerCase().includes(q);
+      return (
+        c.cmd.toLowerCase().includes(q) ||
+        c.desc.toLowerCase().includes(q) ||
+        section.title.toLowerCase().includes(q)
+      );
     });
 
     if (!filteredCmds.length) return;
@@ -269,7 +292,7 @@ function renderSectionHTML(sheetKey, section, cmds, q) {
     </div>
     <div class="cmd-list">`;
 
-  cmds.forEach(c => {
+  cmds.forEach((c) => {
     const id = cmdId(sheetKey, c.cmd);
     const isFav = state.favorites.has(id);
     const note = state.notes[id];
@@ -289,7 +312,7 @@ function renderSectionHTML(sheetKey, section, cmds, q) {
         <div class="cmd-body">
           <code>${q ? highlight(c.cmd, q) : sheetKey === 'ansible' ? escapeHTML(c.cmd) : syntaxHighlight(c.cmd)}</code>
           <div class="cmd-desc">${highlight(c.desc, q)}</div>
-          ${(c.platform || safety) ? `<div class="cmd-meta">${c.platform ? `<span class="cmd-tag">${escapeHTML(c.platform)}</span>` : ''}${safety ? '<span class="cmd-tag warning">Review before running</span>' : ''}</div>` : ''}
+          ${c.platform || safety ? `<div class="cmd-meta">${c.platform ? `<span class="cmd-tag">${escapeHTML(c.platform)}</span>` : ''}${safety ? '<span class="cmd-tag warning">Review before running</span>' : ''}</div>` : ''}
           ${safety ? `<div class="cmd-safety"><strong>Heads up:</strong> ${safety}</div>` : ''}
           ${hasNote ? `<div class="cmd-note">${escapeHTML(note)}</div>` : ''}
         </div>
@@ -308,14 +331,25 @@ function renderSectionHTML(sheetKey, section, cmds, q) {
 
 function getSafetyHint(cmd) {
   const s = cmd.toLowerCase();
-  if (/\b(rm\s+-[a-z]*r|shred|mkfs|dd\s+if=|wipefs)\b/.test(s)) return 'This can permanently remove data. Verify the target and use a dry run or backup where available.';
-  if (/\b(apt|pacman|paru|dnf|yum)\s+.*\b(remove|erase|autoremove|rns)\b/.test(s)) return 'This may remove packages and dependencies. Review the transaction before confirming.';
-  if (/\b(mir|purge|--force|-f)\b/.test(s)) return 'This command can make broad or irreversible changes. Confirm its scope before running it.';
+  if (/\b(rm\s+-[a-z]*r|shred|mkfs|dd\s+if=|wipefs)\b/.test(s))
+    return 'This can permanently remove data. Verify the target and use a dry run or backup where available.';
+  if (/\b(apt|pacman|paru|dnf|yum)\s+.*\b(remove|erase|autoremove|rns)\b/.test(s))
+    return 'This may remove packages and dependencies. Review the transaction before confirming.';
+  if (/\b(mir|purge|--force|-f)\b/.test(s))
+    return 'This command can make broad or irreversible changes. Confirm its scope before running it.';
   return '';
 }
 
 function escapeAttr(s) {
-  return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(s)
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function renderBuilderPage(q) {
@@ -344,7 +378,7 @@ function renderBuilderPage(q) {
 
     // Attach the input listener once — update only the results, never recreate the input
     const input = document.getElementById('builder-page-input');
-    input.addEventListener('input', function() {
+    input.addEventListener('input', function () {
       renderBuilderResults(this.value.toLowerCase().trim());
     });
     input.focus();
@@ -356,7 +390,7 @@ function renderBuilderPage(q) {
 
 function renderBuilderResults(q) {
   const container = document.getElementById('builder-results');
-  const countEl   = document.getElementById('builder-result-count');
+  const countEl = document.getElementById('builder-result-count');
   if (!container) return;
 
   // Group builders by sheet, filtered by q
@@ -365,7 +399,8 @@ function renderBuilderResults(q) {
     const sheetKey = key.split('::')[0];
     const sheet = SHEETS[sheetKey];
     if (!sheet) return;
-    const matchesQ = !q ||
+    const matchesQ =
+      !q ||
       def.name.toLowerCase().includes(q) ||
       def.description.toLowerCase().includes(q) ||
       sheet.name.toLowerCase().includes(q);
@@ -396,15 +431,15 @@ function renderBuilderResults(q) {
         <div class="builder-cards">`;
 
     items.forEach(({ key, def }) => {
-      const flagCount = (def.flags || []).filter(f => !f.hidden).length;
-      const argCount  = (def.args  || []).filter(a => a.required !== false).length;
+      const flagCount = (def.flags || []).filter((f) => !f.hidden).length;
+      const argCount = (def.args || []).filter((a) => a.required !== false).length;
       html += `
         <div class="builder-card" style="--card-accent:${sheet.iconBg}" onclick="openBuilder('${escapeAttr(key)}')">
           <div class="builder-card-name">${escapeHTML(def.name)}</div>
           <div class="builder-card-desc">${escapeHTML(def.description)}</div>
           <div class="builder-card-meta">
             ${flagCount ? `<span class="builder-card-flags">⚑ ${flagCount} flags</span>` : ''}
-            ${argCount  ? `<span class="builder-card-flags">◈ ${argCount} inputs</span>` : ''}
+            ${argCount ? `<span class="builder-card-flags">◈ ${argCount} inputs</span>` : ''}
             <span class="builder-card-open">Open →</span>
           </div>
         </div>`;
@@ -451,7 +486,7 @@ function renderFavorites(q) {
     // Find the command and its section
     let found = null;
     for (const section of SHEETS[sheetKey].sections) {
-      const c = section.cmds.find(c => c.cmd === cmd);
+      const c = section.cmds.find((c) => c.cmd === cmd);
       if (c) {
         found = { sheet: SHEETS[sheetKey], section, cmd: c };
         break;
@@ -459,7 +494,8 @@ function renderFavorites(q) {
     }
     if (!found) continue;
 
-    if (q && !found.cmd.cmd.toLowerCase().includes(q) && !found.cmd.desc.toLowerCase().includes(q)) continue;
+    if (q && !found.cmd.cmd.toLowerCase().includes(q) && !found.cmd.desc.toLowerCase().includes(q))
+      continue;
 
     if (!grouped[sheetKey]) grouped[sheetKey] = { sheet: found.sheet, cmds: [] };
     grouped[sheetKey].cmds.push({ ...found.cmd, _section: found.section, _sheetKey: sheetKey });
@@ -468,11 +504,16 @@ function renderFavorites(q) {
   let total = 0;
   for (const [sheetKey, group] of Object.entries(grouped)) {
     total += group.cmds.length;
-    html += renderSectionHTML(sheetKey, {
-      id: `fav-${sheetKey}`,
-      title: `${group.sheet.name} · ${group.cmds.length}`,
-      color: group.sheet.iconBg,
-    }, group.cmds, q);
+    html += renderSectionHTML(
+      sheetKey,
+      {
+        id: `fav-${sheetKey}`,
+        title: `${group.sheet.name} · ${group.cmds.length}`,
+        color: group.sheet.iconBg,
+      },
+      group.cmds,
+      q,
+    );
   }
 
   if (total === 0) {
@@ -490,7 +531,8 @@ function renderFavorites(q) {
 
 function updateStatusCount(count, name, noun = 'command') {
   document.getElementById('status-name').textContent = name;
-  document.getElementById('status-counts').textContent = `${count} ${noun}${count === 1 ? '' : 's'}`;
+  document.getElementById('status-counts').textContent =
+    `${count} ${noun}${count === 1 ? '' : 's'}`;
 }
 
 function toggleSection(id) {
@@ -511,7 +553,6 @@ function toggleFavorite(id) {
   renderSidebar();
   renderMain();
 }
-
 
 /* ─────────────────────────────────────────
    NOTES
@@ -561,10 +602,10 @@ function openBuilder(builderKey) {
   currentBuilder = { def, values: {}, flags: {}, flagValues: {} };
 
   // Set defaults
-  (def.args || []).forEach(a => {
+  (def.args || []).forEach((a) => {
     currentBuilder.values[a.key] = a.default || '';
   });
-  (def.flags || []).forEach(f => {
+  (def.flags || []).forEach((f) => {
     currentBuilder.flags[f.flag] = f.alwaysOn || false;
     if (f.valueDefault) currentBuilder.flagValues[f.flag] = f.valueDefault;
   });
@@ -588,8 +629,10 @@ function resetBuilder() {
   currentBuilder.values = {};
   currentBuilder.flags = {};
   currentBuilder.flagValues = {};
-  (def.args || []).forEach(a => { currentBuilder.values[a.key] = a.default || ''; });
-  (def.flags || []).forEach(f => {
+  (def.args || []).forEach((a) => {
+    currentBuilder.values[a.key] = a.default || '';
+  });
+  (def.flags || []).forEach((f) => {
     currentBuilder.flags[f.flag] = f.alwaysOn || false;
     if (f.valueDefault) currentBuilder.flagValues[f.flag] = f.valueDefault;
   });
@@ -602,17 +645,17 @@ function renderBuilderBody(def) {
   let html = '';
 
   // Required args section
-  const reqArgs = (def.args || []).filter(a => a.required !== false);
+  const reqArgs = (def.args || []).filter((a) => a.required !== false);
   if (reqArgs.length) {
     html += `<div class="builder-section">
       <div class="builder-section-title required-section">Required fields</div>`;
-    (def.args || []).forEach(a => {
+    (def.args || []).forEach((a) => {
       const val = currentBuilder.values[a.key] || '';
       if (a.type === 'select') {
         html += `<div class="builder-input-row">
           <span class="builder-input-label">${a.label}</span>
           <select onchange="builderArgChange('${escapeAttr(a.key)}', this.value)" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11.5px;outline:none;">
-            ${(a.options || []).map(o => `<option value="${escapeHTML(o.value)}" ${val === o.value ? 'selected' : ''}>${escapeHTML(o.label)}</option>`).join('')}
+            ${(a.options || []).map((o) => `<option value="${escapeHTML(o.value)}" ${val === o.value ? 'selected' : ''}>${escapeHTML(o.label)}</option>`).join('')}
           </select>
         </div>`;
       } else {
@@ -630,11 +673,11 @@ function renderBuilderBody(def) {
   }
 
   // Optional args section
-  const optArgs = (def.args || []).filter(a => a.required === false);
+  const optArgs = (def.args || []).filter((a) => a.required === false);
   if (optArgs.length) {
     html += `<div class="builder-section">
       <div class="builder-section-title">Optional arguments</div>`;
-    optArgs.forEach(a => {
+    optArgs.forEach((a) => {
       const val = currentBuilder.values[a.key] || '';
       html += `<div class="builder-input-row">
         <span class="builder-input-label">${a.label}</span>
@@ -649,24 +692,26 @@ function renderBuilderBody(def) {
   }
 
   // Flags section
-  const visibleFlags = (def.flags || []).filter(f => !f.hidden);
+  const visibleFlags = (def.flags || []).filter((f) => !f.hidden);
   if (visibleFlags.length) {
     html += `<div class="builder-section">
       <div class="builder-section-title">Options & flags</div>`;
-    visibleFlags.forEach(f => {
+    visibleFlags.forEach((f) => {
       const checked = currentBuilder.flags[f.flag] || false;
       const fval = currentBuilder.flagValues[f.flag] || f.valueDefault || '';
       const esc = escapeAttr(f.flag);
       html += `
-        <label class="builder-flag ${checked ? 'checked' : ''}" for="flag-${escapeHTML(f.flag.replace(/[^a-zA-Z0-9]/g,''))}">
-          <input type="checkbox" id="flag-${escapeHTML(f.flag.replace(/[^a-zA-Z0-9]/g,''))}"
+        <label class="builder-flag ${checked ? 'checked' : ''}" for="flag-${escapeHTML(f.flag.replace(/[^a-zA-Z0-9]/g, ''))}">
+          <input type="checkbox" id="flag-${escapeHTML(f.flag.replace(/[^a-zA-Z0-9]/g, ''))}"
             ${checked ? 'checked' : ''}
             onchange="builderFlagToggle('${esc}', this.checked)"
           />
           <div class="builder-flag-body">
             <div class="builder-flag-name">${escapeHTML(f.flag)}</div>
             <div class="builder-flag-desc">${escapeHTML(f.desc)}</div>
-            ${f.valuePrompt ? `
+            ${
+              f.valuePrompt
+                ? `
               <div class="builder-flag-value-input">
                 <label>${escapeHTML(f.valuePrompt)}</label>
                 <input type="text" placeholder="${escapeHTML(f.valueDefault || '')}"
@@ -675,7 +720,9 @@ function renderBuilderBody(def) {
                   onclick="event.stopPropagation()"
                 />
               </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </label>`;
     });
@@ -719,7 +766,7 @@ function buildCommandString() {
   (def.args || []).forEach((a, i) => {
     const v = (values[a.key] || '').trim();
     if (!v && a.required === false) return;
-    const val = v || (a.placeholder || a.key);
+    const val = v || a.placeholder || a.key;
     // Most CLIs have positional args before flags but some after
     if (def.argsAfterFlags) postArgs.push(a.quote ? `"${val}"` : val);
     else preArgs.push(a.quote ? `"${val}"` : val);
@@ -731,12 +778,15 @@ function buildCommandString() {
   const regularFlags = [];
   const filterFlags = [];
 
-  (def.flags || []).forEach(f => {
+  (def.flags || []).forEach((f) => {
     if (!flags[f.flag] && !f.alwaysOn) return;
     const fval = (flagValues[f.flag] || f.valueDefault || '').trim();
-    const flagStr = f.join !== undefined
-      ? (fval ? `${f.flag}${f.join}${f.quote ? `"${fval}"` : fval}` : f.flag)
-      : f.flag;
+    const flagStr =
+      f.join !== undefined
+        ? fval
+          ? `${f.flag}${f.join}${f.quote ? `"${fval}"` : fval}`
+          : f.flag
+        : f.flag;
 
     if (f.filterMode) filterFlags.push(flagStr);
     else regularFlags.push(flagStr);
@@ -759,21 +809,25 @@ function updateBuilderPreview() {
   // Colorize the preview
   const { def } = currentBuilder;
   const baseParts = def.base.split(' ');
-  let colored = baseParts.map(p => `<span style="color:var(--accent);font-weight:600">${escapeHTML(p)}</span>`).join(' ');
+  let colored = baseParts
+    .map((p) => `<span style="color:var(--accent);font-weight:600">${escapeHTML(p)}</span>`)
+    .join(' ');
 
   // Get everything after the base command
   const afterBase = cmd.slice(def.base.length).trim();
   if (afterBase) {
     const tokens = afterBase.split(' ');
-    const coloredTokens = tokens.map(t => {
+    const coloredTokens = tokens.map((t) => {
       if (t.startsWith('-')) return `<span style="color:var(--cyan)">${escapeHTML(t)}</span>`;
-      if (t.startsWith('"') || t.startsWith("'")) return `<span style="color:#b8d490">${escapeHTML(t)}</span>`;
+      if (t.startsWith('"') || t.startsWith("'"))
+        return `<span style="color:#b8d490">${escapeHTML(t)}</span>`;
       return `<span style="color:var(--text2)">${escapeHTML(t)}</span>`;
     });
     colored += ' ' + coloredTokens.join(' ');
   }
 
-  previewEl.innerHTML = colored || '<span style="color:var(--text3)">Start filling in options above...</span>';
+  previewEl.innerHTML =
+    colored || '<span style="color:var(--text3)">Start filling in options above...</span>';
 }
 
 function copyBuiltCommand() {
@@ -785,17 +839,19 @@ function copyBuiltCommand() {
     navigator.clipboard.writeText(cmd).then(() => {
       addToHistory(cmd);
       btn.textContent = '✓ Copied!';
-      setTimeout(() => { btn.textContent = orig; }, 1500);
+      setTimeout(() => {
+        btn.textContent = orig;
+      }, 1500);
     });
   } else {
     fallbackCopy(cmd);
     addToHistory(cmd);
     btn.textContent = '✓ Copied!';
-    setTimeout(() => { btn.textContent = orig; }, 1500);
+    setTimeout(() => {
+      btn.textContent = orig;
+    }, 1500);
   }
 }
-
-
 
 /* ─────────────────────────────────────────
    COPY & HISTORY
@@ -807,15 +863,21 @@ function copyCmd(btn, text) {
     btn.textContent = '✓';
     btn.classList.add('ok');
     addToHistory(finalText);
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1500);
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('ok');
+    }, 1500);
   };
 
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(finalText).then(doCopy).catch(() => {
-      // Fall back
-      fallbackCopy(finalText);
-      doCopy();
-    });
+    navigator.clipboard
+      .writeText(finalText)
+      .then(doCopy)
+      .catch(() => {
+        // Fall back
+        fallbackCopy(finalText);
+        doCopy();
+      });
   } else {
     fallbackCopy(finalText);
     doCopy();
@@ -829,13 +891,15 @@ function fallbackCopy(text) {
   ta.style.left = '-9999px';
   document.body.appendChild(ta);
   ta.select();
-  try { document.execCommand('copy'); } catch (e) {}
+  try {
+    document.execCommand('copy');
+  } catch (e) {}
   document.body.removeChild(ta);
 }
 
 function addToHistory(cmd) {
   // Remove duplicates
-  state.history = state.history.filter(h => h.cmd !== cmd);
+  state.history = state.history.filter((h) => h.cmd !== cmd);
   state.history.unshift({ cmd: cmd, time: Date.now() });
   // Keep last 50
   if (state.history.length > 50) state.history = state.history.slice(0, 50);
@@ -859,7 +923,8 @@ function updateHistoryBadge() {
 function renderHistory() {
   const body = document.getElementById('history-body');
   if (state.history.length === 0) {
-    body.innerHTML = '<div class="history-empty">No commands copied yet.<br>Copied commands will appear here.</div>';
+    body.innerHTML =
+      '<div class="history-empty">No commands copied yet.<br>Copied commands will appear here.</div>';
     return;
   }
 
@@ -871,7 +936,9 @@ function renderHistory() {
     return Math.floor(diff / 86400000) + 'd ago';
   };
 
-  body.innerHTML = state.history.map((h, i) => `
+  body.innerHTML = state.history
+    .map(
+      (h, i) => `
     <div class="history-item" onclick="copyFromHistory(${i})">
       <div class="history-cmd">${escapeHTML(h.cmd)}</div>
       <div class="history-meta">
@@ -880,7 +947,9 @@ function renderHistory() {
         <span>click to copy again</span>
       </div>
     </div>
-  `).join('');
+  `,
+    )
+    .join('');
 }
 
 function copyFromHistory(i) {
@@ -921,12 +990,12 @@ function togglePanel(name) {
 /* ─────────────────────────────────────────
    SEARCH & KEYBOARD
 ───────────────────────────────────────── */
-document.getElementById('search').addEventListener('input', function() {
+document.getElementById('search').addEventListener('input', function () {
   state.searchQuery = this.value.trim();
   renderMain();
 });
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
   // Cmd/Ctrl + K to focus search
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
@@ -943,11 +1012,20 @@ document.addEventListener('keydown', function(e) {
   // Escape closes things
   if (e.key === 'Escape') {
     const builder = document.getElementById('builder-modal');
-    if (builder.classList.contains('open')) { closeBuilder(); return; }
+    if (builder.classList.contains('open')) {
+      closeBuilder();
+      return;
+    }
     const modal = document.getElementById('note-modal');
-    if (modal.classList.contains('open')) { closeModal(); return; }
+    if (modal.classList.contains('open')) {
+      closeModal();
+      return;
+    }
     const panel = document.getElementById('history-panel');
-    if (panel.classList.contains('open')) { togglePanel('history'); return; }
+    if (panel.classList.contains('open')) {
+      togglePanel('history');
+      return;
+    }
     const s = document.getElementById('search');
     if (document.activeElement === s) {
       s.value = '';
@@ -971,14 +1049,14 @@ document.addEventListener('keydown', function(e) {
 ───────────────────────────────────────── */
 // Validate stored state — clear activeSection if it doesn't belong to activeSheet
 if (state.activeSection && SHEETS[state.activeSheet]) {
-  const validSection = SHEETS[state.activeSheet].sections.some(s => s.id === state.activeSection);
+  const validSection = SHEETS[state.activeSheet].sections.some((s) => s.id === state.activeSection);
   if (!validSection) {
     state.activeSection = null;
     save('activeSection');
   }
 }
 // If activeSheet no longer exists in SHEETS, reset
-if (!['__favorites','__builder'].includes(state.activeSheet) && !SHEETS[state.activeSheet]) {
+if (!['__favorites', '__builder'].includes(state.activeSheet) && !SHEETS[state.activeSheet]) {
   state.activeSheet = 'gam7';
   state.activeSection = null;
   save('activeSheet');
@@ -996,7 +1074,7 @@ function setView(mode) {
 
 function applyView() {
   document.body.setAttribute('data-view', state.viewMode);
-  ['comfortable','compact','cards'].forEach(m => {
+  ['comfortable', 'compact', 'cards'].forEach((m) => {
     const btn = document.getElementById('view-' + m);
     if (btn) btn.classList.toggle('active', m === state.viewMode);
   });
@@ -1022,34 +1100,40 @@ function applyFontSize() {
 ───────────────────────────────────────── */
 function syntaxHighlight(cmd) {
   // Escape HTML first
-  let s = cmd
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  let s = cmd.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   // Quoted strings (single or double) — do first to avoid re-processing
-  s = s.replace(/(&quot;[^&]*&quot;|'[^']*')/g,
-    m => `<span class="syn-str">${m}</span>`);
+  s = s.replace(/(&quot;[^&]*&quot;|'[^']*')/g, (m) => `<span class="syn-str">${m}</span>`);
 
   // Flags: --flag, -f, /FLAG (Windows), +flag
-  s = s.replace(/(?<![a-zA-Z])(--?[a-zA-Z][\w-]*|\/[A-Z]+(?::[^\s]*)?|\+[a-zA-Z][\w-]*)/g,
-    m => `<span class="syn-flag">${m}</span>`);
+  s = s.replace(
+    /(?<![a-zA-Z])(--?[a-zA-Z][\w-]*|\/[A-Z]+(?::[^\s]*)?|\+[a-zA-Z][\w-]*)/g,
+    (m) => `<span class="syn-flag">${m}</span>`,
+  );
 
   // Paths and files (contains / or \ or .ext)
-  s = s.replace(/(?:^|\s)((?:~|\.\.?)?\/[\w./-]+|[\w.-]+\.(?:json|yaml|yml|txt|log|sh|py|js|tf|conf|cfg|ini|pem|key|crt|pfx|csv|xml|md|gz|tar|zip))/g,
-    (m, path) => m.replace(path, `<span class="syn-path">${path}</span>`));
+  s = s.replace(
+    /(?:^|\s)((?:~|\.\.?)?\/[\w./-]+|[\w.-]+\.(?:json|yaml|yml|txt|log|sh|py|js|tf|conf|cfg|ini|pem|key|crt|pfx|csv|xml|md|gz|tar|zip))/g,
+    (m, path) => m.replace(path, `<span class="syn-path">${path}</span>`),
+  );
 
   // Pipes, redirects, &&, ||
-  s = s.replace(/(\s)(\|{1,2}|&amp;&amp;|\|\||\s&gt;\s|\s&gt;&gt;\s|\s2&gt;)(\s)/g,
-    (m, a, op, b) => `${a}<span class="syn-op">${op}</span>${b}`);
+  s = s.replace(
+    /(\s)(\|{1,2}|&amp;&amp;|\|\||\s&gt;\s|\s&gt;&gt;\s|\s2&gt;)(\s)/g,
+    (m, a, op, b) => `${a}<span class="syn-op">${op}</span>${b}`,
+  );
 
   // SQL keywords
-  s = s.replace(/\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|INSERT INTO|UPDATE|DELETE|CREATE|DROP|ALTER|INDEX|TABLE|AS|AND|OR|NOT|IN|LIKE|IS NULL|IS NOT NULL|COUNT|SUM|AVG|MAX|MIN|DISTINCT|UNION|WITH)\b/gi,
-    m => `<span class="syn-kw">${m}</span>`);
+  s = s.replace(
+    /\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|INSERT INTO|UPDATE|DELETE|CREATE|DROP|ALTER|INDEX|TABLE|AS|AND|OR|NOT|IN|LIKE|IS NULL|IS NOT NULL|COUNT|SUM|AVG|MAX|MIN|DISTINCT|UNION|WITH)\b/gi,
+    (m) => `<span class="syn-kw">${m}</span>`,
+  );
 
   // Numbers (standalone)
-  s = s.replace(/(?<![a-zA-Z#-])(\b\d+(?:\.\d+)?\b)(?![a-zA-Z])/g,
-    m => `<span class="syn-num">${m}</span>`);
+  s = s.replace(
+    /(?<![a-zA-Z#-])(\b\d+(?:\.\d+)?\b)(?![a-zA-Z])/g,
+    (m) => `<span class="syn-num">${m}</span>`,
+  );
 
   return s;
 }
@@ -1066,7 +1150,7 @@ function initSidebarResize() {
   let startX = 0;
   let startW = 0;
 
-  resizer.addEventListener('mousedown', e => {
+  resizer.addEventListener('mousedown', (e) => {
     dragging = true;
     startX = e.clientX;
     startW = sidebar.offsetWidth;
@@ -1076,7 +1160,7 @@ function initSidebarResize() {
     e.preventDefault();
   });
 
-  document.addEventListener('mousemove', e => {
+  document.addEventListener('mousemove', (e) => {
     if (!dragging) return;
     const newW = Math.max(160, Math.min(400, startW + e.clientX - startX));
     sidebar.style.width = newW + 'px';

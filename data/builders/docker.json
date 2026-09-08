@@ -1,0 +1,289 @@
+{
+  "docker::docker run -d --name web -p 8080:80 nginx": {
+    "name": "docker run",
+    "description": "Build a docker run command",
+    "base": "docker run",
+    "args": [
+      {
+        "key": "image",
+        "label": "Image",
+        "placeholder": "nginx:latest",
+        "required": true
+      },
+      {
+        "key": "cmd",
+        "label": "Command (optional)",
+        "placeholder": "bash, or leave empty",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-d",
+        "desc": "Detached mode — run in background"
+      },
+      {
+        "flag": "-it",
+        "desc": "Interactive with terminal"
+      },
+      {
+        "flag": "--rm",
+        "desc": "Auto-remove container after exit"
+      },
+      {
+        "flag": "--name",
+        "desc": "Container name",
+        "valuePrompt": "Name",
+        "join": " "
+      },
+      {
+        "flag": "-p",
+        "desc": "Port mapping",
+        "valuePrompt": "host:container (e.g. 8080:80)",
+        "join": " "
+      },
+      {
+        "flag": "-v",
+        "desc": "Volume mount",
+        "valuePrompt": "host:container (e.g. /data:/app)",
+        "join": " "
+      },
+      {
+        "flag": "-e",
+        "desc": "Environment variable",
+        "valuePrompt": "KEY=value",
+        "join": " "
+      },
+      {
+        "flag": "--env-file",
+        "desc": "Load env from file",
+        "valuePrompt": "Filename (e.g. .env)",
+        "join": " "
+      },
+      {
+        "flag": "--network",
+        "desc": "Connect to network",
+        "valuePrompt": "Network name",
+        "join": " "
+      },
+      {
+        "flag": "--restart",
+        "desc": "Restart policy",
+        "valuePrompt": "always | on-failure | unless-stopped",
+        "valueDefault": "unless-stopped",
+        "join": "="
+      },
+      {
+        "flag": "--user",
+        "desc": "Run as user",
+        "valuePrompt": "UID:GID or username",
+        "join": " "
+      },
+      {
+        "flag": "-w",
+        "desc": "Working directory inside container",
+        "valuePrompt": "Path (e.g. /app)",
+        "join": " "
+      },
+      {
+        "flag": "--memory",
+        "desc": "Memory limit",
+        "valuePrompt": "Size (e.g. 512m, 2g)",
+        "join": "="
+      },
+      {
+        "flag": "--cpus",
+        "desc": "CPU limit",
+        "valuePrompt": "Count (e.g. 1.5)",
+        "join": "="
+      },
+      {
+        "flag": "--hostname",
+        "desc": "Set container hostname",
+        "valuePrompt": "Hostname",
+        "join": " "
+      },
+      {
+        "flag": "--privileged",
+        "desc": "Give extended privileges (CAREFUL!)"
+      }
+    ]
+  },
+  "docker::docker build -t name:tag .": {
+    "name": "docker build",
+    "description": "Build an image from a Dockerfile",
+    "base": "docker build",
+    "args": [
+      {
+        "key": "tag",
+        "label": "Image name:tag",
+        "placeholder": "myapp:latest",
+        "required": true
+      },
+      {
+        "key": "context",
+        "label": "Build context",
+        "placeholder": ".",
+        "required": true,
+        "default": "."
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Tag (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "--no-cache",
+        "desc": "Build without using cache"
+      },
+      {
+        "flag": "--pull",
+        "desc": "Always pull newer base image"
+      },
+      {
+        "flag": "-f",
+        "desc": "Dockerfile path (if not in context root)",
+        "valuePrompt": "Path to Dockerfile",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--build-arg",
+        "desc": "Build-time variable",
+        "valuePrompt": "KEY=value",
+        "join": " ",
+        "repeatable": true
+      },
+      {
+        "flag": "--target",
+        "desc": "Build a specific multi-stage target",
+        "valuePrompt": "Stage name",
+        "join": " "
+      },
+      {
+        "flag": "--platform",
+        "desc": "Target platform",
+        "valuePrompt": "linux/amd64 | linux/arm64",
+        "join": "="
+      },
+      {
+        "flag": "--label",
+        "desc": "Add metadata label",
+        "valuePrompt": "key=value",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--progress plain",
+        "desc": "Plain text output (no TTY spinners)"
+      },
+      {
+        "flag": "--secret",
+        "desc": "Secret to expose during build",
+        "valuePrompt": "id=mysecret,src=~/.ssh/id_rsa",
+        "join": " "
+      }
+    ]
+  },
+  "docker::docker exec -it container bash": {
+    "name": "docker exec",
+    "description": "Execute command inside a running container",
+    "base": "docker exec",
+    "args": [
+      {
+        "key": "container",
+        "label": "Container name/ID",
+        "placeholder": "my-container",
+        "required": true
+      },
+      {
+        "key": "command",
+        "label": "Command to run",
+        "placeholder": "bash",
+        "required": true,
+        "default": "bash"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-it",
+        "desc": "Interactive with terminal (for shells)"
+      },
+      {
+        "flag": "-d",
+        "desc": "Detached — run in background"
+      },
+      {
+        "flag": "-e",
+        "desc": "Set environment variable",
+        "valuePrompt": "KEY=value",
+        "join": " "
+      },
+      {
+        "flag": "-u",
+        "desc": "Run as user",
+        "valuePrompt": "UID or username",
+        "join": " "
+      },
+      {
+        "flag": "-w",
+        "desc": "Working directory inside container",
+        "valuePrompt": "/path",
+        "join": " "
+      },
+      {
+        "flag": "--privileged",
+        "desc": "Run with extended privileges"
+      }
+    ]
+  },
+  "docker::docker logs -f --tail 100 container": {
+    "name": "docker logs",
+    "description": "View and follow container logs",
+    "base": "docker logs",
+    "args": [
+      {
+        "key": "container",
+        "label": "Container name/ID",
+        "placeholder": "my-container",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-f",
+        "desc": "Follow — stream logs in real time"
+      },
+      {
+        "flag": "--tail",
+        "desc": "Show only last N lines",
+        "valuePrompt": "Lines",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "--since",
+        "desc": "Show logs since time ago",
+        "valuePrompt": "e.g. 10m, 1h, 2024-01-01",
+        "join": " "
+      },
+      {
+        "flag": "--until",
+        "desc": "Show logs until timestamp",
+        "valuePrompt": "e.g. 2024-12-31",
+        "join": " "
+      },
+      {
+        "flag": "-t",
+        "desc": "Add timestamps to each line"
+      },
+      {
+        "flag": "--details",
+        "desc": "Show extra log detail attributes"
+      }
+    ]
+  }
+}

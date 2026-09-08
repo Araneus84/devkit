@@ -1,0 +1,318 @@
+{
+  "name": "AWS CLI",
+  "icon": "☁",
+  "iconBg": "#ff9900",
+  "subtitle": "Amazon Web Services CLI",
+  "meta": "aws-cli v2",
+  "sections": [
+    {
+      "id": "aws-config",
+      "title": "Configuration & Profiles",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "aws configure",
+          "desc": "Interactive setup of credentials and default region"
+        },
+        {
+          "cmd": "aws configure --profile myprofile",
+          "desc": "Configure named profile"
+        },
+        {
+          "cmd": "aws configure list",
+          "desc": "Show current configuration"
+        },
+        {
+          "cmd": "aws configure list-profiles",
+          "desc": "List all configured profiles"
+        },
+        {
+          "cmd": "aws --profile prod s3 ls",
+          "desc": "Run command with specific profile"
+        },
+        {
+          "cmd": "export AWS_PROFILE=prod",
+          "desc": "Set default profile for session"
+        },
+        {
+          "cmd": "aws sts get-caller-identity",
+          "desc": "Show current account and user info — useful to verify auth"
+        },
+        {
+          "cmd": "aws configure sso",
+          "desc": "Configure SSO authentication"
+        },
+        {
+          "cmd": "aws sso login --profile myprofile",
+          "desc": "Login via SSO"
+        }
+      ]
+    },
+    {
+      "id": "aws-ec2",
+      "title": "EC2 Instances",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "aws ec2 describe-instances",
+          "desc": "List all EC2 instances with details"
+        },
+        {
+          "cmd": "aws ec2 describe-instances --query \"Reservations[*].Instances[*].[InstanceId,State.Name,PublicIpAddress]\" --output table",
+          "desc": "Pretty table with specific fields"
+        },
+        {
+          "cmd": "aws ec2 describe-instances --filters \"Name=tag:Name,Values=web*\"",
+          "desc": "Filter instances by tag"
+        },
+        {
+          "cmd": "aws ec2 start-instances --instance-ids i-1234567890abcdef0",
+          "desc": "Start stopped instance"
+        },
+        {
+          "cmd": "aws ec2 stop-instances --instance-ids i-1234567890abcdef0",
+          "desc": "Stop running instance"
+        },
+        {
+          "cmd": "aws ec2 reboot-instances --instance-ids i-1234567890abcdef0",
+          "desc": "Reboot instance"
+        },
+        {
+          "cmd": "aws ec2 terminate-instances --instance-ids i-1234567890abcdef0",
+          "desc": "Terminate instance (PERMANENT)"
+        },
+        {
+          "cmd": "aws ec2 describe-security-groups",
+          "desc": "List all security groups"
+        },
+        {
+          "cmd": "aws ec2 describe-volumes",
+          "desc": "List EBS volumes"
+        },
+        {
+          "cmd": "aws ec2 create-snapshot --volume-id vol-1234 --description \"backup\"",
+          "desc": "Create EBS snapshot"
+        },
+        {
+          "cmd": "aws ec2 describe-key-pairs",
+          "desc": "List SSH key pairs"
+        }
+      ]
+    },
+    {
+      "id": "aws-s3",
+      "title": "S3 Storage",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "aws s3 ls",
+          "desc": "List all buckets"
+        },
+        {
+          "cmd": "aws s3 ls s3://bucket-name/",
+          "desc": "List contents of bucket"
+        },
+        {
+          "cmd": "aws s3 ls s3://bucket/ --recursive --human-readable --summarize",
+          "desc": "Recursive listing with sizes"
+        },
+        {
+          "cmd": "aws s3 cp file.txt s3://bucket/path/",
+          "desc": "Upload file to S3"
+        },
+        {
+          "cmd": "aws s3 cp s3://bucket/file.txt .",
+          "desc": "Download file from S3"
+        },
+        {
+          "cmd": "aws s3 cp dir/ s3://bucket/dir/ --recursive",
+          "desc": "Upload directory recursively"
+        },
+        {
+          "cmd": "aws s3 sync local/ s3://bucket/path/",
+          "desc": "Sync directory to S3 (incremental)"
+        },
+        {
+          "cmd": "aws s3 sync s3://bucket/path/ local/ --delete",
+          "desc": "Sync from S3, delete local extras"
+        },
+        {
+          "cmd": "aws s3 rm s3://bucket/file.txt",
+          "desc": "Delete object from S3"
+        },
+        {
+          "cmd": "aws s3 rm s3://bucket/path/ --recursive",
+          "desc": "Delete folder recursively"
+        },
+        {
+          "cmd": "aws s3 mb s3://new-bucket",
+          "desc": "Make new bucket"
+        },
+        {
+          "cmd": "aws s3 rb s3://bucket --force",
+          "desc": "Remove bucket and all contents"
+        },
+        {
+          "cmd": "aws s3 presign s3://bucket/file.pdf --expires-in 3600",
+          "desc": "Generate pre-signed URL (1 hour)"
+        }
+      ]
+    },
+    {
+      "id": "aws-iam",
+      "title": "IAM (Users & Roles)",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "aws iam list-users",
+          "desc": "List all IAM users"
+        },
+        {
+          "cmd": "aws iam get-user --user-name alice",
+          "desc": "Get details for specific user"
+        },
+        {
+          "cmd": "aws iam create-user --user-name alice",
+          "desc": "Create new IAM user"
+        },
+        {
+          "cmd": "aws iam delete-user --user-name alice",
+          "desc": "Delete IAM user"
+        },
+        {
+          "cmd": "aws iam list-attached-user-policies --user-name alice",
+          "desc": "List policies attached to user"
+        },
+        {
+          "cmd": "aws iam attach-user-policy --user-name alice --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess",
+          "desc": "Attach managed policy to user"
+        },
+        {
+          "cmd": "aws iam list-roles",
+          "desc": "List all IAM roles"
+        },
+        {
+          "cmd": "aws iam list-access-keys --user-name alice",
+          "desc": "List access keys for user"
+        },
+        {
+          "cmd": "aws iam create-access-key --user-name alice",
+          "desc": "Create access key for user"
+        },
+        {
+          "cmd": "aws iam delete-access-key --user-name alice --access-key-id AKIA...",
+          "desc": "Delete access key"
+        }
+      ]
+    },
+    {
+      "id": "aws-lambda",
+      "title": "Lambda",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "aws lambda list-functions",
+          "desc": "List all Lambda functions"
+        },
+        {
+          "cmd": "aws lambda get-function --function-name myFunc",
+          "desc": "Get function details"
+        },
+        {
+          "cmd": "aws lambda invoke --function-name myFunc --payload '{\"key\":\"value\"}' out.json",
+          "desc": "Invoke function with payload"
+        },
+        {
+          "cmd": "aws lambda update-function-code --function-name myFunc --zip-file fileb://function.zip",
+          "desc": "Update function code from zip"
+        },
+        {
+          "cmd": "aws lambda update-function-configuration --function-name myFunc --timeout 30",
+          "desc": "Update function timeout"
+        },
+        {
+          "cmd": "aws logs tail /aws/lambda/myFunc --follow",
+          "desc": "Stream Lambda logs in real-time"
+        }
+      ]
+    },
+    {
+      "id": "aws-rds",
+      "title": "RDS Databases",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "aws rds describe-db-instances",
+          "desc": "List all RDS instances"
+        },
+        {
+          "cmd": "aws rds describe-db-instances --db-instance-identifier mydb",
+          "desc": "Get details for specific DB"
+        },
+        {
+          "cmd": "aws rds describe-db-snapshots",
+          "desc": "List database snapshots"
+        },
+        {
+          "cmd": "aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-manual-1",
+          "desc": "Create manual snapshot"
+        },
+        {
+          "cmd": "aws rds reboot-db-instance --db-instance-identifier mydb",
+          "desc": "Reboot RDS instance"
+        },
+        {
+          "cmd": "aws rds stop-db-instance --db-instance-identifier mydb",
+          "desc": "Stop RDS instance"
+        }
+      ]
+    },
+    {
+      "id": "aws-misc",
+      "title": "CloudWatch & Misc",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "aws logs describe-log-groups",
+          "desc": "List CloudWatch log groups"
+        },
+        {
+          "cmd": "aws logs tail /aws/log/group --follow",
+          "desc": "Stream logs in real-time"
+        },
+        {
+          "cmd": "aws logs filter-log-events --log-group-name /aws/lambda/myFunc --filter-pattern \"ERROR\"",
+          "desc": "Filter logs by pattern"
+        },
+        {
+          "cmd": "aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization ...",
+          "desc": "Get metric data"
+        },
+        {
+          "cmd": "aws ssm start-session --target i-1234567890abcdef0",
+          "desc": "SSH-less shell into EC2 via SSM"
+        },
+        {
+          "cmd": "aws ssm get-parameter --name \"/app/prod/db_password\" --with-decryption",
+          "desc": "Get encrypted SSM parameter"
+        },
+        {
+          "cmd": "aws ssm get-parameters-by-path --path \"/app/prod/\" --recursive --with-decryption",
+          "desc": "Get all params under path"
+        },
+        {
+          "cmd": "aws secretsmanager get-secret-value --secret-id mySecret",
+          "desc": "Retrieve secret from Secrets Manager"
+        },
+        {
+          "cmd": "aws cloudformation list-stacks",
+          "desc": "List CloudFormation stacks"
+        },
+        {
+          "cmd": "aws cloudformation describe-stack-events --stack-name my-stack",
+          "desc": "See stack deployment events"
+        }
+      ]
+    }
+  ]
+}

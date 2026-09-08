@@ -7,5 +7,3 @@ Thumbs.db
 *.log
 playwright-report/
 test-results/
-node_modules/
-test-results/

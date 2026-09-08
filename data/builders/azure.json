@@ -1,0 +1,135 @@
+{
+  "azure::az vm create --resource-group myRG --name myVM --image Ubuntu2204 --admin-username azureuser --generate-ssh-keys": {
+    "name": "az vm create",
+    "description": "Create an Azure Virtual Machine",
+    "base": "az vm create",
+    "args": [
+      {
+        "key": "rg",
+        "label": "--resource-group",
+        "placeholder": "myResourceGroup",
+        "required": true
+      },
+      {
+        "key": "name",
+        "label": "--name",
+        "placeholder": "myVM",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--resource-group",
+        "desc": "Resource group (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "--name",
+        "desc": "VM name (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "--image",
+        "desc": "OS image",
+        "valuePrompt": "Ubuntu2204 | Win2022Datacenter | RHEL | Debian11",
+        "valueDefault": "Ubuntu2204",
+        "join": " "
+      },
+      {
+        "flag": "--size",
+        "desc": "VM size",
+        "valuePrompt": "Standard_B2s | Standard_D2s_v3",
+        "join": " "
+      },
+      {
+        "flag": "--admin-username",
+        "desc": "Admin username",
+        "valuePrompt": "azureuser",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--generate-ssh-keys",
+        "desc": "Auto-generate SSH key pair"
+      },
+      {
+        "flag": "--ssh-key-values",
+        "desc": "SSH public key(s)",
+        "valuePrompt": "~/.ssh/id_rsa.pub",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--admin-password",
+        "desc": "Admin password (Windows)",
+        "valuePrompt": "Password123!",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--location",
+        "desc": "Azure region",
+        "valuePrompt": "westus2 | eastus | northeurope",
+        "join": " "
+      },
+      {
+        "flag": "--vnet-name",
+        "desc": "Virtual network",
+        "valuePrompt": "myVNet",
+        "join": " "
+      },
+      {
+        "flag": "--subnet",
+        "desc": "Subnet name",
+        "valuePrompt": "mySubnet",
+        "join": " "
+      },
+      {
+        "flag": "--public-ip-sku",
+        "desc": "Public IP SKU",
+        "valuePrompt": "Standard | Basic",
+        "join": " "
+      },
+      {
+        "flag": "--no-wait",
+        "desc": "Do not wait for operation to complete"
+      }
+    ]
+  },
+  "azure::az group create --name myRG --location westus2": {
+    "name": "az group create",
+    "description": "Create an Azure resource group",
+    "base": "az group create",
+    "args": [
+      {
+        "key": "name",
+        "label": "--name",
+        "placeholder": "myResourceGroup",
+        "required": true
+      },
+      {
+        "key": "location",
+        "label": "--location",
+        "placeholder": "westus2",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--tags",
+        "desc": "Tags as key=value pairs",
+        "valuePrompt": "env=prod team=ops",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--managed-by",
+        "desc": "ID of resource managing this group",
+        "valuePrompt": "Resource ID",
+        "join": " "
+      }
+    ]
+  }
+}

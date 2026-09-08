@@ -1,0 +1,8 @@
+node_modules/
+dist/
+vendor/
+test-results/
+playwright-report/
+package-lock.json
+src/reference-data.js
+src/command-definitions.js

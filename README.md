@@ -1,255 +1,80 @@
-# DevKit — portable reference and workbench
+# DevKit
 
-**[Open DevKit in your browser](https://araneus84.github.io/devkit/)** · [Single-file edition](https://araneus84.github.io/devkit/dist/devkit.html) · [Download for offline use](https://github.com/Araneus84/devkit/archive/refs/heads/main.zip)
+**[Open DevKit](https://araneus84.github.io/devkit/)** · [Single-file edition](https://araneus84.github.io/devkit/dist/devkit.html) · [Download](https://github.com/Araneus84/devkit/archive/refs/heads/main.zip)
 
-DevKit is a browser-based command reference and file builder for sysadmins, DevOps, platform engineers and SREs. It includes Ansible, Terraform, Bash, PowerShell, Python, SQL, containers and separate CI/CD builders. No account or backend is required to use the app.
+DevKit is an offline command reference and structured file builder for system administrators, DevOps engineers, platform engineers, and SREs. It helps you create commands, scripts, configuration files, and CI/CD pipelines without memorizing every keyword or indentation rule.
 
-Version 3.20.1 adds an optional, dependency-free local companion for installed-tool detection, read-only Git status, and controlled validation or formatting. It binds only to loopback, creates a one-time token at launch, accepts fixed operations, never invokes a shell, and stores submitted files only in disposable temporary directories. Hosted pages use the browser's explicit Local Network Access permission. DevKit remains an offline static app when the companion is not running. See [docs/local-companion.md](docs/local-companion.md).
+The app runs entirely in the browser. It has no account, backend, analytics, or runtime network dependency. Drafts stay in browser storage unless you export them.
 
-Version 3.18 adds a dependency-aware visual pipeline map to the GitHub Actions, GitLab CI, and Jenkins builders. Job dependencies update generated code immediately, unsafe cycles and invalid GitLab stage links are disabled, and map cards jump to their editable blocks.
+## What it includes
 
-Version 3.19 adds portable JSON-only recipe packs. Imported packs can define guided fields, optional blocks and fixed output templates, but cannot run scripts, inject interface HTML or access the network. Packs participate in module browsing, unified search and workspace backups.
+- Searchable references for common infrastructure and operations tools
+- Connected source and block editors for YAML, JSON, Bash, PowerShell, Python, SQL, Terraform, Docker, and related formats
+- Specialized Ansible, Python, GitHub Actions, GitLab CI, and Jenkins builders
+- Context-aware completion, diagnostics, repairs, syntax highlighting, and optional Vim controls
+- Multi-file project workspaces, version history, ZIP import/export, and portable backups
+- Recipe packs for adding trusted, data-only templates
+- An optional local companion for installed-tool detection and controlled validation
 
-The hosted app uses browser-local storage. Drafts do not automatically synchronize between devices or between the local-file and hosted editions. Use the app’s backup/export and restore/import controls to move your work. Download the ZIP or single-file edition for offline use.
+Source edits update supported blocks, and block edits update source. Comments, anchors, aliases, key order, and quote styles are preserved for supported YAML documents when possible. Invalid source stays editable while block controls pause and offer recovery actions.
 
-## License and responsible use
+## Run it
 
-DevKit uses the [DevKit Free Use License 1.0](LICENSE), with notices in [NOTICE](NOTICE). You may use it personally, at work, and for paid client projects. You may use or sell the scripts/configurations you generate. You may share or modify DevKit under its terms, but may not sell the application, include it in a paid product, charge for hosted access, or monetize copies/derivatives without separate written permission.
+Open `index.html` in a modern browser. Copy the whole folder to move DevKit between Windows, macOS, and Linux.
 
-This is a custom **source-available** license, not an OSI open-source license. Third-party libraries retain their own terms. See [SECURITY.md](SECURITY.md) for privacy, review scope, limits and private vulnerability reporting. Browser drafts and exported backups are not encrypted; use placeholders instead of real credentials.
+Use `dist/devkit.html` when you need one portable file. It is generated from the same manifest and source files as the folder edition.
 
-## Publishing updates
+For local development:
 
-GitHub Pages serves the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. Create a branch, make the change, run `npm test`, commit source and the rebuilt `dist/devkit.html`, then open a pull request. The protected `main` branch requires the **DevKit QA gate** to pass before merge. GitHub Pages publishes the merged folder edition automatically.
-
-
-Open **index.html** in a modern browser. No installation, server, account or internet connection is required. Copy the entire folder to move the app to Windows, macOS or Linux. Unzip downloaded archives first.
-
-To use locally installed validators, start the optional service with `npm run companion` or `node companion/devkit-companion.cjs --root .`, then open **Local** in DevKit and enter the printed URL and token. Node.js 18 or newer is required only for this optional feature.
-
-For a single file, use **dist/devkit.html**. This is generated from the same source as the folder edition.
-
-## Using the app
-
-Version 3.17 replaces literal command-only search with one ranked offline index spanning commands, builders, schema-backed editors, root block types, Python steps and modules, guides, projects and backup tools. Conversational queries, common operational synonyms and small typos resolve to direct actions, while type filters, query examples and keyboard navigation make broad results manageable. Search text stays local and is rendered as text rather than HTML. See [docs/unified-search.md](docs/unified-search.md) for ranking and extension guidance.
-
-Version 3.16 adds Guided, Standard and Expert editing views across connected file editors, Python, CI/CD, project files, Ansible and compact builders. Every view uses the same live document: switching changes pane proportions and guidance density without rewriting source, blocks, comments or history. The preference persists, travels in workspace backups and remains compatible with responsive Build/Preview tabs. See [docs/editor-modes.md](docs/editor-modes.md) for the behavior contract.
-
-Version 3.15 adds a locally bundled YAML concrete-syntax-tree parser to the shared document model. Generic YAML, GitHub Actions, GitLab CI, Ansible and project files now keep comments, anchors, aliases, mapping order, sequence-item comments and scalar quote styles while block edits change values, rename keys, reorder items or add structure. Exact source remains untouched until a block changes it; afterward the parser reconciles the changed data into the original YAML document tree. Multi-document files and the same safety budgets work in both app editions. See [docs/yaml-roundtrip.md](docs/yaml-roundtrip.md) for the preservation contract and limits.
-
-Version 3.14 adds a shared offline diagnostic engine to every code editor. Compact diagnostics show precise line and column locations, mark source ranges, and move the caret to a selected issue. Syntax checks cover YAML, JSON and Python; schema rules cover Kubernetes, Docker Compose, GitHub Actions, GitLab CI, Ansible playbooks and package.json. One-click repairs handle indentation tabs, trailing whitespace, final newlines, common missing fields and secret-shaped values. Private keys and common AWS, GitHub, GitLab, Slack and sensitive-assignment patterns are detected locally. Project shared variables warn and refuse to save newly entered secret-shaped values. See [docs/diagnostics.md](docs/diagnostics.md) for scope and extension rules.
-
-Version 3.13 adds offline ZIP project portability and durable project history. **Export ZIP** downloads the real folder tree and files for direct use; ZIP imports accept stored and deflated UTF-8 archives only after path, size, encryption, compression and CRC checks pass. Project snapshots preserve files, empty folders and shared variables, show added/removed/modified files with line diffs, and restore one file or the whole project. Imports and restores create safety snapshots automatically. Existing v1 browser projects migrate to the v2 storage envelope without losing drafts, and v1 project-package imports remain compatible.
-
-Version 3.12 introduces durable multi-file project workspaces. Open **Projects** to create an Ansible role, Terraform module, container service, CI/CD collection or blank project. Projects keep portable nested paths, folders, open tabs, the active file and shared non-secret variables. Files open in the existing connected code/block editors and autosave through the same schema-backed draft model. Multi-file selection imports local files, and the project package export/import format moves one complete project without overwriting local identities. Project storage is versioned for future migrations and is included in full DevKit backups. See [docs/project-workspaces.md](docs/project-workspaces.md) for the contract.
-
-Version 3.11.1 cancels delayed editor autofocus when the user has already clicked or typed elsewhere, so a fast edit to a newly opened block cannot lose focus or miss draft persistence. Version 3.11 introduces schema registry version 1. Every reference module, structured document profile, recipe and command builder is now discoverable through one validated contract containing its block structure, fields, parser, generator, starter, editor mode, indentation and completion metadata. The deep editor, draft validation, syntax mode and autocomplete now consume that registry. See [docs/schema-registry.md](docs/schema-registry.md) for the contributor contract.
-
-Version 3.10.4 keeps a high-contrast caret continuously visible while a code surface has focus, including when the file or current block is empty. Version 3.10.3 focuses a newly opened or reset code surface and places its caret at the end of the initial content. Version 3.10.2 renders ghost completion text after the caret, so typing always begins before the suggestion. Version 3.10.1 keeps the caret in the first editable placeholder after completion and suppresses suggestions while that placeholder is empty. Repeated **Tab** presses cannot insert the same field again, and structured editors omit keys that already exist among the current block's siblings.
-
-Version 3.10 adds context-aware completion to every code surface. Start a known field, keyword, instruction or module name and the editor shows the remaining text as a ghost suggestion plus clickable choices. Press **Tab** to accept the first choice. For example, `ho` becomes `hosts: ""`; the cursor lands inside the quotes. Press **Enter** after a YAML field, Python block, shell construct, HCL/Groovy brace, JSON container or Docker continuation to insert the correct indentation and show the next likely block. Suggestions also work in Vim insert mode; normal mode keeps Vim commands in control.
-
-The repository now includes a GitHub Actions QA gate. `npm test` rebuilds the standalone HTML and runs every model and browser test. Failed checks add a GitHub annotation, a readable Actions job summary, and a downloadable log bundle that identifies the failed suite and the area to repair. See [CONTRIBUTING.md](CONTRIBUTING.md) for the protected-branch workflow and local commands.
-
-Version 3.9.2 keeps block controls usable and clearly explains when invalid source has temporarily paused them. Ansible can repair tab-indented YAML with a visible suggestion, and every deep editor provides a button to discard invalid source and resume the last valid blocks. Tab inserts spaces in ordinary editing and Vim insert mode. Source-mode uploads retain their detected line endings after edits, ordinary Bash commands reconstruct command blocks, and the original command builder now mounts its editor correctly.
-
-Version 3.9.1 replaces the transparent text-highlighting overlay and limited Vim emulation with a real, locally bundled CodeMirror editor. Text, cursor, selection and syntax colors now share one editing surface and stay inside its visible border. Language modes cover Bash, PowerShell, Python, YAML, JSON, SQL, Dockerfile and Jenkins/Groovy; Terraform uses shell-like highlighting. Code/block synchronization, copy/download and saved drafts continue to use the underlying file text.
-
-Enable **Vim mode** for the maintained cm5-vim keymap: motions and counts, operators such as `dw`, `dd` and `cw`, visual mode, registers, `/` search, and Ex commands are supported. DevKit already saves drafts automatically; `:w` therefore keeps the current browser draft. The editor and Vim implementation are bundled locally and make no runtime network requests.
-
-Version 3.8 adds **Saved files** to each tool's workbench. Resume imported files after reload, search, rename, duplicate or delete drafts (deletion has an immediate Undo). **Save as a new copy** creates a separate document. Same-name imports offer **Resume saved draft** or **Import as a new copy**, preserving previous edits. These files live in this browser; export backups to move them elsewhere.
-
-**New blank file** and **Load starter** work even when source syntax is incomplete; Undo restores the source and blocks. Backup imports validate complete editor draft shapes. Damaged existing drafts offer recovery downloads rather than silently replacing their contents. Filenames are checked in both block and source modes. Export status is separate from language validation: exporting is possible for unfinished source, and the target tool remains the final validator.
-
-The Vim preference is optional, saved locally and included in workspace backups. Mode and undo history survive automatic block synchronization. Turn the checkbox off to return to standard editor controls.
-
-Workspace/reset operations and source-change coordination now use shared functions and explicit Python/source adapters in `src/editor-workspace.js`. Rendering still uses the existing extension layers; this release does not replace the entire UI architecture. `tests/workspace-browser.cjs` covers interrupted workflows and Vim operations in both distributions.
-
-1. Choose a tool in the sidebar, then **Open workbench**.
-2. Select a recipe, fill in its required values, and add optional blocks.
-3. Review the live output. Copy it or download the suggested filename.
-4. Use **Customize** on any reference example to edit its exact text. Examples with a matching command recipe open that recipe automatically.
-
-Choose **Deep block editors** at the top of a tool's workbench to build a whole file. The existing quick recipes and command builders remain below it. Ansible retains its specialized playbook, inventory and nested task builder. Regex includes a local JavaScript-engine tester with a 500 ms time limit.
-
-## Deep editors
-
-### Built-in syntax round trips
-
-Version 3.7 improves code-to-block reconstruction instead of relying on a single edited field:
-
-- Dockerfile: every original instruction type, ENV variables, COPY shell/JSON forms, shell/exec RUN/CMD/ENTRYPOINT, continuation lines, build ARGs, platform stages, COPY options/multiple sources and port protocols.
-- Bash and PowerShell: the library’s functions, conditions, loops, arrays, commands/parameters and pipelines; PowerShell try/catch/finally. Preambles are preserved when importing scripts without the default startup settings.
-- SQL: the library’s SELECT clauses, nested filters, joins, CTEs, INSERT, UPDATE, DELETE and CREATE TABLE.
-- Jenkins: the library’s Declarative Pipeline stages, parallel branches, environment/credentials, retry/directory steps and post conditions.
-- GitHub Actions/GitLab CI: pipelines expressed by the platform builders return to their specialized blocks. Other valid YAML retains generic data blocks rather than losing vendor-specific keys.
-- Terraform: object and array expressions return to typed nested values when representable.
-
-These adapters do not implement every external language/vendor grammar. Unknown directives, heredocs, custom plugins and other unsupported forms remain as editable code. Jenkins/CI specialized conversion is accepted only when regeneration preserves the supported source/data; unsupported additional settings remain intact in the fallback view. Python and Ansible retain their dedicated parsers.
-
-Validation: `node tests/roundtrip-adapters.cjs` tests fresh-source reconstruction and emitted output; `node tests/roundtrip-browser.cjs` tests automatic sync, multiple edits, reorder/undo, error recovery, draft reload and both app editions.
-
-### Compact editors and empty starts
-
-New deep-editor drafts start empty. Bash starts with `#!/usr/bin/env bash`; Python starts with `#!/usr/bin/env python3`. Existing saved drafts are restored. **New blank file** clears the working page (Undo is available); **Load starter** explicitly loads an example. Explicitly selected recipes/examples still open their chosen content. Ansible new files start blank and offer a visible first-field suggestion.
-
-Block panels use smaller spacing, softer surfaces and content-sized text inputs. File uploads are under **Open or drop a file**; dragging a file over that control expands it. YAML completion cards show the changed lines with an always-visible Apply button.
-
-### Ansible live completion
-
-Typing valid YAML, including `- name: ""`, creates and selects the corresponding play/task block automatically after a short pause. Incomplete YAML keeps the last valid blocks. The preview offers explicit, parser-checked repairs for missing colons, unfinished quotes and unclosed flow lists/mappings. Review the proposed text and choose **Apply**; repairs are never applied automatically, and Undo restores the original text. Unsupported errors remain visible for manual correction.
-
-### Edit code and blocks together
-
-Every deep editor, quick recipe, Ansible builder and original command modal now has an editable preview. Type directly, pause briefly, or press **Ctrl/Cmd+Enter** / **Sync code to blocks now**. Block edits update the preview. Deep editor and recipe drafts save typed text immediately; Undo restores earlier code and blocks together. The original command modal remains session-only.
-
-- **Terraform:** typed configuration rebuilds provider/resource/variable/module blocks, arguments and nested blocks. Expressions remain expressions. Comments are retained as code blocks; heredoc-containing blocks are kept as custom code to preserve their contents.
-- **YAML and Ansible:** text rebuilds nested data blocks. Valid source is retained exactly until a block changes it; block changes reconcile into the original YAML document tree so comments, anchors, aliases, ordering and scalar quote styles remain attached. Invalid or incomplete documents keep the typed text and last valid blocks. Deep editors also offer **Keep as Custom code**.
-- **JSON:** text rebuilds nested data blocks. Block edits regenerate consistently indented JSON because JSON has no comments or scalar style metadata.
-- **Bash, PowerShell, SQL, Dockerfile and Jenkins:** edits that exactly match a supported field update that field. Existing recognized blocks are retained where possible. Simple new Bash commands, PowerShell variables/output, SELECT queries and Dockerfile instructions become structured blocks. The supported nested structures are covered by the adapters above; other syntax is preserved in editable **Custom code** blocks.
-- **CI/CD YAML:** known field edits keep specialized controls; broader source edits use nested YAML data blocks so extra vendor keys remain editable. Jenkins syntax outside supported fields is retained as custom code.
-- **Quick commands:** supported scalar edits retain recipe fields. Other changes use source-line blocks and keep the output filename. The original command modal uses a custom command block for syntax outside its options.
-
-Uploads of `.tf`, `.sh`, `.ps1`, `.sql`, `Dockerfile` and `Jenkinsfile` use the same adapters. **Original source text** remains available for exact-text editing. Source is never executed. Custom code and target-specific expressions must be validated using their language/tool. Run `node tests/source-sync-browser.cjs` with the existing Playwright environment settings to verify two-way editing, nested Terraform, script field updates, imports, unfinished-code recovery, Ansible and both distributions.
-
-### CI/CD platform builders
-
-Open **CI/CD** in the sidebar and select **GitHub Actions**, **GitLab CI**, or **Jenkins**. Each platform has a dedicated builder, starter, saved draft, official syntax reference, and export filename. Add nested blocks or use suggested steps, drag blocks between compatible sections, and use Undo/Redo to revise changes.
-
-- **GitHub Actions:** push, pull request, manual and scheduled triggers; jobs, dependencies, runners, timeouts, matrices, environment/secret references, shell steps, reusable actions and action inputs. Save under `.github/workflows/ci.yml`.
-- **GitLab CI:** ordered stages, jobs, images, runner tags, dependencies, variables, before/script/after commands, conditional rules, manual jobs, artifacts and caches. Save as `.gitlab-ci.yml` in the repository root. Some browsers strip its leading dot on download; restore the exact filename.
-- **Jenkins:** Declarative Pipeline with agent selection, timeouts, environment/credential bindings, sequential and parallel stages, Unix/Windows commands, checkout, retry, directory, artifacts, JUnit and post conditions. Save as `Jenkinsfile` in the repository root. The starter checks out SCM explicitly and requires a Pipeline-from-SCM or multibranch job.
-
-The editable preview syncs with blocks; automatic quoting handles YAML and Groovy strings. Jobs in GitHub run in parallel unless linked by Needs. GitLab stage order controls execution, with Needs able to bypass stage barriers. Jenkins parallel branches share the selected agent and workspace. Structural checks catch missing fields, duplicate names and invalid job dependencies; full validation still belongs to the target CI platform, particularly action inputs, cron expressions, shell commands and installed Jenkins plugins.
-
-Existing uploads use the shared importer: YAML becomes generic data blocks, and Jenkinsfile uses custom code blocks when its syntax is not recognized. Importing a pipeline does not reconstruct every platform-specific block. The builders work offline and never run pipelines or send credentials anywhere.
-
-CI/CD checks: `node tests/cicd.cjs` and `node tests/cicd-browser.cjs` (the latter uses the same Playwright/Chrome environment settings as the existing browser tests). Model and browser checks cover the three starters, YAML parsing, dependency errors, matrix and secret values, stage reordering, Groovy escaping, independent drafts, download, sidebar restoration, mobile preview, and both folder and bundled editions. No live CI server was used.
-
-| Editor | Building blocks |
-| --- | --- |
-| Bash | Variables, arrays, commands with individual arguments, pipelines, functions, if/else, foreach, while, return and comments |
-| PowerShell | The same script structures, named parameters/switches, and try/catch/finally |
-| Python | Variables, arrays, loops, functions, conditions, exception handling and subprocess commands/pipelines |
-| Terraform HCL | Terraform settings, providers, variables, locals, resources, data sources, modules, outputs, recursive nested blocks and typed values |
-| SQL | SELECT, joins, aggregates, nested AND/OR filters, CTEs, sorting, limits, INSERT rows, UPDATE, DELETE and CREATE TABLE |
-| Dockerfile | Repeatable instructions and multiple build stages, with structured command arguments |
-| YAML / JSON | Nested mappings/objects, lists, strings, numbers, booleans, null and multiple YAML documents |
-
-### Python: connected code and blocks
-
-Python now opens as a three-pane workspace: a searchable step library, your script blocks, and **editable Python code**. Choose Basics, Modules, pandas, Excel, NumPy or OpenCV. Use **Add the next step to** to insert inside a loop or branch. Ready-made examples include CSV-to-Excel, array statistics, cell editing and image resizing.
-
-Package operations include reading/writing CSV and Excel tables, filtering rows, removing missing rows, creating NumPy arrays and calculating statistics, editing workbook cells, and reading/resizing/converting/saving images. Required imports are generated automatically. **Packages & custom modules** also lets you add a module with an optional alias or use `from … import …`. The displayed pip command is for your own Python environment; DevKit installs and executes nothing.
-
-The operations expansion adds **44 guided steps** and brings the searchable module catalog to **46 entries**, including **23 built-in modules**. This is a curated practical toolkit, not a measured popularity ranking.
-
-| Area | Modules and tasks |
-| --- | --- |
-| Files and OS | pathlib, os, shutil, subprocess, hashlib; discovery, text files, environment settings, copies, ZIP archives, checksums and commands with timeouts |
-| Configuration | json, csv, PyYAML, tomllib, configparser, python-dotenv, Jinja2, sqlite3; config loading/writing, inventory files, templates and parameterized read-only database queries |
-| APIs | requests, httpx, tenacity; GET/POST, JSON responses and bounded retries |
-| SSH and networking | socket, ipaddress, Paramiko, Netmiko; DNS, TCP checks, subnets, SSH diagnostics, SFTP and device show commands |
-| Cloud and containers | boto3, Docker SDK, Kubernetes client/config; AWS identity, paginated S3 listings, container inventories and pod listings |
-| Monitoring and automation | psutil, logging, datetime, re, argparse, concurrent.futures, GitPython, Rich, prometheus-client; metrics, logs, CLI options, thread pools, repository status and Prometheus textfiles |
-
-The catalog also provides one-click imports and documentation for sys, platform, tempfile, glob, asyncio, time, pytest, Click and Typer; these do not yet all have dedicated guided operations. The existing NumPy, pandas, Excel and OpenCV helpers remain available.
-
-Use the **Python task category** dropdown to filter the step library, or search by task/module name. **Packages & custom modules** has its own search, documentation links and a built-in/third-party label. The install command excludes standard-library modules and deduplicates packages such as Kubernetes. **Download requirements.txt** exports the selected known third-party dependencies without version pins. Custom modules and dependencies used only in opaque code may need to be added separately.
-
-New starter workflows include API health checks, host metrics, YAML-to-JSON conversion and Kubernetes pod inventory. Connection steps rely on the environment where the generated script runs: existing cloud profiles, kubeconfig, Docker configuration, known SSH host keys, or named environment variables. Templates are never run by DevKit. TOML's built-in `tomllib` requires Python 3.11 or newer.
-
-Type directly into the code pane. After a 600 ms pause, recognized imports, assignments, calls, functions, loops and if/else branches become editable blocks. You can also click **Sync code to blocks now** or press Ctrl/Cmd+Enter. Tab inserts four spaces. Common supported package calls return to their guided steps; other calls use generic function/argument blocks.
-
-Unsupported constructs such as classes, decorators, with-statements and elif chains remain complete **Advanced statement** blocks. Code typed into the pane is kept exactly until a block edit requires regeneration, which may normalize whitespace and quoting. Unrecognized code is retained, not executed. This is a syntax-assisted editor, not a full Python interpreter, formatter or type checker.
-
-While a typed statement is incomplete, the current code is saved and the last valid blocks remain visible. Block editing pauses until the code parses, preventing an incomplete source edit from being overwritten. You can still copy/download the in-progress code. Undo restores previous states. Existing `.py` files open in this connected editor automatically; **Original source text** remains available as an explicit import mode.
-
-Each section offers compatible block types. Add a block, fill its fields, then add more blocks inside it. Drag a handle into a compatible section to change nesting, or use arrow buttons to reorder siblings. Duplicate a block to reuse an entire branch. Collapse/expand controls help navigate large files. SQL keeps its required clause order automatically.
-
-Literal values are escaped automatically. Choose **variable** when referring to a script variable. **Expression** and **Advanced statement** fields deliberately accept code; those require your own syntax review. Terraform expression fields offer input-variable and type choices. Returns belong inside functions.
-
-Compose, Kubernetes and package.json recipes can open as fully editable document trees. Terraform also has an editable `.tf.json` starting file. These starters have separate saved drafts. Contextual suggestions include Compose service fields, Kubernetes container settings, npm metadata and common Terraform arguments. Generic YAML/JSON editors are available from every tool, and Bash/PowerShell editors can assemble command workflows for the other CLI tools.
-
-Use **Drop a file here to customize it** or **Choose file to customize** in a workbench or builder. Ansible's **Open / drop a file** button leads to the same importer. Files are read locally; they are never uploaded to a server.
-
-Automatic mode opens `.json`, `.yaml` and `.yml` as nested blocks, and `.py` in the connected Python workspace. Terraform, Bash, PowerShell, SQL, Dockerfile and Jenkinsfile use the source/block adapters described above; other UTF-8 files open in an editable source view with their original filename. Choose **Original source text** explicitly to bypass conversion or repair an invalid structured file.
-
-YAML block imports preserve comments, anchors, aliases, ordering and scalar quote styles through connected code/block edits. Whitespace may be normalized around a changed structure. JSON block imports preserve data and regenerate formatting. Source mode preserves original text on import and download; after editing, line endings use the detected original style. JSON holds one root value; YAML may contain multiple documents. Imports require UTF-8 files under 1 MB. Block trees allow 1,500 values and 20 nested levels. Binary files and UTF-16 files are rejected with an explanation. Failed imports leave the current draft intact. Imported files have separate drafts by filename and editor type.
-
-The editors supply language structure, not every vendor's schema. Runtime variable values, provider-specific Terraform arguments, database schemas and advanced expressions are not validated by the browser. SQL uses PostgreSQL-style syntax. Python pipelines capture text between commands and are intended for small text output.
-
-Drag handles and arrow buttons reorder blocks where the output format permits it. SQL clauses and some script setup steps keep their required order. YAML, JSON, shell commands, formulas and device CLI commands have different rules; the UI indicates the output target.
-
-**Nothing is executed by DevKit.** The browser app is cross-platform; generated commands still require the named tools and the indicated operating system or shell. Recipes are starting points, not exhaustive vendor schemas or deployment validation. Check generated files with the actual target tool. Older reference examples are retained and may target particular versions.
-
-## Moving your notes and drafts
-
-Use **Backup / move → Export notes, favorites & drafts** in the old copy. Import that JSON backup into the new copy. Browser storage can depend on the browser, profile and local file path. File URLs do not provide reliable shared storage between different copies.
-
-App files contain no personal notes, favorites or drafts. Those stay in browser storage. Backups contain your saved content and should be kept privately. Closing a private-browsing session or clearing browser data can remove drafts.
-
-## Source layout
-
-- `src/reference-data.js`: cheatsheet content.
-- `src/command-definitions.js`: existing option-aware command definitions.
-- `src/tool-guides.js`: purpose, workflow, pitfalls, checks and official links for every tool.
-- `src/recipe-catalog.js`: typed recipe definitions and pure text generators.
-- `src/workbench.js`: shared UI, drafts, fields, ordering, copying and regex testing.
-- `src/portable.js`: versioned export/import and portability controls.
-- `src/deep-model.js`: recursive node definitions, structural validation and language generators.
-- `src/deep-editor.js`: nested editor, compatible moves, file import and per-editor drafts.
-- `src/deep-hints.js`: tool-specific suggested fields and starter integration.
-- `src/file-import.js`: local file picker/drop zones, structured import and original-source editing.
-- `src/yaml-roundtrip.js`: CST-backed YAML reconciliation for comments, anchors, aliases, ordering and scalar styles.
-- `src/python-model.js`: package operations and Python source/block conversion using the locally bundled Lezer parser.
-- `src/python-editor.js`: Python step library, editable preview and synchronization.
-- `src/python-ops.js`: sysadmin/DevOps module catalog, operations steps and starter workflows.
-- `src/ansible-*.js`: the specialized Ansible builder and reference.
-- `src/state.js`, `src/reference-ui.js`, `src/start.js`: reference app state, rendering and startup.
-- `styles/`: matching stylesheets.
-- `vendor/`: locally bundled parsers and editor libraries with their license texts.
-- `tools/build.cjs`: dependency-free single-file builder.
-- `tests/`: repeatable checks.
-
-Classic deferred scripts are intentional: they can run directly from `file://` without module-loader or fetch restrictions. Runtime resources are local. External documentation links open only when clicked. There is no telemetry, cloud storage, service worker, or automatic update mechanism.
-
-## Rebuild the single-file edition
-
-Only maintainers need Node.js. From this folder:
-
-```text
-node tools/build.cjs
+```bash
+npm ci
+npx playwright install chromium
+npm run check
+npm test
 ```
 
-The build syntax-checks each script and writes `dist/devkit.html`. Edit source files, not the generated HTML. No npm installation is needed to build.
+Run one test group while iterating:
 
-Run `node tests/recipes.cjs` for catalog coverage, generated YAML/JSON parsing, command argument ordering and source checks. Run `node tests/deep.cjs` for recursive language generators and validation. Both use only Node.js built-ins and the bundled YAML library.
+```bash
+npm run test:one -- companion
+```
 
-Optional UI checks: `node tests/browser-deep.cjs` requires Playwright and a browser supplied separately. `DEVKIT_PLAYWRIGHT` may point to an existing Playwright package and `DEVKIT_CHROME` to a Chrome executable. No browser-test dependencies are needed to run or build the app.
+Rebuild the standalone edition after changing source, styles, or the asset manifest:
 
-`node tests/uploads.cjs` checks file drops, pickers, original-source downloads, CRLF edits, invalid import recovery, saved imported drafts and both app editions using the same Playwright setup.
+```bash
+npm run build
+```
 
-Python checks: `node tests/python.cjs`, `node tests/python-roundtrip.cjs`, and `node tests/python-browser.cjs` (the last requires the same Playwright setup). This release also passed CPython syntax checks for 21 generated scripts and CPython AST comparisons for 11 source-to-block-to-source fixtures. Browser checks cover package selection, both editing directions, nested blocks, incomplete-code recovery and reload, custom imports, `.py` imports and offline operation.
+Reference sheets and legacy command builders are maintained as domain files under `data/`. The build generates their browser-compatible runtime files and verifies the portable edition.
 
-Operations checks: `node tests/python-ops.cjs` and `node tests/ops-browser.cjs` (Playwright). All 44 operations and four starters generated parsable Python; 48 outputs also passed CPython syntax parsing. Browser checks cover categories, module search, built-in dependency exclusion, package deduplication, nested insertion and both editions. No cloud, SSH, Docker or Kubernetes operations were executed during verification.
+## Optional local companion
 
-This release was also checked in Chromium with network requests blocked: all 28 tool sections, 1,976 customizable examples, copy/download, input validation, undo, draft reload, regex timeout, backup import/export, mobile preview and the retained Ansible builder passed. The deep editor checks cover actual pointer dragging between branches, recursive editing, cyclic YAML rejection, draft recovery and both folder and bundled editions. Representative Python, Bash, PowerShell, HCL and SQL outputs passed local parser checks. Generated commands were not executed against services or devices.
+The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:
 
-To add a recipe, call `dkRecipe(...)` in `src/recipe-catalog.js`: specify its tool, stable ID, fields, blocks, pure generator, filename and verification hint. Do not execute generated commands or add network calls. Keep generators deterministic and add representative checks under `tests/`.
+```bash
+npm run companion
+```
 
-## Browser support
+It binds to loopback, prints a one-time token, and never invokes a general-purpose shell. Node.js 18 or newer is required for this optional feature. See [Local companion](docs/local-companion.md).
 
-Requires a modern browser with native dialog elements, JavaScript, local file access and Blob downloads. Tested in Chromium on Windows. Other operating systems do not need platform-specific app code, but have not been tested in this environment. Clipboard permissions and local regex workers vary by browser; the UI provides selection-based copying or an explanatory message if unavailable.
+## Documentation
 
-## Third-party code
+- [Architecture and maintenance](docs/architecture.md)
+- [Schema registry](docs/schema-registry.md)
+- [YAML round-trip behavior](docs/yaml-roundtrip.md)
+- [Editor modes](docs/editor-modes.md)
+- [Diagnostics](docs/diagnostics.md)
+- [Project workspaces](docs/project-workspaces.md)
+- [Recipe packs](docs/recipe-packs.md)
+- [Unified search](docs/unified-search.md)
+- [CI/CD pipeline map](docs/cicd-pipeline-map.md)
+- [Security](SECURITY.md)
+- [Release history](CHANGELOG.md)
 
-js-yaml 4.3.2 is bundled under its MIT license. See `vendor/LICENSE.js-yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==`.
+## License
 
-yaml 2.9.0 is bundled under its ISC license for concrete-syntax-tree parsing and comment-preserving serialization. See `vendor/LICENSE.yaml.txt`. Its published npm tarball was verified against SHA-512 integrity `sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==`.
+DevKit uses the [DevKit Free Use License 1.0](LICENSE). You may use it personally, at work, and for paid client projects. You may use or sell the scripts and configurations you generate. You may not sell DevKit, charge for hosted access, include it in a paid product, or monetize copies or derivatives without written permission.
 
-Lezer's Python parser and its common, LR and highlight packages are bundled locally under MIT licenses; see `vendor/LICENSE.lezer.txt` for versions and copyright notices. CodeMirror 5.65.21 and cm5-vim 0.0.6 are bundled under their MIT licenses in `vendor/codemirror/`. There are no runtime parser or editor downloads.
+This is a source-available license and is not an OSI-approved open-source license. Third-party libraries keep their own licenses; see [NOTICE](NOTICE).
 
-Python package references: [NumPy statistics](https://numpy.org/doc/stable/reference/routines.statistics.html), [pandas file I/O](https://pandas.pydata.org/docs/user_guide/io.html), [openpyxl tutorial](https://openpyxl.readthedocs.io/en/3.1/tutorial.html), and [OpenCV image I/O](https://docs.opencv.org/4.12.0/d4/da8/group__imgcodecs.html).
-
-Language references used for the deep editors: [Bash manual](https://www.gnu.org/software/bash/manual/bash.html), [PowerShell language keywords](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_language_keywords), [Terraform configuration syntax](https://developer.hashicorp.com/terraform/language/syntax/configuration), [PostgreSQL table expressions](https://www.postgresql.org/docs/current/queries-table-expressions.html), [Docker Compose services](https://docs.docker.com/reference/compose-file/services/), [Kubernetes Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) and [npm package.json](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/).
+Browser drafts and backups are not encrypted. Use placeholders for credentials and private keys.

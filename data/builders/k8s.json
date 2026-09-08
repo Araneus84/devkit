@@ -1,0 +1,400 @@
+{
+  "k8s::kubectl get pods": {
+    "name": "kubectl get pods",
+    "description": "Build a kubectl get pods command",
+    "base": "kubectl get pods",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace name",
+        "join": " "
+      },
+      {
+        "flag": "-A",
+        "desc": "All namespaces"
+      },
+      {
+        "flag": "-o wide",
+        "desc": "Show extra info (IP, node)"
+      },
+      {
+        "flag": "-o yaml",
+        "desc": "Output as YAML"
+      },
+      {
+        "flag": "-o json",
+        "desc": "Output as JSON"
+      },
+      {
+        "flag": "-l",
+        "desc": "Label selector",
+        "valuePrompt": "e.g. app=nginx,env=prod",
+        "join": " "
+      },
+      {
+        "flag": "--field-selector",
+        "desc": "Field selector",
+        "valuePrompt": "e.g. status.phase=Failed",
+        "join": "="
+      },
+      {
+        "flag": "-w",
+        "desc": "Watch — live updates"
+      },
+      {
+        "flag": "--show-labels",
+        "desc": "Include labels in output"
+      },
+      {
+        "flag": "--sort-by",
+        "desc": "Sort by field",
+        "valuePrompt": "JSONPath (e.g. .metadata.name)",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--no-headers",
+        "desc": "Skip column headers"
+      },
+      {
+        "flag": "--all-namespaces",
+        "desc": "Same as -A (long form)"
+      }
+    ]
+  },
+  "k8s::kubectl logs pod-name": {
+    "name": "kubectl logs",
+    "description": "Build a kubectl logs command",
+    "base": "kubectl logs",
+    "args": [
+      {
+        "key": "pod",
+        "label": "Pod name or selector",
+        "placeholder": "pod-name or -l app=nginx",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace",
+        "join": " "
+      },
+      {
+        "flag": "-f",
+        "desc": "Follow log output (stream)"
+      },
+      {
+        "flag": "-c",
+        "desc": "Container name (for multi-container pods)",
+        "valuePrompt": "Container",
+        "join": " "
+      },
+      {
+        "flag": "--previous",
+        "desc": "Show logs from previous container instance (crashed)"
+      },
+      {
+        "flag": "--tail",
+        "desc": "Show only last N lines",
+        "valuePrompt": "Lines",
+        "valueDefault": "100",
+        "join": "="
+      },
+      {
+        "flag": "--since",
+        "desc": "Show logs since duration ago",
+        "valuePrompt": "e.g. 1h, 30m, 5s",
+        "join": "="
+      },
+      {
+        "flag": "--since-time",
+        "desc": "Show logs since timestamp",
+        "valuePrompt": "RFC3339 (e.g. 2025-01-01T00:00:00Z)",
+        "join": "="
+      },
+      {
+        "flag": "--timestamps",
+        "desc": "Include timestamps in output"
+      },
+      {
+        "flag": "--all-containers",
+        "desc": "Logs from all containers in pod"
+      },
+      {
+        "flag": "-l",
+        "desc": "Label selector (instead of pod name)",
+        "valuePrompt": "e.g. app=nginx",
+        "join": " "
+      }
+    ]
+  },
+  "k8s::kubectl apply -f manifest.yaml": {
+    "name": "kubectl apply",
+    "description": "Apply Kubernetes manifests",
+    "base": "kubectl apply",
+    "args": [
+      {
+        "key": "target",
+        "label": "File / directory / URL",
+        "placeholder": "manifest.yaml or ./k8s/",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-f",
+        "desc": "From file (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace",
+        "join": " "
+      },
+      {
+        "flag": "--dry-run=client",
+        "desc": "Preview without applying (client-side)"
+      },
+      {
+        "flag": "--dry-run=server",
+        "desc": "Preview without applying (server validates)"
+      },
+      {
+        "flag": "--server-side",
+        "desc": "Use server-side apply (better conflict handling)"
+      },
+      {
+        "flag": "--force",
+        "desc": "Force apply, deleting and recreating if necessary"
+      },
+      {
+        "flag": "--prune",
+        "desc": "Delete resources not in the applied set"
+      },
+      {
+        "flag": "-l",
+        "desc": "Prune selector label",
+        "valuePrompt": "app=myapp",
+        "join": " "
+      },
+      {
+        "flag": "-R",
+        "desc": "Recursively apply all files in directory"
+      },
+      {
+        "flag": "-k",
+        "desc": "Apply Kustomize directory instead of -f"
+      }
+    ]
+  },
+  "k8s::kubectl scale deployment nginx --replicas=5": {
+    "name": "kubectl scale",
+    "description": "Scale a Kubernetes workload",
+    "base": "kubectl scale",
+    "args": [
+      {
+        "key": "resource",
+        "label": "Resource type",
+        "type": "select",
+        "options": [
+          {
+            "value": "deployment",
+            "label": "deployment"
+          },
+          {
+            "value": "statefulset",
+            "label": "statefulset"
+          },
+          {
+            "value": "replicaset",
+            "label": "replicaset"
+          }
+        ],
+        "required": true,
+        "default": "deployment"
+      },
+      {
+        "key": "name",
+        "label": "Resource name",
+        "placeholder": "nginx",
+        "required": true
+      },
+      {
+        "key": "replicas",
+        "label": "Replica count",
+        "placeholder": "3",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--replicas",
+        "desc": "Number of replicas (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace",
+        "join": " "
+      },
+      {
+        "flag": "--current-replicas",
+        "desc": "Only scale if current count matches",
+        "valuePrompt": "Current count",
+        "join": "="
+      },
+      {
+        "flag": "--timeout",
+        "desc": "Timeout for the operation",
+        "valuePrompt": "e.g. 60s",
+        "join": "="
+      }
+    ]
+  },
+  "k8s::kubectl rollout restart deployment/nginx": {
+    "name": "kubectl rollout",
+    "description": "Manage rollouts — restart, undo, status",
+    "base": "kubectl rollout",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "options": [
+          {
+            "value": "restart",
+            "label": "restart — rolling restart"
+          },
+          {
+            "value": "undo",
+            "label": "undo — roll back"
+          },
+          {
+            "value": "status",
+            "label": "status — watch progress"
+          },
+          {
+            "value": "history",
+            "label": "history — view revisions"
+          },
+          {
+            "value": "pause",
+            "label": "pause — halt rollout"
+          },
+          {
+            "value": "resume",
+            "label": "resume — continue rollout"
+          }
+        ],
+        "required": true,
+        "default": "restart"
+      },
+      {
+        "key": "resource",
+        "label": "Resource",
+        "placeholder": "deployment/nginx",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace",
+        "join": " "
+      },
+      {
+        "flag": "--to-revision",
+        "desc": "Roll back to specific revision (undo)",
+        "valuePrompt": "Revision number",
+        "join": "="
+      },
+      {
+        "flag": "--timeout",
+        "desc": "Timeout waiting for status",
+        "valuePrompt": "e.g. 5m",
+        "join": "="
+      }
+    ]
+  },
+  "k8s::kubectl describe pod pod-name": {
+    "name": "kubectl describe",
+    "description": "Show detailed info about any resource",
+    "base": "kubectl describe",
+    "args": [
+      {
+        "key": "resource",
+        "label": "Resource type",
+        "type": "select",
+        "options": [
+          {
+            "value": "pod",
+            "label": "pod"
+          },
+          {
+            "value": "deployment",
+            "label": "deployment"
+          },
+          {
+            "value": "service",
+            "label": "service"
+          },
+          {
+            "value": "node",
+            "label": "node"
+          },
+          {
+            "value": "ingress",
+            "label": "ingress"
+          },
+          {
+            "value": "configmap",
+            "label": "configmap"
+          },
+          {
+            "value": "secret",
+            "label": "secret"
+          },
+          {
+            "value": "persistentvolumeclaim",
+            "label": "persistentvolumeclaim"
+          }
+        ],
+        "required": true,
+        "default": "pod"
+      },
+      {
+        "key": "name",
+        "label": "Resource name",
+        "placeholder": "my-pod-name or leave empty for all",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Namespace",
+        "valuePrompt": "Namespace",
+        "join": " "
+      },
+      {
+        "flag": "-l",
+        "desc": "Select by label instead of name",
+        "valuePrompt": "app=nginx",
+        "join": " "
+      },
+      {
+        "flag": "-A",
+        "desc": "All namespaces"
+      }
+    ]
+  }
+}

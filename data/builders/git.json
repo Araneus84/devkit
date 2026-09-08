@@ -1,0 +1,324 @@
+{
+  "git::git log": {
+    "name": "git log",
+    "description": "Build a git log command",
+    "base": "git log",
+    "args": [],
+    "flags": [
+      {
+        "flag": "--oneline",
+        "desc": "Compact one-line format"
+      },
+      {
+        "flag": "--graph",
+        "desc": "ASCII graph of branches"
+      },
+      {
+        "flag": "--all",
+        "desc": "Show all branches"
+      },
+      {
+        "flag": "--decorate",
+        "desc": "Show branch/tag refs"
+      },
+      {
+        "flag": "-n",
+        "desc": "Limit number of commits",
+        "valuePrompt": "Number",
+        "valueDefault": "20",
+        "join": " "
+      },
+      {
+        "flag": "--since",
+        "desc": "Show commits since date",
+        "valuePrompt": "e.g. \"2 weeks ago\" or \"2025-01-01\"",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--until",
+        "desc": "Show commits until date",
+        "valuePrompt": "Date",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--author",
+        "desc": "Filter by author",
+        "valuePrompt": "Name or email",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--grep",
+        "desc": "Filter by commit message pattern",
+        "valuePrompt": "Pattern",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "-p",
+        "desc": "Show patch (full diff)"
+      },
+      {
+        "flag": "--stat",
+        "desc": "Show file change stats"
+      },
+      {
+        "flag": "--name-only",
+        "desc": "Show only changed filenames"
+      },
+      {
+        "flag": "--reverse",
+        "desc": "Show oldest commits first"
+      },
+      {
+        "flag": "--merges",
+        "desc": "Show only merge commits"
+      },
+      {
+        "flag": "--no-merges",
+        "desc": "Hide merge commits"
+      },
+      {
+        "flag": "--pretty",
+        "desc": "Custom format",
+        "valuePrompt": "e.g. format:\"%h %s\"",
+        "join": "=",
+        "quote": true
+      }
+    ]
+  },
+  "git::git commit -m \"message\"": {
+    "name": "git commit",
+    "description": "Commit staged changes",
+    "base": "git commit",
+    "args": [
+      {
+        "key": "message",
+        "label": "Commit message",
+        "placeholder": "feat: add login page",
+        "required": true,
+        "quote": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-a",
+        "desc": "Auto-stage all tracked changed files before commit"
+      },
+      {
+        "flag": "--amend",
+        "desc": "Amend the previous commit"
+      },
+      {
+        "flag": "--no-edit",
+        "desc": "Amend without changing the message"
+      },
+      {
+        "flag": "--allow-empty",
+        "desc": "Allow commit with no changes (e.g. to trigger CI)"
+      },
+      {
+        "flag": "--signoff",
+        "desc": "Add Signed-off-by trailer"
+      },
+      {
+        "flag": "--no-verify",
+        "desc": "Skip pre-commit and commit-msg hooks"
+      },
+      {
+        "flag": "--author",
+        "desc": "Override author",
+        "valuePrompt": "\"Name <email>\"",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--date",
+        "desc": "Override date",
+        "valuePrompt": "\"YYYY-MM-DD HH:MM:SS\"",
+        "join": "=",
+        "quote": true
+      }
+    ]
+  },
+  "git::git push": {
+    "name": "git push",
+    "description": "Push commits to remote",
+    "base": "git push",
+    "args": [
+      {
+        "key": "remote",
+        "label": "Remote (optional)",
+        "placeholder": "origin",
+        "required": false
+      },
+      {
+        "key": "branch",
+        "label": "Branch (optional)",
+        "placeholder": "main or feature/x",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-u",
+        "desc": "Set upstream tracking branch (use first time)"
+      },
+      {
+        "flag": "--force",
+        "desc": "Force push — overwrites remote (CAREFUL!)"
+      },
+      {
+        "flag": "--force-with-lease",
+        "desc": "Safer force push — fails if remote has new commits"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview without actually pushing"
+      },
+      {
+        "flag": "--tags",
+        "desc": "Push all local tags"
+      },
+      {
+        "flag": "--delete",
+        "desc": "Delete remote branch",
+        "valuePrompt": "Branch name",
+        "join": " "
+      },
+      {
+        "flag": "--no-verify",
+        "desc": "Skip pre-push hooks"
+      }
+    ]
+  },
+  "git::git stash": {
+    "name": "git stash",
+    "description": "Stash uncommitted changes",
+    "base": "git stash",
+    "args": [
+      {
+        "key": "subcommand",
+        "label": "Action",
+        "type": "select",
+        "options": [
+          {
+            "value": "push",
+            "label": "push — save changes"
+          },
+          {
+            "value": "pop",
+            "label": "pop — restore latest"
+          },
+          {
+            "value": "apply",
+            "label": "apply — restore without removing"
+          },
+          {
+            "value": "list",
+            "label": "list — show all stashes"
+          },
+          {
+            "value": "drop",
+            "label": "drop — delete a stash"
+          },
+          {
+            "value": "show",
+            "label": "show — see stash diff"
+          },
+          {
+            "value": "clear",
+            "label": "clear — remove all stashes"
+          },
+          {
+            "value": "branch",
+            "label": "branch — create branch from stash"
+          }
+        ],
+        "required": true,
+        "default": "push"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-m",
+        "desc": "Stash message (for push)",
+        "valuePrompt": "Description",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-u",
+        "desc": "Include untracked files (push)"
+      },
+      {
+        "flag": "-a",
+        "desc": "Include all files including ignored (push)"
+      },
+      {
+        "flag": "--index",
+        "desc": "Restore staged state too (pop/apply)"
+      },
+      {
+        "flag": "stash@{1}",
+        "desc": "Target a specific stash index (pop/apply/drop/show)",
+        "join": " "
+      }
+    ]
+  },
+  "git::git diff": {
+    "name": "git diff",
+    "description": "Show changes between commits, branches or files",
+    "base": "git diff",
+    "args": [
+      {
+        "key": "ref",
+        "label": "Ref / branch (optional)",
+        "placeholder": "main or HEAD~1 or branch1..branch2",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--staged",
+        "desc": "Show staged changes (what will be committed)"
+      },
+      {
+        "flag": "--cached",
+        "desc": "Same as --staged"
+      },
+      {
+        "flag": "--stat",
+        "desc": "Show summary stats instead of full diff"
+      },
+      {
+        "flag": "--name-only",
+        "desc": "Show only changed file names"
+      },
+      {
+        "flag": "--name-status",
+        "desc": "Show file names with change type (A/M/D)"
+      },
+      {
+        "flag": "-w",
+        "desc": "Ignore whitespace changes"
+      },
+      {
+        "flag": "--word-diff",
+        "desc": "Show changes word by word"
+      },
+      {
+        "flag": "--shortstat",
+        "desc": "One-line summary of changes"
+      },
+      {
+        "flag": "--",
+        "desc": "Separate ref from file path",
+        "valuePrompt": "File path (e.g. src/app.js)",
+        "join": " "
+      }
+    ]
+  }
+}

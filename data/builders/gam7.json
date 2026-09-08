@@ -1,0 +1,312 @@
+{
+  "gam7::gam update user user@domain.com suspended false": {
+    "name": "gam update user",
+    "description": "Update a Google Workspace user account",
+    "base": "gam update user",
+    "args": [
+      {
+        "key": "user",
+        "label": "User email",
+        "placeholder": "user@domain.com",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "suspended true",
+        "desc": "Suspend the user account"
+      },
+      {
+        "flag": "suspended false",
+        "desc": "Unsuspend / restore the user account"
+      },
+      {
+        "flag": "changepassword true",
+        "desc": "Force password change at next login"
+      },
+      {
+        "flag": "admin true",
+        "desc": "Grant super admin privileges"
+      },
+      {
+        "flag": "admin false",
+        "desc": "Revoke super admin privileges"
+      },
+      {
+        "flag": "password",
+        "desc": "Set a new password",
+        "valuePrompt": "New password",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "firstname",
+        "desc": "Change first name",
+        "valuePrompt": "First name",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "lastname",
+        "desc": "Change last name",
+        "valuePrompt": "Last name",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "ou",
+        "desc": "Move to Organizational Unit",
+        "valuePrompt": "/OUName",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  },
+  "gam7::gam user user@domain.com print filelist": {
+    "name": "gam print filelist",
+    "description": "List Drive files for a user",
+    "base": "gam user",
+    "args": [
+      {
+        "key": "user",
+        "label": "User email",
+        "placeholder": "user@domain.com",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "print filelist",
+        "desc": "List files (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      },
+      {
+        "flag": "fields name,size,owners,modifiedtime",
+        "desc": "Show name, size, owner, modified date"
+      },
+      {
+        "flag": "fields name,id,mimeType,parents",
+        "desc": "Show file ID, type and folder structure"
+      },
+      {
+        "flag": "query \"mimeType='application/vnd.google-apps.folder'\"",
+        "desc": "List only folders",
+        "join": " "
+      },
+      {
+        "flag": "query \"'me' in owners\"",
+        "desc": "Only files owned by this user",
+        "join": " "
+      },
+      {
+        "flag": "query \"modifiedTime > '2024-01-01'\"",
+        "desc": "Only recently modified files",
+        "join": " "
+      },
+      {
+        "flag": "> filelist.csv",
+        "desc": "Export output to CSV file"
+      }
+    ]
+  },
+  "gam7::gam user user@domain.com print licenses": {
+    "name": "gam print licenses",
+    "description": "Show licenses for a user or the whole org",
+    "base": "gam",
+    "args": [
+      {
+        "key": "scope",
+        "label": "Scope",
+        "type": "select",
+        "options": [
+          {
+            "value": "user user@domain.com print licenses",
+            "label": "Specific user"
+          },
+          {
+            "value": "print licenses",
+            "label": "Entire org"
+          }
+        ],
+        "required": true,
+        "default": "print licenses"
+      }
+    ],
+    "flags": []
+  },
+  "gam7::gam user src@domain.com transfer drive dest@domain.com": {
+    "name": "gam transfer drive",
+    "description": "Transfer Drive files between users",
+    "base": "gam user",
+    "args": [
+      {
+        "key": "src",
+        "label": "Source user",
+        "placeholder": "source@domain.com",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination user",
+        "placeholder": "destination@domain.com",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "transfer drive",
+        "desc": "Transfer Drive files (always required)",
+        "alwaysOn": true,
+        "hidden": true
+      }
+    ]
+  },
+  "gam7::gam user user@domain.com add license 1010020026": {
+    "name": "gam add/delete license",
+    "description": "Assign or remove a Google Workspace license",
+    "base": "gam user",
+    "args": [
+      {
+        "key": "user",
+        "label": "User email",
+        "placeholder": "user@domain.com",
+        "required": true
+      },
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "options": [
+          {
+            "value": "add license",
+            "label": "Add license"
+          },
+          {
+            "value": "delete license",
+            "label": "Remove license"
+          }
+        ],
+        "required": true,
+        "default": "add license"
+      },
+      {
+        "key": "sku",
+        "label": "License SKU",
+        "type": "select",
+        "options": [
+          {
+            "value": "1010020026",
+            "label": "Enterprise Standard"
+          },
+          {
+            "value": "1010020020",
+            "label": "Enterprise Plus"
+          },
+          {
+            "value": "1010310004",
+            "label": "Business Standard"
+          },
+          {
+            "value": "1010310003",
+            "label": "Business Starter"
+          },
+          {
+            "value": "1010340001",
+            "label": "Archived User"
+          },
+          {
+            "value": "1010400001",
+            "label": "Chrome Enterprise Premium"
+          }
+        ],
+        "required": true,
+        "default": "1010020026"
+      }
+    ],
+    "flags": []
+  },
+  "gam7::gam create vaultexport matter MATTER_ID name \"Export\" corpus mail accounts user@domain.com": {
+    "name": "gam create vaultexport",
+    "description": "Export a user mailbox or Drive via Vault",
+    "base": "gam create vaultexport",
+    "args": [
+      {
+        "key": "matter",
+        "label": "matter MATTER_ID",
+        "placeholder": "matter abc123",
+        "required": true
+      },
+      {
+        "key": "name",
+        "label": "Export name",
+        "placeholder": "My Export",
+        "required": true,
+        "quote": true
+      },
+      {
+        "key": "corpus",
+        "label": "Data type",
+        "type": "select",
+        "options": [
+          {
+            "value": "corpus mail",
+            "label": "Mail (Gmail)"
+          },
+          {
+            "value": "corpus drive",
+            "label": "Drive"
+          },
+          {
+            "value": "corpus groups",
+            "label": "Groups"
+          }
+        ],
+        "required": true,
+        "default": "corpus mail"
+      },
+      {
+        "key": "accounts",
+        "label": "User email",
+        "placeholder": "accounts user@domain.com",
+        "required": true
+      }
+    ],
+    "flags": []
+  },
+  "gam7::gam print users": {
+    "name": "gam print users",
+    "description": "List users with filters and fields",
+    "base": "gam print users",
+    "args": [],
+    "flags": [
+      {
+        "flag": "query \"isSuspended=true\"",
+        "desc": "Only suspended users"
+      },
+      {
+        "flag": "query \"isAdmin=true\"",
+        "desc": "Only super admins"
+      },
+      {
+        "flag": "query \"orgUnitPath=/Sales\"",
+        "desc": "Filter by OU path",
+        "valuePrompt": "OU path (e.g. /Sales)",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "fields primaryEmail,name,suspended,orgUnitPath",
+        "desc": "Common useful fields"
+      },
+      {
+        "flag": "fields primaryEmail,lastLoginTime,creationTime",
+        "desc": "Login and creation dates"
+      },
+      {
+        "flag": "> users.csv",
+        "desc": "Export to CSV file"
+      }
+    ]
+  }
+}

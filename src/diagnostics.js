@@ -1,43 +1,727 @@
 /* Shared offline diagnostics: syntax, declarative schemas, secrets and safe repairs. */
-const DG_MAX=60,DG_SEVERITY={error:3,warning:2,info:1};
-const dgObject=value=>!!value&&typeof value==='object'&&!Array.isArray(value);
-function dgPos(text,index){const before=text.slice(0,Math.max(0,index)),lines=before.split('\n');return {line:lines.length-1,ch:lines.at(-1).length};}
-function dgRange(text,start,end=start+1){const from=dgPos(text,start),to=dgPos(text,Math.max(start+1,end));return {line:from.line,ch:from.ch,endLine:to.line,endCh:to.ch,start,end};}
-function dgItem(text,{severity='error',source='syntax',message,start=0,end=start+1,fix=null}){return {severity,source,message,...dgRange(text,start,end),fix};}
-function dgContext(item){let filename='',path='',sheet='',profile=typeof eaProfile==='function'?eaProfile(item):'command';if(item.el.id==='dd-preview'&&ddState){filename=ddState.filename||'';sheet=ddState.sheet||'';if(ddState.projectId){const project=pwState?.projects?.[ddState.projectId],file=project?.files?.find(f=>f.id===ddState.projectFileId);path=file?.path||filename;}}else if(item.el.id==='ab-preview'){filename='playbook.yml';path=filename;sheet='ansible';profile='ansible';}else if(item.el.id==='dk-preview'&&dkActive){const out=typeof dkOutput==='function'?dkOutput():null;filename=out?.filename||'';path=filename;sheet=dkActive.sheet||'';}else if(item.el.id==='sx-command-preview')profile='command';return {item,filename,path:path||filename,sheet,profile,mode:ceLanguage(item.el)};}
-function dgPlaceholder(context,name,quoted=false){name=String(name||'SECRET').replace(/[^A-Za-z0-9_]+/g,'_').replace(/^\d/,'_$&').toUpperCase();if(quoted)return '${'+name+'}';if(context.profile==='github')return '${{ secrets.'+name+' }}';if(context.profile==='powershell')return '$env:'+name;if(context.profile==='python')return 'os.environ.get("'+name+'", "")';if(context.profile==='terraform')return 'var.'+name.toLowerCase();if(context.profile==='sql')return ':'+name.toLowerCase();return '"${'+name+'}"';}
-function dgSecretFind(text,context={}){const found=[];function add(start,end,name,message){if(found.some(x=>start<x.end&&end>x.start))return;const quoted=start>0&&['"',"'"].includes(text[start-1])&&text[end]===text[start-1],replacement=dgPlaceholder(context,name,quoted);found.push(dgItem(text,{severity:'error',source:'secret',message,start,end,fix:{label:'Replace with '+replacement,safe:false,range:{start,end},text:replacement}}));}
- const pem=/-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/g;for(const match of text.matchAll(pem))add(match.index,match.index+match[0].length,'PRIVATE_KEY','Private key material is embedded in this file. Use a secret store or environment reference.');
- const tokens=[[/\bAKIA[0-9A-Z]{16}\b/g,'AWS_ACCESS_KEY_ID','AWS access-key-shaped value detected.'],[/\bgh[pousr]_[A-Za-z0-9]{30,255}\b/g,'GITHUB_TOKEN','GitHub token-shaped value detected.'],[/\bgithub_pat_[A-Za-z0-9_]{40,255}\b/g,'GITHUB_TOKEN','GitHub fine-grained token-shaped value detected.'],[/\bglpat-[A-Za-z0-9_-]{20,255}\b/g,'GITLAB_TOKEN','GitLab token-shaped value detected.'],[/\bxox[baprs]-[A-Za-z0-9-]{20,255}\b/g,'SLACK_TOKEN','Slack token-shaped value detected.']];for(const [pattern,name,message] of tokens)for(const match of text.matchAll(pattern))add(match.index,match.index+match[0].length,name,message);
- const assignment=/\b(password|passwd|token|secret|api[_-]?key|client[_-]?secret|access[_-]?key)\b\s*[:=]\s*(["']?)([^\s"'#,}\]]{8,})(?:\2)/gim;for(const match of text.matchAll(assignment)){const value=match[3],lower=value.toLowerCase();if(/\$\{|\{\{|<.*>|redacted|placeholder|example|changeme|dummy|your[_-]/i.test(value))continue;const start=match.index+match[0].indexOf(value);add(start,start+value.length,match[1],match[1]+' contains a literal value that looks sensitive. Use a placeholder or secret reference.');}
- if(context.variableName&&/(password|passwd|token|secret|api[_-]?key|client[_-]?secret|access[_-]?key)/i.test(context.variableName)&&text.length>=8&&!/\$\{|\{\{|<.*>|redacted|placeholder|example|changeme|dummy/i.test(text))add(0,text.length,context.variableName,'Shared variables are browser-visible. Store a reference or placeholder instead of this sensitive value.');return found;
+const DG_MAX = 60,
+  DG_SEVERITY = { error: 3, warning: 2, info: 1 };
+const dgObject = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
+function dgPos(text, index) {
+  const before = text.slice(0, Math.max(0, index)),
+    lines = before.split('\n');
+  return { line: lines.length - 1, ch: lines.at(-1).length };
 }
-function dgSyntax(text,context){const out=[],profile=context.profile,mode=context.mode;if(['yaml','ansible','github','gitlab'].includes(profile)||mode==='yaml'){try{jsyaml.loadAll(text,()=>{}, {schema:jsyaml.JSON_SCHEMA,json:false});}catch(e){const line=e.mark?.line||0,ch=e.mark?.column||0,start=text.split('\n').slice(0,line).reduce((n,x)=>n+x.length+1,0)+ch;out.push(dgItem(text,{message:e.reason||e.message,start,end:start+1}));}}
- if(profile==='json'||dgObject(mode)&&mode.json){try{JSON.parse(text);}catch(e){const position=Number(/position\s+(\d+)/i.exec(e.message)?.[1]||0);out.push(dgItem(text,{message:'JSON syntax: '+e.message,start:position,end:position+1}));}}
- if(profile==='python'&&typeof DP_PARSER!=='undefined'){const tree=DP_PARSER.parse(text);let count=0;tree.iterate({enter(node){if(node.type.isError&&count++<10)out.push(dgItem(text,{message:'Python syntax is incomplete or invalid here.',start:node.from,end:Math.max(node.from+1,node.to)}));}});}
- return out;
+function dgRange(text, start, end = start + 1) {
+  const from = dgPos(text, start),
+    to = dgPos(text, Math.max(start + 1, end));
+  return { line: from.line, ch: from.ch, endLine: to.line, endCh: to.ch, start, end };
 }
-function dgStyles(text,context){const out=[],lines=text.split('\n');let offset=0;for(let line=0;line<lines.length;line++){const value=lines[line],trail=/[ \t]+$/.exec(value);if(trail)out.push(dgItem(text,{severity:'info',source:'style',message:'Trailing whitespace.',start:offset+trail.index,end:offset+value.length,fix:{label:'Remove whitespace',safe:true,range:{start:offset+trail.index,end:offset+value.length},text:''}}));if((['yaml','ansible','github','gitlab','python'].includes(context.profile)||context.mode==='yaml')&&/^\t+/.test(value)){const tabs=/^\t+/.exec(value)[0],size=context.profile==='python'?4:2;out.push(dgItem(text,{severity:'error',source:'style',message:'Indentation tabs are unsafe in this language.',start:offset,end:offset+tabs.length,fix:{label:'Convert tabs to spaces',safe:true,range:{start:offset,end:offset+tabs.length},text:' '.repeat(size*tabs.length)}}));}offset+=value.length+1;}if(text&&!text.endsWith('\n'))out.push(dgItem(text,{severity:'info',source:'style',message:'File has no final newline.',start:text.length-1,end:text.length,fix:{label:'Add final newline',safe:true,apply:value=>value+'\n'}}));return out;
+function dgItem(
+  text,
+  { severity = 'error', source = 'syntax', message, start = 0, end = start + 1, fix = null },
+) {
+  return { severity, source, message, ...dgRange(text, start, end), fix };
 }
-function dgKeyAt(text,key){const escaped=key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),match=new RegExp('^(\\s*)(?:-\\s+)?["\']?'+escaped+'["\']?\\s*:','mi').exec(text);return match?match.index+match[0].length-match[1].length:0;}
-function dgSchemaItem(text,message,{severity='error',key='',fix=null}={}){const start=key?dgKeyAt(text,key):0;return dgItem(text,{severity,source:'schema',message,start,end:start+Math.max(1,key.length),fix});}
-const DG_SCHEMA_RULES=[
- {id:'kubernetes',title:'Kubernetes resource',detect:(docs,c)=>docs.some(x=>dgObject(x)&&('apiVersion'in x||'kind'in x)),validate(docs,text){const out=[];for(const doc of docs.filter(dgObject)){if(typeof doc.apiVersion!=='string')out.push(dgSchemaItem(text,'Kubernetes resources need a string apiVersion.',{key:'apiVersion'}));if(typeof doc.kind!=='string')out.push(dgSchemaItem(text,'Kubernetes resources need a string kind.',{key:'kind'}));if(!dgObject(doc.metadata)||typeof doc.metadata.name!=='string'||!doc.metadata.name.trim())out.push(dgSchemaItem(text,'Kubernetes resources need metadata.name.',{key:dgObject(doc.metadata)?'metadata':'kind',fix:{label:'Add metadata.name',safe:false,apply:value=>/^\s*metadata\s*:\s*\{?\}?\s*$/m.test(value)?value.replace(/^(\s*)metadata\s*:\s*\{?\}?\s*$/m,'$1metadata:\n$1  name: app'):value.replace(/^(\s*kind\s*:[^\n]*\n)/m,'$1metadata:\n  name: app\n')}}));if(doc.kind==='Deployment'&&(!dgObject(doc.spec)||!dgObject(doc.spec.template)||!dgObject(doc.spec.selector)))out.push(dgSchemaItem(text,'Deployment spec needs selector and template mappings.',{key:'spec'}));if(doc.kind==='Service'&&(!dgObject(doc.spec)||!Array.isArray(doc.spec.ports)||!doc.spec.ports.length))out.push(dgSchemaItem(text,'Service spec needs at least one port.',{key:'spec'}));}return out;}},
- {id:'compose',title:'Docker Compose',detect:(docs,c)=>/^(?:docker-)?compose(?:\.[^.]+)?\.ya?ml$/i.test(c.filename)||docs.some(x=>dgObject(x)&&dgObject(x.services)&&!x.apiVersion),validate(docs,text){const root=docs[0],out=[];if(!dgObject(root?.services)||!Object.keys(root.services).length)return[dgSchemaItem(text,'Compose needs a non-empty services mapping.',{key:'services'})];for(const [name,service] of Object.entries(root.services)){if(!dgObject(service))out.push(dgSchemaItem(text,'Service '+name+' must be a mapping.',{key:name}));else{if(!service.image&&!service.build)out.push(dgSchemaItem(text,'Service '+name+' should define image or build.',{severity:'warning',key:name}));if(service.ports!==undefined&&!Array.isArray(service.ports))out.push(dgSchemaItem(text,'Service '+name+' ports must be a list.',{key:'ports'}));}}if(root.version!==undefined)out.push(dgSchemaItem(text,'Compose version is obsolete in current Compose specifications.',{severity:'info',key:'version'}));return out;}},
- {id:'github-actions',title:'GitHub Actions',detect:(docs,c)=>c.profile==='github'||c.profile==='github-actions'||/\.github\/workflows\//i.test(c.path),validate(docs,text){const root=docs[0],out=[];if(!dgObject(root))return[dgSchemaItem(text,'Workflow root must be a mapping.')];if(root.on===undefined)out.push(dgSchemaItem(text,'GitHub Actions workflow needs an on trigger.',{key:'name',fix:{label:'Add push trigger',safe:false,apply:value=>value.replace(/^(\s*name\s*:[^\n]*\n)?/,'$&on:\n  push:\n')}}));if(!dgObject(root.jobs)||!Object.keys(root.jobs).length)out.push(dgSchemaItem(text,'Workflow needs a non-empty jobs mapping.',{key:'jobs'}));else for(const [name,job] of Object.entries(root.jobs)){if(!dgObject(job))out.push(dgSchemaItem(text,'Job '+name+' must be a mapping.',{key:name}));else if(!job.uses){if(!job['runs-on'])out.push(dgSchemaItem(text,'Job '+name+' needs runs-on or a reusable workflow reference.',{key:name}));if(!Array.isArray(job.steps)||!job.steps.length)out.push(dgSchemaItem(text,'Job '+name+' needs at least one step.',{key:name}));else for(const step of job.steps)if(!dgObject(step)||(!step.run&&!step.uses)||step.run&&step.uses)out.push(dgSchemaItem(text,'Each step needs exactly one of run or uses.',{key:'steps'}));}}return out;}},
- {id:'gitlab-ci',title:'GitLab CI',detect:(docs,c)=>c.profile==='gitlab'||c.profile==='gitlab-ci'||/(^|\/)\.gitlab-ci\.ya?ml$/i.test(c.path),validate(docs,text){const root=docs[0],out=[],reserved=new Set(['stages','variables','default','include','workflow','image','services','cache','before_script','after_script']);if(!dgObject(root))return[dgSchemaItem(text,'GitLab pipeline root must be a mapping.')];const stages=root.stages;if(stages!==undefined&&(!Array.isArray(stages)||stages.some(x=>typeof x!=='string')))out.push(dgSchemaItem(text,'GitLab stages must be a list of names.',{key:'stages'}));for(const [name,job] of Object.entries(root).filter(([key])=>!reserved.has(key)&&!key.startsWith('.'))){if(!dgObject(job))continue;if(job.script===undefined&&!job.trigger)out.push(dgSchemaItem(text,'GitLab job '+name+' needs script or trigger.',{key:name}));if(job.stage&&Array.isArray(stages)&&!stages.includes(job.stage))out.push(dgSchemaItem(text,'Job '+name+' uses a stage not listed in stages.',{key:'stage'}));}return out;}},
- {id:'ansible-playbook',title:'Ansible playbook',detect:(docs,c)=>c.profile==='ansible'||c.sheet==='ansible'&&Array.isArray(docs[0]),validate(docs,text){const root=docs.length===1?docs[0]:docs,out=[];if(!Array.isArray(root))return[dgSchemaItem(text,'Ansible playbook root must be a list of plays.')];for(const play of root){if(!dgObject(play))out.push(dgSchemaItem(text,'Each Ansible play must be a mapping.'));else{if(!play.name)out.push(dgSchemaItem(text,'Each play should have a descriptive name.',{severity:'warning',key:'hosts'}));if(!play.hosts)out.push(dgSchemaItem(text,'Ansible play needs hosts.',{key:Object.hasOwn(play,'hosts')?'hosts':'name',fix:{label:'Set hosts to all',safe:false,apply:value=>Object.hasOwn(play,'hosts')?value.replace(/^(\s*)hosts\s*:[^\n]*$/m,'$1hosts: all'):value.replace(/^(\s*-\s+name\s*:[^\n]*\n)/m,'$1  hosts: all\n')}}));for(const key of ['tasks','handlers','pre_tasks','post_tasks'])if(play[key]!==undefined&&!Array.isArray(play[key]))out.push(dgSchemaItem(text,key+' must be a list of tasks.',{key}));}}return out;}},
- {id:'package-json',title:'package.json',detect:(docs,c)=>c.filename.toLowerCase()==='package.json',validate(docs,text){const root=docs[0],out=[];if(!dgObject(root))return[dgSchemaItem(text,'package.json root must be an object.')];if(root.name!==undefined&&typeof root.name!=='string')out.push(dgSchemaItem(text,'package name must be a string.',{key:'name'}));if(root.version!==undefined&&typeof root.version!=='string')out.push(dgSchemaItem(text,'package version must be a string.',{key:'version'}));for(const key of ['scripts','dependencies','devDependencies'])if(root[key]!==undefined&&!dgObject(root[key]))out.push(dgSchemaItem(text,key+' must be an object.',{key}));return out;}}
+function dgContext(item) {
+  let filename = '',
+    path = '',
+    sheet = '',
+    profile = typeof eaProfile === 'function' ? eaProfile(item) : 'command';
+  if (item.el.id === 'dd-preview' && ddState) {
+    filename = ddState.filename || '';
+    sheet = ddState.sheet || '';
+    if (ddState.projectId) {
+      const project = pwState?.projects?.[ddState.projectId],
+        file = project?.files?.find((f) => f.id === ddState.projectFileId);
+      path = file?.path || filename;
+    }
+  } else if (item.el.id === 'ab-preview') {
+    filename = 'playbook.yml';
+    path = filename;
+    sheet = 'ansible';
+    profile = 'ansible';
+  } else if (item.el.id === 'dk-preview' && dkActive) {
+    const out = typeof dkOutput === 'function' ? dkOutput() : null;
+    filename = out?.filename || '';
+    path = filename;
+    sheet = dkActive.sheet || '';
+  } else if (item.el.id === 'sx-command-preview') profile = 'command';
+  return { item, filename, path: path || filename, sheet, profile, mode: ceLanguage(item.el) };
+}
+function dgPlaceholder(context, name, quoted = false) {
+  name = String(name || 'SECRET')
+    .replace(/[^A-Za-z0-9_]+/g, '_')
+    .replace(/^\d/, '_$&')
+    .toUpperCase();
+  if (quoted) return '${' + name + '}';
+  if (context.profile === 'github') return '${{ secrets.' + name + ' }}';
+  if (context.profile === 'powershell') return '$env:' + name;
+  if (context.profile === 'python') return 'os.environ.get("' + name + '", "")';
+  if (context.profile === 'terraform') return 'var.' + name.toLowerCase();
+  if (context.profile === 'sql') return ':' + name.toLowerCase();
+  return '"${' + name + '}"';
+}
+function dgSecretFind(text, context = {}) {
+  const found = [];
+  function add(start, end, name, message) {
+    if (found.some((x) => start < x.end && end > x.start)) return;
+    const quoted =
+        start > 0 && ['"', "'"].includes(text[start - 1]) && text[end] === text[start - 1],
+      replacement = dgPlaceholder(context, name, quoted);
+    found.push(
+      dgItem(text, {
+        severity: 'error',
+        source: 'secret',
+        message,
+        start,
+        end,
+        fix: {
+          label: 'Replace with ' + replacement,
+          safe: false,
+          range: { start, end },
+          text: replacement,
+        },
+      }),
+    );
+  }
+  const pem =
+    /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/g;
+  for (const match of text.matchAll(pem))
+    add(
+      match.index,
+      match.index + match[0].length,
+      'PRIVATE_KEY',
+      'Private key material is embedded in this file. Use a secret store or environment reference.',
+    );
+  const tokens = [
+    [/\bAKIA[0-9A-Z]{16}\b/g, 'AWS_ACCESS_KEY_ID', 'AWS access-key-shaped value detected.'],
+    [/\bgh[pousr]_[A-Za-z0-9]{30,255}\b/g, 'GITHUB_TOKEN', 'GitHub token-shaped value detected.'],
+    [
+      /\bgithub_pat_[A-Za-z0-9_]{40,255}\b/g,
+      'GITHUB_TOKEN',
+      'GitHub fine-grained token-shaped value detected.',
+    ],
+    [/\bglpat-[A-Za-z0-9_-]{20,255}\b/g, 'GITLAB_TOKEN', 'GitLab token-shaped value detected.'],
+    [/\bxox[baprs]-[A-Za-z0-9-]{20,255}\b/g, 'SLACK_TOKEN', 'Slack token-shaped value detected.'],
+  ];
+  for (const [pattern, name, message] of tokens)
+    for (const match of text.matchAll(pattern))
+      add(match.index, match.index + match[0].length, name, message);
+  const assignment =
+    /\b(password|passwd|token|secret|api[_-]?key|client[_-]?secret|access[_-]?key)\b\s*[:=]\s*(["']?)([^\s"'#,}\]]{8,})(?:\2)/gim;
+  for (const match of text.matchAll(assignment)) {
+    const value = match[3],
+      lower = value.toLowerCase();
+    if (/\$\{|\{\{|<.*>|redacted|placeholder|example|changeme|dummy|your[_-]/i.test(value))
+      continue;
+    const start = match.index + match[0].indexOf(value);
+    add(
+      start,
+      start + value.length,
+      match[1],
+      match[1] +
+        ' contains a literal value that looks sensitive. Use a placeholder or secret reference.',
+    );
+  }
+  if (
+    context.variableName &&
+    /(password|passwd|token|secret|api[_-]?key|client[_-]?secret|access[_-]?key)/i.test(
+      context.variableName,
+    ) &&
+    text.length >= 8 &&
+    !/\$\{|\{\{|<.*>|redacted|placeholder|example|changeme|dummy/i.test(text)
+  )
+    add(
+      0,
+      text.length,
+      context.variableName,
+      'Shared variables are browser-visible. Store a reference or placeholder instead of this sensitive value.',
+    );
+  return found;
+}
+function dgSyntax(text, context) {
+  const out = [],
+    profile = context.profile,
+    mode = context.mode;
+  if (['yaml', 'ansible', 'github', 'gitlab'].includes(profile) || mode === 'yaml') {
+    try {
+      jsyaml.loadAll(text, () => {}, { schema: jsyaml.JSON_SCHEMA, json: false });
+    } catch (e) {
+      const line = e.mark?.line || 0,
+        ch = e.mark?.column || 0,
+        start =
+          text
+            .split('\n')
+            .slice(0, line)
+            .reduce((n, x) => n + x.length + 1, 0) + ch;
+      out.push(dgItem(text, { message: e.reason || e.message, start, end: start + 1 }));
+    }
+  }
+  if (profile === 'json' || (dgObject(mode) && mode.json)) {
+    try {
+      JSON.parse(text);
+    } catch (e) {
+      const position = Number(/position\s+(\d+)/i.exec(e.message)?.[1] || 0);
+      out.push(
+        dgItem(text, { message: 'JSON syntax: ' + e.message, start: position, end: position + 1 }),
+      );
+    }
+  }
+  if (profile === 'python' && typeof DP_PARSER !== 'undefined') {
+    const tree = DP_PARSER.parse(text);
+    let count = 0;
+    tree.iterate({
+      enter(node) {
+        if (node.type.isError && count++ < 10)
+          out.push(
+            dgItem(text, {
+              message: 'Python syntax is incomplete or invalid here.',
+              start: node.from,
+              end: Math.max(node.from + 1, node.to),
+            }),
+          );
+      },
+    });
+  }
+  return out;
+}
+function dgStyles(text, context) {
+  const out = [],
+    lines = text.split('\n');
+  let offset = 0;
+  for (let line = 0; line < lines.length; line++) {
+    const value = lines[line],
+      trail = /[ \t]+$/.exec(value);
+    if (trail)
+      out.push(
+        dgItem(text, {
+          severity: 'info',
+          source: 'style',
+          message: 'Trailing whitespace.',
+          start: offset + trail.index,
+          end: offset + value.length,
+          fix: {
+            label: 'Remove whitespace',
+            safe: true,
+            range: { start: offset + trail.index, end: offset + value.length },
+            text: '',
+          },
+        }),
+      );
+    if (
+      (['yaml', 'ansible', 'github', 'gitlab', 'python'].includes(context.profile) ||
+        context.mode === 'yaml') &&
+      /^\t+/.test(value)
+    ) {
+      const tabs = /^\t+/.exec(value)[0],
+        size = context.profile === 'python' ? 4 : 2;
+      out.push(
+        dgItem(text, {
+          severity: 'error',
+          source: 'style',
+          message: 'Indentation tabs are unsafe in this language.',
+          start: offset,
+          end: offset + tabs.length,
+          fix: {
+            label: 'Convert tabs to spaces',
+            safe: true,
+            range: { start: offset, end: offset + tabs.length },
+            text: ' '.repeat(size * tabs.length),
+          },
+        }),
+      );
+    }
+    offset += value.length + 1;
+  }
+  if (text && !text.endsWith('\n'))
+    out.push(
+      dgItem(text, {
+        severity: 'info',
+        source: 'style',
+        message: 'File has no final newline.',
+        start: text.length - 1,
+        end: text.length,
+        fix: { label: 'Add final newline', safe: true, apply: (value) => value + '\n' },
+      }),
+    );
+  return out;
+}
+function dgKeyAt(text, key) {
+  const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+    match = new RegExp('^(\\s*)(?:-\\s+)?["\']?' + escaped + '["\']?\\s*:', 'mi').exec(text);
+  return match ? match.index + match[0].length - match[1].length : 0;
+}
+function dgSchemaItem(text, message, { severity = 'error', key = '', fix = null } = {}) {
+  const start = key ? dgKeyAt(text, key) : 0;
+  return dgItem(text, {
+    severity,
+    source: 'schema',
+    message,
+    start,
+    end: start + Math.max(1, key.length),
+    fix,
+  });
+}
+const DG_SCHEMA_RULES = [
+  {
+    id: 'kubernetes',
+    title: 'Kubernetes resource',
+    detect: (docs, c) => docs.some((x) => dgObject(x) && ('apiVersion' in x || 'kind' in x)),
+    validate(docs, text) {
+      const out = [];
+      for (const doc of docs.filter(dgObject)) {
+        if (typeof doc.apiVersion !== 'string')
+          out.push(
+            dgSchemaItem(text, 'Kubernetes resources need a string apiVersion.', {
+              key: 'apiVersion',
+            }),
+          );
+        if (typeof doc.kind !== 'string')
+          out.push(dgSchemaItem(text, 'Kubernetes resources need a string kind.', { key: 'kind' }));
+        if (
+          !dgObject(doc.metadata) ||
+          typeof doc.metadata.name !== 'string' ||
+          !doc.metadata.name.trim()
+        )
+          out.push(
+            dgSchemaItem(text, 'Kubernetes resources need metadata.name.', {
+              key: dgObject(doc.metadata) ? 'metadata' : 'kind',
+              fix: {
+                label: 'Add metadata.name',
+                safe: false,
+                apply: (value) =>
+                  /^\s*metadata\s*:\s*\{?\}?\s*$/m.test(value)
+                    ? value.replace(
+                        /^(\s*)metadata\s*:\s*\{?\}?\s*$/m,
+                        '$1metadata:\n$1  name: app',
+                      )
+                    : value.replace(/^(\s*kind\s*:[^\n]*\n)/m, '$1metadata:\n  name: app\n'),
+              },
+            }),
+          );
+        if (
+          doc.kind === 'Deployment' &&
+          (!dgObject(doc.spec) || !dgObject(doc.spec.template) || !dgObject(doc.spec.selector))
+        )
+          out.push(
+            dgSchemaItem(text, 'Deployment spec needs selector and template mappings.', {
+              key: 'spec',
+            }),
+          );
+        if (
+          doc.kind === 'Service' &&
+          (!dgObject(doc.spec) || !Array.isArray(doc.spec.ports) || !doc.spec.ports.length)
+        )
+          out.push(dgSchemaItem(text, 'Service spec needs at least one port.', { key: 'spec' }));
+      }
+      return out;
+    },
+  },
+  {
+    id: 'compose',
+    title: 'Docker Compose',
+    detect: (docs, c) =>
+      /^(?:docker-)?compose(?:\.[^.]+)?\.ya?ml$/i.test(c.filename) ||
+      docs.some((x) => dgObject(x) && dgObject(x.services) && !x.apiVersion),
+    validate(docs, text) {
+      const root = docs[0],
+        out = [];
+      if (!dgObject(root?.services) || !Object.keys(root.services).length)
+        return [
+          dgSchemaItem(text, 'Compose needs a non-empty services mapping.', { key: 'services' }),
+        ];
+      for (const [name, service] of Object.entries(root.services)) {
+        if (!dgObject(service))
+          out.push(dgSchemaItem(text, 'Service ' + name + ' must be a mapping.', { key: name }));
+        else {
+          if (!service.image && !service.build)
+            out.push(
+              dgSchemaItem(text, 'Service ' + name + ' should define image or build.', {
+                severity: 'warning',
+                key: name,
+              }),
+            );
+          if (service.ports !== undefined && !Array.isArray(service.ports))
+            out.push(
+              dgSchemaItem(text, 'Service ' + name + ' ports must be a list.', { key: 'ports' }),
+            );
+        }
+      }
+      if (root.version !== undefined)
+        out.push(
+          dgSchemaItem(text, 'Compose version is obsolete in current Compose specifications.', {
+            severity: 'info',
+            key: 'version',
+          }),
+        );
+      return out;
+    },
+  },
+  {
+    id: 'github-actions',
+    title: 'GitHub Actions',
+    detect: (docs, c) =>
+      c.profile === 'github' ||
+      c.profile === 'github-actions' ||
+      /\.github\/workflows\//i.test(c.path),
+    validate(docs, text) {
+      const root = docs[0],
+        out = [];
+      if (!dgObject(root)) return [dgSchemaItem(text, 'Workflow root must be a mapping.')];
+      if (root.on === undefined)
+        out.push(
+          dgSchemaItem(text, 'GitHub Actions workflow needs an on trigger.', {
+            key: 'name',
+            fix: {
+              label: 'Add push trigger',
+              safe: false,
+              apply: (value) => value.replace(/^(\s*name\s*:[^\n]*\n)?/, '$&on:\n  push:\n'),
+            },
+          }),
+        );
+      if (!dgObject(root.jobs) || !Object.keys(root.jobs).length)
+        out.push(dgSchemaItem(text, 'Workflow needs a non-empty jobs mapping.', { key: 'jobs' }));
+      else
+        for (const [name, job] of Object.entries(root.jobs)) {
+          if (!dgObject(job))
+            out.push(dgSchemaItem(text, 'Job ' + name + ' must be a mapping.', { key: name }));
+          else if (!job.uses) {
+            if (!job['runs-on'])
+              out.push(
+                dgSchemaItem(
+                  text,
+                  'Job ' + name + ' needs runs-on or a reusable workflow reference.',
+                  { key: name },
+                ),
+              );
+            if (!Array.isArray(job.steps) || !job.steps.length)
+              out.push(
+                dgSchemaItem(text, 'Job ' + name + ' needs at least one step.', { key: name }),
+              );
+            else
+              for (const step of job.steps)
+                if (!dgObject(step) || (!step.run && !step.uses) || (step.run && step.uses))
+                  out.push(
+                    dgSchemaItem(text, 'Each step needs exactly one of run or uses.', {
+                      key: 'steps',
+                    }),
+                  );
+          }
+        }
+      return out;
+    },
+  },
+  {
+    id: 'gitlab-ci',
+    title: 'GitLab CI',
+    detect: (docs, c) =>
+      c.profile === 'gitlab' ||
+      c.profile === 'gitlab-ci' ||
+      /(^|\/)\.gitlab-ci\.ya?ml$/i.test(c.path),
+    validate(docs, text) {
+      const root = docs[0],
+        out = [],
+        reserved = new Set([
+          'stages',
+          'variables',
+          'default',
+          'include',
+          'workflow',
+          'image',
+          'services',
+          'cache',
+          'before_script',
+          'after_script',
+        ]);
+      if (!dgObject(root)) return [dgSchemaItem(text, 'GitLab pipeline root must be a mapping.')];
+      const stages = root.stages;
+      if (
+        stages !== undefined &&
+        (!Array.isArray(stages) || stages.some((x) => typeof x !== 'string'))
+      )
+        out.push(dgSchemaItem(text, 'GitLab stages must be a list of names.', { key: 'stages' }));
+      for (const [name, job] of Object.entries(root).filter(
+        ([key]) => !reserved.has(key) && !key.startsWith('.'),
+      )) {
+        if (!dgObject(job)) continue;
+        if (job.script === undefined && !job.trigger)
+          out.push(
+            dgSchemaItem(text, 'GitLab job ' + name + ' needs script or trigger.', { key: name }),
+          );
+        if (job.stage && Array.isArray(stages) && !stages.includes(job.stage))
+          out.push(
+            dgSchemaItem(text, 'Job ' + name + ' uses a stage not listed in stages.', {
+              key: 'stage',
+            }),
+          );
+      }
+      return out;
+    },
+  },
+  {
+    id: 'ansible-playbook',
+    title: 'Ansible playbook',
+    detect: (docs, c) =>
+      c.profile === 'ansible' || (c.sheet === 'ansible' && Array.isArray(docs[0])),
+    validate(docs, text) {
+      const root = docs.length === 1 ? docs[0] : docs,
+        out = [];
+      if (!Array.isArray(root))
+        return [dgSchemaItem(text, 'Ansible playbook root must be a list of plays.')];
+      for (const play of root) {
+        if (!dgObject(play)) out.push(dgSchemaItem(text, 'Each Ansible play must be a mapping.'));
+        else {
+          if (!play.name)
+            out.push(
+              dgSchemaItem(text, 'Each play should have a descriptive name.', {
+                severity: 'warning',
+                key: 'hosts',
+              }),
+            );
+          if (!play.hosts)
+            out.push(
+              dgSchemaItem(text, 'Ansible play needs hosts.', {
+                key: Object.hasOwn(play, 'hosts') ? 'hosts' : 'name',
+                fix: {
+                  label: 'Set hosts to all',
+                  safe: false,
+                  apply: (value) =>
+                    Object.hasOwn(play, 'hosts')
+                      ? value.replace(/^(\s*)hosts\s*:[^\n]*$/m, '$1hosts: all')
+                      : value.replace(/^(\s*-\s+name\s*:[^\n]*\n)/m, '$1  hosts: all\n'),
+                },
+              }),
+            );
+          for (const key of ['tasks', 'handlers', 'pre_tasks', 'post_tasks'])
+            if (play[key] !== undefined && !Array.isArray(play[key]))
+              out.push(dgSchemaItem(text, key + ' must be a list of tasks.', { key }));
+        }
+      }
+      return out;
+    },
+  },
+  {
+    id: 'package-json',
+    title: 'package.json',
+    detect: (docs, c) => c.filename.toLowerCase() === 'package.json',
+    validate(docs, text) {
+      const root = docs[0],
+        out = [];
+      if (!dgObject(root)) return [dgSchemaItem(text, 'package.json root must be an object.')];
+      if (root.name !== undefined && typeof root.name !== 'string')
+        out.push(dgSchemaItem(text, 'package name must be a string.', { key: 'name' }));
+      if (root.version !== undefined && typeof root.version !== 'string')
+        out.push(dgSchemaItem(text, 'package version must be a string.', { key: 'version' }));
+      for (const key of ['scripts', 'dependencies', 'devDependencies'])
+        if (root[key] !== undefined && !dgObject(root[key]))
+          out.push(dgSchemaItem(text, key + ' must be an object.', { key }));
+      return out;
+    },
+  },
 ];
-function dgSchema(text,context,syntax){if(syntax.some(x=>x.severity==='error'))return[];const structured=['yaml','ansible','github','github-actions','gitlab','gitlab-ci','json'].includes(context.profile)||context.mode==='yaml'||dgObject(context.mode)&&context.mode.json;if(!structured)return[];let docs;try{docs=(context.profile==='json'||dgObject(context.mode)&&context.mode.json)?[JSON.parse(text)]:jsyaml.loadAll(text,{schema:jsyaml.JSON_SCHEMA,json:false});}catch{return[];}const out=[];for(const rule of DG_SCHEMA_RULES)if(rule.detect(docs,context))out.push(...rule.validate(docs,text).map(item=>({...item,schema:rule.title})));return out;}
-for(const [id,rules] of Object.entries({yaml:['kubernetes','compose','ansible-playbook'],json:['package-json'],ansible:['ansible-playbook'],github:['github-actions'],['github-actions']:['github-actions'],gitlab:['gitlab-ci'],['gitlab-ci']:['gitlab-ci']})){const schema=dkSchemaGet(id);if(schema)schema.validation={...(schema.validation||{}),diagnosticRules:rules};}
-function dgAnalyze(text,context){if(!context||context.profile==='command')return[];const syntax=dgSyntax(text,context);return [...syntax,...dgSchema(text,context,syntax),...dgSecretFind(text,context),...dgStyles(text,context)].sort((a,b)=>b.severity&&DG_SEVERITY[b.severity]-DG_SEVERITY[a.severity]||a.start-b.start).slice(0,DG_MAX);}
-function dgClear(item){for(const mark of item.dgMarks||[])mark.clear();for(const line of item.dgLines||[])item.cm.removeLineClass(line,'background','dg-line');item.dgMarks=[];item.dgLines=[];}
-function dgGoto(item,diagnostic){item.cm.focus();item.cm.setCursor({line:diagnostic.line,ch:diagnostic.ch});item.cm.scrollIntoView({line:diagnostic.line,ch:diagnostic.ch},80);}
-function dgApply(item,diagnostic){const fix=diagnostic.fix;if(!fix)return;const cm=item.cm,value=cm.getValue();cm.operation(()=>{if(fix.range){cm.replaceRange(fix.text,cm.posFromIndex(fix.range.start),cm.posFromIndex(fix.range.end),'+diagnostic');cm.setCursor(cm.posFromIndex(fix.range.start+fix.text.length));}else if(fix.apply){const next=fix.apply(value);if(next!==value){const cursor=cm.getCursor();cm.setValue(next);cm.setCursor(cursor);}}});dgSchedule(item,0);}
-function dgRender(item,diagnostics){dgClear(item);item.dgDiagnostics=diagnostics;const body=item.dgBody,open=item.dgPanel.open;body.replaceChildren();let errors=0,warnings=0;for(const diagnostic of diagnostics){if(diagnostic.severity==='error')errors++;if(diagnostic.severity==='warning')warnings++;const from={line:diagnostic.line,ch:diagnostic.ch},to={line:diagnostic.endLine,ch:diagnostic.endCh};if(from.line===to.line&&from.ch===to.ch)item.dgLines.push(item.cm.addLineClass(from.line,'background','dg-line'));else item.dgMarks.push(item.cm.markText(from,to,{className:'dg-mark '+diagnostic.severity,title:diagnostic.message}));const row=dkEl('div','dg-row '+diagnostic.severity),jump=dkBtn((diagnostic.schema?diagnostic.schema+' · ':'')+(diagnostic.line+1)+':'+(diagnostic.ch+1)+' · '+diagnostic.message,()=>dgGoto(item,diagnostic),'dg-message');row.append(dkEl('span','dg-level',diagnostic.severity),jump);if(diagnostic.fix)row.append(dkBtn(diagnostic.fix.label,()=>dgApply(item,diagnostic),'dk-small'));body.append(row);}const safe=diagnostics.filter(x=>x.fix?.safe);if(safe.length){const all=dkBtn('Apply '+safe.length+' safe repair'+(safe.length===1?'':'s'),()=>{const ordered=[...safe].sort((a,b)=>(b.fix.range?.start??Infinity)-(a.fix.range?.start??Infinity));for(const diagnostic of ordered)dgApply(item,diagnostic);},'dk-small');body.prepend(all);}item.dgSummary.textContent=diagnostics.length?'Diagnostics · '+errors+' errors · '+warnings+' warnings · '+diagnostics.length+' total':'Diagnostics · No issues detected';item.dgPanel.classList.toggle('ready',!diagnostics.length);item.dgPanel.open=open||errors>0;}
-function dgRun(item){if(!item?.el?.isConnected||item.writing)return;dgRender(item,dgAnalyze(item.cm.getValue(),dgContext(item)));}
-function dgSchedule(item,delay=350){clearTimeout(item.dgTimer);item.dgTimer=setTimeout(()=>dgRun(item),delay);}
-function dgMount(item){if(item.dgPanel||item.el.id==='sx-command-preview')return;const panel=dkEl('details','dg-panel'),summary=dkEl('summary','dg-summary','Diagnostics · Checking…'),body=dkEl('div','dg-body');panel.append(summary,body);item.cm.getWrapperElement().after(panel);item.dgPanel=panel;item.dgSummary=summary;item.dgBody=body;item.dgMarks=[];item.cm.on('change',()=>dgSchedule(item));dgSchedule(item,0);}
-const dgBaseAttach=ceAttach;ceAttach=function(el){dgBaseAttach(el);const item=CE_EDITORS.get(el);if(item)dgMount(item);};for(const item of CE_EDITORS.values())dgMount(item);
-const dgBaseVariables=pwVariables;pwVariables=function(host,project){dgBaseVariables(host,project);for(const input of host.querySelectorAll('[aria-label="Shared variable value"]')){const row=input.closest('.pw-variable'),name=row?.querySelector('[aria-label="Shared variable name"]'),notice=dkEl('small','dg-variable-warning');row?.after(notice);const original=input.onchange;function scan(){const findings=dgSecretFind(input.value,{profile:'variable',variableName:name?.value||''});row?.classList.toggle('dg-variable-unsafe',!!findings.length);notice.textContent=findings.length?'This resembles a secret. Use a placeholder such as ${'+(name?.value||'SECRET')+'}; the value was not saved.':'';return findings;}input.oninput=scan;input.onchange=()=>{if(scan().length)return;original?.();};scan();}}
+function dgSchema(text, context, syntax) {
+  if (syntax.some((x) => x.severity === 'error')) return [];
+  const structured =
+    ['yaml', 'ansible', 'github', 'github-actions', 'gitlab', 'gitlab-ci', 'json'].includes(
+      context.profile,
+    ) ||
+    context.mode === 'yaml' ||
+    (dgObject(context.mode) && context.mode.json);
+  if (!structured) return [];
+  let docs;
+  try {
+    docs =
+      context.profile === 'json' || (dgObject(context.mode) && context.mode.json)
+        ? [JSON.parse(text)]
+        : jsyaml.loadAll(text, { schema: jsyaml.JSON_SCHEMA, json: false });
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const rule of DG_SCHEMA_RULES)
+    if (rule.detect(docs, context))
+      out.push(...rule.validate(docs, text).map((item) => ({ ...item, schema: rule.title })));
+  return out;
+}
+for (const [id, rules] of Object.entries({
+  yaml: ['kubernetes', 'compose', 'ansible-playbook'],
+  json: ['package-json'],
+  ansible: ['ansible-playbook'],
+  github: ['github-actions'],
+  ['github-actions']: ['github-actions'],
+  gitlab: ['gitlab-ci'],
+  ['gitlab-ci']: ['gitlab-ci'],
+})) {
+  const schema = dkSchemaGet(id);
+  if (schema) schema.validation = { ...(schema.validation || {}), diagnosticRules: rules };
+}
+function dgAnalyze(text, context) {
+  if (!context || context.profile === 'command') return [];
+  const syntax = dgSyntax(text, context);
+  return [
+    ...syntax,
+    ...dgSchema(text, context, syntax),
+    ...dgSecretFind(text, context),
+    ...dgStyles(text, context),
+  ]
+    .sort(
+      (a, b) =>
+        (b.severity && DG_SEVERITY[b.severity] - DG_SEVERITY[a.severity]) || a.start - b.start,
+    )
+    .slice(0, DG_MAX);
+}
+function dgClear(item) {
+  for (const mark of item.dgMarks || []) mark.clear();
+  for (const line of item.dgLines || []) item.cm.removeLineClass(line, 'background', 'dg-line');
+  item.dgMarks = [];
+  item.dgLines = [];
+}
+function dgGoto(item, diagnostic) {
+  item.cm.focus();
+  item.cm.setCursor({ line: diagnostic.line, ch: diagnostic.ch });
+  item.cm.scrollIntoView({ line: diagnostic.line, ch: diagnostic.ch }, 80);
+}
+function dgApply(item, diagnostic) {
+  const fix = diagnostic.fix;
+  if (!fix) return;
+  const cm = item.cm,
+    value = cm.getValue();
+  cm.operation(() => {
+    if (fix.range) {
+      cm.replaceRange(
+        fix.text,
+        cm.posFromIndex(fix.range.start),
+        cm.posFromIndex(fix.range.end),
+        '+diagnostic',
+      );
+      cm.setCursor(cm.posFromIndex(fix.range.start + fix.text.length));
+    } else if (fix.apply) {
+      const next = fix.apply(value);
+      if (next !== value) {
+        const cursor = cm.getCursor();
+        cm.setValue(next);
+        cm.setCursor(cursor);
+      }
+    }
+  });
+  dgSchedule(item, 0);
+}
+function dgRender(item, diagnostics) {
+  dgClear(item);
+  item.dgDiagnostics = diagnostics;
+  const body = item.dgBody,
+    open = item.dgPanel.open;
+  body.replaceChildren();
+  let errors = 0,
+    warnings = 0;
+  for (const diagnostic of diagnostics) {
+    if (diagnostic.severity === 'error') errors++;
+    if (diagnostic.severity === 'warning') warnings++;
+    const from = { line: diagnostic.line, ch: diagnostic.ch },
+      to = { line: diagnostic.endLine, ch: diagnostic.endCh };
+    if (from.line === to.line && from.ch === to.ch)
+      item.dgLines.push(item.cm.addLineClass(from.line, 'background', 'dg-line'));
+    else
+      item.dgMarks.push(
+        item.cm.markText(from, to, {
+          className: 'dg-mark ' + diagnostic.severity,
+          title: diagnostic.message,
+        }),
+      );
+    const row = dkEl('div', 'dg-row ' + diagnostic.severity),
+      jump = dkBtn(
+        (diagnostic.schema ? diagnostic.schema + ' · ' : '') +
+          (diagnostic.line + 1) +
+          ':' +
+          (diagnostic.ch + 1) +
+          ' · ' +
+          diagnostic.message,
+        () => dgGoto(item, diagnostic),
+        'dg-message',
+      );
+    row.append(dkEl('span', 'dg-level', diagnostic.severity), jump);
+    if (diagnostic.fix)
+      row.append(dkBtn(diagnostic.fix.label, () => dgApply(item, diagnostic), 'dk-small'));
+    body.append(row);
+  }
+  const safe = diagnostics.filter((x) => x.fix?.safe);
+  if (safe.length) {
+    const all = dkBtn(
+      'Apply ' + safe.length + ' safe repair' + (safe.length === 1 ? '' : 's'),
+      () => {
+        const ordered = [...safe].sort(
+          (a, b) => (b.fix.range?.start ?? Infinity) - (a.fix.range?.start ?? Infinity),
+        );
+        for (const diagnostic of ordered) dgApply(item, diagnostic);
+      },
+      'dk-small',
+    );
+    body.prepend(all);
+  }
+  item.dgSummary.textContent = diagnostics.length
+    ? 'Diagnostics · ' +
+      errors +
+      ' errors · ' +
+      warnings +
+      ' warnings · ' +
+      diagnostics.length +
+      ' total'
+    : 'Diagnostics · No issues detected';
+  item.dgPanel.classList.toggle('ready', !diagnostics.length);
+  item.dgPanel.open = open || errors > 0;
+}
+function dgRun(item) {
+  if (!item?.el?.isConnected || item.writing) return;
+  dgRender(item, dgAnalyze(item.cm.getValue(), dgContext(item)));
+}
+function dgSchedule(item, delay = 350) {
+  clearTimeout(item.dgTimer);
+  item.dgTimer = setTimeout(() => dgRun(item), delay);
+}
+function dgMount(item) {
+  if (item.dgPanel || item.el.id === 'sx-command-preview') return;
+  const panel = dkEl('details', 'dg-panel'),
+    summary = dkEl('summary', 'dg-summary', 'Diagnostics · Checking…'),
+    body = dkEl('div', 'dg-body');
+  panel.append(summary, body);
+  item.cm.getWrapperElement().after(panel);
+  item.dgPanel = panel;
+  item.dgSummary = summary;
+  item.dgBody = body;
+  item.dgMarks = [];
+  item.cm.on('change', () => dgSchedule(item));
+  dgSchedule(item, 0);
+}
+const dgBaseAttach = ceAttach;
+ceAttach = function (el) {
+  dgBaseAttach(el);
+  const item = CE_EDITORS.get(el);
+  if (item) dgMount(item);
+};
+for (const item of CE_EDITORS.values()) dgMount(item);
+const dgBaseVariables = pwVariables;
+pwVariables = function (host, project) {
+  dgBaseVariables(host, project);
+  for (const input of host.querySelectorAll('[aria-label="Shared variable value"]')) {
+    const row = input.closest('.pw-variable'),
+      name = row?.querySelector('[aria-label="Shared variable name"]'),
+      notice = dkEl('small', 'dg-variable-warning');
+    row?.after(notice);
+    const original = input.onchange;
+    function scan() {
+      const findings = dgSecretFind(input.value, {
+        profile: 'variable',
+        variableName: name?.value || '',
+      });
+      row?.classList.toggle('dg-variable-unsafe', !!findings.length);
+      notice.textContent = findings.length
+        ? 'This resembles a secret. Use a placeholder such as ${' +
+          (name?.value || 'SECRET') +
+          '}; the value was not saved.'
+        : '';
+      return findings;
+    }
+    input.oninput = scan;
+    input.onchange = () => {
+      if (scan().length) return;
+      original?.();
+    };
+    scan();
+  }
+};

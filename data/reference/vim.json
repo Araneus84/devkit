@@ -1,0 +1,351 @@
+{
+  "name": "Vim",
+  "icon": "✎",
+  "iconBg": "#019733",
+  "subtitle": "Modal text editor",
+  "meta": "Vim 8/9+",
+  "sections": [
+    {
+      "id": "vim-modes",
+      "title": "Modes & Basics",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "Esc",
+          "desc": "Return to Normal mode (the default mode)"
+        },
+        {
+          "cmd": "i",
+          "desc": "Insert mode — type text before cursor"
+        },
+        {
+          "cmd": "a",
+          "desc": "Insert mode — append after cursor"
+        },
+        {
+          "cmd": "I",
+          "desc": "Insert at beginning of line"
+        },
+        {
+          "cmd": "A",
+          "desc": "Append at end of line"
+        },
+        {
+          "cmd": "o / O",
+          "desc": "New line below / above current line and enter Insert mode"
+        },
+        {
+          "cmd": "v",
+          "desc": "Visual mode — select characters"
+        },
+        {
+          "cmd": "V",
+          "desc": "Visual Line mode — select whole lines"
+        },
+        {
+          "cmd": "Ctrl+v",
+          "desc": "Visual Block mode — column/rectangle selection"
+        },
+        {
+          "cmd": ":",
+          "desc": "Command-line mode — for save, quit, search & replace, etc."
+        }
+      ]
+    },
+    {
+      "id": "vim-nav",
+      "title": "Navigation",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "h j k l",
+          "desc": "Left, Down, Up, Right (vim movement keys)"
+        },
+        {
+          "cmd": "w / b",
+          "desc": "Forward / backward by word"
+        },
+        {
+          "cmd": "e",
+          "desc": "Move to end of word"
+        },
+        {
+          "cmd": "0 / $",
+          "desc": "Beginning / end of line"
+        },
+        {
+          "cmd": "^",
+          "desc": "First non-blank character of line"
+        },
+        {
+          "cmd": "gg / G",
+          "desc": "Go to first / last line of file"
+        },
+        {
+          "cmd": "5G or :5",
+          "desc": "Go to line 5"
+        },
+        {
+          "cmd": "Ctrl+d / Ctrl+u",
+          "desc": "Half page down / up"
+        },
+        {
+          "cmd": "Ctrl+f / Ctrl+b",
+          "desc": "Full page forward / back"
+        },
+        {
+          "cmd": "{ / }",
+          "desc": "Previous / next empty line (paragraph)"
+        },
+        {
+          "cmd": "%",
+          "desc": "Jump to matching bracket"
+        },
+        {
+          "cmd": "fX / FX",
+          "desc": "Jump forward / back to next X character"
+        },
+        {
+          "cmd": "*",
+          "desc": "Find next occurrence of word under cursor"
+        },
+        {
+          "cmd": "#",
+          "desc": "Find previous occurrence of word under cursor"
+        }
+      ]
+    },
+    {
+      "id": "vim-edit",
+      "title": "Editing",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "x",
+          "desc": "Delete character under cursor"
+        },
+        {
+          "cmd": "dd",
+          "desc": "Delete (cut) current line"
+        },
+        {
+          "cmd": "5dd",
+          "desc": "Delete 5 lines"
+        },
+        {
+          "cmd": "dw",
+          "desc": "Delete word"
+        },
+        {
+          "cmd": "d$ or D",
+          "desc": "Delete to end of line"
+        },
+        {
+          "cmd": "cc",
+          "desc": "Change (replace) entire line — enters Insert mode"
+        },
+        {
+          "cmd": "cw",
+          "desc": "Change word"
+        },
+        {
+          "cmd": "C",
+          "desc": "Change to end of line"
+        },
+        {
+          "cmd": "r X",
+          "desc": "Replace single character with X"
+        },
+        {
+          "cmd": "R",
+          "desc": "Replace mode (overwrite)"
+        },
+        {
+          "cmd": "yy",
+          "desc": "Yank (copy) current line"
+        },
+        {
+          "cmd": "yw",
+          "desc": "Yank word"
+        },
+        {
+          "cmd": "p / P",
+          "desc": "Paste after / before cursor"
+        },
+        {
+          "cmd": "u",
+          "desc": "Undo"
+        },
+        {
+          "cmd": "Ctrl+r",
+          "desc": "Redo"
+        },
+        {
+          "cmd": ".",
+          "desc": "Repeat last change"
+        },
+        {
+          "cmd": ">> / <<",
+          "desc": "Indent / outdent line"
+        }
+      ]
+    },
+    {
+      "id": "vim-search",
+      "title": "Search & Replace",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "/pattern",
+          "desc": "Search forward for pattern"
+        },
+        {
+          "cmd": "?pattern",
+          "desc": "Search backward for pattern"
+        },
+        {
+          "cmd": "n / N",
+          "desc": "Next / previous match"
+        },
+        {
+          "cmd": ":%s/old/new/g",
+          "desc": "Replace all \"old\" with \"new\" in entire file"
+        },
+        {
+          "cmd": ":%s/old/new/gc",
+          "desc": "Replace with confirmation for each"
+        },
+        {
+          "cmd": ":5,15s/old/new/g",
+          "desc": "Replace only in lines 5 to 15"
+        },
+        {
+          "cmd": ":%s/old/new/gi",
+          "desc": "Case-insensitive replace"
+        },
+        {
+          "cmd": ":noh",
+          "desc": "Clear search highlight"
+        }
+      ]
+    },
+    {
+      "id": "vim-files",
+      "title": "Files & Buffers",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": ":w",
+          "desc": "Save (write) current file"
+        },
+        {
+          "cmd": ":w filename",
+          "desc": "Save as different filename"
+        },
+        {
+          "cmd": ":q",
+          "desc": "Quit (fails if unsaved changes)"
+        },
+        {
+          "cmd": ":q!",
+          "desc": "Quit without saving (force)"
+        },
+        {
+          "cmd": ":wq or ZZ",
+          "desc": "Save and quit"
+        },
+        {
+          "cmd": ":wqa",
+          "desc": "Save all and quit all"
+        },
+        {
+          "cmd": ":e filename",
+          "desc": "Open another file"
+        },
+        {
+          "cmd": ":bn / :bp",
+          "desc": "Next / previous buffer"
+        },
+        {
+          "cmd": ":ls",
+          "desc": "List open buffers"
+        },
+        {
+          "cmd": ":bd",
+          "desc": "Close current buffer"
+        },
+        {
+          "cmd": ":split / :vsplit",
+          "desc": "Horizontal / vertical window split"
+        },
+        {
+          "cmd": "Ctrl+w + h/j/k/l",
+          "desc": "Navigate between windows"
+        },
+        {
+          "cmd": "Ctrl+w + q",
+          "desc": "Close current window"
+        }
+      ]
+    },
+    {
+      "id": "vim-misc",
+      "title": "Misc & Settings",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": ":set number / :set nu",
+          "desc": "Show line numbers"
+        },
+        {
+          "cmd": ":set relativenumber / :set rnu",
+          "desc": "Show relative line numbers"
+        },
+        {
+          "cmd": ":set ignorecase / :set ic",
+          "desc": "Case-insensitive search"
+        },
+        {
+          "cmd": ":set hlsearch / :set hls",
+          "desc": "Highlight all search matches"
+        },
+        {
+          "cmd": ":set paste / :set nopaste",
+          "desc": "Toggle paste mode (preserves indentation)"
+        },
+        {
+          "cmd": ":syntax on",
+          "desc": "Enable syntax highlighting"
+        },
+        {
+          "cmd": "Ctrl+g",
+          "desc": "Show file info and cursor position"
+        },
+        {
+          "cmd": ":!command",
+          "desc": "Run shell command without leaving Vim"
+        },
+        {
+          "cmd": ":r filename",
+          "desc": "Read contents of file into buffer"
+        },
+        {
+          "cmd": ":r !date",
+          "desc": "Insert output of shell command"
+        },
+        {
+          "cmd": "qa ... q",
+          "desc": "Record macro \"a\", then \"q\" to stop"
+        },
+        {
+          "cmd": "@a",
+          "desc": "Play back macro \"a\""
+        },
+        {
+          "cmd": ":help topic",
+          "desc": "Show help on topic"
+        }
+      ]
+    }
+  ]
+}

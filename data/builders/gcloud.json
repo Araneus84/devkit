@@ -1,0 +1,192 @@
+{
+  "gcloud::gcloud compute instances create my-vm --machine-type=e2-medium --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud": {
+    "name": "gcloud compute instances create",
+    "description": "Create a Google Compute Engine VM",
+    "base": "gcloud compute instances create",
+    "args": [
+      {
+        "key": "name",
+        "label": "Instance name",
+        "placeholder": "my-vm",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--machine-type",
+        "desc": "Machine type",
+        "valuePrompt": "e2-micro | e2-medium | n2-standard-4",
+        "valueDefault": "e2-medium",
+        "join": "="
+      },
+      {
+        "flag": "--image-family",
+        "desc": "OS image family",
+        "valuePrompt": "ubuntu-2204-lts | debian-11 | centos-stream-9",
+        "valueDefault": "ubuntu-2204-lts",
+        "join": "="
+      },
+      {
+        "flag": "--image-project",
+        "desc": "Image project",
+        "valuePrompt": "ubuntu-os-cloud | debian-cloud | centos-cloud",
+        "valueDefault": "ubuntu-os-cloud",
+        "join": "="
+      },
+      {
+        "flag": "--zone",
+        "desc": "Zone",
+        "valuePrompt": "us-central1-a | us-east1-b",
+        "join": "="
+      },
+      {
+        "flag": "--region",
+        "desc": "Region (auto-selects zone)",
+        "valuePrompt": "us-central1",
+        "join": "="
+      },
+      {
+        "flag": "--boot-disk-size",
+        "desc": "Boot disk size",
+        "valuePrompt": "50GB",
+        "join": "="
+      },
+      {
+        "flag": "--boot-disk-type",
+        "desc": "Boot disk type",
+        "valuePrompt": "pd-standard | pd-ssd | pd-balanced",
+        "join": "="
+      },
+      {
+        "flag": "--tags",
+        "desc": "Network tags for firewall rules",
+        "valuePrompt": "http-server,https-server",
+        "join": "="
+      },
+      {
+        "flag": "--metadata",
+        "desc": "Metadata key=value pairs",
+        "valuePrompt": "ssh-keys=user:pubkey",
+        "join": "="
+      },
+      {
+        "flag": "--preemptible",
+        "desc": "Use preemptible instance (cheaper, can be stopped)"
+      },
+      {
+        "flag": "--no-address",
+        "desc": "No external IP (internal only)"
+      },
+      {
+        "flag": "--subnet",
+        "desc": "Subnet name",
+        "valuePrompt": "default",
+        "join": "="
+      },
+      {
+        "flag": "--service-account",
+        "desc": "Service account email",
+        "valuePrompt": "sa@project.iam.gserviceaccount.com",
+        "join": "="
+      }
+    ]
+  },
+  "gcloud::gcloud run deploy my-service --image=gcr.io/project/image --region=us-central1": {
+    "name": "gcloud run deploy",
+    "description": "Deploy a container to Cloud Run",
+    "base": "gcloud run deploy",
+    "args": [
+      {
+        "key": "name",
+        "label": "Service name",
+        "placeholder": "my-service",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--image",
+        "desc": "Container image URL",
+        "valuePrompt": "gcr.io/project/image:tag",
+        "join": "=",
+        "quote": true
+      },
+      {
+        "flag": "--region",
+        "desc": "Region",
+        "valuePrompt": "us-central1 | europe-west1",
+        "valueDefault": "us-central1",
+        "join": "="
+      },
+      {
+        "flag": "--platform",
+        "desc": "Platform",
+        "valuePrompt": "managed | gke | kubernetes",
+        "valueDefault": "managed",
+        "join": "="
+      },
+      {
+        "flag": "--allow-unauthenticated",
+        "desc": "Allow public access without authentication"
+      },
+      {
+        "flag": "--no-allow-unauthenticated",
+        "desc": "Require authentication"
+      },
+      {
+        "flag": "--memory",
+        "desc": "Memory limit",
+        "valuePrompt": "256Mi | 512Mi | 1Gi | 2Gi",
+        "join": "="
+      },
+      {
+        "flag": "--cpu",
+        "desc": "CPU limit",
+        "valuePrompt": "1 | 2 | 4",
+        "join": "="
+      },
+      {
+        "flag": "--concurrency",
+        "desc": "Max requests per container",
+        "valuePrompt": "80",
+        "join": "="
+      },
+      {
+        "flag": "--min-instances",
+        "desc": "Minimum instances (prevent cold start)",
+        "valuePrompt": "1",
+        "join": "="
+      },
+      {
+        "flag": "--max-instances",
+        "desc": "Maximum instances",
+        "valuePrompt": "100",
+        "join": "="
+      },
+      {
+        "flag": "--set-env-vars",
+        "desc": "Environment variables",
+        "valuePrompt": "KEY1=val1,KEY2=val2",
+        "join": "="
+      },
+      {
+        "flag": "--set-secrets",
+        "desc": "Mount secrets",
+        "valuePrompt": "ENV_VAR=secret-name:version",
+        "join": "="
+      },
+      {
+        "flag": "--service-account",
+        "desc": "Service account",
+        "valuePrompt": "sa@project.iam.gserviceaccount.com",
+        "join": "="
+      },
+      {
+        "flag": "--tag",
+        "desc": "Traffic tag for the revision",
+        "valuePrompt": "canary | staging",
+        "join": "="
+      }
+    ]
+  }
+}

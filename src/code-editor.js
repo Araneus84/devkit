@@ -1,42 +1,337 @@
 /* CodeMirror keeps the real editing surface, language colors and Vim behavior together. */
-const CE_EDITORS=new Map(),CE_DOCUMENTS=new Map(),CE_FOCUS_REQUESTS=new Map();
-let ceVim=localStorage.getItem('devkit:vim')==='true',ceInteraction=0;
-addEventListener('pointerdown',()=>ceInteraction++,true);addEventListener('keydown',()=>ceInteraction++,true);addEventListener('focusin',event=>{if(!event.target.closest?.('.CodeMirror'))ceInteraction++;},true);
-function ceAccessibleName(el,name){const item=CE_EDITORS.get(el);if(!item){el.setAttribute('aria-label',name);return;}item.accessibleName=name;el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',name);}
-function ceLanguage(el){
- if(el.id==='sx-command-preview')return null;
- if(el.id==='dd-preview'&&ddState?.profile==='source')return ceFilenameMode(ddState.filename||'');
- if(el.id==='dk-preview'){const output=dkActive&&typeof dkOutput==='function'?dkOutput():null,fromName=ceFilenameMode(output?.filename||'');if(fromName)return fromName;}
- return dkSchemaForEditor({el})?.editor.mode??null;
+const CE_EDITORS = new Map(),
+  CE_DOCUMENTS = new Map(),
+  CE_FOCUS_REQUESTS = new Map();
+let ceVim = localStorage.getItem('devkit:vim') === 'true',
+  ceInteraction = 0;
+addEventListener('pointerdown', () => ceInteraction++, true);
+addEventListener('keydown', () => ceInteraction++, true);
+addEventListener(
+  'focusin',
+  (event) => {
+    if (!event.target.closest?.('.CodeMirror')) ceInteraction++;
+  },
+  true,
+);
+function ceAccessibleName(el, name) {
+  const item = CE_EDITORS.get(el);
+  if (!item) {
+    el.setAttribute('aria-label', name);
+    return;
+  }
+  item.accessibleName = name;
+  el.removeAttribute('aria-label');
+  el.setAttribute('aria-hidden', 'true');
+  item.cm.getInputField().setAttribute('aria-label', name);
 }
-function ceFilenameMode(name){return /Dockerfile/i.test(name)?'dockerfile':/Jenkinsfile/i.test(name)?'groovy':/\.py$/i.test(name)?'python':/\.ps1$/i.test(name)?'application/x-powershell':/\.sql$/i.test(name)?'text/x-sql':/\.json$/i.test(name)?{name:'javascript',json:true}:/\.ya?ml$/i.test(name)?'yaml':/\.(sh|bash|tf)$/i.test(name)?'text/x-sh':null;}
-function ceIndex(cm,pos){return cm.indexFromPos(pos);}
-function ceDocumentId(el){return el.id+':'+(el.id==='dd-preview'?ddState?.id:el.id==='dk-preview'?dkActive?.id:el.id==='ab-preview'?abState?.kind:currentBuilder?.def?.name);}
-function ceStatus(item,mode){item.status.textContent=ceVim?'VIM · '+String(mode?.mode||'normal').toUpperCase()+(mode?.subMode?' · '+String(mode.subMode).toUpperCase():''):'';}
-function ceFocusItem(item,position='end',interaction=ceInteraction){requestAnimationFrame(()=>{if(!item.el.isConnected||interaction!==ceInteraction)return;item.cm.focus();if(position==='end')item.cm.setCursor(item.cm.posFromIndex(item.cm.getValue().length));else if(position==='start')item.cm.setCursor(0,0);});}
-function ceFocusRequest(id,position='end'){const interaction=ceInteraction,el=document.getElementById(id),item=el&&CE_EDITORS.get(el);if(item){ceFocusItem(item,position,interaction);return;}CE_FOCUS_REQUESTS.set(id,{position,interaction});}
-function ceSetVim(enabled){ceVim=enabled;localStorage.setItem('devkit:vim',String(enabled));for(const item of CE_EDITORS.values()){item.toggle.checked=enabled;const cursor=item.cm.getCursor('head');item.cm.setOption('keyMap',enabled?'vim':'default');item.cm.setCursor(cursor);ceStatus(item,enabled?{mode:'normal'}:null);item.cm.focus();}}
-CodeMirror.Vim.defineEx('write','w',cm=>{const item=[...CE_EDITORS.values()].find(x=>x.cm===cm);if(!item)return;item.el.value=cm.getValue();item.el.dispatchEvent(new Event('input',{bubbles:true}));if(ddState&&item.el.id==='dd-preview')ddSave();else if(abState&&item.el.id==='ab-preview')abSave();ceStatus(item,{mode:'normal'});});
-function ceAttach(el){
- if(CE_EDITORS.has(el)||el.closest('.CodeMirror')||!el.getClientRects().length)return;
- const initialStart=el.selectionStart||0,initialEnd=el.selectionEnd||initialStart,row=dkEl('div','ce-controls dk-actions'),toggle=dkEl('input');toggle.type='checkbox';toggle.checked=ceVim;toggle.setAttribute('aria-label','Enable Vim controls');const label=dkEl('label','dk-help');label.append(toggle,document.createTextNode(' Vim mode'));const status=dkEl('span','ce-vim-status');status.setAttribute('role','status');const help=dkEl('details','dk-help');help.append(dkEl('summary','','Vim key guide'),dkEl('p','','Full Vim keymap: motions and counts, operators such as dw/dd/cw, insert and visual modes, registers, search with / or ?, and Ex commands such as :w and :set. DevKit saves automatically; :w keeps the draft in browser storage. Disable Vim mode here to return to ordinary editing.'));row.append(label,status,help);el.before(row);
- const accessibleName=el.getAttribute('aria-label')||'Code editor',documentId=ceDocumentId(el),saved=CE_DOCUMENTS.get(documentId);el.removeAttribute('aria-label');el.setAttribute('aria-hidden','true');
- const cm=CodeMirror.fromTextArea(el,{mode:ceLanguage(el),lineNumbers:true,lineWrapping:false,inputStyle:'textarea',indentUnit:2,tabSize:2,indentWithTabs:false,keyMap:ceVim?'vim':'default',matchBrackets:true,cursorBlinkRate:0,viewportMargin:20,extraKeys:{'Ctrl-Enter':()=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',ctrlKey:true,bubbles:true}));},'Cmd-Enter':()=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',metaKey:true,bubbles:true}));}}});cm.getInputField().setAttribute('aria-label',accessibleName);
- cm.getWrapperElement().addEventListener('keydown',event=>{const inserting=!ceVim||cm.state.vim?.insertMode;if(event.key==='Tab'&&!inserting){event.preventDefault();event.stopPropagation();return;}if(!inserting)return;if(event.key==='Tab'){event.preventDefault();event.stopPropagation();if(!event.shiftKey&&typeof eaAccept==='function'&&eaAccept(item))return;cm.execCommand(event.shiftKey?'indentLess':'insertSoftTab');return;}if(event.key==='Enter'&&typeof eaEnter==='function'&&eaEnter(item)){event.preventDefault();event.stopPropagation();}},true);
- const item={el,cm,row,toggle,status,documentId,accessibleName,writing:false,last:el.value,size:''};CE_EDITORS.set(el,item);if(saved?.history)try{cm.setHistory(saved.history);}catch{}cm.setSelection(cm.posFromIndex(initialStart),cm.posFromIndex(initialEnd));cm.setSize('100%','100%');toggle.onchange=()=>ceSetVim(toggle.checked);ceStatus(item,ceVim?{mode:'normal'}:null);if(typeof eaMount==='function')eaMount(item);
- cm.on('change',()=>{if(item.writing)return;item.last=cm.getValue();el.value=item.last;el.setSelectionRange(ceIndex(cm,cm.getCursor('anchor')),ceIndex(cm,cm.getCursor('head')));el.dispatchEvent(new Event('input',{bubbles:true}));if(typeof eaUpdate==='function')eaUpdate(item);setTimeout(()=>{if(el.isConnected)CE_DOCUMENTS.set(documentId,{history:cm.getHistory()});});});
- cm.on('cursorActivity',()=>{const anchor=ceIndex(cm,cm.getCursor('anchor')),head=ceIndex(cm,cm.getCursor('head'));el.setSelectionRange(anchor,head);if(typeof eaUpdate==='function')eaUpdate(item);});
- cm.on('scroll',()=>{const info=cm.getScrollInfo();el.scrollTop=info.top;el.scrollLeft=info.left;});
- cm.on('vim-mode-change',mode=>{ceStatus(item,mode);if(typeof eaUpdate==='function')eaUpdate(item);});
- cm.on('blur',()=>el.dispatchEvent(new Event('change',{bubbles:true})));
- requestAnimationFrame(()=>{cm.refresh();if(CE_FOCUS_REQUESTS.has(el.id)){const request=CE_FOCUS_REQUESTS.get(el.id);CE_FOCUS_REQUESTS.delete(el.id);if(request.interaction!==ceInteraction)return;cm.focus();if(request.position==='end')cm.setCursor(cm.posFromIndex(cm.getValue().length));else if(request.position==='start')cm.setCursor(0,0);}});
+function ceLanguage(el) {
+  if (el.id === 'sx-command-preview') return null;
+  if (el.id === 'dd-preview' && ddState?.profile === 'source')
+    return ceFilenameMode(ddState.filename || '');
+  if (el.id === 'dk-preview') {
+    const output = dkActive && typeof dkOutput === 'function' ? dkOutput() : null,
+      fromName = ceFilenameMode(output?.filename || '');
+    if (fromName) return fromName;
+  }
+  return dkSchemaForEditor({ el })?.editor.mode ?? null;
 }
-function ceScan(){for(const [el,item] of CE_EDITORS)if(!el.isConnected){CE_DOCUMENTS.set(item.documentId,{history:item.cm.getHistory()});CE_EDITORS.delete(el);}for(const el of document.querySelectorAll('#dd-preview,#ab-preview,#dk-preview,#sx-command-preview'))if(el.getClientRects().length)ceAttach(el);}
-new MutationObserver(()=>requestAnimationFrame(ceScan)).observe(document.body,{childList:true,subtree:true});
-setInterval(()=>{ceScan();for(const item of CE_EDITORS.values()){if(!item.el.isConnected)continue;item.el.removeAttribute('aria-label');item.el.setAttribute('aria-hidden','true');item.cm.getInputField().setAttribute('aria-label',item.accessibleName);const value=item.el.value;if(value!==item.last){item.writing=true;const cursor=item.cm.getCursor();item.cm.setValue(value);item.cm.setCursor(cursor);item.last=value;item.cm.setOption('mode',ceLanguage(item.el));item.writing=false;}const rect=item.cm.getWrapperElement().getBoundingClientRect(),size=Math.round(rect.width)+'x'+Math.round(rect.height);if(size!==item.size){item.size=size;item.cm.refresh();}}},150);
+function ceFilenameMode(name) {
+  return /Dockerfile/i.test(name)
+    ? 'dockerfile'
+    : /Jenkinsfile/i.test(name)
+      ? 'groovy'
+      : /\.py$/i.test(name)
+        ? 'python'
+        : /\.ps1$/i.test(name)
+          ? 'application/x-powershell'
+          : /\.sql$/i.test(name)
+            ? 'text/x-sql'
+            : /\.json$/i.test(name)
+              ? { name: 'javascript', json: true }
+              : /\.ya?ml$/i.test(name)
+                ? 'yaml'
+                : /\.(sh|bash|tf)$/i.test(name)
+                  ? 'text/x-sh'
+                  : null;
+}
+function ceIndex(cm, pos) {
+  return cm.indexFromPos(pos);
+}
+function ceDocumentId(el) {
+  return (
+    el.id +
+    ':' +
+    (el.id === 'dd-preview'
+      ? ddState?.id
+      : el.id === 'dk-preview'
+        ? dkActive?.id
+        : el.id === 'ab-preview'
+          ? abState?.kind
+          : currentBuilder?.def?.name)
+  );
+}
+function ceStatus(item, mode) {
+  item.status.textContent = ceVim
+    ? 'VIM · ' +
+      String(mode?.mode || 'normal').toUpperCase() +
+      (mode?.subMode ? ' · ' + String(mode.subMode).toUpperCase() : '')
+    : '';
+}
+function ceFocusItem(item, position = 'end', interaction = ceInteraction) {
+  requestAnimationFrame(() => {
+    if (!item.el.isConnected || interaction !== ceInteraction) return;
+    item.cm.focus();
+    if (position === 'end') item.cm.setCursor(item.cm.posFromIndex(item.cm.getValue().length));
+    else if (position === 'start') item.cm.setCursor(0, 0);
+  });
+}
+function ceFocusRequest(id, position = 'end') {
+  const interaction = ceInteraction,
+    el = document.getElementById(id),
+    item = el && CE_EDITORS.get(el);
+  if (item) {
+    ceFocusItem(item, position, interaction);
+    return;
+  }
+  CE_FOCUS_REQUESTS.set(id, { position, interaction });
+}
+function ceSetVim(enabled) {
+  ceVim = enabled;
+  localStorage.setItem('devkit:vim', String(enabled));
+  for (const item of CE_EDITORS.values()) {
+    item.toggle.checked = enabled;
+    const cursor = item.cm.getCursor('head');
+    item.cm.setOption('keyMap', enabled ? 'vim' : 'default');
+    item.cm.setCursor(cursor);
+    ceStatus(item, enabled ? { mode: 'normal' } : null);
+    item.cm.focus();
+  }
+}
+CodeMirror.Vim.defineEx('write', 'w', (cm) => {
+  const item = [...CE_EDITORS.values()].find((x) => x.cm === cm);
+  if (!item) return;
+  item.el.value = cm.getValue();
+  item.el.dispatchEvent(new Event('input', { bubbles: true }));
+  if (ddState && item.el.id === 'dd-preview') ddSave();
+  else if (abState && item.el.id === 'ab-preview') abSave();
+  ceStatus(item, { mode: 'normal' });
+});
+function ceAttach(el) {
+  if (CE_EDITORS.has(el) || el.closest('.CodeMirror') || !el.getClientRects().length) return;
+  const initialStart = el.selectionStart || 0,
+    initialEnd = el.selectionEnd || initialStart,
+    row = dkEl('div', 'ce-controls dk-actions'),
+    toggle = dkEl('input');
+  toggle.type = 'checkbox';
+  toggle.checked = ceVim;
+  toggle.setAttribute('aria-label', 'Enable Vim controls');
+  const label = dkEl('label', 'dk-help');
+  label.append(toggle, document.createTextNode(' Vim mode'));
+  const status = dkEl('span', 'ce-vim-status');
+  status.setAttribute('role', 'status');
+  const help = dkEl('details', 'dk-help');
+  help.append(
+    dkEl('summary', '', 'Vim key guide'),
+    dkEl(
+      'p',
+      '',
+      'Full Vim keymap: motions and counts, operators such as dw/dd/cw, insert and visual modes, registers, search with / or ?, and Ex commands such as :w and :set. DevKit saves automatically; :w keeps the draft in browser storage. Disable Vim mode here to return to ordinary editing.',
+    ),
+  );
+  row.append(label, status, help);
+  el.before(row);
+  const accessibleName = el.getAttribute('aria-label') || 'Code editor',
+    documentId = ceDocumentId(el),
+    saved = CE_DOCUMENTS.get(documentId);
+  el.removeAttribute('aria-label');
+  el.setAttribute('aria-hidden', 'true');
+  const cm = CodeMirror.fromTextArea(el, {
+    mode: ceLanguage(el),
+    lineNumbers: true,
+    lineWrapping: false,
+    inputStyle: 'textarea',
+    indentUnit: 2,
+    tabSize: 2,
+    indentWithTabs: false,
+    keyMap: ceVim ? 'vim' : 'default',
+    matchBrackets: true,
+    cursorBlinkRate: 0,
+    viewportMargin: 20,
+    extraKeys: {
+      'Ctrl-Enter': () => {
+        el.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Enter', ctrlKey: true, bubbles: true }),
+        );
+      },
+      'Cmd-Enter': () => {
+        el.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Enter', metaKey: true, bubbles: true }),
+        );
+      },
+    },
+  });
+  cm.getInputField().setAttribute('aria-label', accessibleName);
+  cm.getWrapperElement().addEventListener(
+    'keydown',
+    (event) => {
+      const inserting = !ceVim || cm.state.vim?.insertMode;
+      if (event.key === 'Tab' && !inserting) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      if (!inserting) return;
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!event.shiftKey && typeof eaAccept === 'function' && eaAccept(item)) return;
+        cm.execCommand(event.shiftKey ? 'indentLess' : 'insertSoftTab');
+        return;
+      }
+      if (event.key === 'Enter' && typeof eaEnter === 'function' && eaEnter(item)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    true,
+  );
+  const item = {
+    el,
+    cm,
+    row,
+    toggle,
+    status,
+    documentId,
+    accessibleName,
+    writing: false,
+    last: el.value,
+    size: '',
+  };
+  CE_EDITORS.set(el, item);
+  if (saved?.history)
+    try {
+      cm.setHistory(saved.history);
+    } catch {}
+  cm.setSelection(cm.posFromIndex(initialStart), cm.posFromIndex(initialEnd));
+  cm.setSize('100%', '100%');
+  toggle.onchange = () => ceSetVim(toggle.checked);
+  ceStatus(item, ceVim ? { mode: 'normal' } : null);
+  if (typeof eaMount === 'function') eaMount(item);
+  cm.on('change', () => {
+    if (item.writing) return;
+    item.last = cm.getValue();
+    el.value = item.last;
+    el.setSelectionRange(ceIndex(cm, cm.getCursor('anchor')), ceIndex(cm, cm.getCursor('head')));
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    if (typeof eaUpdate === 'function') eaUpdate(item);
+    setTimeout(() => {
+      if (el.isConnected) CE_DOCUMENTS.set(documentId, { history: cm.getHistory() });
+    });
+  });
+  cm.on('cursorActivity', () => {
+    const anchor = ceIndex(cm, cm.getCursor('anchor')),
+      head = ceIndex(cm, cm.getCursor('head'));
+    el.setSelectionRange(anchor, head);
+    if (typeof eaUpdate === 'function') eaUpdate(item);
+  });
+  cm.on('scroll', () => {
+    const info = cm.getScrollInfo();
+    el.scrollTop = info.top;
+    el.scrollLeft = info.left;
+  });
+  cm.on('vim-mode-change', (mode) => {
+    ceStatus(item, mode);
+    if (typeof eaUpdate === 'function') eaUpdate(item);
+  });
+  cm.on('blur', () => el.dispatchEvent(new Event('change', { bubbles: true })));
+  requestAnimationFrame(() => {
+    cm.refresh();
+    if (CE_FOCUS_REQUESTS.has(el.id)) {
+      const request = CE_FOCUS_REQUESTS.get(el.id);
+      CE_FOCUS_REQUESTS.delete(el.id);
+      if (request.interaction !== ceInteraction) return;
+      cm.focus();
+      if (request.position === 'end') cm.setCursor(cm.posFromIndex(cm.getValue().length));
+      else if (request.position === 'start') cm.setCursor(0, 0);
+    }
+  });
+}
+function ceScan() {
+  for (const [el, item] of CE_EDITORS)
+    if (!el.isConnected) {
+      CE_DOCUMENTS.set(item.documentId, { history: item.cm.getHistory() });
+      CE_EDITORS.delete(el);
+    }
+  for (const el of document.querySelectorAll(
+    '#dd-preview,#ab-preview,#dk-preview,#sx-command-preview',
+  ))
+    if (el.getClientRects().length) ceAttach(el);
+}
+new MutationObserver(() => requestAnimationFrame(ceScan)).observe(document.body, {
+  childList: true,
+  subtree: true,
+});
+setInterval(() => {
+  ceScan();
+  for (const item of CE_EDITORS.values()) {
+    if (!item.el.isConnected) continue;
+    item.el.removeAttribute('aria-label');
+    item.el.setAttribute('aria-hidden', 'true');
+    item.cm.getInputField().setAttribute('aria-label', item.accessibleName);
+    const value = item.el.value;
+    if (value !== item.last) {
+      item.writing = true;
+      const cursor = item.cm.getCursor();
+      item.cm.setValue(value);
+      item.cm.setCursor(cursor);
+      item.last = value;
+      item.cm.setOption('mode', ceLanguage(item.el));
+      item.writing = false;
+    }
+    const rect = item.cm.getWrapperElement().getBoundingClientRect(),
+      size = Math.round(rect.width) + 'x' + Math.round(rect.height);
+    if (size !== item.size) {
+      item.size = size;
+      item.cm.refresh();
+    }
+  }
+}, 150);
 // Source/block adapters still address the original textarea. Preserve CodeMirror selection across rerenders.
-const ceBaseSelection=sxSelection,ceBaseRestore=sxRestore,cePending=new Map();
-sxSelection=function(el){const item=CE_EDITORS.get(el);if(!item)return ceBaseSelection(el);const info=item.cm.getScrollInfo();return {codeMirror:true,anchor:ceIndex(item.cm,item.cm.getCursor('anchor')),head:ceIndex(item.cm,item.cm.getCursor('head')),top:info.top,left:info.left,focus:item.cm.hasFocus()};};
-sxRestore=function(id,state){const el=document.getElementById(id),item=el&&CE_EDITORS.get(el);if(!state?.codeMirror)return ceBaseRestore(id,state);if(!item){cePending.set(id,state);return;}item.cm.setSelection(item.cm.posFromIndex(state.anchor),item.cm.posFromIndex(state.head));item.cm.scrollTo(state.left,state.top);if(state.focus)item.cm.focus();};
-const ceOriginalAttach=ceAttach;ceAttach=function(el){ceOriginalAttach(el);const pending=cePending.get(el.id);if(pending){cePending.delete(el.id);sxRestore(el.id,pending);}};
+const ceBaseSelection = sxSelection,
+  ceBaseRestore = sxRestore,
+  cePending = new Map();
+sxSelection = function (el) {
+  const item = CE_EDITORS.get(el);
+  if (!item) return ceBaseSelection(el);
+  const info = item.cm.getScrollInfo();
+  return {
+    codeMirror: true,
+    anchor: ceIndex(item.cm, item.cm.getCursor('anchor')),
+    head: ceIndex(item.cm, item.cm.getCursor('head')),
+    top: info.top,
+    left: info.left,
+    focus: item.cm.hasFocus(),
+  };
+};
+sxRestore = function (id, state) {
+  const el = document.getElementById(id),
+    item = el && CE_EDITORS.get(el);
+  if (!state?.codeMirror) return ceBaseRestore(id, state);
+  if (!item) {
+    cePending.set(id, state);
+    return;
+  }
+  item.cm.setSelection(item.cm.posFromIndex(state.anchor), item.cm.posFromIndex(state.head));
+  item.cm.scrollTo(state.left, state.top);
+  if (state.focus) item.cm.focus();
+};
+const ceOriginalAttach = ceAttach;
+ceAttach = function (el) {
+  ceOriginalAttach(el);
+  const pending = cePending.get(el.id);
+  if (pending) {
+    cePending.delete(el.id);
+    sxRestore(el.id, pending);
+  }
+};
 ceScan();

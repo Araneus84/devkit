@@ -1,0 +1,254 @@
+{
+  "name": "Azure CLI",
+  "icon": "Az",
+  "iconBg": "#0078d4",
+  "subtitle": "Microsoft Azure CLI",
+  "meta": "az cli",
+  "sections": [
+    {
+      "id": "az-auth",
+      "title": "Authentication & Setup",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "az login",
+          "desc": "Interactive browser login"
+        },
+        {
+          "cmd": "az login --use-device-code",
+          "desc": "Login with device code (for headless)"
+        },
+        {
+          "cmd": "az login --service-principal --username APP_ID --password PWD --tenant TENANT",
+          "desc": "Service principal login"
+        },
+        {
+          "cmd": "az account show",
+          "desc": "Show current subscription and tenant"
+        },
+        {
+          "cmd": "az account list --output table",
+          "desc": "List all available subscriptions"
+        },
+        {
+          "cmd": "az account set --subscription \"subscription-name\"",
+          "desc": "Switch active subscription"
+        },
+        {
+          "cmd": "az logout",
+          "desc": "Sign out of all accounts"
+        },
+        {
+          "cmd": "az version",
+          "desc": "Show Azure CLI version"
+        },
+        {
+          "cmd": "az upgrade",
+          "desc": "Upgrade Azure CLI to latest version"
+        }
+      ]
+    },
+    {
+      "id": "az-rg",
+      "title": "Resource Groups",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "az group list --output table",
+          "desc": "List all resource groups"
+        },
+        {
+          "cmd": "az group show --name myRG",
+          "desc": "Show resource group details"
+        },
+        {
+          "cmd": "az group create --name myRG --location westus2",
+          "desc": "Create resource group"
+        },
+        {
+          "cmd": "az group delete --name myRG --yes --no-wait",
+          "desc": "Delete resource group (and all resources)"
+        },
+        {
+          "cmd": "az resource list --resource-group myRG --output table",
+          "desc": "List all resources in group"
+        },
+        {
+          "cmd": "az resource list --tag env=prod --output table",
+          "desc": "List resources by tag"
+        }
+      ]
+    },
+    {
+      "id": "az-vm",
+      "title": "Virtual Machines",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "az vm list --output table",
+          "desc": "List all VMs"
+        },
+        {
+          "cmd": "az vm list --show-details --output table",
+          "desc": "Include power state and IPs"
+        },
+        {
+          "cmd": "az vm show --resource-group myRG --name myVM",
+          "desc": "Show VM details"
+        },
+        {
+          "cmd": "az vm create --resource-group myRG --name myVM --image Ubuntu2204 --admin-username azureuser --generate-ssh-keys",
+          "desc": "Create Ubuntu VM with SSH key"
+        },
+        {
+          "cmd": "az vm start --resource-group myRG --name myVM",
+          "desc": "Start VM"
+        },
+        {
+          "cmd": "az vm stop --resource-group myRG --name myVM",
+          "desc": "Stop VM (still charged)"
+        },
+        {
+          "cmd": "az vm deallocate --resource-group myRG --name myVM",
+          "desc": "Deallocate VM (not charged for compute)"
+        },
+        {
+          "cmd": "az vm restart --resource-group myRG --name myVM",
+          "desc": "Restart VM"
+        },
+        {
+          "cmd": "az vm delete --resource-group myRG --name myVM --yes",
+          "desc": "Delete VM"
+        },
+        {
+          "cmd": "az vm run-command invoke --resource-group myRG --name myVM --command-id RunShellScript --scripts \"uptime\"",
+          "desc": "Run shell command on Linux VM"
+        }
+      ]
+    },
+    {
+      "id": "az-storage",
+      "title": "Storage",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "az storage account list --output table",
+          "desc": "List storage accounts"
+        },
+        {
+          "cmd": "az storage account create --name mystorage --resource-group myRG --location westus2 --sku Standard_LRS",
+          "desc": "Create storage account"
+        },
+        {
+          "cmd": "az storage container list --account-name mystorage",
+          "desc": "List blob containers"
+        },
+        {
+          "cmd": "az storage blob list --container-name mycontainer --account-name mystorage --output table",
+          "desc": "List blobs in container"
+        },
+        {
+          "cmd": "az storage blob upload --file ./local.txt --container-name mycontainer --name remote.txt --account-name mystorage",
+          "desc": "Upload blob"
+        },
+        {
+          "cmd": "az storage blob download --container-name mycontainer --name remote.txt --file ./local.txt --account-name mystorage",
+          "desc": "Download blob"
+        }
+      ]
+    },
+    {
+      "id": "az-aks",
+      "title": "AKS (Kubernetes)",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "az aks list --output table",
+          "desc": "List AKS clusters"
+        },
+        {
+          "cmd": "az aks get-credentials --resource-group myRG --name myAKS",
+          "desc": "Configure kubectl for cluster"
+        },
+        {
+          "cmd": "az aks scale --resource-group myRG --name myAKS --node-count 5",
+          "desc": "Scale cluster nodes"
+        },
+        {
+          "cmd": "az aks upgrade --resource-group myRG --name myAKS --kubernetes-version 1.28.0",
+          "desc": "Upgrade cluster version"
+        },
+        {
+          "cmd": "az aks get-upgrades --resource-group myRG --name myAKS",
+          "desc": "Show available upgrade versions"
+        }
+      ]
+    },
+    {
+      "id": "az-network",
+      "title": "Networking",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "az network vnet list --output table",
+          "desc": "List virtual networks"
+        },
+        {
+          "cmd": "az network nsg list --output table",
+          "desc": "List network security groups"
+        },
+        {
+          "cmd": "az network nsg rule list --resource-group myRG --nsg-name myNSG --output table",
+          "desc": "List NSG rules"
+        },
+        {
+          "cmd": "az network public-ip list --output table",
+          "desc": "List public IP addresses"
+        },
+        {
+          "cmd": "az network dns zone list --output table",
+          "desc": "List DNS zones"
+        },
+        {
+          "cmd": "az network dns record-set list --resource-group myRG --zone-name example.com --output table",
+          "desc": "List DNS records in zone"
+        }
+      ]
+    },
+    {
+      "id": "az-aad",
+      "title": "Azure AD & Identity",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "az ad user list --output table",
+          "desc": "List Azure AD users"
+        },
+        {
+          "cmd": "az ad user show --id user@domain.com",
+          "desc": "Show user details"
+        },
+        {
+          "cmd": "az ad group list --output table",
+          "desc": "List Azure AD groups"
+        },
+        {
+          "cmd": "az ad group member list --group \"Admins\"",
+          "desc": "List group members"
+        },
+        {
+          "cmd": "az ad sp list --display-name myapp",
+          "desc": "List service principals matching name"
+        },
+        {
+          "cmd": "az ad sp create-for-rbac --name myapp --role Contributor",
+          "desc": "Create service principal with role"
+        },
+        {
+          "cmd": "az role assignment list --assignee user@domain.com --output table",
+          "desc": "List role assignments for user"
+        }
+      ]
+    }
+  ]
+}

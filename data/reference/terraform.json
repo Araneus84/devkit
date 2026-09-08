@@ -1,0 +1,317 @@
+{
+  "name": "Terraform",
+  "icon": "⬢",
+  "iconBg": "#7b42bc",
+  "subtitle": "Infrastructure as Code",
+  "meta": "Terraform 1.x",
+  "sections": [
+    {
+      "id": "tf-init",
+      "title": "Init & Setup",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "terraform init",
+          "desc": "Initialize working directory, download providers and modules"
+        },
+        {
+          "cmd": "terraform init -upgrade",
+          "desc": "Upgrade providers to latest matching versions"
+        },
+        {
+          "cmd": "terraform init -backend-config=\"bucket=name\"",
+          "desc": "Initialize with backend config override"
+        },
+        {
+          "cmd": "terraform init -reconfigure",
+          "desc": "Reconfigure backend, ignoring existing config"
+        },
+        {
+          "cmd": "terraform init -migrate-state",
+          "desc": "Migrate state to new backend"
+        },
+        {
+          "cmd": "terraform version",
+          "desc": "Show Terraform and provider versions"
+        },
+        {
+          "cmd": "terraform providers",
+          "desc": "List providers required by configuration"
+        },
+        {
+          "cmd": "terraform get -update",
+          "desc": "Download and update modules"
+        }
+      ]
+    },
+    {
+      "id": "tf-plan",
+      "title": "Plan & Apply",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "terraform plan",
+          "desc": "Preview changes before applying"
+        },
+        {
+          "cmd": "terraform plan -out=tfplan",
+          "desc": "Save plan to file for later apply"
+        },
+        {
+          "cmd": "terraform plan -var=\"region=us-east-1\"",
+          "desc": "Set variable inline for plan"
+        },
+        {
+          "cmd": "terraform plan -var-file=\"prod.tfvars\"",
+          "desc": "Use variable file"
+        },
+        {
+          "cmd": "terraform plan -target=resource.name",
+          "desc": "Plan changes for specific resource only"
+        },
+        {
+          "cmd": "terraform apply",
+          "desc": "Apply changes — prompts for confirmation"
+        },
+        {
+          "cmd": "terraform apply -auto-approve",
+          "desc": "Apply without confirmation prompt"
+        },
+        {
+          "cmd": "terraform apply tfplan",
+          "desc": "Apply previously saved plan"
+        },
+        {
+          "cmd": "terraform apply -refresh-only",
+          "desc": "Update state without changing infrastructure"
+        },
+        {
+          "cmd": "terraform destroy",
+          "desc": "Destroy all managed infrastructure (CAREFUL!)"
+        },
+        {
+          "cmd": "terraform destroy -target=resource.name",
+          "desc": "Destroy specific resource only"
+        }
+      ]
+    },
+    {
+      "id": "tf-state",
+      "title": "State Management",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "terraform state list",
+          "desc": "List all resources in state"
+        },
+        {
+          "cmd": "terraform state show resource.name",
+          "desc": "Show details of resource in state"
+        },
+        {
+          "cmd": "terraform state mv old_name new_name",
+          "desc": "Rename resource in state"
+        },
+        {
+          "cmd": "terraform state rm resource.name",
+          "desc": "Remove resource from state (does not destroy)"
+        },
+        {
+          "cmd": "terraform state pull > backup.tfstate",
+          "desc": "Download remote state to local file"
+        },
+        {
+          "cmd": "terraform state push backup.tfstate",
+          "desc": "Upload local state to remote backend"
+        },
+        {
+          "cmd": "terraform import resource.name id",
+          "desc": "Import existing infrastructure into state"
+        },
+        {
+          "cmd": "terraform refresh",
+          "desc": "Update state to match real infrastructure (use plan -refresh-only)"
+        },
+        {
+          "cmd": "terraform force-unlock LOCK_ID",
+          "desc": "Manually unlock state — use with extreme caution"
+        }
+      ]
+    },
+    {
+      "id": "tf-inspect",
+      "title": "Inspection & Output",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "terraform show",
+          "desc": "Show current state or saved plan"
+        },
+        {
+          "cmd": "terraform show -json",
+          "desc": "Show state as JSON for parsing"
+        },
+        {
+          "cmd": "terraform output",
+          "desc": "Show output values from state"
+        },
+        {
+          "cmd": "terraform output -json",
+          "desc": "Output values as JSON"
+        },
+        {
+          "cmd": "terraform output output_name",
+          "desc": "Show single output value"
+        },
+        {
+          "cmd": "terraform output -raw output_name",
+          "desc": "Show output as plain string (no quotes)"
+        },
+        {
+          "cmd": "terraform graph | dot -Tpng > graph.png",
+          "desc": "Generate dependency graph visualization"
+        },
+        {
+          "cmd": "terraform console",
+          "desc": "Interactive console for evaluating expressions"
+        }
+      ]
+    },
+    {
+      "id": "tf-fmt",
+      "title": "Formatting & Validation",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "terraform fmt",
+          "desc": "Format files in current directory"
+        },
+        {
+          "cmd": "terraform fmt -recursive",
+          "desc": "Format all files including subdirectories"
+        },
+        {
+          "cmd": "terraform fmt -check",
+          "desc": "Check formatting without modifying — useful for CI"
+        },
+        {
+          "cmd": "terraform fmt -diff",
+          "desc": "Show formatting changes that would be made"
+        },
+        {
+          "cmd": "terraform validate",
+          "desc": "Validate syntax and internal consistency"
+        },
+        {
+          "cmd": "terraform validate -json",
+          "desc": "Validate with JSON output"
+        }
+      ]
+    },
+    {
+      "id": "tf-workspace",
+      "title": "Workspaces",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "terraform workspace list",
+          "desc": "List all workspaces"
+        },
+        {
+          "cmd": "terraform workspace show",
+          "desc": "Show current workspace"
+        },
+        {
+          "cmd": "terraform workspace new dev",
+          "desc": "Create new workspace"
+        },
+        {
+          "cmd": "terraform workspace select prod",
+          "desc": "Switch to workspace"
+        },
+        {
+          "cmd": "terraform workspace delete old",
+          "desc": "Delete workspace (must be empty)"
+        }
+      ]
+    },
+    {
+      "id": "tf-syntax",
+      "title": "HCL Syntax Reference",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "resource \"aws_instance\" \"web\" { ami = \"ami-123\" }",
+          "desc": "Resource block — creates infrastructure"
+        },
+        {
+          "cmd": "data \"aws_ami\" \"ubuntu\" { most_recent = true }",
+          "desc": "Data source — read existing infrastructure"
+        },
+        {
+          "cmd": "variable \"region\" { default = \"us-east-1\" }",
+          "desc": "Input variable declaration"
+        },
+        {
+          "cmd": "output \"ip\" { value = aws_instance.web.public_ip }",
+          "desc": "Output value"
+        },
+        {
+          "cmd": "locals { common_tags = { Env = \"prod\" } }",
+          "desc": "Local values — reusable expressions"
+        },
+        {
+          "cmd": "module \"vpc\" { source = \"./modules/vpc\" }",
+          "desc": "Use a module"
+        },
+        {
+          "cmd": "count = 3",
+          "desc": "Create multiple instances of a resource"
+        },
+        {
+          "cmd": "for_each = toset([\"a\", \"b\", \"c\"])",
+          "desc": "Create one resource per item"
+        },
+        {
+          "cmd": "depends_on = [aws_iam_role.role]",
+          "desc": "Explicit dependency declaration"
+        },
+        {
+          "cmd": "lifecycle { prevent_destroy = true }",
+          "desc": "Lifecycle rules — control resource behavior"
+        }
+      ]
+    },
+    {
+      "id": "tf-troubleshoot",
+      "title": "Troubleshooting",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "TF_LOG=DEBUG terraform apply",
+          "desc": "Enable detailed debug logging"
+        },
+        {
+          "cmd": "TF_LOG=TRACE terraform plan 2> tf.log",
+          "desc": "Maximum verbosity to file"
+        },
+        {
+          "cmd": "terraform plan -detailed-exitcode",
+          "desc": "Exit codes: 0=no changes, 1=error, 2=changes"
+        },
+        {
+          "cmd": "terraform taint resource.name",
+          "desc": "Mark resource for recreation on next apply (deprecated)"
+        },
+        {
+          "cmd": "terraform apply -replace=\"resource.name\"",
+          "desc": "Replace specific resource (modern syntax)"
+        },
+        {
+          "cmd": "rm -rf .terraform && terraform init",
+          "desc": "Reset provider cache and re-initialize"
+        }
+      ]
+    }
+  ]
+}

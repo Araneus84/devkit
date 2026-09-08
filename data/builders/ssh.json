@@ -1,0 +1,102 @@
+{
+  "ssh::ssh user@host": {
+    "name": "ssh",
+    "description": "Build an SSH connection command",
+    "base": "ssh",
+    "args": [
+      {
+        "key": "target",
+        "label": "user@host",
+        "placeholder": "user@server.com",
+        "required": true
+      },
+      {
+        "key": "remoteCmd",
+        "label": "Remote command (optional)",
+        "placeholder": "uptime",
+        "required": false,
+        "quote": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-p",
+        "desc": "Custom port",
+        "valuePrompt": "Port",
+        "valueDefault": "22",
+        "join": " "
+      },
+      {
+        "flag": "-i",
+        "desc": "Identity file (private key)",
+        "valuePrompt": "Path to key",
+        "join": " "
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose (use -vvv for max verbosity)"
+      },
+      {
+        "flag": "-A",
+        "desc": "Forward SSH agent"
+      },
+      {
+        "flag": "-X",
+        "desc": "X11 forwarding (GUI apps)"
+      },
+      {
+        "flag": "-t",
+        "desc": "Force pseudo-terminal (needed for sudo)"
+      },
+      {
+        "flag": "-N",
+        "desc": "No remote command (useful for tunnels)"
+      },
+      {
+        "flag": "-f",
+        "desc": "Background after authentication"
+      },
+      {
+        "flag": "-L",
+        "desc": "Local port forward",
+        "valuePrompt": "localport:remotehost:remoteport",
+        "join": " "
+      },
+      {
+        "flag": "-R",
+        "desc": "Remote port forward",
+        "valuePrompt": "remoteport:localhost:localport",
+        "join": " "
+      },
+      {
+        "flag": "-D",
+        "desc": "SOCKS5 proxy port",
+        "valuePrompt": "Local port",
+        "valueDefault": "1080",
+        "join": " "
+      },
+      {
+        "flag": "-J",
+        "desc": "ProxyJump (via bastion)",
+        "valuePrompt": "jumpuser@jumphost",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "Set option",
+        "valuePrompt": "e.g. ServerAliveInterval=60",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-C",
+        "desc": "Enable compression"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet mode"
+      }
+    ]
+  }
+}

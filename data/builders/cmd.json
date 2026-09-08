@@ -1,0 +1,332 @@
+{
+  "cmd::robocopy src dest /mir": {
+    "name": "robocopy",
+    "description": "Build a robocopy command with the right switches",
+    "base": "robocopy",
+    "args": [
+      {
+        "key": "source",
+        "label": "Source",
+        "placeholder": "C:\\source",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination",
+        "placeholder": "D:\\backup",
+        "required": true
+      },
+      {
+        "key": "files",
+        "label": "Files (optional)",
+        "placeholder": "*.* (default)",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "/MIR",
+        "desc": "Mirror directory tree (equivalent to /E + /PURGE)"
+      },
+      {
+        "flag": "/E",
+        "desc": "Copy all subdirectories, including empty ones"
+      },
+      {
+        "flag": "/S",
+        "desc": "Copy subdirectories, excluding empty ones"
+      },
+      {
+        "flag": "/PURGE",
+        "desc": "Delete files in destination that no longer exist in source"
+      },
+      {
+        "flag": "/COPYALL",
+        "desc": "Copy ALL file info (equivalent to /COPY:DATSOU)"
+      },
+      {
+        "flag": "/MOVE",
+        "desc": "Move files (delete from source after copy)"
+      },
+      {
+        "flag": "/Z",
+        "desc": "Copy in restartable mode (good for unstable networks)"
+      },
+      {
+        "flag": "/MT",
+        "desc": "Multi-threaded copy (default 8 threads)",
+        "valuePrompt": "Threads (1-128)",
+        "valueDefault": "8"
+      },
+      {
+        "flag": "/R",
+        "desc": "Number of retries on failed copies",
+        "valuePrompt": "Retries",
+        "valueDefault": "3"
+      },
+      {
+        "flag": "/W",
+        "desc": "Wait time between retries (seconds)",
+        "valuePrompt": "Wait seconds",
+        "valueDefault": "5"
+      },
+      {
+        "flag": "/XF",
+        "desc": "Exclude files matching pattern",
+        "valuePrompt": "Pattern (e.g. *.tmp *.log)"
+      },
+      {
+        "flag": "/XD",
+        "desc": "Exclude directories matching pattern",
+        "valuePrompt": "Pattern (e.g. node_modules)"
+      },
+      {
+        "flag": "/LOG",
+        "desc": "Log output to file",
+        "valuePrompt": "Log file path",
+        "valueDefault": "robocopy.log",
+        "join": ":"
+      },
+      {
+        "flag": "/TEE",
+        "desc": "Output to both console and log file"
+      },
+      {
+        "flag": "/NP",
+        "desc": "No progress (cleaner output)"
+      },
+      {
+        "flag": "/NFL",
+        "desc": "No file list (cleaner log)"
+      },
+      {
+        "flag": "/NDL",
+        "desc": "No directory list (cleaner log)"
+      },
+      {
+        "flag": "/L",
+        "desc": "List only — do not copy (dry run!)"
+      },
+      {
+        "flag": "/MAXAGE",
+        "desc": "Maximum file age (skip files older than)",
+        "valuePrompt": "Days or YYYYMMDD",
+        "join": ":"
+      },
+      {
+        "flag": "/MINAGE",
+        "desc": "Minimum file age (skip files newer than)",
+        "valuePrompt": "Days or YYYYMMDD",
+        "join": ":"
+      }
+    ]
+  },
+  "cmd::xcopy /s /e source dest": {
+    "name": "xcopy",
+    "description": "Copy files and directories with options",
+    "base": "xcopy",
+    "args": [
+      {
+        "key": "source",
+        "label": "Source",
+        "placeholder": "C:\\source",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination",
+        "placeholder": "D:\\dest",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "/S",
+        "desc": "Copy directories and subdirectories (except empty)"
+      },
+      {
+        "flag": "/E",
+        "desc": "Copy all subdirectories including empty ones"
+      },
+      {
+        "flag": "/H",
+        "desc": "Copy hidden and system files"
+      },
+      {
+        "flag": "/R",
+        "desc": "Overwrite read-only files"
+      },
+      {
+        "flag": "/Y",
+        "desc": "Suppress overwrite confirmation prompt"
+      },
+      {
+        "flag": "/I",
+        "desc": "Assume destination is a directory"
+      },
+      {
+        "flag": "/D",
+        "desc": "Copy only files newer than destination"
+      },
+      {
+        "flag": "/C",
+        "desc": "Continue on errors"
+      },
+      {
+        "flag": "/Q",
+        "desc": "Quiet mode — suppress file names"
+      },
+      {
+        "flag": "/F",
+        "desc": "Show full source and destination paths"
+      },
+      {
+        "flag": "/Z",
+        "desc": "Restartable mode (for network copies)"
+      },
+      {
+        "flag": "/EXCLUDE:list.txt",
+        "desc": "Exclude files listed in a text file"
+      }
+    ]
+  },
+  "cmd::netstat -ano": {
+    "name": "netstat",
+    "description": "Show network connections and listening ports",
+    "base": "netstat",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-a",
+        "desc": "Show all connections and listening ports"
+      },
+      {
+        "flag": "-n",
+        "desc": "Show addresses numerically (no DNS)"
+      },
+      {
+        "flag": "-o",
+        "desc": "Show owning process ID (PID)"
+      },
+      {
+        "flag": "-b",
+        "desc": "Show executable involved (needs admin)"
+      },
+      {
+        "flag": "-e",
+        "desc": "Show ethernet statistics"
+      },
+      {
+        "flag": "-s",
+        "desc": "Show per-protocol statistics"
+      },
+      {
+        "flag": "-r",
+        "desc": "Show routing table"
+      },
+      {
+        "flag": "-p TCP",
+        "desc": "Filter by protocol",
+        "valuePrompt": "TCP | UDP | ICMP",
+        "join": " "
+      },
+      {
+        "flag": "| findstr :80",
+        "desc": "Pipe: filter to specific port",
+        "valuePrompt": "Port number (e.g. :443)",
+        "join": " "
+      },
+      {
+        "flag": "| findstr LISTENING",
+        "desc": "Pipe: only listening sockets"
+      },
+      {
+        "flag": "| findstr ESTABLISHED",
+        "desc": "Pipe: only active connections"
+      }
+    ]
+  },
+  "cmd::schtasks /create /tn \"MyTask\" /tr \"C:\\script.bat\" /sc daily": {
+    "name": "schtasks /create",
+    "description": "Create a scheduled task",
+    "base": "schtasks /create",
+    "args": [
+      {
+        "key": "tn",
+        "label": "Task name",
+        "placeholder": "MyTask",
+        "required": true
+      },
+      {
+        "key": "tr",
+        "label": "Task to run",
+        "placeholder": "C:\\scripts\\backup.bat",
+        "required": true,
+        "quote": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "/sc DAILY",
+        "desc": "Run daily"
+      },
+      {
+        "flag": "/sc WEEKLY",
+        "desc": "Run weekly"
+      },
+      {
+        "flag": "/sc MONTHLY",
+        "desc": "Run monthly"
+      },
+      {
+        "flag": "/sc ONCE",
+        "desc": "Run once only"
+      },
+      {
+        "flag": "/sc ONSTART",
+        "desc": "Run at system startup"
+      },
+      {
+        "flag": "/sc ONLOGON",
+        "desc": "Run at user logon"
+      },
+      {
+        "flag": "/st",
+        "desc": "Start time",
+        "valuePrompt": "HH:MM (24h, e.g. 02:00)",
+        "join": " "
+      },
+      {
+        "flag": "/sd",
+        "desc": "Start date",
+        "valuePrompt": "MM/DD/YYYY",
+        "join": " "
+      },
+      {
+        "flag": "/mo",
+        "desc": "Modifier (e.g. every N days)",
+        "valuePrompt": "Number",
+        "valueDefault": "1",
+        "join": " "
+      },
+      {
+        "flag": "/ru",
+        "desc": "Run as user",
+        "valuePrompt": "SYSTEM or username",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "/rp",
+        "desc": "Password for run-as user",
+        "valuePrompt": "Password",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "/f",
+        "desc": "Force create, suppress warnings"
+      }
+    ]
+  }
+}

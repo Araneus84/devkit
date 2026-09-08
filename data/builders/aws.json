@@ -1,0 +1,225 @@
+{
+  "aws::aws s3 sync local/ s3://bucket/path/": {
+    "name": "aws s3 sync",
+    "description": "Build an aws s3 sync command",
+    "base": "aws s3 sync",
+    "args": [
+      {
+        "key": "source",
+        "label": "Source",
+        "placeholder": "local/ or s3://bucket/path/",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination",
+        "placeholder": "s3://bucket/path/ or local/",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--delete",
+        "desc": "Delete files in destination that no longer exist in source"
+      },
+      {
+        "flag": "--dryrun",
+        "desc": "Preview without making changes"
+      },
+      {
+        "flag": "--exclude",
+        "desc": "Exclude pattern",
+        "valuePrompt": "Pattern (e.g. \"*.tmp\")",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--include",
+        "desc": "Include pattern (use after exclude)",
+        "valuePrompt": "Pattern",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--acl",
+        "desc": "Set ACL on uploaded objects",
+        "valuePrompt": "private | public-read | bucket-owner-full-control",
+        "valueDefault": "private",
+        "join": " "
+      },
+      {
+        "flag": "--storage-class",
+        "desc": "Storage class",
+        "valuePrompt": "STANDARD | STANDARD_IA | GLACIER | DEEP_ARCHIVE",
+        "join": " "
+      },
+      {
+        "flag": "--sse",
+        "desc": "Server-side encryption",
+        "valuePrompt": "AES256 | aws:kms",
+        "valueDefault": "AES256",
+        "join": " "
+      },
+      {
+        "flag": "--cache-control",
+        "desc": "Set Cache-Control header",
+        "valuePrompt": "e.g. max-age=3600",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--content-type",
+        "desc": "Set Content-Type",
+        "valuePrompt": "e.g. text/html",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--profile",
+        "desc": "Use specific AWS profile",
+        "valuePrompt": "Profile name",
+        "join": " "
+      },
+      {
+        "flag": "--region",
+        "desc": "Specify region",
+        "valuePrompt": "e.g. us-east-1",
+        "join": " "
+      },
+      {
+        "flag": "--size-only",
+        "desc": "Compare size only (not modified time)"
+      },
+      {
+        "flag": "--exact-timestamps",
+        "desc": "Require exact timestamp match"
+      }
+    ]
+  },
+  "aws::aws ec2 describe-instances": {
+    "name": "aws ec2 describe-instances",
+    "description": "List EC2 instances with filters",
+    "base": "aws ec2 describe-instances",
+    "args": [],
+    "flags": [
+      {
+        "flag": "--filters",
+        "desc": "Filter by tag or state",
+        "valuePrompt": "Name=tag:Name,Values=web* or Name=instance-state-name,Values=running",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--instance-ids",
+        "desc": "Specific instance ID(s)",
+        "valuePrompt": "i-1234567890abcdef0",
+        "join": " ",
+        "repeatable": true
+      },
+      {
+        "flag": "--query",
+        "desc": "JMESPath query to reshape output",
+        "valuePrompt": "\"Reservations[*].Instances[*].[InstanceId,State.Name,PublicIpAddress]\"",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--output",
+        "desc": "Output format",
+        "valuePrompt": "table | json | text",
+        "valueDefault": "table",
+        "join": " "
+      },
+      {
+        "flag": "--profile",
+        "desc": "AWS profile to use",
+        "valuePrompt": "prod",
+        "join": " "
+      },
+      {
+        "flag": "--region",
+        "desc": "AWS region",
+        "valuePrompt": "us-east-1",
+        "join": " "
+      }
+    ]
+  },
+  "aws::aws s3 cp file.txt s3://bucket/path/": {
+    "name": "aws s3 cp",
+    "description": "Copy files to/from/between S3",
+    "base": "aws s3 cp",
+    "args": [
+      {
+        "key": "source",
+        "label": "Source",
+        "placeholder": "file.txt or s3://bucket/path/",
+        "required": true
+      },
+      {
+        "key": "dest",
+        "label": "Destination",
+        "placeholder": "s3://bucket/path/ or ./local/",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--recursive",
+        "desc": "Copy directory recursively"
+      },
+      {
+        "flag": "--exclude",
+        "desc": "Exclude pattern",
+        "valuePrompt": "\"*.tmp\"",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--include",
+        "desc": "Include pattern (override exclude)",
+        "valuePrompt": "\"*.log\"",
+        "join": " ",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--sse",
+        "desc": "Server-side encryption",
+        "valuePrompt": "AES256 | aws:kms",
+        "join": " "
+      },
+      {
+        "flag": "--acl",
+        "desc": "Canned ACL",
+        "valuePrompt": "private | public-read",
+        "join": " "
+      },
+      {
+        "flag": "--storage-class",
+        "desc": "Storage class",
+        "valuePrompt": "STANDARD | STANDARD_IA | GLACIER",
+        "join": " "
+      },
+      {
+        "flag": "--no-progress",
+        "desc": "Suppress progress output"
+      },
+      {
+        "flag": "--profile",
+        "desc": "AWS profile",
+        "valuePrompt": "prod",
+        "join": " "
+      },
+      {
+        "flag": "--region",
+        "desc": "AWS region",
+        "valuePrompt": "us-east-1",
+        "join": " "
+      }
+    ]
+  }
+}

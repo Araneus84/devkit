@@ -1,0 +1,551 @@
+{
+  "name": "Linux Admin",
+  "icon": "🐧",
+  "iconBg": "#fcc624",
+  "subtitle": "System administration",
+  "meta": "systemd-based",
+  "sections": [
+    {
+      "id": "lin-systemd",
+      "title": "systemd & Services",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "systemctl status servicename",
+          "desc": "Show service status"
+        },
+        {
+          "cmd": "systemctl start servicename",
+          "desc": "Start a service"
+        },
+        {
+          "cmd": "systemctl stop servicename",
+          "desc": "Stop a service"
+        },
+        {
+          "cmd": "systemctl restart servicename",
+          "desc": "Restart a service"
+        },
+        {
+          "cmd": "systemctl reload servicename",
+          "desc": "Reload service config without restart"
+        },
+        {
+          "cmd": "systemctl enable servicename",
+          "desc": "Enable service to start on boot"
+        },
+        {
+          "cmd": "systemctl disable servicename",
+          "desc": "Disable service from auto-start"
+        },
+        {
+          "cmd": "systemctl list-units --type=service",
+          "desc": "List all loaded services"
+        },
+        {
+          "cmd": "systemctl list-unit-files --state=enabled",
+          "desc": "List all enabled services"
+        },
+        {
+          "cmd": "systemctl daemon-reload",
+          "desc": "Reload systemd after editing unit files"
+        },
+        {
+          "cmd": "systemctl mask servicename",
+          "desc": "Prevent service from being started"
+        }
+      ]
+    },
+    {
+      "id": "lin-journal",
+      "title": "Logs (journalctl)",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "journalctl",
+          "desc": "View all logs (newest at bottom)"
+        },
+        {
+          "cmd": "journalctl -u servicename",
+          "desc": "View logs for specific service"
+        },
+        {
+          "cmd": "journalctl -u servicename -f",
+          "desc": "Follow service logs (like tail -f)"
+        },
+        {
+          "cmd": "journalctl -u servicename --since \"1 hour ago\"",
+          "desc": "Recent logs only"
+        },
+        {
+          "cmd": "journalctl --since \"2025-01-01\" --until \"2025-01-02\"",
+          "desc": "Logs between dates"
+        },
+        {
+          "cmd": "journalctl -p err",
+          "desc": "Only error-level messages"
+        },
+        {
+          "cmd": "journalctl -b",
+          "desc": "Logs from current boot"
+        },
+        {
+          "cmd": "journalctl -b -1",
+          "desc": "Logs from previous boot"
+        },
+        {
+          "cmd": "journalctl --disk-usage",
+          "desc": "Show how much disk logs are using"
+        },
+        {
+          "cmd": "journalctl --vacuum-time=7d",
+          "desc": "Delete logs older than 7 days"
+        }
+      ]
+    },
+    {
+      "id": "lin-network",
+      "title": "Networking",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "ip addr show",
+          "desc": "Show all network interfaces and IPs"
+        },
+        {
+          "cmd": "ip route show",
+          "desc": "Show routing table"
+        },
+        {
+          "cmd": "ip link set eth0 up",
+          "desc": "Enable interface"
+        },
+        {
+          "cmd": "ss -tulpn",
+          "desc": "List listening sockets with PIDs"
+        },
+        {
+          "cmd": "ss -tn state established",
+          "desc": "Show established TCP connections"
+        },
+        {
+          "cmd": "nmcli device status",
+          "desc": "Network Manager device status"
+        },
+        {
+          "cmd": "nmcli connection up \"Wired connection 1\"",
+          "desc": "Activate network connection"
+        },
+        {
+          "cmd": "iptables -L -n -v",
+          "desc": "List firewall rules"
+        },
+        {
+          "cmd": "ufw status verbose",
+          "desc": "Uncomplicated firewall status"
+        },
+        {
+          "cmd": "ufw allow 22/tcp",
+          "desc": "Allow SSH through firewall"
+        },
+        {
+          "cmd": "firewall-cmd --list-all",
+          "desc": "List firewalld rules"
+        },
+        {
+          "cmd": "firewall-cmd --add-port=80/tcp --permanent && firewall-cmd --reload",
+          "desc": "Open port permanently"
+        }
+      ]
+    },
+    {
+      "id": "lin-distro-check",
+      "title": "Identify Your Distro",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "cat /etc/os-release",
+          "desc": "Most reliable: show distro ID, name, version, and related family"
+        },
+        {
+          "cmd": "uname -r",
+          "desc": "Show the running kernel version"
+        },
+        {
+          "cmd": "command -v apt pacman paru dnf zypper",
+          "desc": "See which common package managers are installed"
+        }
+      ]
+    },
+    {
+      "id": "lin-apt",
+      "title": "Debian, Ubuntu & Mint (apt)",
+      "color": "#e95420",
+      "cmds": [
+        {
+          "cmd": "sudo apt update && sudo apt upgrade",
+          "desc": "Refresh package lists, then upgrade installed packages",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "sudo apt install package",
+          "desc": "Install a package from enabled repositories",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "sudo apt remove package",
+          "desc": "Remove a package but keep its configuration files",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "sudo apt purge package",
+          "desc": "Remove a package and its configuration files",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "sudo apt autoremove",
+          "desc": "Remove no-longer-needed dependencies",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "apt search keyword",
+          "desc": "Search available packages",
+          "platform": "Debian / Ubuntu / Mint"
+        },
+        {
+          "cmd": "apt list --installed",
+          "desc": "List installed packages",
+          "platform": "Debian / Ubuntu / Mint"
+        }
+      ]
+    },
+    {
+      "id": "lin-arch",
+      "title": "Arch, CachyOS & Manjaro (pacman)",
+      "color": "#1793d1",
+      "cmds": [
+        {
+          "cmd": "sudo pacman -Syu",
+          "desc": "Synchronize repositories and perform a full system upgrade — do not use partial upgrades",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "sudo pacman -S package",
+          "desc": "Install a repository package",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "sudo pacman -Rns package",
+          "desc": "Remove a package, unneeded dependencies, and its system config files",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "pacman -Ss keyword",
+          "desc": "Search synchronized repositories",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "pacman -Qs keyword",
+          "desc": "Search installed packages",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "pacman -Qdt",
+          "desc": "List orphaned packages; inspect before removing them",
+          "platform": "Arch / CachyOS / Manjaro"
+        },
+        {
+          "cmd": "sudo pacman -Syu --needed package",
+          "desc": "Upgrade the system and install a package only if it is missing",
+          "platform": "Arch / CachyOS / Manjaro"
+        }
+      ]
+    },
+    {
+      "id": "lin-aur",
+      "title": "Arch AUR Helpers (paru / yay)",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "paru -S package",
+          "desc": "Install a repository or AUR package; CachyOS commonly includes paru",
+          "platform": "Arch / CachyOS AUR"
+        },
+        {
+          "cmd": "paru -Sua",
+          "desc": "Check and upgrade AUR packages after a regular pacman -Syu update",
+          "platform": "Arch / CachyOS AUR"
+        },
+        {
+          "cmd": "paru -Ss keyword",
+          "desc": "Search repositories and the AUR",
+          "platform": "Arch / CachyOS AUR"
+        },
+        {
+          "cmd": "paru -Rns package",
+          "desc": "Remove an AUR or repository package with unused dependencies",
+          "platform": "Arch / CachyOS AUR"
+        },
+        {
+          "cmd": "yay -S package",
+          "desc": "Equivalent AUR-helper workflow when yay is installed instead of paru",
+          "platform": "Arch AUR"
+        }
+      ]
+    },
+    {
+      "id": "lin-rpm",
+      "title": "Fedora, RHEL, Rocky & AlmaLinux (dnf)",
+      "color": "#51a2da",
+      "cmds": [
+        {
+          "cmd": "sudo dnf upgrade --refresh",
+          "desc": "Refresh metadata and upgrade the system",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "sudo dnf install package",
+          "desc": "Install a package",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "sudo dnf remove package",
+          "desc": "Remove a package and unused dependencies where appropriate",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "dnf search keyword",
+          "desc": "Search enabled repositories",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "dnf list installed",
+          "desc": "List installed packages",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "sudo dnf autoremove",
+          "desc": "Remove unneeded dependencies",
+          "platform": "Fedora / RHEL family"
+        },
+        {
+          "cmd": "yum install package",
+          "desc": "Compatibility command on older RHEL/CentOS systems; dnf is the modern replacement",
+          "platform": "Legacy RHEL / CentOS"
+        }
+      ]
+    },
+    {
+      "id": "lin-universal",
+      "title": "Universal Apps (Flatpak & Snap)",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "flatpak search keyword",
+          "desc": "Search Flatpak remotes",
+          "platform": "Most distros"
+        },
+        {
+          "cmd": "flatpak install flathub app.id",
+          "desc": "Install an app from Flathub",
+          "platform": "Most distros"
+        },
+        {
+          "cmd": "flatpak update",
+          "desc": "Update installed Flatpak applications",
+          "platform": "Most distros"
+        },
+        {
+          "cmd": "snap install package",
+          "desc": "Install a Snap package when snapd is available",
+          "platform": "Ubuntu / optional elsewhere"
+        },
+        {
+          "cmd": "snap refresh",
+          "desc": "Update installed Snap packages",
+          "platform": "Ubuntu / optional elsewhere"
+        }
+      ]
+    },
+    {
+      "id": "lin-users",
+      "title": "Users & Groups",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "useradd -m -s /bin/bash username",
+          "desc": "Create user with home directory and bash shell"
+        },
+        {
+          "cmd": "usermod -aG groupname username",
+          "desc": "Add user to group (preserving existing)"
+        },
+        {
+          "cmd": "userdel -r username",
+          "desc": "Delete user and their home directory"
+        },
+        {
+          "cmd": "passwd username",
+          "desc": "Set or change user password"
+        },
+        {
+          "cmd": "groupadd groupname",
+          "desc": "Create new group"
+        },
+        {
+          "cmd": "id username",
+          "desc": "Show user UID, GID, and groups"
+        },
+        {
+          "cmd": "who, w",
+          "desc": "Show logged in users (w shows activity)"
+        },
+        {
+          "cmd": "last",
+          "desc": "Show login history"
+        },
+        {
+          "cmd": "chage -l username",
+          "desc": "Show password aging info"
+        },
+        {
+          "cmd": "sudo visudo",
+          "desc": "Safely edit sudoers file"
+        }
+      ]
+    },
+    {
+      "id": "lin-monitor",
+      "title": "Monitoring",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "top, htop, btop",
+          "desc": "Interactive process monitor (btop is fanciest)"
+        },
+        {
+          "cmd": "free -h",
+          "desc": "Show memory usage"
+        },
+        {
+          "cmd": "df -h",
+          "desc": "Show disk space usage"
+        },
+        {
+          "cmd": "du -sh /path/*",
+          "desc": "Show size of each item in path"
+        },
+        {
+          "cmd": "iostat -x 2",
+          "desc": "Disk I/O statistics every 2 seconds"
+        },
+        {
+          "cmd": "vmstat 2",
+          "desc": "Virtual memory stats every 2 seconds"
+        },
+        {
+          "cmd": "iotop",
+          "desc": "I/O usage by process (requires sudo)"
+        },
+        {
+          "cmd": "lsof -i :8080",
+          "desc": "List processes using port 8080"
+        },
+        {
+          "cmd": "lsof -p 1234",
+          "desc": "List files opened by process"
+        },
+        {
+          "cmd": "dmesg | tail",
+          "desc": "Show kernel ring buffer messages"
+        },
+        {
+          "cmd": "uptime",
+          "desc": "System uptime and load average"
+        }
+      ]
+    },
+    {
+      "id": "lin-disk",
+      "title": "Disks & Mounting",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "lsblk",
+          "desc": "List block devices (drives and partitions)"
+        },
+        {
+          "cmd": "fdisk -l",
+          "desc": "List partition tables"
+        },
+        {
+          "cmd": "mount /dev/sdb1 /mnt/data",
+          "desc": "Mount partition"
+        },
+        {
+          "cmd": "umount /mnt/data",
+          "desc": "Unmount filesystem"
+        },
+        {
+          "cmd": "mount | column -t",
+          "desc": "Show all mounts in table format"
+        },
+        {
+          "cmd": "mkfs.ext4 /dev/sdb1",
+          "desc": "Format partition as ext4"
+        },
+        {
+          "cmd": "fsck /dev/sdb1",
+          "desc": "Check filesystem for errors"
+        },
+        {
+          "cmd": "blkid",
+          "desc": "Show UUIDs of block devices"
+        },
+        {
+          "cmd": "cat /etc/fstab",
+          "desc": "View persistent mount configuration"
+        }
+      ]
+    },
+    {
+      "id": "lin-cron",
+      "title": "Scheduling",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "crontab -e",
+          "desc": "Edit current user crontab"
+        },
+        {
+          "cmd": "crontab -l",
+          "desc": "List current user cron jobs"
+        },
+        {
+          "cmd": "crontab -r",
+          "desc": "Remove all cron jobs (CAREFUL!)"
+        },
+        {
+          "cmd": "sudo crontab -e -u username",
+          "desc": "Edit another user crontab"
+        },
+        {
+          "cmd": "0 2 * * * /script.sh",
+          "desc": "Cron syntax — every day at 2 AM"
+        },
+        {
+          "cmd": "*/15 * * * * /script.sh",
+          "desc": "Every 15 minutes"
+        },
+        {
+          "cmd": "systemctl list-timers",
+          "desc": "List systemd timers (modern alternative)"
+        },
+        {
+          "cmd": "at \"now + 1 hour\"",
+          "desc": "Schedule one-time task"
+        }
+      ]
+    }
+  ]
+}

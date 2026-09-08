@@ -1,0 +1,283 @@
+{
+  "name": "cURL & jq",
+  "icon": "⤓",
+  "iconBg": "#073551",
+  "subtitle": "HTTP tools & JSON processing",
+  "meta": "curl + jq",
+  "sections": [
+    {
+      "id": "curl-basics",
+      "title": "cURL Basics",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "curl https://api.example.com",
+          "desc": "Simple GET request"
+        },
+        {
+          "cmd": "curl -v https://api.example.com",
+          "desc": "Verbose — show request/response headers"
+        },
+        {
+          "cmd": "curl -i https://api.example.com",
+          "desc": "Include response headers in output"
+        },
+        {
+          "cmd": "curl -I https://api.example.com",
+          "desc": "HEAD request — only show headers"
+        },
+        {
+          "cmd": "curl -L https://example.com",
+          "desc": "Follow redirects"
+        },
+        {
+          "cmd": "curl -o file.html https://example.com",
+          "desc": "Save output to file"
+        },
+        {
+          "cmd": "curl -O https://example.com/file.zip",
+          "desc": "Save with original filename"
+        },
+        {
+          "cmd": "curl -s https://api.example.com",
+          "desc": "Silent mode (no progress bar)"
+        },
+        {
+          "cmd": "curl -f https://example.com",
+          "desc": "Fail silently on HTTP errors (exit code != 0)"
+        },
+        {
+          "cmd": "curl --connect-timeout 5 --max-time 30 url",
+          "desc": "Set connection and total timeout"
+        }
+      ]
+    },
+    {
+      "id": "curl-data",
+      "title": "POST & Data",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "curl -X POST -d \"key=value\" url",
+          "desc": "POST form data"
+        },
+        {
+          "cmd": "curl -X POST -d '{\"key\":\"value\"}' -H \"Content-Type: application/json\" url",
+          "desc": "POST JSON"
+        },
+        {
+          "cmd": "curl -X POST -d @data.json -H \"Content-Type: application/json\" url",
+          "desc": "POST JSON from file"
+        },
+        {
+          "cmd": "curl -X PUT -d \"data\" url",
+          "desc": "PUT request"
+        },
+        {
+          "cmd": "curl -X DELETE url",
+          "desc": "DELETE request"
+        },
+        {
+          "cmd": "curl -X PATCH -d '{\"key\":\"new\"}' -H \"Content-Type: application/json\" url",
+          "desc": "PATCH request"
+        },
+        {
+          "cmd": "curl -F \"file=@upload.jpg\" url",
+          "desc": "Multipart file upload"
+        },
+        {
+          "cmd": "curl -F \"field=value\" -F \"file=@upload.jpg\" url",
+          "desc": "Multipart with file and field"
+        },
+        {
+          "cmd": "curl --data-urlencode \"q=search term\" url",
+          "desc": "URL-encode data"
+        }
+      ]
+    },
+    {
+      "id": "curl-headers",
+      "title": "Headers & Auth",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "curl -H \"Authorization: Bearer TOKEN\" url",
+          "desc": "Bearer token authentication"
+        },
+        {
+          "cmd": "curl -u username:password url",
+          "desc": "Basic authentication"
+        },
+        {
+          "cmd": "curl -H \"X-Custom: value\" -H \"Accept: application/json\" url",
+          "desc": "Multiple custom headers"
+        },
+        {
+          "cmd": "curl -A \"Mozilla/5.0\" url",
+          "desc": "Set User-Agent"
+        },
+        {
+          "cmd": "curl --cookie \"session=abc123\" url",
+          "desc": "Send cookies"
+        },
+        {
+          "cmd": "curl -c cookies.txt url",
+          "desc": "Save cookies to file"
+        },
+        {
+          "cmd": "curl -b cookies.txt url",
+          "desc": "Load cookies from file"
+        },
+        {
+          "cmd": "curl -e \"https://referrer\" url",
+          "desc": "Set Referer header"
+        }
+      ]
+    },
+    {
+      "id": "curl-debug",
+      "title": "Debugging & Misc",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "curl -w \"%{http_code}\\n\" -o /dev/null -s url",
+          "desc": "Get just the HTTP status code"
+        },
+        {
+          "cmd": "curl -w \"@curl-format.txt\" -o /dev/null -s url",
+          "desc": "Custom output format (timings, sizes)"
+        },
+        {
+          "cmd": "curl -k https://self-signed.example",
+          "desc": "Allow insecure SSL (skip cert check)"
+        },
+        {
+          "cmd": "curl --cert-status url",
+          "desc": "Verify SSL cert status via OCSP"
+        },
+        {
+          "cmd": "curl --resolve example.com:443:1.2.3.4 https://example.com",
+          "desc": "Override DNS for testing"
+        },
+        {
+          "cmd": "curl -x http://proxy:8080 url",
+          "desc": "Use HTTP proxy"
+        },
+        {
+          "cmd": "curl --socks5 host:port url",
+          "desc": "Use SOCKS5 proxy"
+        },
+        {
+          "cmd": "curl --http2 url",
+          "desc": "Use HTTP/2"
+        },
+        {
+          "cmd": "curl --trace-ascii trace.log url",
+          "desc": "Save full trace for deep debugging"
+        }
+      ]
+    },
+    {
+      "id": "jq-basics",
+      "title": "jq Basics",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "curl url | jq",
+          "desc": "Pretty-print JSON"
+        },
+        {
+          "cmd": "curl url | jq .",
+          "desc": "Same as above — explicit identity filter"
+        },
+        {
+          "cmd": "curl url | jq .field",
+          "desc": "Extract a top-level field"
+        },
+        {
+          "cmd": "curl url | jq \".user.email\"",
+          "desc": "Extract a nested field"
+        },
+        {
+          "cmd": "curl url | jq \".[0]\"",
+          "desc": "First element of array"
+        },
+        {
+          "cmd": "curl url | jq \".items[]\"",
+          "desc": "Iterate all items in array"
+        },
+        {
+          "cmd": "curl url | jq \".items[].name\"",
+          "desc": "Get name from each item in array"
+        },
+        {
+          "cmd": "curl url | jq -r .field",
+          "desc": "Raw output (no quotes around strings)"
+        },
+        {
+          "cmd": "echo '{\"a\":1}' | jq .",
+          "desc": "Pretty print inline JSON"
+        }
+      ]
+    },
+    {
+      "id": "jq-advanced",
+      "title": "jq Advanced",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "jq \"length\"",
+          "desc": "Length of array or string"
+        },
+        {
+          "cmd": "jq \"keys\"",
+          "desc": "List object keys"
+        },
+        {
+          "cmd": "jq \"select(.age > 30)\"",
+          "desc": "Filter by condition"
+        },
+        {
+          "cmd": "jq \".items[] | select(.status == \\\"active\\\")\"",
+          "desc": "Filter array items"
+        },
+        {
+          "cmd": "jq \"map(.name)\"",
+          "desc": "Extract field from every item in array"
+        },
+        {
+          "cmd": "jq \".items | sort_by(.date)\"",
+          "desc": "Sort array by field"
+        },
+        {
+          "cmd": "jq \"group_by(.category)\"",
+          "desc": "Group array by field"
+        },
+        {
+          "cmd": "jq \"{name: .full_name, age: .years}\"",
+          "desc": "Reshape into new object"
+        },
+        {
+          "cmd": "jq \"to_entries | map(.value)\"",
+          "desc": "Get all values from object"
+        },
+        {
+          "cmd": "jq \".items | unique\"",
+          "desc": "Remove duplicates from array"
+        },
+        {
+          "cmd": "jq \".items | min_by(.price)\"",
+          "desc": "Find min by field"
+        },
+        {
+          "cmd": "jq -s \". | add\"",
+          "desc": "Combine multiple JSON objects from input"
+        },
+        {
+          "cmd": "jq \"if .x > 0 then \\\"pos\\\" else \\\"neg\\\" end\"",
+          "desc": "Conditional logic"
+        }
+      ]
+    }
+  ]
+}

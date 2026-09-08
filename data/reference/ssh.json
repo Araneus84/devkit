@@ -1,0 +1,267 @@
+{
+  "name": "SSH & SSL",
+  "icon": "🔐",
+  "iconBg": "#dd4814",
+  "subtitle": "SSH, SCP, OpenSSL, keys",
+  "meta": "OpenSSH",
+  "sections": [
+    {
+      "id": "ssh-basics",
+      "title": "SSH Basics",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "ssh user@host",
+          "desc": "Connect to remote host"
+        },
+        {
+          "cmd": "ssh -p 2222 user@host",
+          "desc": "Connect on non-default port"
+        },
+        {
+          "cmd": "ssh -i ~/.ssh/key.pem user@host",
+          "desc": "Connect with specific identity file"
+        },
+        {
+          "cmd": "ssh -v user@host",
+          "desc": "Verbose output for debugging connection issues"
+        },
+        {
+          "cmd": "ssh -vvv user@host",
+          "desc": "Maximum verbosity"
+        },
+        {
+          "cmd": "ssh user@host \"command\"",
+          "desc": "Run single command on remote"
+        },
+        {
+          "cmd": "ssh -t user@host \"sudo command\"",
+          "desc": "Force pseudo-terminal (needed for sudo)"
+        },
+        {
+          "cmd": "ssh -A user@host",
+          "desc": "Forward SSH agent (use local keys on remote)"
+        },
+        {
+          "cmd": "ssh -X user@host",
+          "desc": "X11 forwarding for GUI apps"
+        }
+      ]
+    },
+    {
+      "id": "ssh-keys",
+      "title": "Keys & Authentication",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "ssh-keygen -t ed25519 -C \"your@email.com\"",
+          "desc": "Generate modern Ed25519 key (recommended)"
+        },
+        {
+          "cmd": "ssh-keygen -t rsa -b 4096 -C \"your@email.com\"",
+          "desc": "Generate 4096-bit RSA key"
+        },
+        {
+          "cmd": "ssh-keygen -f keyname",
+          "desc": "Generate key with specific filename"
+        },
+        {
+          "cmd": "ssh-copy-id user@host",
+          "desc": "Copy public key to remote authorized_keys"
+        },
+        {
+          "cmd": "ssh-copy-id -i ~/.ssh/key.pub user@host",
+          "desc": "Copy specific key"
+        },
+        {
+          "cmd": "ssh-add ~/.ssh/key.pem",
+          "desc": "Add private key to SSH agent"
+        },
+        {
+          "cmd": "ssh-add -l",
+          "desc": "List keys loaded in agent"
+        },
+        {
+          "cmd": "ssh-add -D",
+          "desc": "Remove all keys from agent"
+        },
+        {
+          "cmd": "eval $(ssh-agent)",
+          "desc": "Start SSH agent in current shell"
+        },
+        {
+          "cmd": "ssh-keygen -y -f keyfile",
+          "desc": "Print public key from private key"
+        },
+        {
+          "cmd": "ssh-keygen -lf keyfile.pub",
+          "desc": "Show fingerprint of public key"
+        }
+      ]
+    },
+    {
+      "id": "ssh-transfer",
+      "title": "File Transfer (SCP / SFTP / Rsync)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "scp file.txt user@host:/path/",
+          "desc": "Copy file to remote"
+        },
+        {
+          "cmd": "scp user@host:/path/file.txt .",
+          "desc": "Copy file from remote"
+        },
+        {
+          "cmd": "scp -r dir/ user@host:/path/",
+          "desc": "Recursively copy directory"
+        },
+        {
+          "cmd": "scp -P 2222 file user@host:/path/",
+          "desc": "SCP on non-default port (capital P!)"
+        },
+        {
+          "cmd": "sftp user@host",
+          "desc": "Open interactive SFTP session"
+        },
+        {
+          "cmd": "rsync -avz src/ user@host:/dest/",
+          "desc": "Rsync over SSH (fast incremental sync)"
+        },
+        {
+          "cmd": "rsync -avz --delete src/ user@host:/dest/",
+          "desc": "Rsync and delete extras on destination"
+        },
+        {
+          "cmd": "rsync -avz -e \"ssh -p 2222\" src/ user@host:/dest/",
+          "desc": "Rsync over non-default SSH port"
+        }
+      ]
+    },
+    {
+      "id": "ssh-tunnel",
+      "title": "Tunnels & Forwarding",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "ssh -L 8080:localhost:80 user@host",
+          "desc": "Local forward — local 8080 → remote port 80"
+        },
+        {
+          "cmd": "ssh -L 5432:db-server:5432 jumphost",
+          "desc": "Local forward via bastion to DB"
+        },
+        {
+          "cmd": "ssh -R 9000:localhost:3000 user@host",
+          "desc": "Remote forward — remote 9000 → local 3000"
+        },
+        {
+          "cmd": "ssh -D 8080 user@host",
+          "desc": "SOCKS5 proxy on local port 8080 via remote"
+        },
+        {
+          "cmd": "ssh -fN -L 8080:localhost:80 user@host",
+          "desc": "Background tunnel (no command, no terminal)"
+        },
+        {
+          "cmd": "ssh -J jumphost user@target",
+          "desc": "Connect to target via jumphost (ProxyJump)"
+        }
+      ]
+    },
+    {
+      "id": "ssh-config",
+      "title": "SSH Config & Server",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "cat ~/.ssh/config",
+          "desc": "View local SSH client config"
+        },
+        {
+          "cmd": "Host myserver\\n  HostName 1.2.3.4\\n  User alex\\n  Port 2222\\n  IdentityFile ~/.ssh/key",
+          "desc": "Example ~/.ssh/config entry — connect with \"ssh myserver\""
+        },
+        {
+          "cmd": "sudo systemctl restart sshd",
+          "desc": "Restart SSH server"
+        },
+        {
+          "cmd": "sudo nano /etc/ssh/sshd_config",
+          "desc": "Edit SSH server config"
+        },
+        {
+          "cmd": "sudo sshd -t",
+          "desc": "Test SSH config for syntax errors before restart"
+        },
+        {
+          "cmd": "cat ~/.ssh/authorized_keys",
+          "desc": "View authorized public keys on this host"
+        },
+        {
+          "cmd": "chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+          "desc": "Fix common SSH permission issues"
+        }
+      ]
+    },
+    {
+      "id": "ssh-openssl",
+      "title": "OpenSSL & Certificates",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "openssl genrsa -out key.pem 2048",
+          "desc": "Generate 2048-bit RSA private key"
+        },
+        {
+          "cmd": "openssl req -new -key key.pem -out csr.pem",
+          "desc": "Create Certificate Signing Request"
+        },
+        {
+          "cmd": "openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes",
+          "desc": "Generate self-signed cert (valid 1 year)"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -text -noout",
+          "desc": "View certificate details"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -enddate -noout",
+          "desc": "Show certificate expiration date"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host",
+          "desc": "Test SSL/TLS connection and view cert"
+        },
+        {
+          "cmd": "echo | openssl s_client -connect host:443 2>/dev/null | openssl x509 -enddate -noout",
+          "desc": "Get remote site cert expiry date"
+        },
+        {
+          "cmd": "openssl pkcs12 -in cert.pfx -out cert.pem -nodes",
+          "desc": "Convert PFX/P12 to PEM"
+        },
+        {
+          "cmd": "openssl rsa -in key.pem -pubout -out pub.pem",
+          "desc": "Extract public key from private key"
+        },
+        {
+          "cmd": "openssl rand -hex 32",
+          "desc": "Generate random hex string (e.g. for secrets)"
+        },
+        {
+          "cmd": "openssl rand -base64 32",
+          "desc": "Generate random base64 string"
+        },
+        {
+          "cmd": "openssl enc -aes-256-cbc -salt -in file -out file.enc",
+          "desc": "Encrypt file with AES-256"
+        },
+        {
+          "cmd": "openssl enc -d -aes-256-cbc -in file.enc -out file",
+          "desc": "Decrypt AES-256 encrypted file"
+        }
+      ]
+    }
+  ]
+}

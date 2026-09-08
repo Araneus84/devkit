@@ -1,0 +1,128 @@
+{
+  "python::python script.js": {
+    "name": "python / python3",
+    "description": "Run Python scripts with options",
+    "base": "python3",
+    "args": [
+      {
+        "key": "script",
+        "label": "Script file (or leave empty for REPL)",
+        "placeholder": "script.py",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Execute inline code",
+        "valuePrompt": "\"print('hello')\"",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "-m",
+        "desc": "Run library module as script",
+        "valuePrompt": "http.server | venv | pip | pytest",
+        "join": " "
+      },
+      {
+        "flag": "-i",
+        "desc": "Inspect mode — open REPL after script runs"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose — show import statements"
+      },
+      {
+        "flag": "-u",
+        "desc": "Unbuffered output (useful for real-time logging)"
+      },
+      {
+        "flag": "-O",
+        "desc": "Optimize — strip assert statements"
+      },
+      {
+        "flag": "-W",
+        "desc": "Warning filter",
+        "valuePrompt": "ignore | error | always",
+        "join": " "
+      },
+      {
+        "flag": "-X",
+        "desc": "Runtime option",
+        "valuePrompt": "utf8 | dev | faulthandler",
+        "join": " "
+      },
+      {
+        "flag": "--version",
+        "desc": "Show Python version and exit"
+      }
+    ]
+  },
+  "python::pip install package-name --break-system-packages": {
+    "name": "pip install",
+    "description": "Install Python packages with pip",
+    "base": "pip install",
+    "args": [
+      {
+        "key": "package",
+        "label": "Package(s)",
+        "placeholder": "requests pandas numpy",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Install from requirements file",
+        "valuePrompt": "requirements.txt",
+        "join": " "
+      },
+      {
+        "flag": "-U",
+        "desc": "Upgrade to latest version"
+      },
+      {
+        "flag": "--upgrade",
+        "desc": "Same as -U (long form)"
+      },
+      {
+        "flag": "--pre",
+        "desc": "Include pre-release versions"
+      },
+      {
+        "flag": "-e",
+        "desc": "Editable install (develop mode)",
+        "valuePrompt": ". or git+https://github.com/...",
+        "join": " "
+      },
+      {
+        "flag": "--no-deps",
+        "desc": "Do not install dependencies"
+      },
+      {
+        "flag": "--break-system-packages",
+        "desc": "Allow install outside virtualenv (Linux system Python)"
+      },
+      {
+        "flag": "--user",
+        "desc": "Install to user directory only"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet — minimal output"
+      },
+      {
+        "flag": "-i",
+        "desc": "Alternate index URL",
+        "valuePrompt": "https://pypi.org/simple/",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview what would be installed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "name": "Excel",
+  "icon": "📊",
+  "iconBg": "#217346",
+  "subtitle": "Excel formulas & shortcuts",
+  "meta": "Microsoft 365",
+  "sections": [
+    {
+      "id": "xl-basics",
+      "title": "Lookup Functions",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "=VLOOKUP(lookup, table, col_num, FALSE)",
+          "desc": "Lookup value in first column, return value from specified column"
+        },
+        {
+          "cmd": "=XLOOKUP(lookup, lookup_array, return_array)",
+          "desc": "Modern lookup — works in any direction, more flexible"
+        },
+        {
+          "cmd": "=INDEX(range, row, col)",
+          "desc": "Return value at specific row/column intersection"
+        },
+        {
+          "cmd": "=MATCH(value, range, 0)",
+          "desc": "Find position of value in range — 0 for exact match"
+        },
+        {
+          "cmd": "=INDEX(B:B, MATCH(A1, C:C, 0))",
+          "desc": "INDEX/MATCH combo — flexible alternative to VLOOKUP"
+        },
+        {
+          "cmd": "=HLOOKUP(lookup, table, row_num, FALSE)",
+          "desc": "Horizontal lookup — search across rows"
+        }
+      ]
+    },
+    {
+      "id": "xl-text",
+      "title": "Text Functions",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "=CONCAT(A1, \" \", B1)",
+          "desc": "Combine text from multiple cells"
+        },
+        {
+          "cmd": "=TEXTJOIN(\", \", TRUE, A1:A10)",
+          "desc": "Join cells with delimiter, ignore empties"
+        },
+        {
+          "cmd": "=LEFT(A1, 5), =RIGHT(A1, 3), =MID(A1, 2, 4)",
+          "desc": "Extract characters from left, right, or middle"
+        },
+        {
+          "cmd": "=LEN(A1)",
+          "desc": "Count characters in cell"
+        },
+        {
+          "cmd": "=UPPER(A1), =LOWER(A1), =PROPER(A1)",
+          "desc": "Change text case"
+        },
+        {
+          "cmd": "=TRIM(A1)",
+          "desc": "Remove extra spaces from text"
+        },
+        {
+          "cmd": "=SUBSTITUTE(A1, \"old\", \"new\")",
+          "desc": "Replace specific text in cell"
+        },
+        {
+          "cmd": "=FIND(\"x\", A1), =SEARCH(\"x\", A1)",
+          "desc": "Find position of text — FIND case-sensitive"
+        },
+        {
+          "cmd": "=TEXT(A1, \"yyyy-mm-dd\")",
+          "desc": "Format number/date as text"
+        }
+      ]
+    },
+    {
+      "id": "xl-logic",
+      "title": "Logical Functions",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "=IF(A1>10, \"High\", \"Low\")",
+          "desc": "Conditional logic — if/then/else"
+        },
+        {
+          "cmd": "=IFS(A1>90, \"A\", A1>80, \"B\", A1>70, \"C\", TRUE, \"F\")",
+          "desc": "Multiple conditions — cleaner than nested IFs"
+        },
+        {
+          "cmd": "=IFERROR(formula, \"N/A\")",
+          "desc": "Catch errors and show alternative value"
+        },
+        {
+          "cmd": "=AND(A1>0, B1<100), =OR(A1=1, A1=2)",
+          "desc": "Combine logical conditions"
+        },
+        {
+          "cmd": "=NOT(condition)",
+          "desc": "Invert boolean value"
+        },
+        {
+          "cmd": "=ISBLANK(A1), =ISNUMBER(A1), =ISTEXT(A1)",
+          "desc": "Check cell content type"
+        },
+        {
+          "cmd": "=SWITCH(A1, 1, \"One\", 2, \"Two\", \"Other\")",
+          "desc": "Cleaner alternative to multiple IFs for exact match"
+        }
+      ]
+    },
+    {
+      "id": "xl-aggregate",
+      "title": "Aggregate & Stats",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "=SUM(A1:A10), =AVERAGE(A1:A10)",
+          "desc": "Total or average of range"
+        },
+        {
+          "cmd": "=COUNT(A1:A10), =COUNTA(A1:A10)",
+          "desc": "Count numbers / count non-empty cells"
+        },
+        {
+          "cmd": "=COUNTIF(A:A, \">100\")",
+          "desc": "Count cells matching condition"
+        },
+        {
+          "cmd": "=COUNTIFS(A:A, \">100\", B:B, \"Yes\")",
+          "desc": "Count with multiple conditions"
+        },
+        {
+          "cmd": "=SUMIF(A:A, \"Apples\", B:B)",
+          "desc": "Sum values where condition matches"
+        },
+        {
+          "cmd": "=SUMIFS(C:C, A:A, \"Apples\", B:B, \">5\")",
+          "desc": "Sum with multiple conditions"
+        },
+        {
+          "cmd": "=AVERAGEIF(A:A, \">0\", B:B)",
+          "desc": "Average values where condition matches"
+        },
+        {
+          "cmd": "=MAX(A1:A10), =MIN(A1:A10)",
+          "desc": "Maximum or minimum value in range"
+        },
+        {
+          "cmd": "=MEDIAN(A1:A10), =MODE(A1:A10)",
+          "desc": "Statistical center — median or most common value"
+        },
+        {
+          "cmd": "=UNIQUE(A1:A100)",
+          "desc": "List unique values from range (365/2021+)"
+        }
+      ]
+    },
+    {
+      "id": "xl-dates",
+      "title": "Date & Time",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "=TODAY(), =NOW()",
+          "desc": "Current date or current date+time"
+        },
+        {
+          "cmd": "=YEAR(A1), =MONTH(A1), =DAY(A1)",
+          "desc": "Extract date parts"
+        },
+        {
+          "cmd": "=WEEKDAY(A1, 2)",
+          "desc": "Day of week — 2 starts week on Monday"
+        },
+        {
+          "cmd": "=DATE(2025, 12, 31)",
+          "desc": "Build date from year/month/day"
+        },
+        {
+          "cmd": "=EOMONTH(A1, 0)",
+          "desc": "Last day of the month"
+        },
+        {
+          "cmd": "=NETWORKDAYS(start, end)",
+          "desc": "Business days between two dates"
+        },
+        {
+          "cmd": "=DATEDIF(start, end, \"y\")",
+          "desc": "Difference in years (use \"m\" for months, \"d\" for days)"
+        },
+        {
+          "cmd": "=A1 + 30",
+          "desc": "Add 30 days to date"
+        }
+      ]
+    },
+    {
+      "id": "xl-shortcuts",
+      "title": "Keyboard Shortcuts",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "Ctrl + Arrow",
+          "desc": "Jump to edge of data region"
+        },
+        {
+          "cmd": "Ctrl + Shift + Arrow",
+          "desc": "Select to edge of data region"
+        },
+        {
+          "cmd": "Ctrl + Home / Ctrl + End",
+          "desc": "Go to A1 / last used cell"
+        },
+        {
+          "cmd": "Ctrl + ; (semicolon)",
+          "desc": "Insert current date"
+        },
+        {
+          "cmd": "Ctrl + Shift + : (colon)",
+          "desc": "Insert current time"
+        },
+        {
+          "cmd": "Ctrl + T",
+          "desc": "Convert range to Excel Table"
+        },
+        {
+          "cmd": "Alt + =",
+          "desc": "AutoSum selected cells"
+        },
+        {
+          "cmd": "Ctrl + Shift + L",
+          "desc": "Toggle filters on selected range"
+        },
+        {
+          "cmd": "F4",
+          "desc": "Toggle absolute/relative reference ($A$1)"
+        },
+        {
+          "cmd": "Ctrl + D / Ctrl + R",
+          "desc": "Fill down / fill right from cell above/left"
+        },
+        {
+          "cmd": "Ctrl + Shift + Enter",
+          "desc": "Enter as array formula (legacy)"
+        }
+      ]
+    },
+    {
+      "id": "xl-array",
+      "title": "Dynamic Arrays (365)",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "=FILTER(range, condition)",
+          "desc": "Filter range by condition — auto-spills results"
+        },
+        {
+          "cmd": "=SORT(range, col, order)",
+          "desc": "Sort range by column"
+        },
+        {
+          "cmd": "=SORTBY(range, sort_by_col, order)",
+          "desc": "Sort range by another range"
+        },
+        {
+          "cmd": "=UNIQUE(A1:A100)",
+          "desc": "List unique values"
+        },
+        {
+          "cmd": "=SEQUENCE(10)",
+          "desc": "Generate sequence of numbers (1 to 10)"
+        },
+        {
+          "cmd": "=RANDARRAY(5, 3)",
+          "desc": "Random number array — 5 rows by 3 columns"
+        },
+        {
+          "cmd": "=LET(x, A1*2, y, B1+1, x+y)",
+          "desc": "Assign names to expressions in a formula"
+        },
+        {
+          "cmd": "=LAMBDA(x, y, x+y)",
+          "desc": "Create custom reusable function (365)"
+        }
+      ]
+    }
+  ]
+}

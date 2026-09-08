@@ -1,0 +1,201 @@
+{
+  "net::nmap host.com": {
+    "name": "nmap",
+    "description": "Build an nmap scan command",
+    "base": "nmap",
+    "args": [
+      {
+        "key": "target",
+        "label": "Target",
+        "placeholder": "host.com or 192.168.1.0/24",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-sn",
+        "desc": "Ping scan only — discover hosts (no port scan)"
+      },
+      {
+        "flag": "-sS",
+        "desc": "SYN stealth scan (requires root)"
+      },
+      {
+        "flag": "-sT",
+        "desc": "TCP connect scan (no root needed)"
+      },
+      {
+        "flag": "-sU",
+        "desc": "UDP scan (requires root)"
+      },
+      {
+        "flag": "-sV",
+        "desc": "Service version detection"
+      },
+      {
+        "flag": "-O",
+        "desc": "OS detection"
+      },
+      {
+        "flag": "-A",
+        "desc": "Aggressive (OS, services, scripts, traceroute)"
+      },
+      {
+        "flag": "-p",
+        "desc": "Ports to scan",
+        "valuePrompt": "e.g. 80,443 or 1-1000 or -",
+        "valueDefault": "1-1000",
+        "join": " "
+      },
+      {
+        "flag": "-p-",
+        "desc": "Scan ALL 65535 ports (slow!)"
+      },
+      {
+        "flag": "-T",
+        "desc": "Timing template (0-5, higher=faster)",
+        "valuePrompt": "Speed",
+        "valueDefault": "4",
+        "join": ""
+      },
+      {
+        "flag": "--top-ports",
+        "desc": "Scan top N most common ports",
+        "valuePrompt": "N",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "-Pn",
+        "desc": "Skip host discovery (treat as up)"
+      },
+      {
+        "flag": "-n",
+        "desc": "No DNS resolution (faster)"
+      },
+      {
+        "flag": "--script",
+        "desc": "Run NSE scripts",
+        "valuePrompt": "Script name (e.g. vuln, default)",
+        "join": "="
+      },
+      {
+        "flag": "-oN",
+        "desc": "Output to normal text file",
+        "valuePrompt": "Filename",
+        "join": " "
+      },
+      {
+        "flag": "-oX",
+        "desc": "Output to XML file",
+        "valuePrompt": "Filename",
+        "join": " "
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose output"
+      },
+      {
+        "flag": "-vv",
+        "desc": "Very verbose"
+      }
+    ]
+  },
+  "net::sudo tcpdump -i any": {
+    "name": "tcpdump",
+    "description": "Build a tcpdump packet capture command",
+    "base": "sudo tcpdump",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-i",
+        "desc": "Interface to capture on",
+        "valuePrompt": "e.g. eth0, any",
+        "valueDefault": "any",
+        "join": " "
+      },
+      {
+        "flag": "-c",
+        "desc": "Capture only N packets then stop",
+        "valuePrompt": "Count",
+        "valueDefault": "100",
+        "join": " "
+      },
+      {
+        "flag": "-w",
+        "desc": "Write to pcap file",
+        "valuePrompt": "Filename (e.g. capture.pcap)",
+        "join": " "
+      },
+      {
+        "flag": "-r",
+        "desc": "Read from pcap file",
+        "valuePrompt": "Filename",
+        "join": " "
+      },
+      {
+        "flag": "-n",
+        "desc": "Don't resolve hostnames (faster)"
+      },
+      {
+        "flag": "-nn",
+        "desc": "Don't resolve hostnames or port names"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose (use -vv or -vvv for more)"
+      },
+      {
+        "flag": "-A",
+        "desc": "Print packets in ASCII"
+      },
+      {
+        "flag": "-X",
+        "desc": "Print packets in hex AND ASCII"
+      },
+      {
+        "flag": "-s",
+        "desc": "Snapshot length (bytes per packet)",
+        "valuePrompt": "Bytes (0 = full)",
+        "valueDefault": "0",
+        "join": " "
+      },
+      {
+        "flag": "port",
+        "desc": "Filter by port (filter expression)",
+        "valuePrompt": "Port number",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "host",
+        "desc": "Filter by host (filter expression)",
+        "valuePrompt": "IP or hostname",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "net",
+        "desc": "Filter by network (filter expression)",
+        "valuePrompt": "CIDR (e.g. 192.168.1.0/24)",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "tcp",
+        "desc": "Only TCP traffic",
+        "filterMode": true
+      },
+      {
+        "flag": "udp",
+        "desc": "Only UDP traffic",
+        "filterMode": true
+      },
+      {
+        "flag": "icmp",
+        "desc": "Only ICMP (ping) traffic",
+        "filterMode": true
+      }
+    ]
+  }
+}

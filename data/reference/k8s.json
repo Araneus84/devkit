@@ -1,0 +1,464 @@
+{
+  "name": "Kubernetes",
+  "icon": "☸",
+  "iconBg": "#326ce5",
+  "subtitle": "kubectl & cluster management",
+  "meta": "kubectl 1.x",
+  "sections": [
+    {
+      "id": "k8s-context",
+      "title": "Context & Config",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "kubectl config get-contexts",
+          "desc": "List all available contexts"
+        },
+        {
+          "cmd": "kubectl config current-context",
+          "desc": "Show currently active context"
+        },
+        {
+          "cmd": "kubectl config use-context context-name",
+          "desc": "Switch to different context"
+        },
+        {
+          "cmd": "kubectl config set-context --current --namespace=ns",
+          "desc": "Set default namespace for current context"
+        },
+        {
+          "cmd": "kubectl config view",
+          "desc": "Show merged kubeconfig"
+        },
+        {
+          "cmd": "kubectl cluster-info",
+          "desc": "Show cluster master and services info"
+        },
+        {
+          "cmd": "kubectl version",
+          "desc": "Show kubectl and server versions"
+        },
+        {
+          "cmd": "kubectl api-resources",
+          "desc": "List all resource types available"
+        },
+        {
+          "cmd": "kubectl api-versions",
+          "desc": "List supported API versions"
+        }
+      ]
+    },
+    {
+      "id": "k8s-pods",
+      "title": "Pods",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "kubectl get pods",
+          "desc": "List pods in current namespace"
+        },
+        {
+          "cmd": "kubectl get pods -A",
+          "desc": "List pods in all namespaces"
+        },
+        {
+          "cmd": "kubectl get pods -o wide",
+          "desc": "List pods with extra info (IP, node)"
+        },
+        {
+          "cmd": "kubectl get pod pod-name -o yaml",
+          "desc": "Get full pod manifest as YAML"
+        },
+        {
+          "cmd": "kubectl describe pod pod-name",
+          "desc": "Detailed pod info including events"
+        },
+        {
+          "cmd": "kubectl logs pod-name",
+          "desc": "View pod logs"
+        },
+        {
+          "cmd": "kubectl logs -f pod-name",
+          "desc": "Follow pod logs in real time"
+        },
+        {
+          "cmd": "kubectl logs pod-name -c container-name",
+          "desc": "Logs from specific container in pod"
+        },
+        {
+          "cmd": "kubectl logs pod-name --previous",
+          "desc": "Logs from previous container instance (crashed)"
+        },
+        {
+          "cmd": "kubectl logs -l app=nginx --tail=100",
+          "desc": "Logs from all pods matching label"
+        },
+        {
+          "cmd": "kubectl exec -it pod-name -- bash",
+          "desc": "Open shell in pod"
+        },
+        {
+          "cmd": "kubectl exec pod-name -- ls /app",
+          "desc": "Run single command in pod"
+        },
+        {
+          "cmd": "kubectl delete pod pod-name",
+          "desc": "Delete pod (deployment will recreate)"
+        },
+        {
+          "cmd": "kubectl delete pod pod-name --grace-period=0 --force",
+          "desc": "Force delete stuck pod"
+        }
+      ]
+    },
+    {
+      "id": "k8s-deploy",
+      "title": "Deployments & Workloads",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "kubectl get deployments",
+          "desc": "List deployments"
+        },
+        {
+          "cmd": "kubectl get rs",
+          "desc": "List replicasets"
+        },
+        {
+          "cmd": "kubectl get sts",
+          "desc": "List statefulsets"
+        },
+        {
+          "cmd": "kubectl get ds",
+          "desc": "List daemonsets"
+        },
+        {
+          "cmd": "kubectl create deployment nginx --image=nginx",
+          "desc": "Create deployment from image"
+        },
+        {
+          "cmd": "kubectl scale deployment nginx --replicas=5",
+          "desc": "Scale deployment to N replicas"
+        },
+        {
+          "cmd": "kubectl set image deployment/nginx nginx=nginx:1.25",
+          "desc": "Update deployment image (rolling update)"
+        },
+        {
+          "cmd": "kubectl rollout status deployment/nginx",
+          "desc": "Watch rollout progress"
+        },
+        {
+          "cmd": "kubectl rollout history deployment/nginx",
+          "desc": "Show rollout history"
+        },
+        {
+          "cmd": "kubectl rollout undo deployment/nginx",
+          "desc": "Roll back to previous revision"
+        },
+        {
+          "cmd": "kubectl rollout undo deployment/nginx --to-revision=2",
+          "desc": "Roll back to specific revision"
+        },
+        {
+          "cmd": "kubectl rollout restart deployment/nginx",
+          "desc": "Restart deployment (re-rolls all pods)"
+        },
+        {
+          "cmd": "kubectl autoscale deployment nginx --min=2 --max=10 --cpu-percent=80",
+          "desc": "Set up Horizontal Pod Autoscaler"
+        }
+      ]
+    },
+    {
+      "id": "k8s-services",
+      "title": "Services & Networking",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "kubectl get svc",
+          "desc": "List services"
+        },
+        {
+          "cmd": "kubectl get svc -o wide",
+          "desc": "Services with selectors and ports"
+        },
+        {
+          "cmd": "kubectl expose deployment nginx --port=80 --type=LoadBalancer",
+          "desc": "Expose deployment as service"
+        },
+        {
+          "cmd": "kubectl get endpoints",
+          "desc": "Show service endpoints (which pods back each service)"
+        },
+        {
+          "cmd": "kubectl get ingress",
+          "desc": "List ingresses"
+        },
+        {
+          "cmd": "kubectl describe ingress my-ingress",
+          "desc": "Show ingress rules and backends"
+        },
+        {
+          "cmd": "kubectl port-forward pod/nginx 8080:80",
+          "desc": "Forward local port to pod"
+        },
+        {
+          "cmd": "kubectl port-forward svc/nginx 8080:80",
+          "desc": "Forward local port to service"
+        },
+        {
+          "cmd": "kubectl get networkpolicies",
+          "desc": "List network policies"
+        }
+      ]
+    },
+    {
+      "id": "k8s-config",
+      "title": "ConfigMaps & Secrets",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "kubectl get configmaps",
+          "desc": "List configmaps"
+        },
+        {
+          "cmd": "kubectl create configmap app-config --from-literal=key=value",
+          "desc": "Create configmap from literal"
+        },
+        {
+          "cmd": "kubectl create configmap app-config --from-file=config.yaml",
+          "desc": "Create configmap from file"
+        },
+        {
+          "cmd": "kubectl describe configmap app-config",
+          "desc": "View configmap contents"
+        },
+        {
+          "cmd": "kubectl get secrets",
+          "desc": "List secrets"
+        },
+        {
+          "cmd": "kubectl create secret generic db-creds --from-literal=password=secret",
+          "desc": "Create generic secret"
+        },
+        {
+          "cmd": "kubectl create secret docker-registry regcred --docker-server=... --docker-username=... --docker-password=...",
+          "desc": "Create docker registry secret"
+        },
+        {
+          "cmd": "kubectl create secret tls my-tls --cert=cert.crt --key=cert.key",
+          "desc": "Create TLS secret"
+        },
+        {
+          "cmd": "kubectl get secret db-creds -o jsonpath=\"{.data.password}\" | base64 -d",
+          "desc": "Decode secret value"
+        }
+      ]
+    },
+    {
+      "id": "k8s-resources",
+      "title": "Resources & Namespaces",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "kubectl get ns",
+          "desc": "List namespaces"
+        },
+        {
+          "cmd": "kubectl create ns my-namespace",
+          "desc": "Create namespace"
+        },
+        {
+          "cmd": "kubectl delete ns my-namespace",
+          "desc": "Delete namespace and all resources in it"
+        },
+        {
+          "cmd": "kubectl get all",
+          "desc": "List most common resources in current namespace"
+        },
+        {
+          "cmd": "kubectl get all -n kube-system",
+          "desc": "List resources in specific namespace"
+        },
+        {
+          "cmd": "kubectl get all --all-namespaces",
+          "desc": "List resources across all namespaces"
+        },
+        {
+          "cmd": "kubectl get nodes",
+          "desc": "List cluster nodes"
+        },
+        {
+          "cmd": "kubectl describe node node-name",
+          "desc": "Detailed node info including capacity"
+        },
+        {
+          "cmd": "kubectl top nodes",
+          "desc": "Show node CPU/memory usage (requires metrics-server)"
+        },
+        {
+          "cmd": "kubectl top pods",
+          "desc": "Show pod CPU/memory usage"
+        },
+        {
+          "cmd": "kubectl get pv,pvc",
+          "desc": "List persistent volumes and claims"
+        },
+        {
+          "cmd": "kubectl get sa",
+          "desc": "List service accounts"
+        },
+        {
+          "cmd": "kubectl get events --sort-by=.metadata.creationTimestamp",
+          "desc": "Recent events sorted by time"
+        }
+      ]
+    },
+    {
+      "id": "k8s-apply",
+      "title": "Apply & Manifests",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "kubectl apply -f manifest.yaml",
+          "desc": "Apply configuration from file (create or update)"
+        },
+        {
+          "cmd": "kubectl apply -f directory/",
+          "desc": "Apply all manifests in directory"
+        },
+        {
+          "cmd": "kubectl apply -k overlay/",
+          "desc": "Apply Kustomize overlay"
+        },
+        {
+          "cmd": "kubectl apply -f https://url/manifest.yaml",
+          "desc": "Apply from URL"
+        },
+        {
+          "cmd": "kubectl diff -f manifest.yaml",
+          "desc": "Show diff between live state and manifest"
+        },
+        {
+          "cmd": "kubectl delete -f manifest.yaml",
+          "desc": "Delete resources defined in manifest"
+        },
+        {
+          "cmd": "kubectl create -f manifest.yaml --dry-run=client -o yaml",
+          "desc": "Generate manifest without creating"
+        },
+        {
+          "cmd": "kubectl get deployment nginx -o yaml > backup.yaml",
+          "desc": "Export resource as YAML backup"
+        },
+        {
+          "cmd": "kubectl replace --force -f manifest.yaml",
+          "desc": "Delete and recreate resource"
+        }
+      ]
+    },
+    {
+      "id": "k8s-debug",
+      "title": "Debug & Troubleshoot",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "kubectl describe pod pod-name",
+          "desc": "See events and status — first stop for debugging"
+        },
+        {
+          "cmd": "kubectl get events -n namespace --sort-by=.lastTimestamp",
+          "desc": "Recent events in namespace"
+        },
+        {
+          "cmd": "kubectl get pods --field-selector=status.phase=Failed",
+          "desc": "List only failed pods"
+        },
+        {
+          "cmd": "kubectl get pods --field-selector=status.phase!=Running",
+          "desc": "List non-running pods"
+        },
+        {
+          "cmd": "kubectl debug pod-name -it --image=busybox",
+          "desc": "Attach debug container to pod"
+        },
+        {
+          "cmd": "kubectl run debug --rm -it --image=busybox -- sh",
+          "desc": "Spin up temporary debug pod"
+        },
+        {
+          "cmd": "kubectl run curl --rm -it --image=curlimages/curl -- sh",
+          "desc": "Spin up curl pod for testing"
+        },
+        {
+          "cmd": "kubectl exec -it pod-name -- nslookup kubernetes.default",
+          "desc": "Test DNS resolution from inside pod"
+        },
+        {
+          "cmd": "kubectl get pod pod-name -o jsonpath=\"{.status.containerStatuses[*].state}\"",
+          "desc": "Get container state with JSONPath"
+        },
+        {
+          "cmd": "kubectl auth can-i create pods",
+          "desc": "Check if current user has permission"
+        },
+        {
+          "cmd": "kubectl auth can-i --list",
+          "desc": "List all permissions for current user"
+        }
+      ]
+    },
+    {
+      "id": "k8s-shortcuts",
+      "title": "Shortcuts & Tips",
+      "color": "#f76c6c",
+      "cmds": [
+        {
+          "cmd": "alias k=kubectl",
+          "desc": "Common alias — most k8s admins use this"
+        },
+        {
+          "cmd": "kubectl get po -w",
+          "desc": "Watch pods in real-time (replaces output as it changes)"
+        },
+        {
+          "cmd": "kubectl get pods --selector=app=nginx",
+          "desc": "Filter by label"
+        },
+        {
+          "cmd": "kubectl get pods -l \"app in (web,api)\"",
+          "desc": "Filter by label set"
+        },
+        {
+          "cmd": "kubectl get pods --show-labels",
+          "desc": "Display labels on all pods"
+        },
+        {
+          "cmd": "kubectl label pod nginx env=prod",
+          "desc": "Add label to pod"
+        },
+        {
+          "cmd": "kubectl annotate pod nginx description=\"web frontend\"",
+          "desc": "Add annotation to pod"
+        },
+        {
+          "cmd": "kubectl cp file.txt pod-name:/path/file.txt",
+          "desc": "Copy file to pod"
+        },
+        {
+          "cmd": "kubectl cp pod-name:/path/file.txt file.txt",
+          "desc": "Copy file from pod"
+        },
+        {
+          "cmd": "kubectl explain pod.spec.containers",
+          "desc": "Show documentation for resource field"
+        },
+        {
+          "cmd": "kubectl get pods --no-headers -o custom-columns=NAME:.metadata.name",
+          "desc": "Output specific fields in table format"
+        }
+      ]
+    }
+  ]
+}
