@@ -2,6 +2,15 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.23.0
+
+- Redesigned the interface with a new warm-ink look, a per-category colour system and a refined light theme.
+- Grouped the sheets into seven collapsible categories in the sidebar: Languages & Shells, Linux & Systems, Networking & Security, Cloud & Containers, Automation & IaC, Data & Admin, and Runbooks & Incidents. The open state is remembered.
+- Added a sidebar filter, pinned sheets, and one-click sheet opening (the sheet name now opens the sheet; the arrow shows its sections).
+- Added a Home dashboard with an intent search box and quick searches, library stats, jump-back-in recents, most-used and recently copied commands, favorites, a runbook shortcut row and category cards. It is the landing page; the DevKit logo returns to it.
+- Usage tracking for the dashboard stays in this browser's local storage and is included in backups.
+- Added a regression test covering category coverage, the dashboard, pins, filter, recents and the mobile drawer.
+
 ## 3.22.0
 
 - Added ten Linux infrastructure references: DNS Operations, Load Balancers & HA, TLS & Certificates, Network Troubleshooting, Performance Troubleshooting, Storage & Boot, Security Audit & Hardening, Patching & Kernel Lifecycle, Puppet & Config Management, and Incident Runbooks.

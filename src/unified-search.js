@@ -398,6 +398,7 @@ function usNavigate(sheet, section = null) {
   if (search) search.value = '';
   state.expandedSheets.add(sheet);
   save('expandedSheets');
+  dkTrackVisit(sheet, section);
   save('activeSheet');
   save('activeSection');
   renderSidebar();

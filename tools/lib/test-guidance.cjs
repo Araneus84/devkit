@@ -37,6 +37,8 @@ module.exports = {
   'python.cjs': 'Fix the Python model, package operations, or syntax detection.',
   'recipe-packs-browser.cjs':
     'Fix recipe-pack storage, import, management, search/schema integration, backup validation, inert rendering, or responsive offline behavior.',
+  'home-ui.cjs':
+    'Fix sheet categories, the home dashboard, sidebar groups, pins, filter, recents, usage tracking or the mobile drawer.',
   'recipe-packs.cjs':
     'Fix the JSON-only recipe-pack contract, template interpreter, limits, quoting, IDs, or malicious-input rejection.',
   'recipes.cjs': 'Fix recipe registration, generated file syntax, or offline assets.',
