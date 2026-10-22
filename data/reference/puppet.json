@@ -1,0 +1,209 @@
+{
+  "name": "Puppet & Config Management",
+  "icon": "◈",
+  "iconBg": "#f97316",
+  "subtitle": "Agent runs, validation, Hiera & idempotency",
+  "meta": "puppet, pdk, r10k, ansible-lint",
+  "sections": [
+    {
+      "id": "pp-agent",
+      "title": "Agent & Server",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "puppet --version",
+          "desc": "Installed version"
+        },
+        {
+          "cmd": "puppet agent -t",
+          "desc": "Run once, in the foreground, verbosely"
+        },
+        {
+          "cmd": "puppet agent -t --noop",
+          "desc": "Dry run: report what would change"
+        },
+        {
+          "cmd": "puppet agent -t --detailed-exitcodes; echo $?",
+          "desc": "Exit codes: 0 no change, 2 changes, 4 failures, 6 changes and failures"
+        },
+        {
+          "cmd": "puppet agent --disable \"maintenance until 14:00\"",
+          "desc": "Pause agent runs with a reason"
+        },
+        {
+          "cmd": "puppet agent --enable",
+          "desc": "Resume agent runs"
+        },
+        {
+          "cmd": "puppet config print server certname environment",
+          "desc": "Where this agent connects and who it is"
+        },
+        {
+          "cmd": "puppet ssl bootstrap",
+          "desc": "Request and install a certificate from the server"
+        },
+        {
+          "cmd": "puppetserver ca list",
+          "desc": "Pending certificate requests"
+        },
+        {
+          "cmd": "puppetserver ca sign --certname web01.example.com",
+          "desc": "Sign a request"
+        },
+        {
+          "cmd": "puppetserver ca clean --certname web01.example.com",
+          "desc": "Revoke and remove a node certificate (before reinstalling it)"
+        },
+        {
+          "cmd": "facter os.release.full",
+          "desc": "One fact"
+        },
+        {
+          "cmd": "facter --json",
+          "desc": "All facts as JSON"
+        },
+        {
+          "cmd": "journalctl -u puppetserver -f",
+          "desc": "Follow Puppet Server logs"
+        }
+      ]
+    },
+    {
+      "id": "pp-validate",
+      "title": "Validate & Test Code",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "puppet parser validate manifests/site.pp",
+          "desc": "Syntax check"
+        },
+        {
+          "cmd": "puppet-lint --fix manifests/",
+          "desc": "Style check with automatic fixes"
+        },
+        {
+          "cmd": "pdk validate",
+          "desc": "Syntax, metadata and lint for a module"
+        },
+        {
+          "cmd": "pdk test unit",
+          "desc": "Run rspec-puppet unit tests"
+        },
+        {
+          "cmd": "pdk new class profile::base",
+          "desc": "Generate a class with its test"
+        },
+        {
+          "cmd": "puppet apply --noop manifests/site.pp",
+          "desc": "Dry-run a manifest locally without a server"
+        },
+        {
+          "cmd": "puppet apply -e \"include profile::base\" --modulepath=./modules --noop",
+          "desc": "Dry-run one class from a module path"
+        },
+        {
+          "cmd": "puppet resource service sshd",
+          "desc": "Show a resource as Puppet sees it (also: puppet resource package nginx)"
+        },
+        {
+          "cmd": "puppet describe file",
+          "desc": "Documentation of a resource type"
+        },
+        {
+          "cmd": "puppet lookup profile::base::packages --explain",
+          "desc": "Hiera: which value wins and from which layer"
+        },
+        {
+          "cmd": "puppet module list --tree",
+          "desc": "Installed modules and dependencies"
+        },
+        {
+          "cmd": "r10k deploy environment -p",
+          "desc": "Deploy environments and modules from Git and the Puppetfile"
+        }
+      ]
+    },
+    {
+      "id": "pp-debug",
+      "title": "Debugging Runs",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "puppet agent -t --debug",
+          "desc": "Verbose debug output"
+        },
+        {
+          "cmd": "puppet agent -t --trace",
+          "desc": "Stack traces for errors"
+        },
+        {
+          "cmd": "puppet agent -t --evaltrace",
+          "desc": "Time every resource evaluation"
+        },
+        {
+          "cmd": "puppet agent -t --tags nginx",
+          "desc": "Apply only resources with a tag"
+        },
+        {
+          "cmd": "puppet agent -t --environment testing",
+          "desc": "Run against another environment (test branches)"
+        },
+        {
+          "cmd": "cat /opt/puppetlabs/puppet/cache/state/last_run_summary.yaml",
+          "desc": "Result and timing of the last run"
+        },
+        {
+          "cmd": "cat /opt/puppetlabs/puppet/cache/state/last_run_report.yaml | head -50",
+          "desc": "Detailed report of the last run"
+        },
+        {
+          "cmd": "openssl x509 -in $(puppet config print hostcert) -noout -dates -subject",
+          "desc": "Is the agent certificate valid?"
+        },
+        {
+          "cmd": "tail -f /var/log/puppetlabs/puppetserver/puppetserver.log",
+          "desc": "Server-side compile errors"
+        }
+      ]
+    },
+    {
+      "id": "pp-quality",
+      "title": "Idempotency & Config Quality (Puppet and Ansible)",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "puppet agent -t; puppet agent -t --detailed-exitcodes; echo $?",
+          "desc": "Idempotency test: the second run must exit 0 (no changes)"
+        },
+        {
+          "cmd": "ansible-playbook site.yml --check --diff",
+          "desc": "Preview changes without applying them"
+        },
+        {
+          "cmd": "ansible-playbook site.yml | grep -E \"changed=[1-9]\"",
+          "desc": "Run it twice: any line printed on the second run is a task that is not idempotent"
+        },
+        {
+          "cmd": "ansible-lint site.yml",
+          "desc": "Lint playbooks for bad practice"
+        },
+        {
+          "cmd": "yamllint .",
+          "desc": "YAML syntax and style"
+        },
+        {
+          "cmd": "molecule converge",
+          "desc": "Apply a role in a disposable test instance"
+        },
+        {
+          "cmd": "molecule idempotence",
+          "desc": "Apply twice and fail if anything changes the second time"
+        },
+        {
+          "cmd": "molecule test",
+          "desc": "Full create, converge, idempotence, verify, destroy cycle"
+        }
+      ]
+    }
+  ]
+}

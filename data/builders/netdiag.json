@@ -1,0 +1,232 @@
+{
+  "netdiag::ping -M do -s 1472 host": {
+    "name": "ping (MTU probe)",
+    "description": "Test path MTU with fragmentation forbidden",
+    "base": "ping",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-M",
+        "desc": "Path MTU discovery mode",
+        "valuePrompt": "do, want or dont",
+        "join": " ",
+        "valueDefault": "do",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-s",
+        "desc": "Payload size (MTU minus 28)",
+        "valuePrompt": "Bytes",
+        "join": " ",
+        "valueDefault": "1472",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of probes",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-I",
+        "desc": "Source interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0"
+      },
+      {
+        "flag": "-W",
+        "desc": "Reply timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::mtr -rwbzc 100 host": {
+    "name": "mtr",
+    "description": "Per-hop loss and latency report",
+    "base": "mtr",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Report mode",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide report: do not cut hostnames",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-b",
+        "desc": "Show names and addresses"
+      },
+      {
+        "flag": "-z",
+        "desc": "Show AS numbers"
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of cycles",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "100",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Use TCP instead of ICMP"
+      },
+      {
+        "flag": "-P",
+        "desc": "TCP/UDP port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "443"
+      },
+      {
+        "flag": "-n",
+        "desc": "No DNS lookups"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::iperf3 -c host -t 10 -P 4": {
+    "name": "iperf3",
+    "description": "Measure throughput to an iperf3 server",
+    "base": "iperf3",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Server to connect to",
+        "valuePrompt": "host",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-t",
+        "desc": "Test duration in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "10"
+      },
+      {
+        "flag": "-P",
+        "desc": "Parallel streams",
+        "valuePrompt": "Streams",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-R",
+        "desc": "Reverse: server sends, client receives"
+      },
+      {
+        "flag": "-u",
+        "desc": "UDP instead of TCP"
+      },
+      {
+        "flag": "-b",
+        "desc": "Target bandwidth",
+        "valuePrompt": "e.g. 100M",
+        "join": " "
+      },
+      {
+        "flag": "-p",
+        "desc": "Server port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "5201"
+      }
+    ]
+  },
+  "netdiag::tcpdump -ni any port 53": {
+    "name": "tcpdump",
+    "description": "Capture packets with a filter",
+    "base": "tcpdump",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Do not resolve names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interface",
+        "valuePrompt": "Interface or any",
+        "join": " ",
+        "valueDefault": "any",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Stop after N packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "1000"
+      },
+      {
+        "flag": "-w",
+        "desc": "Write to a pcap file",
+        "valuePrompt": "File",
+        "join": " ",
+        "valueDefault": "/tmp/capture.pcap"
+      },
+      {
+        "flag": "-A",
+        "desc": "Print payload as ASCII"
+      },
+      {
+        "flag": "port",
+        "desc": "Port",
+        "valuePrompt": "Port number",
+        "join": " ",
+        "valueDefault": "53",
+        "filterMode": true
+      },
+      {
+        "flag": "host",
+        "desc": "Host",
+        "valuePrompt": "Address",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "udp",
+        "desc": "UDP only",
+        "filterMode": true
+      },
+      {
+        "flag": "tcp",
+        "desc": "TCP only",
+        "filterMode": true
+      },
+      {
+        "flag": "icmp",
+        "desc": "ICMP only",
+        "filterMode": true
+      }
+    ]
+  }
+}

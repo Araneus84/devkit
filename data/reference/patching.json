@@ -1,0 +1,225 @@
+{
+  "name": "Patching & Kernel Lifecycle",
+  "icon": "⟳",
+  "iconBg": "#6366f1",
+  "subtitle": "Find, apply, verify and roll back updates",
+  "meta": "apt, dnf, needrestart, ansible",
+  "sections": [
+    {
+      "id": "pt-status",
+      "title": "What Is Pending, What Is Running",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "uname -r",
+          "desc": "The kernel you are running right now"
+        },
+        {
+          "cmd": "uptime -p",
+          "desc": "Time since last boot: very long uptime = unpatched kernel"
+        },
+        {
+          "cmd": "dpkg -l \"linux-image-*\" | awk '/^ii/{print $2,$3}'",
+          "desc": "Installed kernels (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "rpm -q kernel",
+          "desc": "Installed kernels (RHEL/Fedora)"
+        },
+        {
+          "cmd": "apt-cache policy linux-generic",
+          "desc": "Is the kernel meta-package installed and what version would it install? (not installed = kernel updates never arrive)"
+        },
+        {
+          "cmd": "apt list --upgradable 2>/dev/null",
+          "desc": "All pending updates"
+        },
+        {
+          "cmd": "apt list --upgradable 2>/dev/null | grep -i security",
+          "desc": "Pending security updates"
+        },
+        {
+          "cmd": "dnf check-update --security",
+          "desc": "Pending security updates (RHEL/Fedora)"
+        },
+        {
+          "cmd": "cat /var/run/reboot-required /var/run/reboot-required.pkgs",
+          "desc": "Reboot needed and which packages asked for it"
+        },
+        {
+          "cmd": "needrestart -b",
+          "desc": "Services running old libraries (machine-readable)"
+        },
+        {
+          "cmd": "needrestart -r l",
+          "desc": "List services needing restart without restarting them"
+        },
+        {
+          "cmd": "dnf needs-restarting -r",
+          "desc": "Is a reboot needed? (RHEL/Fedora)"
+        },
+        {
+          "cmd": "ls -l /proc/*/exe 2>/dev/null | grep -c deleted",
+          "desc": "Count of processes running replaced binaries (restart or reboot to load the update)"
+        },
+        {
+          "cmd": "canonical-livepatch status",
+          "desc": "Livepatch state (Ubuntu Pro)"
+        },
+        {
+          "cmd": "systemctl status unattended-upgrades",
+          "desc": "Automatic updates: enabled and running?"
+        },
+        {
+          "cmd": "tail /var/log/unattended-upgrades/unattended-upgrades.log",
+          "desc": "What automatic updates did and why they skipped things"
+        },
+        {
+          "cmd": "apt-mark showhold",
+          "desc": "Packages held back"
+        }
+      ]
+    },
+    {
+      "id": "pt-apply",
+      "title": "Applying Updates Safely",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "apt update && apt full-upgrade",
+          "desc": "Update the index and apply everything (full-upgrade handles dependency changes)"
+        },
+        {
+          "cmd": "apt-get -s full-upgrade | grep -E \"^(Inst|Remv)\"",
+          "desc": "Simulate first: what is installed and, importantly, removed"
+        },
+        {
+          "cmd": "apt install --only-upgrade PACKAGE",
+          "desc": "Upgrade a single installed package"
+        },
+        {
+          "cmd": "apt install linux-generic",
+          "desc": "Make sure the kernel meta-package follows security kernels"
+        },
+        {
+          "cmd": "apt-mark hold PACKAGE",
+          "desc": "Pin a package version"
+        },
+        {
+          "cmd": "apt autoremove --purge",
+          "desc": "Remove unneeded packages and old kernels"
+        },
+        {
+          "cmd": "dpkg --configure -a",
+          "desc": "Finish an interrupted installation"
+        },
+        {
+          "cmd": "apt --fix-broken install",
+          "desc": "Repair broken dependencies"
+        },
+        {
+          "cmd": "dnf upgrade --refresh",
+          "desc": "Update everything (RHEL/Fedora)"
+        },
+        {
+          "cmd": "dnf history",
+          "desc": "Transaction history"
+        },
+        {
+          "cmd": "dnf history undo last",
+          "desc": "Roll back the last transaction"
+        },
+        {
+          "cmd": "dnf versionlock add PACKAGE",
+          "desc": "Pin a package version (RHEL/Fedora)"
+        }
+      ]
+    },
+    {
+      "id": "pt-kernel",
+      "title": "Kernel & Boot Fallback",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "dkms status",
+          "desc": "Out-of-tree modules (NVIDIA, ZFS...): confirm they are built for the new kernel before rebooting"
+        },
+        {
+          "cmd": "dpkg --list | grep -E \"linux-(image|headers|modules)\"",
+          "desc": "Kernel packages installed"
+        },
+        {
+          "cmd": "grep -E \"menuentry |submenu \" /boot/grub/grub.cfg | cut -d\"'\" -f2",
+          "desc": "Boot menu entries (to pick the old kernel if the new one fails)"
+        },
+        {
+          "cmd": "grubby --default-kernel",
+          "desc": "Default kernel (RHEL/Fedora)"
+        },
+        {
+          "cmd": "grubby --set-default /boot/vmlinuz-KERNELVERSION",
+          "desc": "Change the default kernel (RHEL/Fedora)"
+        },
+        {
+          "cmd": "apt remove --purge linux-image-OLDVERSION",
+          "desc": "Remove an old kernel only after the new one boots cleanly"
+        },
+        {
+          "cmd": "journalctl -b -1 -k | tail",
+          "desc": "Kernel messages from the previous boot"
+        },
+        {
+          "cmd": "last -x reboot | head",
+          "desc": "Reboot history"
+        },
+        {
+          "cmd": "systemctl reboot",
+          "desc": "Reboot"
+        }
+      ]
+    },
+    {
+      "id": "pt-rolling",
+      "title": "Rolling Patching & Reboots",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "kubectl cordon NODE",
+          "desc": "Mark a Kubernetes node unschedulable"
+        },
+        {
+          "cmd": "kubectl drain NODE --ignore-daemonsets --delete-emptydir-data",
+          "desc": "Evict pods gracefully before patching a node"
+        },
+        {
+          "cmd": "kubectl uncordon NODE",
+          "desc": "Allow scheduling again after the node is back"
+        },
+        {
+          "cmd": "kubectl get nodes -o wide",
+          "desc": "Node status, OS image and kernel version"
+        },
+        {
+          "cmd": "echo \"set server be_app/web1 state drain\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Drain a server out of HAProxy before patching (wait for scur to reach 0)"
+        },
+        {
+          "cmd": "until ssh host true; do sleep 5; done",
+          "desc": "Wait for a host to return after reboot"
+        },
+        {
+          "cmd": "ansible web -b -m reboot -a \"reboot_timeout=600\" -f 1",
+          "desc": "Reboot hosts one at a time and wait for each"
+        },
+        {
+          "cmd": "ansible all -m command -a \"uname -r\" -o",
+          "desc": "Confirm every host runs the expected kernel"
+        },
+        {
+          "cmd": "ansible-playbook patch.yml --limit canary",
+          "desc": "Patch a canary ring first, then widen to the rest"
+        }
+      ]
+    }
+  ]
+}

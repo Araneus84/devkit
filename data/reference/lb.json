@@ -1,0 +1,271 @@
+{
+  "name": "Load Balancers & HA",
+  "icon": "⚖",
+  "iconBg": "#10b981",
+  "subtitle": "HAProxy, nginx, keepalived & IPVS",
+  "meta": "haproxy, nginx, keepalived",
+  "sections": [
+    {
+      "id": "lb-haproxy",
+      "title": "HAProxy",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "haproxy -c -f /etc/haproxy/haproxy.cfg",
+          "desc": "Validate the configuration (always before reload)"
+        },
+        {
+          "cmd": "systemctl reload haproxy",
+          "desc": "Graceful reload: new processes take new connections, old ones finish"
+        },
+        {
+          "cmd": "haproxy -vv",
+          "desc": "Version and build options (TLS library, Lua, PCRE...)"
+        },
+        {
+          "cmd": "echo \"show info\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Process info: uptime, current connections, limits (socket path comes from \"stats socket\")"
+        },
+        {
+          "cmd": "echo \"show stat\" | socat stdio /run/haproxy/admin.sock | cut -d, -f1,2,5,18,19",
+          "desc": "Per-server status: current sessions (scur) and UP/DOWN state"
+        },
+        {
+          "cmd": "echo \"show servers state\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Admin and operational state of every server"
+        },
+        {
+          "cmd": "echo \"set server be_app/web1 state drain\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Drain a backend: finish existing sessions, accept no new ones"
+        },
+        {
+          "cmd": "echo \"set server be_app/web1 state ready\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Put a drained/maintenance server back into rotation"
+        },
+        {
+          "cmd": "echo \"set server be_app/web1 state maint\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Take a server out of rotation completely"
+        },
+        {
+          "cmd": "echo \"show errors\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Last invalid requests/responses seen (parse errors, bad headers)"
+        },
+        {
+          "cmd": "echo \"show sess\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Active sessions"
+        },
+        {
+          "cmd": "echo \"show table st_src_global\" | socat stdio /run/haproxy/admin.sock",
+          "desc": "Stick-table contents (rate limiting, abuse tracking)"
+        },
+        {
+          "cmd": "grep -E \" (502|503|504) \" /var/log/haproxy.log | tail",
+          "desc": "Recent gateway errors; the termination flags (sH--, SC--, cD--) say who closed and when"
+        },
+        {
+          "cmd": "journalctl -u haproxy -f",
+          "desc": "Follow HAProxy logs"
+        }
+      ]
+    },
+    {
+      "id": "lb-nginx",
+      "title": "nginx",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "nginx -t",
+          "desc": "Test the configuration"
+        },
+        {
+          "cmd": "nginx -T | less",
+          "desc": "Dump the full effective configuration including includes"
+        },
+        {
+          "cmd": "nginx -s reload",
+          "desc": "Graceful reload"
+        },
+        {
+          "cmd": "nginx -V 2>&1 | tr \" \" \"\\n\"",
+          "desc": "Compile flags and modules, one per line"
+        },
+        {
+          "cmd": "curl -s http://127.0.0.1/nginx_status",
+          "desc": "stub_status: active connections, accepts, handled, requests, reading/writing/waiting"
+        },
+        {
+          "cmd": "tail -f /var/log/nginx/error.log",
+          "desc": "Upstream errors (connect refused, timed out, no live upstreams)"
+        },
+        {
+          "cmd": "awk '{print $9}' /var/log/nginx/access.log | sort | uniq -c | sort -rn",
+          "desc": "Count of responses by HTTP status"
+        },
+        {
+          "cmd": "awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head",
+          "desc": "Top client IPs"
+        },
+        {
+          "cmd": "ss -tnp | grep nginx",
+          "desc": "Connections held by nginx workers (clients and upstreams)"
+        }
+      ]
+    },
+    {
+      "id": "lb-keepalived",
+      "title": "keepalived & VRRP",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "keepalived -t -f /etc/keepalived/keepalived.conf",
+          "desc": "Test the configuration (keepalived 2.x)"
+        },
+        {
+          "cmd": "systemctl status keepalived",
+          "desc": "State and last transitions (MASTER/BACKUP/FAULT)"
+        },
+        {
+          "cmd": "journalctl -u keepalived -f",
+          "desc": "Follow state changes and health-check script results"
+        },
+        {
+          "cmd": "ip -br addr show",
+          "desc": "Which node currently holds the virtual IP?"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 vrrp",
+          "desc": "Watch VRRP advertisements: who is advertising, at what priority?"
+        },
+        {
+          "cmd": "kill -USR1 $(cat /run/keepalived.pid) && cat /tmp/keepalived.data",
+          "desc": "Dump internal state (VRRP instances, checkers) to /tmp/keepalived.data"
+        },
+        {
+          "cmd": "arping -c 3 -A -I eth0 192.0.2.100",
+          "desc": "Send gratuitous ARP for the VIP to refresh switch/neighbour caches after failover"
+        },
+        {
+          "cmd": "arping -D -I eth0 -c 2 192.0.2.100",
+          "desc": "Duplicate address detection: does anyone else already own this IP?"
+        },
+        {
+          "cmd": "ip neigh show 192.0.2.100",
+          "desc": "Which MAC does this host currently think owns the VIP?"
+        },
+        {
+          "cmd": "sysctl net.ipv4.ip_nonlocal_bind",
+          "desc": "Must be 1 for a service to bind to a VIP the node does not hold yet"
+        },
+        {
+          "cmd": "systemctl stop keepalived",
+          "desc": "Failover test: stop on the MASTER and watch the VIP move (do this in a maintenance window)"
+        }
+      ]
+    },
+    {
+      "id": "lb-ipvs",
+      "title": "LVS / IPVS",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "ipvsadm -Ln",
+          "desc": "Virtual services and real servers (numeric)"
+        },
+        {
+          "cmd": "ipvsadm -Ln --stats",
+          "desc": "Connection, packet and byte counters per service/server"
+        },
+        {
+          "cmd": "ipvsadm -Ln --rate",
+          "desc": "Current rates per second"
+        },
+        {
+          "cmd": "ipvsadm -lnc",
+          "desc": "Connection table with state and expiry"
+        },
+        {
+          "cmd": "ipvsadm -A -t 192.0.2.100:80 -s rr",
+          "desc": "Add a TCP virtual service with round robin"
+        },
+        {
+          "cmd": "ipvsadm -a -t 192.0.2.100:80 -r 10.0.0.11:80 -g",
+          "desc": "Add a real server in direct-routing mode"
+        },
+        {
+          "cmd": "modprobe ip_vs",
+          "desc": "Load the IPVS kernel module"
+        }
+      ]
+    },
+    {
+      "id": "lb-test",
+      "title": "Backend & Health Checks",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "curl -sv -o /dev/null http://10.0.0.11:8080/health",
+          "desc": "Hit a backend directly, bypassing the load balancer"
+        },
+        {
+          "cmd": "curl -s -o /dev/null -w \"%{http_code} connect=%{time_connect} ttfb=%{time_starttransfer} total=%{time_total}\\n\" http://app.example.com/",
+          "desc": "Status and timing breakdown: slow connect = network, slow ttfb = backend"
+        },
+        {
+          "cmd": "curl --resolve app.example.com:443:192.0.2.10 https://app.example.com/",
+          "desc": "Test one specific node/VIP with the correct SNI and Host header"
+        },
+        {
+          "cmd": "curl -H \"Host: app.example.com\" http://192.0.2.10/",
+          "desc": "Test virtual-host routing against an IP"
+        },
+        {
+          "cmd": "for i in $(seq 1 20); do curl -s http://app.example.com/whoami; echo; done | sort | uniq -c",
+          "desc": "Check balancing distribution (needs an endpoint that returns the backend name)"
+        },
+        {
+          "cmd": "ab -n 1000 -c 20 http://app.example.com/",
+          "desc": "Quick load test with ApacheBench"
+        },
+        {
+          "cmd": "wrk -t4 -c64 -d30s http://app.example.com/",
+          "desc": "Sustained load test with latency percentiles"
+        }
+      ]
+    },
+    {
+      "id": "lb-502",
+      "title": "Why 502 / 503 / 504?",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "ss -ltn",
+          "desc": "Listening sockets: a non-zero Recv-Q means the accept queue is filling up"
+        },
+        {
+          "cmd": "nstat -az TcpExtListenOverflows TcpExtListenDrops",
+          "desc": "Accept-queue overflows: backend cannot accept fast enough"
+        },
+        {
+          "cmd": "sysctl net.core.somaxconn net.ipv4.tcp_max_syn_backlog",
+          "desc": "Queue limits that cap the listen backlog"
+        },
+        {
+          "cmd": "cat /proc/$(pidof -s haproxy)/limits | grep \"open files\"",
+          "desc": "File descriptor limit: too low = refused connections under load"
+        },
+        {
+          "cmd": "ss -s",
+          "desc": "Socket totals including time-wait and orphaned connections"
+        },
+        {
+          "cmd": "dmesg -T | grep -iE \"conntrack|nf_conntrack: table full\"",
+          "desc": "Conntrack table full drops new connections"
+        },
+        {
+          "cmd": "systemctl status app --no-pager",
+          "desc": "Was the backend restarted? 502 during deploy = LB still sends traffic to a restarting backend: drain first, use health checks"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,366 @@
+{
+  "name": "Security Audit & Hardening",
+  "icon": "🛡",
+  "iconBg": "#dc2626",
+  "subtitle": "SSH, exposure, compromise triage, auditd & SELinux",
+  "meta": "read-only checks first",
+  "sections": [
+    {
+      "id": "sa-ssh",
+      "title": "SSH & Logins",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "sshd -T | grep -E \"permitrootlogin|passwordauthentication|allowusers|maxauthtries|x11forwarding\"",
+          "desc": "Effective SSH server settings (not just what the file says)"
+        },
+        {
+          "cmd": "sshd -t",
+          "desc": "Test sshd configuration before restarting"
+        },
+        {
+          "cmd": "ssh-keygen -lf ~/.ssh/authorized_keys",
+          "desc": "Fingerprints of authorized keys: any you do not recognise?"
+        },
+        {
+          "cmd": "last -i | head -20",
+          "desc": "Recent logins with source IPs"
+        },
+        {
+          "cmd": "lastb | head",
+          "desc": "Recent failed logins"
+        },
+        {
+          "cmd": "journalctl -u ssh --since today | grep -E \"Failed|Accepted\"",
+          "desc": "Today's SSH successes and failures (unit is sshd on RHEL)"
+        },
+        {
+          "cmd": "grep \"Failed password\" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | head",
+          "desc": "Top sources of failed password attempts"
+        },
+        {
+          "cmd": "ss -tnp state established '( sport = :22 )'",
+          "desc": "Who is connected over SSH right now"
+        },
+        {
+          "cmd": "w",
+          "desc": "Logged-in users, idle time and what they run"
+        },
+        {
+          "cmd": "fail2ban-client status sshd",
+          "desc": "Jail status: banned IPs and totals"
+        },
+        {
+          "cmd": "fail2ban-client set sshd unbanip 192.0.2.5",
+          "desc": "Unban an address you locked out by mistake"
+        }
+      ]
+    },
+    {
+      "id": "sa-expose",
+      "title": "Exposure: what is reachable?",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "ss -tulpn | grep -v \"127.0.0.1\"",
+          "desc": "Everything listening on a non-loopback address"
+        },
+        {
+          "cmd": "ufw status verbose",
+          "desc": "Firewall rules and default policies"
+        },
+        {
+          "cmd": "ufw allow from 192.168.1.0/24 to any port 22 proto tcp",
+          "desc": "Allow a service from one network only"
+        },
+        {
+          "cmd": "ufw delete allow 32400/tcp",
+          "desc": "Remove a rule that opened a port to everyone"
+        },
+        {
+          "cmd": "upnpc -l",
+          "desc": "UPnP port mappings your router currently holds: applications can open ports to the internet by themselves"
+        },
+        {
+          "cmd": "nmap -Pn -p- --open 192.0.2.10",
+          "desc": "Scan all ports of a host you own"
+        },
+        {
+          "cmd": "kubectl get svc -A | grep -E \"NodePort|LoadBalancer\"",
+          "desc": "Kubernetes services reachable from outside the cluster"
+        },
+        {
+          "cmd": "kubectl get ingress -A",
+          "desc": "Hostnames routed into the cluster"
+        }
+      ]
+    },
+    {
+      "id": "sa-ir",
+      "title": "Compromise Triage (read-only)",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "ps -eo user,pid,ppid,lstart,cmd --sort=lstart | tail -30",
+          "desc": "Newest processes with start times"
+        },
+        {
+          "cmd": "ls -l /proc/*/exe 2>/dev/null | grep deleted",
+          "desc": "Processes running from a deleted binary: a classic malware tell (package upgrades also cause a few)"
+        },
+        {
+          "cmd": "find /tmp /var/tmp /dev/shm -type f -perm /111 2>/dev/null",
+          "desc": "Executables in temporary directories"
+        },
+        {
+          "cmd": "find / -xdev -type f -newermt \"2 days ago\" -perm /111 2>/dev/null | head",
+          "desc": "Executables created in the last two days"
+        },
+        {
+          "cmd": "ss -tunap | grep -v \"127.0.0.1\"",
+          "desc": "Non-local connections with owning process"
+        },
+        {
+          "cmd": "ss -tnp state established | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -rn | head",
+          "desc": "Remote addresses by connection count"
+        },
+        {
+          "cmd": "ls -l /proc/PID/exe /proc/PID/cwd",
+          "desc": "Where a suspicious process runs from"
+        },
+        {
+          "cmd": "cat /proc/PID/cgroup",
+          "desc": "Which container or systemd unit a process belongs to"
+        },
+        {
+          "cmd": "cp /proc/PID/exe /root/evidence.bin && chmod 000 /root/evidence.bin && sha256sum /root/evidence.bin",
+          "desc": "Preserve a deleted binary as evidence (never execute it) and record its hash"
+        },
+        {
+          "cmd": "crontab -l; ls -la /etc/cron.* /var/spool/cron/crontabs",
+          "desc": "Scheduled-job persistence"
+        },
+        {
+          "cmd": "systemctl list-timers --all",
+          "desc": "systemd timers (cron alternative)"
+        },
+        {
+          "cmd": "systemctl list-unit-files --state=enabled",
+          "desc": "Everything set to start at boot"
+        },
+        {
+          "cmd": "find /etc /usr/bin /usr/sbin /bin /sbin -newermt \"7 days ago\" -type f 2>/dev/null",
+          "desc": "System files changed in the last week"
+        },
+        {
+          "cmd": "debsums -c",
+          "desc": "Package files that differ from the package (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "rpm -Va",
+          "desc": "Package files that differ from the package (RHEL/Fedora)"
+        },
+        {
+          "cmd": "getent passwd | awk -F: '$3==0'",
+          "desc": "Accounts with UID 0 (should be only root)"
+        },
+        {
+          "cmd": "awk -F: '($2==\"\")' /etc/shadow",
+          "desc": "Accounts with an empty password"
+        },
+        {
+          "cmd": "cat /root/.ssh/authorized_keys ~/.ssh/authorized_keys",
+          "desc": "SSH keys that grant access"
+        },
+        {
+          "cmd": "rkhunter --check --sk",
+          "desc": "Rootkit and common-backdoor scan"
+        },
+        {
+          "cmd": "tcpdump -nni eth0 -c 2000 udp | awk '{print $5}' | sort | uniq -c | sort -rn | head",
+          "desc": "Outbound UDP flood check: one destination with thousands of identical packets"
+        }
+      ]
+    },
+    {
+      "id": "sa-k8s",
+      "title": "Kubernetes Security Checks",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.hostNetwork==true) | .metadata.namespace+\"/\"+.metadata.name'",
+          "desc": "Pods on the host network (they see and use the host's interfaces)"
+        },
+        {
+          "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.containers[].securityContext.privileged==true) | .metadata.namespace+\"/\"+.metadata.name'",
+          "desc": "Privileged containers"
+        },
+        {
+          "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.volumes[]?.hostPath) | .metadata.namespace+\"/\"+.metadata.name'",
+          "desc": "Pods mounting host paths"
+        },
+        {
+          "cmd": "kubectl get clusterrolebindings -o wide | grep cluster-admin",
+          "desc": "Who has full cluster control"
+        },
+        {
+          "cmd": "kubectl auth can-i --list --as=system:serviceaccount:NAMESPACE:SERVICEACCOUNT",
+          "desc": "What a service account may do"
+        },
+        {
+          "cmd": "kubectl get networkpolicy -A",
+          "desc": "No policies means any pod can reach any other pod"
+        },
+        {
+          "cmd": "kubectl exec POD -n NAMESPACE -- ps -eo pid,user,lstart,args",
+          "desc": "Processes inside a container: anything you do not recognise?"
+        },
+        {
+          "cmd": "kubectl get secrets -A",
+          "desc": "Secrets in the cluster (names only; values are not shown)"
+        }
+      ]
+    },
+    {
+      "id": "sa-audit",
+      "title": "auditd & Authentication Logs",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "auditctl -l",
+          "desc": "Active audit rules"
+        },
+        {
+          "cmd": "auditctl -w /etc/passwd -p wa -k passwd_changes",
+          "desc": "Watch writes and attribute changes to a file"
+        },
+        {
+          "cmd": "ausearch -k passwd_changes -i",
+          "desc": "Events for a rule key, human readable"
+        },
+        {
+          "cmd": "ausearch -m USER_LOGIN --success no -i",
+          "desc": "Failed login events"
+        },
+        {
+          "cmd": "aureport --summary",
+          "desc": "Audit summary report"
+        },
+        {
+          "cmd": "aureport -au",
+          "desc": "Authentication report"
+        },
+        {
+          "cmd": "journalctl _COMM=sudo --since today",
+          "desc": "sudo activity today"
+        },
+        {
+          "cmd": "lastlog",
+          "desc": "Last login per account"
+        },
+        {
+          "cmd": "chage -l alex",
+          "desc": "Password ageing for a user"
+        },
+        {
+          "cmd": "passwd -S alex",
+          "desc": "Password status: locked, no password, usable"
+        }
+      ]
+    },
+    {
+      "id": "sa-lsm",
+      "title": "SELinux & AppArmor",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "getenforce",
+          "desc": "Enforcing, Permissive or Disabled"
+        },
+        {
+          "cmd": "sestatus",
+          "desc": "Full SELinux status"
+        },
+        {
+          "cmd": "setenforce 0",
+          "desc": "Temporarily permissive: if the problem disappears, SELinux was blocking it (turn back on with setenforce 1)"
+        },
+        {
+          "cmd": "ausearch -m avc -ts recent",
+          "desc": "Recent SELinux denials"
+        },
+        {
+          "cmd": "audit2why < /var/log/audit/audit.log",
+          "desc": "Explain denials and suggest boolean or context fixes"
+        },
+        {
+          "cmd": "ls -Z /var/www",
+          "desc": "Security contexts of files"
+        },
+        {
+          "cmd": "restorecon -Rv /var/www",
+          "desc": "Reset file contexts to the policy default"
+        },
+        {
+          "cmd": "semanage fcontext -a -t httpd_sys_content_t \"/srv/web(/.*)?\"",
+          "desc": "Persistently label a custom web directory"
+        },
+        {
+          "cmd": "setsebool -P httpd_can_network_connect on",
+          "desc": "Allow the web server to make outgoing connections (persistent)"
+        },
+        {
+          "cmd": "aa-status",
+          "desc": "AppArmor profiles and their modes"
+        },
+        {
+          "cmd": "aa-complain /usr/sbin/nginx",
+          "desc": "Put a profile into complain mode while debugging"
+        }
+      ]
+    },
+    {
+      "id": "sa-harden",
+      "title": "Hardening Quick Checks",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "lynis audit system",
+          "desc": "Broad hardening audit with a score and suggestions"
+        },
+        {
+          "cmd": "systemd-analyze security SERVICE",
+          "desc": "Exposure score of a service and which sandboxing options it lacks"
+        },
+        {
+          "cmd": "sysctl net.ipv4.tcp_syncookies net.ipv4.conf.all.rp_filter net.ipv4.conf.all.accept_redirects",
+          "desc": "Network hardening settings"
+        },
+        {
+          "cmd": "find / -xdev -perm -4000 -type f 2>/dev/null",
+          "desc": "SUID programs"
+        },
+        {
+          "cmd": "find / -xdev -type f -perm -0002 2>/dev/null",
+          "desc": "World-writable files"
+        },
+        {
+          "cmd": "getcap -r / 2>/dev/null",
+          "desc": "Files with elevated capabilities"
+        },
+        {
+          "cmd": "mount | grep -E \"nosuid|noexec\"",
+          "desc": "Which mounts restrict execution"
+        },
+        {
+          "cmd": "apt list --upgradable 2>/dev/null | grep -i security",
+          "desc": "Pending security updates (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "unattended-upgrade --dry-run -d",
+          "desc": "What automatic updates would do"
+        }
+      ]
+    }
+  ]
+}

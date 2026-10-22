@@ -1,0 +1,135 @@
+{
+  "storage::lvextend -r -L +10G /dev/vg0/data": {
+    "name": "lvextend",
+    "description": "Grow a logical volume and its filesystem",
+    "base": "lvextend",
+    "args": [
+      {
+        "key": "lv",
+        "label": "Logical volume",
+        "placeholder": "/dev/vg0/data",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Resize the filesystem too",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-L",
+        "desc": "Grow by size",
+        "valuePrompt": "+10G",
+        "join": " ",
+        "valueDefault": "+10G",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-l",
+        "desc": "Grow by extents or percentage (instead of -L)",
+        "valuePrompt": "+100%FREE",
+        "join": " ",
+        "valueDefault": "+100%FREE"
+      },
+      {
+        "flag": "--test",
+        "desc": "Dry run"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::df -hT": {
+    "name": "df",
+    "description": "Filesystem usage",
+    "base": "df",
+    "args": [
+      {
+        "key": "path",
+        "label": "Path",
+        "placeholder": "/",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-h",
+        "desc": "Human readable",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Show filesystem type",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Inodes instead of blocks"
+      },
+      {
+        "flag": "-x",
+        "desc": "Exclude a type",
+        "valuePrompt": "e.g. tmpfs",
+        "join": " ",
+        "valueDefault": "tmpfs"
+      },
+      {
+        "flag": "-t",
+        "desc": "Only this type",
+        "valuePrompt": "e.g. xfs",
+        "join": " "
+      },
+      {
+        "flag": "--total",
+        "desc": "Add a total line"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::smartctl -H /dev/sda": {
+    "name": "smartctl",
+    "description": "Disk SMART health",
+    "base": "smartctl",
+    "args": [
+      {
+        "key": "device",
+        "label": "Device",
+        "placeholder": "/dev/sda",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-H",
+        "desc": "Overall health"
+      },
+      {
+        "flag": "-a",
+        "desc": "All information"
+      },
+      {
+        "flag": "-x",
+        "desc": "Extended information"
+      },
+      {
+        "flag": "-i",
+        "desc": "Identity"
+      },
+      {
+        "flag": "-t",
+        "desc": "Start a self-test",
+        "valuePrompt": "short, long or conveyance",
+        "join": " ",
+        "valueDefault": "short"
+      },
+      {
+        "flag": "-l",
+        "desc": "Show a log",
+        "valuePrompt": "error or selftest",
+        "join": " ",
+        "valueDefault": "error"
+      }
+    ],
+    "argsAfterFlags": true
+  }
+}

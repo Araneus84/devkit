@@ -1,0 +1,266 @@
+{
+  "tls::openssl s_client -connect host:443 -servername host </dev/null": {
+    "name": "openssl s_client",
+    "description": "Open a TLS connection and inspect the handshake",
+    "base": "openssl s_client",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-connect",
+        "desc": "Host and port",
+        "valuePrompt": "host:443",
+        "join": " ",
+        "valueDefault": "host:443",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-servername",
+        "desc": "SNI name (required for virtual hosts)",
+        "valuePrompt": "Hostname",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-showcerts",
+        "desc": "Show the whole chain the server sends"
+      },
+      {
+        "flag": "-tls1_2",
+        "desc": "Force TLS 1.2"
+      },
+      {
+        "flag": "-tls1_3",
+        "desc": "Force TLS 1.3"
+      },
+      {
+        "flag": "-alpn",
+        "desc": "Offer an ALPN protocol",
+        "valuePrompt": "e.g. h2 or http/1.1",
+        "join": " ",
+        "valueDefault": "h2"
+      },
+      {
+        "flag": "-status",
+        "desc": "Request OCSP stapling"
+      },
+      {
+        "flag": "-brief",
+        "desc": "Short connection summary"
+      },
+      {
+        "flag": "-verify_return_error",
+        "desc": "Fail if the chain does not verify"
+      },
+      {
+        "flag": "-CAfile",
+        "desc": "Trust this CA file",
+        "valuePrompt": "Path",
+        "join": " "
+      },
+      {
+        "flag": "-starttls",
+        "desc": "Upgrade a plain protocol",
+        "valuePrompt": "smtp, imap, pop3 or ftp",
+        "join": " ",
+        "valueDefault": "smtp"
+      },
+      {
+        "flag": "</dev/null",
+        "desc": "Close stdin so the command exits by itself",
+        "alwaysOn": true
+      }
+    ]
+  },
+  "tls::openssl x509 -in cert.pem -noout -dates -subject -issuer": {
+    "name": "openssl x509",
+    "description": "Inspect a certificate file",
+    "base": "openssl x509",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-in",
+        "desc": "Certificate file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "cert.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-noout",
+        "desc": "Do not print the encoded certificate",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-dates",
+        "desc": "Validity dates"
+      },
+      {
+        "flag": "-subject",
+        "desc": "Subject"
+      },
+      {
+        "flag": "-issuer",
+        "desc": "Issuer"
+      },
+      {
+        "flag": "-fingerprint",
+        "desc": "Fingerprint (add -sha256 for SHA-256)"
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Use SHA-256 for the fingerprint"
+      },
+      {
+        "flag": "-text",
+        "desc": "Everything in the certificate"
+      },
+      {
+        "flag": "-ext",
+        "desc": "Print one extension",
+        "valuePrompt": "e.g. subjectAltName",
+        "join": " ",
+        "valueDefault": "subjectAltName"
+      },
+      {
+        "flag": "-checkend",
+        "desc": "Exit 1 if it expires within N seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2592000"
+      },
+      {
+        "flag": "-inform",
+        "desc": "Input format",
+        "valuePrompt": "PEM or DER",
+        "join": " ",
+        "valueDefault": "PEM"
+      }
+    ]
+  },
+  "tls::openssl req -new -key key.pem -out req.csr -subj \"/CN=host.example.com\" -addext \"subjectAltName=DNS:host.example.com\"": {
+    "name": "openssl req (CSR)",
+    "description": "Create a certificate signing request",
+    "base": "openssl req",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-new",
+        "desc": "Create a new request",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-key",
+        "desc": "Private key file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "key.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-out",
+        "desc": "CSR output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "req.csr",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-subj",
+        "desc": "Subject",
+        "valuePrompt": "/CN=host.example.com",
+        "join": " ",
+        "valueDefault": "/CN=host.example.com",
+        "alwaysOn": true,
+        "quote": true
+      },
+      {
+        "flag": "-addext",
+        "desc": "Extension (repeat for more)",
+        "valuePrompt": "subjectAltName=DNS:host.example.com",
+        "join": " ",
+        "valueDefault": "subjectAltName=DNS:host.example.com",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Sign with SHA-256"
+      }
+    ]
+  },
+  "tls::certbot certonly --standalone -d example.com": {
+    "name": "certbot certonly",
+    "description": "Obtain a certificate without changing server configuration",
+    "base": "certbot certonly",
+    "args": [],
+    "flags": [
+      {
+        "flag": "--standalone",
+        "desc": "Run a temporary web server on port 80"
+      },
+      {
+        "flag": "--webroot",
+        "desc": "Use an existing web root"
+      },
+      {
+        "flag": "-w",
+        "desc": "Web root path (with --webroot)",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/var/www/html"
+      },
+      {
+        "flag": "--manual",
+        "desc": "Manual challenge"
+      },
+      {
+        "flag": "--preferred-challenges",
+        "desc": "Challenge type",
+        "valuePrompt": "http or dns",
+        "join": " ",
+        "valueDefault": "dns"
+      },
+      {
+        "flag": "-d",
+        "desc": "Domain (repeat for more)",
+        "valuePrompt": "example.com",
+        "join": " ",
+        "valueDefault": "example.com",
+        "alwaysOn": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Test against the staging server without saving"
+      },
+      {
+        "flag": "--staging",
+        "desc": "Use the staging server (no rate limits, untrusted certificate)"
+      },
+      {
+        "flag": "--cert-name",
+        "desc": "Certificate name",
+        "valuePrompt": "Name",
+        "join": " "
+      },
+      {
+        "flag": "-m",
+        "desc": "Contact email",
+        "valuePrompt": "Email",
+        "join": " "
+      },
+      {
+        "flag": "--agree-tos",
+        "desc": "Accept the terms of service"
+      },
+      {
+        "flag": "--deploy-hook",
+        "desc": "Command to run after success",
+        "valuePrompt": "Command",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  }
+}

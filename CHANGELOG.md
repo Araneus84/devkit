@@ -2,6 +2,13 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.22.0
+
+- Added ten Linux infrastructure references: DNS Operations, Load Balancers & HA, TLS & Certificates, Network Troubleshooting, Performance Troubleshooting, Storage & Boot, Security Audit & Hardening, Patching & Kernel Lifecycle, Puppet & Config Management, and Incident Runbooks.
+- Added 31 command builders (dig, rndc, HAProxy, nginx, IPVS, arping, openssl, certbot, ping MTU probe, mtr, iperf3, tcpdump, strace, iostat, vmstat, perf, lvextend, df, smartctl, ausearch, ufw, kubectl drain, needrestart and Puppet) and eleven file and script recipes, including HAProxy and keepalived configurations, a rolling patch playbook and a post-mortem template.
+- Added ordered incident runbooks (DNS failures, 502/503/504 after deploy, disk full, SSH lockout, high load, service start failure, HA failover test, unexplained outbound traffic, certificate errors, Kubernetes crash loops and patch day) and a rapid-fire concept sheet.
+- Added a regression test for the new catalogs, builder keys, generated scripts and playbook.
+
 ## 3.21.0
 
 - Added a fast project check for manifest integrity, source syntax, text hygiene, and stale standalone builds.

@@ -1,0 +1,134 @@
+{
+  "secaudit::fail2ban-client status sshd": {
+    "name": "fail2ban-client",
+    "description": "Inspect fail2ban",
+    "base": "fail2ban-client",
+    "args": [
+      {
+        "key": "verb",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "status",
+        "options": [
+          {
+            "value": "status",
+            "label": "status - jails or one jail"
+          },
+          {
+            "value": "banned",
+            "label": "banned - all banned addresses"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload configuration"
+          },
+          {
+            "value": "ping",
+            "label": "ping - is the server up?"
+          }
+        ]
+      },
+      {
+        "key": "jail",
+        "label": "Jail",
+        "placeholder": "sshd",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "secaudit::ausearch -k passwd_changes -i": {
+    "name": "ausearch",
+    "description": "Search the audit log",
+    "base": "ausearch",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-k",
+        "desc": "Rule key",
+        "valuePrompt": "Key",
+        "join": " ",
+        "valueDefault": "passwd_changes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interpret numbers as names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-ts",
+        "desc": "Start time",
+        "valuePrompt": "today, recent or a date",
+        "join": " ",
+        "valueDefault": "today"
+      },
+      {
+        "flag": "-m",
+        "desc": "Message type",
+        "valuePrompt": "e.g. USER_LOGIN",
+        "join": " ",
+        "valueDefault": "USER_LOGIN"
+      },
+      {
+        "flag": "--success",
+        "desc": "Only successes or failures",
+        "valuePrompt": "yes or no",
+        "join": " ",
+        "valueDefault": "no"
+      },
+      {
+        "flag": "-ua",
+        "desc": "By user",
+        "valuePrompt": "User",
+        "join": " "
+      },
+      {
+        "flag": "-x",
+        "desc": "By executable",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "secaudit::ufw allow from 192.168.1.0/24 to any port 22 proto tcp": {
+    "name": "ufw allow",
+    "description": "Allow a service from one network",
+    "base": "ufw allow",
+    "args": [],
+    "flags": [
+      {
+        "flag": "from",
+        "desc": "Source address or network",
+        "valuePrompt": "CIDR",
+        "join": " ",
+        "valueDefault": "192.168.1.0/24",
+        "alwaysOn": true
+      },
+      {
+        "flag": "to any port",
+        "desc": "Destination port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "22",
+        "alwaysOn": true
+      },
+      {
+        "flag": "proto",
+        "desc": "Protocol",
+        "valuePrompt": "tcp or udp",
+        "join": " ",
+        "valueDefault": "tcp",
+        "alwaysOn": true
+      },
+      {
+        "flag": "comment",
+        "desc": "Rule comment",
+        "valuePrompt": "Text",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  }
+}
