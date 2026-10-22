@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.21.0",
+  "version": "3.22.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -31,6 +31,7 @@
     "src/ansible-drag.js",
     "src/tool-guides.js",
     "src/recipe-catalog.js",
+    "src/infra-recipes.js",
     "src/recipe-packs.js",
     "src/workbench.js",
     "src/deep-model.js",

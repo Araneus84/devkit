@@ -4320,5 +4320,1619 @@ const BUILDERS = {
         "desc": "Preview what would be installed"
       }
     ]
+  },
+  "dns::dig example.com": {
+    "name": "dig",
+    "description": "Build a DNS lookup command",
+    "base": "dig",
+    "args": [
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": true
+      },
+      {
+        "key": "type",
+        "label": "Record type",
+        "type": "select",
+        "required": true,
+        "default": "A",
+        "options": [
+          {
+            "value": "A",
+            "label": "A"
+          },
+          {
+            "value": "AAAA",
+            "label": "AAAA"
+          },
+          {
+            "value": "MX",
+            "label": "MX"
+          },
+          {
+            "value": "NS",
+            "label": "NS"
+          },
+          {
+            "value": "TXT",
+            "label": "TXT"
+          },
+          {
+            "value": "SOA",
+            "label": "SOA"
+          },
+          {
+            "value": "CNAME",
+            "label": "CNAME"
+          },
+          {
+            "value": "PTR",
+            "label": "PTR"
+          },
+          {
+            "value": "SRV",
+            "label": "SRV"
+          },
+          {
+            "value": "CAA",
+            "label": "CAA"
+          },
+          {
+            "value": "DNSKEY",
+            "label": "DNSKEY"
+          },
+          {
+            "value": "DS",
+            "label": "DS"
+          },
+          {
+            "value": "ANY",
+            "label": "ANY"
+          }
+        ]
+      }
+    ],
+    "flags": [
+      {
+        "flag": "@",
+        "desc": "Query a specific server",
+        "valuePrompt": "Server (e.g. 1.1.1.1 or ns1.example.com)",
+        "join": ""
+      },
+      {
+        "flag": "+short",
+        "desc": "Answer only"
+      },
+      {
+        "flag": "+noall +answer",
+        "desc": "Answer section only, with TTLs"
+      },
+      {
+        "flag": "+trace",
+        "desc": "Trace from the root servers"
+      },
+      {
+        "flag": "+tcp",
+        "desc": "Use TCP instead of UDP"
+      },
+      {
+        "flag": "+dnssec",
+        "desc": "Request DNSSEC records"
+      },
+      {
+        "flag": "+cd",
+        "desc": "Disable DNSSEC validation (diagnose SERVFAIL)"
+      },
+      {
+        "flag": "+norecurse",
+        "desc": "Do not ask for recursion (authoritative query)"
+      },
+      {
+        "flag": "+nssearch",
+        "desc": "Ask every authoritative server for the SOA"
+      },
+      {
+        "flag": "+noedns",
+        "desc": "Disable EDNS"
+      },
+      {
+        "flag": "+bufsize",
+        "desc": "EDNS UDP buffer size",
+        "valuePrompt": "Bytes",
+        "join": "=",
+        "valueDefault": "1232"
+      },
+      {
+        "flag": "+time",
+        "desc": "Timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "2"
+      },
+      {
+        "flag": "+tries",
+        "desc": "Number of attempts",
+        "valuePrompt": "Tries",
+        "join": "=",
+        "valueDefault": "1"
+      },
+      {
+        "flag": "+subnet",
+        "desc": "EDNS client subnet",
+        "valuePrompt": "Prefix (e.g. 203.0.113.0/24)",
+        "join": "="
+      }
+    ]
+  },
+  "dns::rndc reload example.com": {
+    "name": "rndc",
+    "description": "Control a BIND server",
+    "base": "rndc",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "reload",
+        "options": [
+          {
+            "value": "reload",
+            "label": "reload - reload a zone"
+          },
+          {
+            "value": "reconfig",
+            "label": "reconfig - load new zones"
+          },
+          {
+            "value": "flush",
+            "label": "flush - clear the cache"
+          },
+          {
+            "value": "flushname",
+            "label": "flushname - clear one name"
+          },
+          {
+            "value": "retransfer",
+            "label": "retransfer - pull zone again"
+          },
+          {
+            "value": "notify",
+            "label": "notify - tell secondaries"
+          },
+          {
+            "value": "zonestatus",
+            "label": "zonestatus - serial and state"
+          },
+          {
+            "value": "freeze",
+            "label": "freeze - freeze a dynamic zone"
+          },
+          {
+            "value": "thaw",
+            "label": "thaw - unfreeze"
+          },
+          {
+            "value": "status",
+            "label": "status - server state"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone or name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::unbound-control flush example.com": {
+    "name": "unbound-control",
+    "description": "Control an Unbound resolver",
+    "base": "unbound-control",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "flush",
+        "options": [
+          {
+            "value": "flush",
+            "label": "flush - one name"
+          },
+          {
+            "value": "flush_zone",
+            "label": "flush_zone - name and below"
+          },
+          {
+            "value": "lookup",
+            "label": "lookup - show servers asked"
+          },
+          {
+            "value": "status",
+            "label": "status - running state"
+          },
+          {
+            "value": "stats_noreset",
+            "label": "stats_noreset - statistics"
+          },
+          {
+            "value": "list_forwards",
+            "label": "list_forwards - forward zones"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload config"
+          }
+        ]
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::pdnsutil check-zone example.com": {
+    "name": "pdnsutil",
+    "description": "Manage PowerDNS zones",
+    "base": "pdnsutil",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "check-zone",
+        "options": [
+          {
+            "value": "check-zone",
+            "label": "check-zone - validate"
+          },
+          {
+            "value": "list-zone",
+            "label": "list-zone - show records"
+          },
+          {
+            "value": "show-zone",
+            "label": "show-zone - metadata and keys"
+          },
+          {
+            "value": "increase-serial",
+            "label": "increase-serial - bump SOA"
+          },
+          {
+            "value": "rectify-zone",
+            "label": "rectify-zone - fix ordering"
+          },
+          {
+            "value": "secure-zone",
+            "label": "secure-zone - enable DNSSEC"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone",
+        "placeholder": "example.com",
+        "required": true
+      }
+    ],
+    "flags": []
+  },
+  "lb::haproxy -c -f /etc/haproxy/haproxy.cfg": {
+    "name": "haproxy config check",
+    "description": "Validate a HAProxy configuration",
+    "base": "haproxy",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Check configuration only",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-f",
+        "desc": "Configuration file or directory",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/haproxy/haproxy.cfg",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: only print errors"
+      },
+      {
+        "flag": "-V",
+        "desc": "Verbose: print the loaded frontends and backends"
+      }
+    ]
+  },
+  "lb::nginx -t": {
+    "name": "nginx test",
+    "description": "Test an nginx configuration",
+    "base": "nginx",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test configuration",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Test and dump the full configuration"
+      },
+      {
+        "flag": "-c",
+        "desc": "Use another configuration file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/nginx/nginx.conf"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: suppress non-error messages"
+      }
+    ]
+  },
+  "lb::ipvsadm -Ln": {
+    "name": "ipvsadm",
+    "description": "List IPVS virtual services and real servers",
+    "base": "ipvsadm",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-Ln",
+        "desc": "List numerically",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--stats",
+        "desc": "Show counters"
+      },
+      {
+        "flag": "--rate",
+        "desc": "Show rates"
+      },
+      {
+        "flag": "-c",
+        "desc": "Show the connection table"
+      },
+      {
+        "flag": "--exact",
+        "desc": "Exact numbers instead of K/M units"
+      }
+    ]
+  },
+  "lb::arping -c 3 -A -I eth0 192.0.2.100": {
+    "name": "arping",
+    "description": "Send or test ARP requests and gratuitous ARP",
+    "base": "arping",
+    "args": [
+      {
+        "key": "ip",
+        "label": "Target IP",
+        "placeholder": "192.0.2.100",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Number of packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "3"
+      },
+      {
+        "flag": "-I",
+        "desc": "Interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-A",
+        "desc": "Gratuitous ARP reply (refresh neighbours after failover)"
+      },
+      {
+        "flag": "-U",
+        "desc": "Unsolicited ARP request"
+      },
+      {
+        "flag": "-D",
+        "desc": "Duplicate address detection: exits 0 if nobody answers"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "tls::openssl s_client -connect host:443 -servername host </dev/null": {
+    "name": "openssl s_client",
+    "description": "Open a TLS connection and inspect the handshake",
+    "base": "openssl s_client",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-connect",
+        "desc": "Host and port",
+        "valuePrompt": "host:443",
+        "join": " ",
+        "valueDefault": "host:443",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-servername",
+        "desc": "SNI name (required for virtual hosts)",
+        "valuePrompt": "Hostname",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-showcerts",
+        "desc": "Show the whole chain the server sends"
+      },
+      {
+        "flag": "-tls1_2",
+        "desc": "Force TLS 1.2"
+      },
+      {
+        "flag": "-tls1_3",
+        "desc": "Force TLS 1.3"
+      },
+      {
+        "flag": "-alpn",
+        "desc": "Offer an ALPN protocol",
+        "valuePrompt": "e.g. h2 or http/1.1",
+        "join": " ",
+        "valueDefault": "h2"
+      },
+      {
+        "flag": "-status",
+        "desc": "Request OCSP stapling"
+      },
+      {
+        "flag": "-brief",
+        "desc": "Short connection summary"
+      },
+      {
+        "flag": "-verify_return_error",
+        "desc": "Fail if the chain does not verify"
+      },
+      {
+        "flag": "-CAfile",
+        "desc": "Trust this CA file",
+        "valuePrompt": "Path",
+        "join": " "
+      },
+      {
+        "flag": "-starttls",
+        "desc": "Upgrade a plain protocol",
+        "valuePrompt": "smtp, imap, pop3 or ftp",
+        "join": " ",
+        "valueDefault": "smtp"
+      },
+      {
+        "flag": "</dev/null",
+        "desc": "Close stdin so the command exits by itself",
+        "alwaysOn": true
+      }
+    ]
+  },
+  "tls::openssl x509 -in cert.pem -noout -dates -subject -issuer": {
+    "name": "openssl x509",
+    "description": "Inspect a certificate file",
+    "base": "openssl x509",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-in",
+        "desc": "Certificate file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "cert.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-noout",
+        "desc": "Do not print the encoded certificate",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-dates",
+        "desc": "Validity dates"
+      },
+      {
+        "flag": "-subject",
+        "desc": "Subject"
+      },
+      {
+        "flag": "-issuer",
+        "desc": "Issuer"
+      },
+      {
+        "flag": "-fingerprint",
+        "desc": "Fingerprint (add -sha256 for SHA-256)"
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Use SHA-256 for the fingerprint"
+      },
+      {
+        "flag": "-text",
+        "desc": "Everything in the certificate"
+      },
+      {
+        "flag": "-ext",
+        "desc": "Print one extension",
+        "valuePrompt": "e.g. subjectAltName",
+        "join": " ",
+        "valueDefault": "subjectAltName"
+      },
+      {
+        "flag": "-checkend",
+        "desc": "Exit 1 if it expires within N seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2592000"
+      },
+      {
+        "flag": "-inform",
+        "desc": "Input format",
+        "valuePrompt": "PEM or DER",
+        "join": " ",
+        "valueDefault": "PEM"
+      }
+    ]
+  },
+  "tls::openssl req -new -key key.pem -out req.csr -subj \"/CN=host.example.com\" -addext \"subjectAltName=DNS:host.example.com\"": {
+    "name": "openssl req (CSR)",
+    "description": "Create a certificate signing request",
+    "base": "openssl req",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-new",
+        "desc": "Create a new request",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-key",
+        "desc": "Private key file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "key.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-out",
+        "desc": "CSR output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "req.csr",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-subj",
+        "desc": "Subject",
+        "valuePrompt": "/CN=host.example.com",
+        "join": " ",
+        "valueDefault": "/CN=host.example.com",
+        "alwaysOn": true,
+        "quote": true
+      },
+      {
+        "flag": "-addext",
+        "desc": "Extension (repeat for more)",
+        "valuePrompt": "subjectAltName=DNS:host.example.com",
+        "join": " ",
+        "valueDefault": "subjectAltName=DNS:host.example.com",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Sign with SHA-256"
+      }
+    ]
+  },
+  "tls::certbot certonly --standalone -d example.com": {
+    "name": "certbot certonly",
+    "description": "Obtain a certificate without changing server configuration",
+    "base": "certbot certonly",
+    "args": [],
+    "flags": [
+      {
+        "flag": "--standalone",
+        "desc": "Run a temporary web server on port 80"
+      },
+      {
+        "flag": "--webroot",
+        "desc": "Use an existing web root"
+      },
+      {
+        "flag": "-w",
+        "desc": "Web root path (with --webroot)",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/var/www/html"
+      },
+      {
+        "flag": "--manual",
+        "desc": "Manual challenge"
+      },
+      {
+        "flag": "--preferred-challenges",
+        "desc": "Challenge type",
+        "valuePrompt": "http or dns",
+        "join": " ",
+        "valueDefault": "dns"
+      },
+      {
+        "flag": "-d",
+        "desc": "Domain (repeat for more)",
+        "valuePrompt": "example.com",
+        "join": " ",
+        "valueDefault": "example.com",
+        "alwaysOn": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Test against the staging server without saving"
+      },
+      {
+        "flag": "--staging",
+        "desc": "Use the staging server (no rate limits, untrusted certificate)"
+      },
+      {
+        "flag": "--cert-name",
+        "desc": "Certificate name",
+        "valuePrompt": "Name",
+        "join": " "
+      },
+      {
+        "flag": "-m",
+        "desc": "Contact email",
+        "valuePrompt": "Email",
+        "join": " "
+      },
+      {
+        "flag": "--agree-tos",
+        "desc": "Accept the terms of service"
+      },
+      {
+        "flag": "--deploy-hook",
+        "desc": "Command to run after success",
+        "valuePrompt": "Command",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  },
+  "netdiag::ping -M do -s 1472 host": {
+    "name": "ping (MTU probe)",
+    "description": "Test path MTU with fragmentation forbidden",
+    "base": "ping",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-M",
+        "desc": "Path MTU discovery mode",
+        "valuePrompt": "do, want or dont",
+        "join": " ",
+        "valueDefault": "do",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-s",
+        "desc": "Payload size (MTU minus 28)",
+        "valuePrompt": "Bytes",
+        "join": " ",
+        "valueDefault": "1472",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of probes",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-I",
+        "desc": "Source interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0"
+      },
+      {
+        "flag": "-W",
+        "desc": "Reply timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::mtr -rwbzc 100 host": {
+    "name": "mtr",
+    "description": "Per-hop loss and latency report",
+    "base": "mtr",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Report mode",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide report: do not cut hostnames",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-b",
+        "desc": "Show names and addresses"
+      },
+      {
+        "flag": "-z",
+        "desc": "Show AS numbers"
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of cycles",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "100",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Use TCP instead of ICMP"
+      },
+      {
+        "flag": "-P",
+        "desc": "TCP/UDP port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "443"
+      },
+      {
+        "flag": "-n",
+        "desc": "No DNS lookups"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::iperf3 -c host -t 10 -P 4": {
+    "name": "iperf3",
+    "description": "Measure throughput to an iperf3 server",
+    "base": "iperf3",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Server to connect to",
+        "valuePrompt": "host",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-t",
+        "desc": "Test duration in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "10"
+      },
+      {
+        "flag": "-P",
+        "desc": "Parallel streams",
+        "valuePrompt": "Streams",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-R",
+        "desc": "Reverse: server sends, client receives"
+      },
+      {
+        "flag": "-u",
+        "desc": "UDP instead of TCP"
+      },
+      {
+        "flag": "-b",
+        "desc": "Target bandwidth",
+        "valuePrompt": "e.g. 100M",
+        "join": " "
+      },
+      {
+        "flag": "-p",
+        "desc": "Server port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "5201"
+      }
+    ]
+  },
+  "netdiag::tcpdump -ni any port 53": {
+    "name": "tcpdump",
+    "description": "Capture packets with a filter",
+    "base": "tcpdump",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Do not resolve names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interface",
+        "valuePrompt": "Interface or any",
+        "join": " ",
+        "valueDefault": "any",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Stop after N packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "1000"
+      },
+      {
+        "flag": "-w",
+        "desc": "Write to a pcap file",
+        "valuePrompt": "File",
+        "join": " ",
+        "valueDefault": "/tmp/capture.pcap"
+      },
+      {
+        "flag": "-A",
+        "desc": "Print payload as ASCII"
+      },
+      {
+        "flag": "port",
+        "desc": "Port",
+        "valuePrompt": "Port number",
+        "join": " ",
+        "valueDefault": "53",
+        "filterMode": true
+      },
+      {
+        "flag": "host",
+        "desc": "Host",
+        "valuePrompt": "Address",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "udp",
+        "desc": "UDP only",
+        "filterMode": true
+      },
+      {
+        "flag": "tcp",
+        "desc": "TCP only",
+        "filterMode": true
+      },
+      {
+        "flag": "icmp",
+        "desc": "ICMP only",
+        "filterMode": true
+      }
+    ]
+  },
+  "perf::strace -f -tt -T -p PID": {
+    "name": "strace",
+    "description": "Trace the system calls of a process",
+    "base": "strace",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-f",
+        "desc": "Follow child processes and threads"
+      },
+      {
+        "flag": "-tt",
+        "desc": "Timestamps with microseconds"
+      },
+      {
+        "flag": "-T",
+        "desc": "Time spent in each syscall"
+      },
+      {
+        "flag": "-c",
+        "desc": "Summary instead of the full trace"
+      },
+      {
+        "flag": "-p",
+        "desc": "Attach to a process",
+        "valuePrompt": "PID",
+        "join": " ",
+        "valueDefault": "PID",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-e",
+        "desc": "Filter",
+        "valuePrompt": "e.g. trace=network or trace=%file",
+        "join": " ",
+        "valueDefault": "trace=network"
+      },
+      {
+        "flag": "-s",
+        "desc": "Maximum string length",
+        "valuePrompt": "Characters",
+        "join": " ",
+        "valueDefault": "200"
+      },
+      {
+        "flag": "-o",
+        "desc": "Write to a file",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "perf::iostat -xz 1 3": {
+    "name": "iostat",
+    "description": "Disk latency and utilisation",
+    "base": "iostat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "3",
+        "required": true,
+        "default": "3"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-x",
+        "desc": "Extended statistics (await, %util)",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-z",
+        "desc": "Hide idle devices",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-d",
+        "desc": "Devices only, no CPU report"
+      },
+      {
+        "flag": "-m",
+        "desc": "Megabytes per second"
+      },
+      {
+        "flag": "-h",
+        "desc": "Human readable"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::vmstat 1 5": {
+    "name": "vmstat",
+    "description": "Run queue, memory, swap, I/O and CPU summary",
+    "base": "vmstat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "5",
+        "required": true,
+        "default": "5"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-S",
+        "desc": "Units",
+        "valuePrompt": "k, K, m or M",
+        "join": " ",
+        "valueDefault": "M"
+      },
+      {
+        "flag": "-a",
+        "desc": "Active/inactive memory"
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide output"
+      },
+      {
+        "flag": "-t",
+        "desc": "Timestamps"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::perf record -F 99 -a -g -- sleep 30": {
+    "name": "perf record",
+    "description": "Sample CPU stacks",
+    "base": "perf record",
+    "args": [
+      {
+        "key": "command",
+        "label": "What to run while sampling",
+        "placeholder": "-- sleep 30",
+        "required": true,
+        "default": "-- sleep 30"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-F",
+        "desc": "Samples per second",
+        "valuePrompt": "Hz",
+        "join": " ",
+        "valueDefault": "99",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-a",
+        "desc": "All CPUs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-g",
+        "desc": "Record call graphs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-p",
+        "desc": "One process only",
+        "valuePrompt": "PID",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "Output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "perf.data"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::lvextend -r -L +10G /dev/vg0/data": {
+    "name": "lvextend",
+    "description": "Grow a logical volume and its filesystem",
+    "base": "lvextend",
+    "args": [
+      {
+        "key": "lv",
+        "label": "Logical volume",
+        "placeholder": "/dev/vg0/data",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Resize the filesystem too",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-L",
+        "desc": "Grow by size",
+        "valuePrompt": "+10G",
+        "join": " ",
+        "valueDefault": "+10G",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-l",
+        "desc": "Grow by extents or percentage (instead of -L)",
+        "valuePrompt": "+100%FREE",
+        "join": " ",
+        "valueDefault": "+100%FREE"
+      },
+      {
+        "flag": "--test",
+        "desc": "Dry run"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::df -hT": {
+    "name": "df",
+    "description": "Filesystem usage",
+    "base": "df",
+    "args": [
+      {
+        "key": "path",
+        "label": "Path",
+        "placeholder": "/",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-h",
+        "desc": "Human readable",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Show filesystem type",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Inodes instead of blocks"
+      },
+      {
+        "flag": "-x",
+        "desc": "Exclude a type",
+        "valuePrompt": "e.g. tmpfs",
+        "join": " ",
+        "valueDefault": "tmpfs"
+      },
+      {
+        "flag": "-t",
+        "desc": "Only this type",
+        "valuePrompt": "e.g. xfs",
+        "join": " "
+      },
+      {
+        "flag": "--total",
+        "desc": "Add a total line"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::smartctl -H /dev/sda": {
+    "name": "smartctl",
+    "description": "Disk SMART health",
+    "base": "smartctl",
+    "args": [
+      {
+        "key": "device",
+        "label": "Device",
+        "placeholder": "/dev/sda",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-H",
+        "desc": "Overall health"
+      },
+      {
+        "flag": "-a",
+        "desc": "All information"
+      },
+      {
+        "flag": "-x",
+        "desc": "Extended information"
+      },
+      {
+        "flag": "-i",
+        "desc": "Identity"
+      },
+      {
+        "flag": "-t",
+        "desc": "Start a self-test",
+        "valuePrompt": "short, long or conveyance",
+        "join": " ",
+        "valueDefault": "short"
+      },
+      {
+        "flag": "-l",
+        "desc": "Show a log",
+        "valuePrompt": "error or selftest",
+        "join": " ",
+        "valueDefault": "error"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "secaudit::fail2ban-client status sshd": {
+    "name": "fail2ban-client",
+    "description": "Inspect fail2ban",
+    "base": "fail2ban-client",
+    "args": [
+      {
+        "key": "verb",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "status",
+        "options": [
+          {
+            "value": "status",
+            "label": "status - jails or one jail"
+          },
+          {
+            "value": "banned",
+            "label": "banned - all banned addresses"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload configuration"
+          },
+          {
+            "value": "ping",
+            "label": "ping - is the server up?"
+          }
+        ]
+      },
+      {
+        "key": "jail",
+        "label": "Jail",
+        "placeholder": "sshd",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "secaudit::ausearch -k passwd_changes -i": {
+    "name": "ausearch",
+    "description": "Search the audit log",
+    "base": "ausearch",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-k",
+        "desc": "Rule key",
+        "valuePrompt": "Key",
+        "join": " ",
+        "valueDefault": "passwd_changes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interpret numbers as names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-ts",
+        "desc": "Start time",
+        "valuePrompt": "today, recent or a date",
+        "join": " ",
+        "valueDefault": "today"
+      },
+      {
+        "flag": "-m",
+        "desc": "Message type",
+        "valuePrompt": "e.g. USER_LOGIN",
+        "join": " ",
+        "valueDefault": "USER_LOGIN"
+      },
+      {
+        "flag": "--success",
+        "desc": "Only successes or failures",
+        "valuePrompt": "yes or no",
+        "join": " ",
+        "valueDefault": "no"
+      },
+      {
+        "flag": "-ua",
+        "desc": "By user",
+        "valuePrompt": "User",
+        "join": " "
+      },
+      {
+        "flag": "-x",
+        "desc": "By executable",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "secaudit::ufw allow from 192.168.1.0/24 to any port 22 proto tcp": {
+    "name": "ufw allow",
+    "description": "Allow a service from one network",
+    "base": "ufw allow",
+    "args": [],
+    "flags": [
+      {
+        "flag": "from",
+        "desc": "Source address or network",
+        "valuePrompt": "CIDR",
+        "join": " ",
+        "valueDefault": "192.168.1.0/24",
+        "alwaysOn": true
+      },
+      {
+        "flag": "to any port",
+        "desc": "Destination port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "22",
+        "alwaysOn": true
+      },
+      {
+        "flag": "proto",
+        "desc": "Protocol",
+        "valuePrompt": "tcp or udp",
+        "join": " ",
+        "valueDefault": "tcp",
+        "alwaysOn": true
+      },
+      {
+        "flag": "comment",
+        "desc": "Rule comment",
+        "valuePrompt": "Text",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  },
+  "patching::kubectl drain NODE --ignore-daemonsets --delete-emptydir-data": {
+    "name": "kubectl drain",
+    "description": "Evict pods from a node before maintenance",
+    "base": "kubectl drain",
+    "args": [
+      {
+        "key": "node",
+        "label": "Node name",
+        "placeholder": "NODE",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--ignore-daemonsets",
+        "desc": "Do not evict DaemonSet pods",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--delete-emptydir-data",
+        "desc": "Allow deleting pods that use emptyDir volumes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--force",
+        "desc": "Also evict pods without a controller"
+      },
+      {
+        "flag": "--grace-period",
+        "desc": "Seconds pods get to stop",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "30"
+      },
+      {
+        "flag": "--timeout",
+        "desc": "Give up after",
+        "valuePrompt": "Duration",
+        "join": "=",
+        "valueDefault": "300s"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview only",
+        "valuePrompt": "client or server",
+        "join": "=",
+        "valueDefault": "client"
+      }
+    ]
+  },
+  "patching::needrestart -b": {
+    "name": "needrestart",
+    "description": "Find services and kernels that need a restart",
+    "base": "needrestart",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-b",
+        "desc": "Batch (machine-readable) output",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-r",
+        "desc": "Restart mode",
+        "valuePrompt": "l (list), i (interactive), a (automatic)",
+        "join": " ",
+        "valueDefault": "l"
+      },
+      {
+        "flag": "-k",
+        "desc": "Check the kernel only"
+      },
+      {
+        "flag": "-l",
+        "desc": "Check libraries only"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose"
+      }
+    ]
+  },
+  "puppet::puppet agent -t": {
+    "name": "puppet agent",
+    "description": "Run the Puppet agent",
+    "base": "puppet agent",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test run: foreground, verbose, detailed exit codes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--noop",
+        "desc": "Report changes without applying them"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug output"
+      },
+      {
+        "flag": "--trace",
+        "desc": "Stack traces for errors"
+      },
+      {
+        "flag": "--evaltrace",
+        "desc": "Time every resource"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      },
+      {
+        "flag": "--tags",
+        "desc": "Only these tags",
+        "valuePrompt": "Tag",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--server",
+        "desc": "Puppet server",
+        "valuePrompt": "Hostname",
+        "join": " "
+      }
+    ]
+  },
+  "puppet::puppet apply --noop manifests/site.pp": {
+    "name": "puppet apply",
+    "description": "Apply or dry-run a manifest without a server",
+    "base": "puppet apply",
+    "args": [
+      {
+        "key": "file",
+        "label": "Manifest",
+        "placeholder": "manifests/site.pp",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--noop",
+        "desc": "Dry run",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--modulepath",
+        "desc": "Module directories",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "./modules"
+      },
+      {
+        "flag": "-e",
+        "desc": "Inline code instead of a file",
+        "valuePrompt": "Puppet code",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--verbose",
+        "desc": "Verbose"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "puppet::puppet lookup profile::base::packages --explain": {
+    "name": "puppet lookup",
+    "description": "Query Hiera data",
+    "base": "puppet lookup",
+    "args": [
+      {
+        "key": "key",
+        "label": "Key",
+        "placeholder": "profile::base::packages",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--explain",
+        "desc": "Explain which layer supplied the value",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--node",
+        "desc": "Node name",
+        "valuePrompt": "Certname",
+        "join": " "
+      },
+      {
+        "flag": "--facts",
+        "desc": "Facts file",
+        "valuePrompt": "facts.yaml",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--merge",
+        "desc": "Merge strategy",
+        "valuePrompt": "first, unique, hash or deep",
+        "join": " ",
+        "valueDefault": "first"
+      }
+    ]
   }
 };

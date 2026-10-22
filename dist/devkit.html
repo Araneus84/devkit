@@ -36164,6 +36164,1620 @@ const BUILDERS = {
         "desc": "Preview what would be installed"
       }
     ]
+  },
+  "dns::dig example.com": {
+    "name": "dig",
+    "description": "Build a DNS lookup command",
+    "base": "dig",
+    "args": [
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": true
+      },
+      {
+        "key": "type",
+        "label": "Record type",
+        "type": "select",
+        "required": true,
+        "default": "A",
+        "options": [
+          {
+            "value": "A",
+            "label": "A"
+          },
+          {
+            "value": "AAAA",
+            "label": "AAAA"
+          },
+          {
+            "value": "MX",
+            "label": "MX"
+          },
+          {
+            "value": "NS",
+            "label": "NS"
+          },
+          {
+            "value": "TXT",
+            "label": "TXT"
+          },
+          {
+            "value": "SOA",
+            "label": "SOA"
+          },
+          {
+            "value": "CNAME",
+            "label": "CNAME"
+          },
+          {
+            "value": "PTR",
+            "label": "PTR"
+          },
+          {
+            "value": "SRV",
+            "label": "SRV"
+          },
+          {
+            "value": "CAA",
+            "label": "CAA"
+          },
+          {
+            "value": "DNSKEY",
+            "label": "DNSKEY"
+          },
+          {
+            "value": "DS",
+            "label": "DS"
+          },
+          {
+            "value": "ANY",
+            "label": "ANY"
+          }
+        ]
+      }
+    ],
+    "flags": [
+      {
+        "flag": "@",
+        "desc": "Query a specific server",
+        "valuePrompt": "Server (e.g. 1.1.1.1 or ns1.example.com)",
+        "join": ""
+      },
+      {
+        "flag": "+short",
+        "desc": "Answer only"
+      },
+      {
+        "flag": "+noall +answer",
+        "desc": "Answer section only, with TTLs"
+      },
+      {
+        "flag": "+trace",
+        "desc": "Trace from the root servers"
+      },
+      {
+        "flag": "+tcp",
+        "desc": "Use TCP instead of UDP"
+      },
+      {
+        "flag": "+dnssec",
+        "desc": "Request DNSSEC records"
+      },
+      {
+        "flag": "+cd",
+        "desc": "Disable DNSSEC validation (diagnose SERVFAIL)"
+      },
+      {
+        "flag": "+norecurse",
+        "desc": "Do not ask for recursion (authoritative query)"
+      },
+      {
+        "flag": "+nssearch",
+        "desc": "Ask every authoritative server for the SOA"
+      },
+      {
+        "flag": "+noedns",
+        "desc": "Disable EDNS"
+      },
+      {
+        "flag": "+bufsize",
+        "desc": "EDNS UDP buffer size",
+        "valuePrompt": "Bytes",
+        "join": "=",
+        "valueDefault": "1232"
+      },
+      {
+        "flag": "+time",
+        "desc": "Timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "2"
+      },
+      {
+        "flag": "+tries",
+        "desc": "Number of attempts",
+        "valuePrompt": "Tries",
+        "join": "=",
+        "valueDefault": "1"
+      },
+      {
+        "flag": "+subnet",
+        "desc": "EDNS client subnet",
+        "valuePrompt": "Prefix (e.g. 203.0.113.0/24)",
+        "join": "="
+      }
+    ]
+  },
+  "dns::rndc reload example.com": {
+    "name": "rndc",
+    "description": "Control a BIND server",
+    "base": "rndc",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "reload",
+        "options": [
+          {
+            "value": "reload",
+            "label": "reload - reload a zone"
+          },
+          {
+            "value": "reconfig",
+            "label": "reconfig - load new zones"
+          },
+          {
+            "value": "flush",
+            "label": "flush - clear the cache"
+          },
+          {
+            "value": "flushname",
+            "label": "flushname - clear one name"
+          },
+          {
+            "value": "retransfer",
+            "label": "retransfer - pull zone again"
+          },
+          {
+            "value": "notify",
+            "label": "notify - tell secondaries"
+          },
+          {
+            "value": "zonestatus",
+            "label": "zonestatus - serial and state"
+          },
+          {
+            "value": "freeze",
+            "label": "freeze - freeze a dynamic zone"
+          },
+          {
+            "value": "thaw",
+            "label": "thaw - unfreeze"
+          },
+          {
+            "value": "status",
+            "label": "status - server state"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone or name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::unbound-control flush example.com": {
+    "name": "unbound-control",
+    "description": "Control an Unbound resolver",
+    "base": "unbound-control",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "flush",
+        "options": [
+          {
+            "value": "flush",
+            "label": "flush - one name"
+          },
+          {
+            "value": "flush_zone",
+            "label": "flush_zone - name and below"
+          },
+          {
+            "value": "lookup",
+            "label": "lookup - show servers asked"
+          },
+          {
+            "value": "status",
+            "label": "status - running state"
+          },
+          {
+            "value": "stats_noreset",
+            "label": "stats_noreset - statistics"
+          },
+          {
+            "value": "list_forwards",
+            "label": "list_forwards - forward zones"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload config"
+          }
+        ]
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::pdnsutil check-zone example.com": {
+    "name": "pdnsutil",
+    "description": "Manage PowerDNS zones",
+    "base": "pdnsutil",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "check-zone",
+        "options": [
+          {
+            "value": "check-zone",
+            "label": "check-zone - validate"
+          },
+          {
+            "value": "list-zone",
+            "label": "list-zone - show records"
+          },
+          {
+            "value": "show-zone",
+            "label": "show-zone - metadata and keys"
+          },
+          {
+            "value": "increase-serial",
+            "label": "increase-serial - bump SOA"
+          },
+          {
+            "value": "rectify-zone",
+            "label": "rectify-zone - fix ordering"
+          },
+          {
+            "value": "secure-zone",
+            "label": "secure-zone - enable DNSSEC"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone",
+        "placeholder": "example.com",
+        "required": true
+      }
+    ],
+    "flags": []
+  },
+  "lb::haproxy -c -f /etc/haproxy/haproxy.cfg": {
+    "name": "haproxy config check",
+    "description": "Validate a HAProxy configuration",
+    "base": "haproxy",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Check configuration only",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-f",
+        "desc": "Configuration file or directory",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/haproxy/haproxy.cfg",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: only print errors"
+      },
+      {
+        "flag": "-V",
+        "desc": "Verbose: print the loaded frontends and backends"
+      }
+    ]
+  },
+  "lb::nginx -t": {
+    "name": "nginx test",
+    "description": "Test an nginx configuration",
+    "base": "nginx",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test configuration",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Test and dump the full configuration"
+      },
+      {
+        "flag": "-c",
+        "desc": "Use another configuration file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/nginx/nginx.conf"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: suppress non-error messages"
+      }
+    ]
+  },
+  "lb::ipvsadm -Ln": {
+    "name": "ipvsadm",
+    "description": "List IPVS virtual services and real servers",
+    "base": "ipvsadm",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-Ln",
+        "desc": "List numerically",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--stats",
+        "desc": "Show counters"
+      },
+      {
+        "flag": "--rate",
+        "desc": "Show rates"
+      },
+      {
+        "flag": "-c",
+        "desc": "Show the connection table"
+      },
+      {
+        "flag": "--exact",
+        "desc": "Exact numbers instead of K/M units"
+      }
+    ]
+  },
+  "lb::arping -c 3 -A -I eth0 192.0.2.100": {
+    "name": "arping",
+    "description": "Send or test ARP requests and gratuitous ARP",
+    "base": "arping",
+    "args": [
+      {
+        "key": "ip",
+        "label": "Target IP",
+        "placeholder": "192.0.2.100",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Number of packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "3"
+      },
+      {
+        "flag": "-I",
+        "desc": "Interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-A",
+        "desc": "Gratuitous ARP reply (refresh neighbours after failover)"
+      },
+      {
+        "flag": "-U",
+        "desc": "Unsolicited ARP request"
+      },
+      {
+        "flag": "-D",
+        "desc": "Duplicate address detection: exits 0 if nobody answers"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "tls::openssl s_client -connect host:443 -servername host </dev/null": {
+    "name": "openssl s_client",
+    "description": "Open a TLS connection and inspect the handshake",
+    "base": "openssl s_client",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-connect",
+        "desc": "Host and port",
+        "valuePrompt": "host:443",
+        "join": " ",
+        "valueDefault": "host:443",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-servername",
+        "desc": "SNI name (required for virtual hosts)",
+        "valuePrompt": "Hostname",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-showcerts",
+        "desc": "Show the whole chain the server sends"
+      },
+      {
+        "flag": "-tls1_2",
+        "desc": "Force TLS 1.2"
+      },
+      {
+        "flag": "-tls1_3",
+        "desc": "Force TLS 1.3"
+      },
+      {
+        "flag": "-alpn",
+        "desc": "Offer an ALPN protocol",
+        "valuePrompt": "e.g. h2 or http/1.1",
+        "join": " ",
+        "valueDefault": "h2"
+      },
+      {
+        "flag": "-status",
+        "desc": "Request OCSP stapling"
+      },
+      {
+        "flag": "-brief",
+        "desc": "Short connection summary"
+      },
+      {
+        "flag": "-verify_return_error",
+        "desc": "Fail if the chain does not verify"
+      },
+      {
+        "flag": "-CAfile",
+        "desc": "Trust this CA file",
+        "valuePrompt": "Path",
+        "join": " "
+      },
+      {
+        "flag": "-starttls",
+        "desc": "Upgrade a plain protocol",
+        "valuePrompt": "smtp, imap, pop3 or ftp",
+        "join": " ",
+        "valueDefault": "smtp"
+      },
+      {
+        "flag": "</dev/null",
+        "desc": "Close stdin so the command exits by itself",
+        "alwaysOn": true
+      }
+    ]
+  },
+  "tls::openssl x509 -in cert.pem -noout -dates -subject -issuer": {
+    "name": "openssl x509",
+    "description": "Inspect a certificate file",
+    "base": "openssl x509",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-in",
+        "desc": "Certificate file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "cert.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-noout",
+        "desc": "Do not print the encoded certificate",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-dates",
+        "desc": "Validity dates"
+      },
+      {
+        "flag": "-subject",
+        "desc": "Subject"
+      },
+      {
+        "flag": "-issuer",
+        "desc": "Issuer"
+      },
+      {
+        "flag": "-fingerprint",
+        "desc": "Fingerprint (add -sha256 for SHA-256)"
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Use SHA-256 for the fingerprint"
+      },
+      {
+        "flag": "-text",
+        "desc": "Everything in the certificate"
+      },
+      {
+        "flag": "-ext",
+        "desc": "Print one extension",
+        "valuePrompt": "e.g. subjectAltName",
+        "join": " ",
+        "valueDefault": "subjectAltName"
+      },
+      {
+        "flag": "-checkend",
+        "desc": "Exit 1 if it expires within N seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2592000"
+      },
+      {
+        "flag": "-inform",
+        "desc": "Input format",
+        "valuePrompt": "PEM or DER",
+        "join": " ",
+        "valueDefault": "PEM"
+      }
+    ]
+  },
+  "tls::openssl req -new -key key.pem -out req.csr -subj \"/CN=host.example.com\" -addext \"subjectAltName=DNS:host.example.com\"": {
+    "name": "openssl req (CSR)",
+    "description": "Create a certificate signing request",
+    "base": "openssl req",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-new",
+        "desc": "Create a new request",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-key",
+        "desc": "Private key file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "key.pem",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-out",
+        "desc": "CSR output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "req.csr",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-subj",
+        "desc": "Subject",
+        "valuePrompt": "/CN=host.example.com",
+        "join": " ",
+        "valueDefault": "/CN=host.example.com",
+        "alwaysOn": true,
+        "quote": true
+      },
+      {
+        "flag": "-addext",
+        "desc": "Extension (repeat for more)",
+        "valuePrompt": "subjectAltName=DNS:host.example.com",
+        "join": " ",
+        "valueDefault": "subjectAltName=DNS:host.example.com",
+        "quote": true,
+        "repeatable": true
+      },
+      {
+        "flag": "-sha256",
+        "desc": "Sign with SHA-256"
+      }
+    ]
+  },
+  "tls::certbot certonly --standalone -d example.com": {
+    "name": "certbot certonly",
+    "description": "Obtain a certificate without changing server configuration",
+    "base": "certbot certonly",
+    "args": [],
+    "flags": [
+      {
+        "flag": "--standalone",
+        "desc": "Run a temporary web server on port 80"
+      },
+      {
+        "flag": "--webroot",
+        "desc": "Use an existing web root"
+      },
+      {
+        "flag": "-w",
+        "desc": "Web root path (with --webroot)",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/var/www/html"
+      },
+      {
+        "flag": "--manual",
+        "desc": "Manual challenge"
+      },
+      {
+        "flag": "--preferred-challenges",
+        "desc": "Challenge type",
+        "valuePrompt": "http or dns",
+        "join": " ",
+        "valueDefault": "dns"
+      },
+      {
+        "flag": "-d",
+        "desc": "Domain (repeat for more)",
+        "valuePrompt": "example.com",
+        "join": " ",
+        "valueDefault": "example.com",
+        "alwaysOn": true,
+        "repeatable": true
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Test against the staging server without saving"
+      },
+      {
+        "flag": "--staging",
+        "desc": "Use the staging server (no rate limits, untrusted certificate)"
+      },
+      {
+        "flag": "--cert-name",
+        "desc": "Certificate name",
+        "valuePrompt": "Name",
+        "join": " "
+      },
+      {
+        "flag": "-m",
+        "desc": "Contact email",
+        "valuePrompt": "Email",
+        "join": " "
+      },
+      {
+        "flag": "--agree-tos",
+        "desc": "Accept the terms of service"
+      },
+      {
+        "flag": "--deploy-hook",
+        "desc": "Command to run after success",
+        "valuePrompt": "Command",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  },
+  "netdiag::ping -M do -s 1472 host": {
+    "name": "ping (MTU probe)",
+    "description": "Test path MTU with fragmentation forbidden",
+    "base": "ping",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-M",
+        "desc": "Path MTU discovery mode",
+        "valuePrompt": "do, want or dont",
+        "join": " ",
+        "valueDefault": "do",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-s",
+        "desc": "Payload size (MTU minus 28)",
+        "valuePrompt": "Bytes",
+        "join": " ",
+        "valueDefault": "1472",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of probes",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-I",
+        "desc": "Source interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0"
+      },
+      {
+        "flag": "-W",
+        "desc": "Reply timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "2"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::mtr -rwbzc 100 host": {
+    "name": "mtr",
+    "description": "Per-hop loss and latency report",
+    "base": "mtr",
+    "args": [
+      {
+        "key": "host",
+        "label": "Host",
+        "placeholder": "host",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Report mode",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide report: do not cut hostnames",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-b",
+        "desc": "Show names and addresses"
+      },
+      {
+        "flag": "-z",
+        "desc": "Show AS numbers"
+      },
+      {
+        "flag": "-c",
+        "desc": "Number of cycles",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "100",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Use TCP instead of ICMP"
+      },
+      {
+        "flag": "-P",
+        "desc": "TCP/UDP port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "443"
+      },
+      {
+        "flag": "-n",
+        "desc": "No DNS lookups"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "netdiag::iperf3 -c host -t 10 -P 4": {
+    "name": "iperf3",
+    "description": "Measure throughput to an iperf3 server",
+    "base": "iperf3",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Server to connect to",
+        "valuePrompt": "host",
+        "join": " ",
+        "valueDefault": "host",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-t",
+        "desc": "Test duration in seconds",
+        "valuePrompt": "Seconds",
+        "join": " ",
+        "valueDefault": "10"
+      },
+      {
+        "flag": "-P",
+        "desc": "Parallel streams",
+        "valuePrompt": "Streams",
+        "join": " ",
+        "valueDefault": "4"
+      },
+      {
+        "flag": "-R",
+        "desc": "Reverse: server sends, client receives"
+      },
+      {
+        "flag": "-u",
+        "desc": "UDP instead of TCP"
+      },
+      {
+        "flag": "-b",
+        "desc": "Target bandwidth",
+        "valuePrompt": "e.g. 100M",
+        "join": " "
+      },
+      {
+        "flag": "-p",
+        "desc": "Server port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "5201"
+      }
+    ]
+  },
+  "netdiag::tcpdump -ni any port 53": {
+    "name": "tcpdump",
+    "description": "Capture packets with a filter",
+    "base": "tcpdump",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-n",
+        "desc": "Do not resolve names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interface",
+        "valuePrompt": "Interface or any",
+        "join": " ",
+        "valueDefault": "any",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-c",
+        "desc": "Stop after N packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "1000"
+      },
+      {
+        "flag": "-w",
+        "desc": "Write to a pcap file",
+        "valuePrompt": "File",
+        "join": " ",
+        "valueDefault": "/tmp/capture.pcap"
+      },
+      {
+        "flag": "-A",
+        "desc": "Print payload as ASCII"
+      },
+      {
+        "flag": "port",
+        "desc": "Port",
+        "valuePrompt": "Port number",
+        "join": " ",
+        "valueDefault": "53",
+        "filterMode": true
+      },
+      {
+        "flag": "host",
+        "desc": "Host",
+        "valuePrompt": "Address",
+        "join": " ",
+        "filterMode": true
+      },
+      {
+        "flag": "udp",
+        "desc": "UDP only",
+        "filterMode": true
+      },
+      {
+        "flag": "tcp",
+        "desc": "TCP only",
+        "filterMode": true
+      },
+      {
+        "flag": "icmp",
+        "desc": "ICMP only",
+        "filterMode": true
+      }
+    ]
+  },
+  "perf::strace -f -tt -T -p PID": {
+    "name": "strace",
+    "description": "Trace the system calls of a process",
+    "base": "strace",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-f",
+        "desc": "Follow child processes and threads"
+      },
+      {
+        "flag": "-tt",
+        "desc": "Timestamps with microseconds"
+      },
+      {
+        "flag": "-T",
+        "desc": "Time spent in each syscall"
+      },
+      {
+        "flag": "-c",
+        "desc": "Summary instead of the full trace"
+      },
+      {
+        "flag": "-p",
+        "desc": "Attach to a process",
+        "valuePrompt": "PID",
+        "join": " ",
+        "valueDefault": "PID",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-e",
+        "desc": "Filter",
+        "valuePrompt": "e.g. trace=network or trace=%file",
+        "join": " ",
+        "valueDefault": "trace=network"
+      },
+      {
+        "flag": "-s",
+        "desc": "Maximum string length",
+        "valuePrompt": "Characters",
+        "join": " ",
+        "valueDefault": "200"
+      },
+      {
+        "flag": "-o",
+        "desc": "Write to a file",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "perf::iostat -xz 1 3": {
+    "name": "iostat",
+    "description": "Disk latency and utilisation",
+    "base": "iostat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "3",
+        "required": true,
+        "default": "3"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-x",
+        "desc": "Extended statistics (await, %util)",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-z",
+        "desc": "Hide idle devices",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-d",
+        "desc": "Devices only, no CPU report"
+      },
+      {
+        "flag": "-m",
+        "desc": "Megabytes per second"
+      },
+      {
+        "flag": "-h",
+        "desc": "Human readable"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::vmstat 1 5": {
+    "name": "vmstat",
+    "description": "Run queue, memory, swap, I/O and CPU summary",
+    "base": "vmstat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "5",
+        "required": true,
+        "default": "5"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-S",
+        "desc": "Units",
+        "valuePrompt": "k, K, m or M",
+        "join": " ",
+        "valueDefault": "M"
+      },
+      {
+        "flag": "-a",
+        "desc": "Active/inactive memory"
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide output"
+      },
+      {
+        "flag": "-t",
+        "desc": "Timestamps"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::perf record -F 99 -a -g -- sleep 30": {
+    "name": "perf record",
+    "description": "Sample CPU stacks",
+    "base": "perf record",
+    "args": [
+      {
+        "key": "command",
+        "label": "What to run while sampling",
+        "placeholder": "-- sleep 30",
+        "required": true,
+        "default": "-- sleep 30"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-F",
+        "desc": "Samples per second",
+        "valuePrompt": "Hz",
+        "join": " ",
+        "valueDefault": "99",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-a",
+        "desc": "All CPUs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-g",
+        "desc": "Record call graphs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-p",
+        "desc": "One process only",
+        "valuePrompt": "PID",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "Output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "perf.data"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::lvextend -r -L +10G /dev/vg0/data": {
+    "name": "lvextend",
+    "description": "Grow a logical volume and its filesystem",
+    "base": "lvextend",
+    "args": [
+      {
+        "key": "lv",
+        "label": "Logical volume",
+        "placeholder": "/dev/vg0/data",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-r",
+        "desc": "Resize the filesystem too",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-L",
+        "desc": "Grow by size",
+        "valuePrompt": "+10G",
+        "join": " ",
+        "valueDefault": "+10G",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-l",
+        "desc": "Grow by extents or percentage (instead of -L)",
+        "valuePrompt": "+100%FREE",
+        "join": " ",
+        "valueDefault": "+100%FREE"
+      },
+      {
+        "flag": "--test",
+        "desc": "Dry run"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::df -hT": {
+    "name": "df",
+    "description": "Filesystem usage",
+    "base": "df",
+    "args": [
+      {
+        "key": "path",
+        "label": "Path",
+        "placeholder": "/",
+        "required": false
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-h",
+        "desc": "Human readable",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Show filesystem type",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Inodes instead of blocks"
+      },
+      {
+        "flag": "-x",
+        "desc": "Exclude a type",
+        "valuePrompt": "e.g. tmpfs",
+        "join": " ",
+        "valueDefault": "tmpfs"
+      },
+      {
+        "flag": "-t",
+        "desc": "Only this type",
+        "valuePrompt": "e.g. xfs",
+        "join": " "
+      },
+      {
+        "flag": "--total",
+        "desc": "Add a total line"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "storage::smartctl -H /dev/sda": {
+    "name": "smartctl",
+    "description": "Disk SMART health",
+    "base": "smartctl",
+    "args": [
+      {
+        "key": "device",
+        "label": "Device",
+        "placeholder": "/dev/sda",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-H",
+        "desc": "Overall health"
+      },
+      {
+        "flag": "-a",
+        "desc": "All information"
+      },
+      {
+        "flag": "-x",
+        "desc": "Extended information"
+      },
+      {
+        "flag": "-i",
+        "desc": "Identity"
+      },
+      {
+        "flag": "-t",
+        "desc": "Start a self-test",
+        "valuePrompt": "short, long or conveyance",
+        "join": " ",
+        "valueDefault": "short"
+      },
+      {
+        "flag": "-l",
+        "desc": "Show a log",
+        "valuePrompt": "error or selftest",
+        "join": " ",
+        "valueDefault": "error"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "secaudit::fail2ban-client status sshd": {
+    "name": "fail2ban-client",
+    "description": "Inspect fail2ban",
+    "base": "fail2ban-client",
+    "args": [
+      {
+        "key": "verb",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "status",
+        "options": [
+          {
+            "value": "status",
+            "label": "status - jails or one jail"
+          },
+          {
+            "value": "banned",
+            "label": "banned - all banned addresses"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload configuration"
+          },
+          {
+            "value": "ping",
+            "label": "ping - is the server up?"
+          }
+        ]
+      },
+      {
+        "key": "jail",
+        "label": "Jail",
+        "placeholder": "sshd",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "secaudit::ausearch -k passwd_changes -i": {
+    "name": "ausearch",
+    "description": "Search the audit log",
+    "base": "ausearch",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-k",
+        "desc": "Rule key",
+        "valuePrompt": "Key",
+        "join": " ",
+        "valueDefault": "passwd_changes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-i",
+        "desc": "Interpret numbers as names",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-ts",
+        "desc": "Start time",
+        "valuePrompt": "today, recent or a date",
+        "join": " ",
+        "valueDefault": "today"
+      },
+      {
+        "flag": "-m",
+        "desc": "Message type",
+        "valuePrompt": "e.g. USER_LOGIN",
+        "join": " ",
+        "valueDefault": "USER_LOGIN"
+      },
+      {
+        "flag": "--success",
+        "desc": "Only successes or failures",
+        "valuePrompt": "yes or no",
+        "join": " ",
+        "valueDefault": "no"
+      },
+      {
+        "flag": "-ua",
+        "desc": "By user",
+        "valuePrompt": "User",
+        "join": " "
+      },
+      {
+        "flag": "-x",
+        "desc": "By executable",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "secaudit::ufw allow from 192.168.1.0/24 to any port 22 proto tcp": {
+    "name": "ufw allow",
+    "description": "Allow a service from one network",
+    "base": "ufw allow",
+    "args": [],
+    "flags": [
+      {
+        "flag": "from",
+        "desc": "Source address or network",
+        "valuePrompt": "CIDR",
+        "join": " ",
+        "valueDefault": "192.168.1.0/24",
+        "alwaysOn": true
+      },
+      {
+        "flag": "to any port",
+        "desc": "Destination port",
+        "valuePrompt": "Port",
+        "join": " ",
+        "valueDefault": "22",
+        "alwaysOn": true
+      },
+      {
+        "flag": "proto",
+        "desc": "Protocol",
+        "valuePrompt": "tcp or udp",
+        "join": " ",
+        "valueDefault": "tcp",
+        "alwaysOn": true
+      },
+      {
+        "flag": "comment",
+        "desc": "Rule comment",
+        "valuePrompt": "Text",
+        "join": " ",
+        "quote": true
+      }
+    ]
+  },
+  "patching::kubectl drain NODE --ignore-daemonsets --delete-emptydir-data": {
+    "name": "kubectl drain",
+    "description": "Evict pods from a node before maintenance",
+    "base": "kubectl drain",
+    "args": [
+      {
+        "key": "node",
+        "label": "Node name",
+        "placeholder": "NODE",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--ignore-daemonsets",
+        "desc": "Do not evict DaemonSet pods",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--delete-emptydir-data",
+        "desc": "Allow deleting pods that use emptyDir volumes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--force",
+        "desc": "Also evict pods without a controller"
+      },
+      {
+        "flag": "--grace-period",
+        "desc": "Seconds pods get to stop",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "30"
+      },
+      {
+        "flag": "--timeout",
+        "desc": "Give up after",
+        "valuePrompt": "Duration",
+        "join": "=",
+        "valueDefault": "300s"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview only",
+        "valuePrompt": "client or server",
+        "join": "=",
+        "valueDefault": "client"
+      }
+    ]
+  },
+  "patching::needrestart -b": {
+    "name": "needrestart",
+    "description": "Find services and kernels that need a restart",
+    "base": "needrestart",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-b",
+        "desc": "Batch (machine-readable) output",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-r",
+        "desc": "Restart mode",
+        "valuePrompt": "l (list), i (interactive), a (automatic)",
+        "join": " ",
+        "valueDefault": "l"
+      },
+      {
+        "flag": "-k",
+        "desc": "Check the kernel only"
+      },
+      {
+        "flag": "-l",
+        "desc": "Check libraries only"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose"
+      }
+    ]
+  },
+  "puppet::puppet agent -t": {
+    "name": "puppet agent",
+    "description": "Run the Puppet agent",
+    "base": "puppet agent",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test run: foreground, verbose, detailed exit codes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--noop",
+        "desc": "Report changes without applying them"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug output"
+      },
+      {
+        "flag": "--trace",
+        "desc": "Stack traces for errors"
+      },
+      {
+        "flag": "--evaltrace",
+        "desc": "Time every resource"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      },
+      {
+        "flag": "--tags",
+        "desc": "Only these tags",
+        "valuePrompt": "Tag",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--server",
+        "desc": "Puppet server",
+        "valuePrompt": "Hostname",
+        "join": " "
+      }
+    ]
+  },
+  "puppet::puppet apply --noop manifests/site.pp": {
+    "name": "puppet apply",
+    "description": "Apply or dry-run a manifest without a server",
+    "base": "puppet apply",
+    "args": [
+      {
+        "key": "file",
+        "label": "Manifest",
+        "placeholder": "manifests/site.pp",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--noop",
+        "desc": "Dry run",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--modulepath",
+        "desc": "Module directories",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "./modules"
+      },
+      {
+        "flag": "-e",
+        "desc": "Inline code instead of a file",
+        "valuePrompt": "Puppet code",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--verbose",
+        "desc": "Verbose"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "puppet::puppet lookup profile::base::packages --explain": {
+    "name": "puppet lookup",
+    "description": "Query Hiera data",
+    "base": "puppet lookup",
+    "args": [
+      {
+        "key": "key",
+        "label": "Key",
+        "placeholder": "profile::base::packages",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--explain",
+        "desc": "Explain which layer supplied the value",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--node",
+        "desc": "Node name",
+        "valuePrompt": "Certname",
+        "join": " "
+      },
+      {
+        "flag": "--facts",
+        "desc": "Facts file",
+        "valuePrompt": "facts.yaml",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--merge",
+        "desc": "Merge strategy",
+        "valuePrompt": "first, unique, hash or deep",
+        "join": " ",
+        "valueDefault": "first"
+      }
+    ]
   }
 };
 
@@ -45628,6 +47242,3393 @@ const SHEETS = {
         ]
       }
     ]
+  },
+  "dns": {
+    "name": "DNS Operations",
+    "icon": "◎",
+    "iconBg": "#0ea5e9",
+    "subtitle": "Resolvers, authoritative servers & DNSSEC",
+    "meta": "dig, BIND, PowerDNS, Unbound",
+    "sections": [
+      {
+        "id": "dns-resolve",
+        "title": "Resolver Triage",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "cat /etc/resolv.conf",
+            "desc": "Which resolver does this host use? 127.0.0.53 (systemd-resolved) or 100.100.100.100 (Tailscale) are only local forwarders"
+          },
+          {
+            "cmd": "resolvectl status",
+            "desc": "Per-link DNS servers, search domains and DNSSEC state (systemd-resolved)"
+          },
+          {
+            "cmd": "resolvectl query example.com",
+            "desc": "Resolve through the system resolver and show which link and protocol answered"
+          },
+          {
+            "cmd": "resolvectl statistics",
+            "desc": "Cache size, hits, misses and DNSSEC verdict counters"
+          },
+          {
+            "cmd": "resolvectl flush-caches",
+            "desc": "Clear the systemd-resolved cache"
+          },
+          {
+            "cmd": "getent hosts example.com",
+            "desc": "What applications actually get (follows nsswitch.conf; dig bypasses it)"
+          },
+          {
+            "cmd": "grep ^hosts /etc/nsswitch.conf",
+            "desc": "Lookup order: files, dns, mdns... a wrong order explains \"dig works, app fails\""
+          },
+          {
+            "cmd": "dig @127.0.0.53 example.com",
+            "desc": "Query the local stub resolver directly"
+          },
+          {
+            "cmd": "dig @1.1.1.1 example.com",
+            "desc": "Compare with a known-good public resolver: same slowness means path/ISP, fast means your resolver"
+          },
+          {
+            "cmd": "dig +tcp example.com",
+            "desc": "Force TCP. Works over TCP but not UDP = fragmentation, MTU or UDP/53 filtering"
+          },
+          {
+            "cmd": "dig +norecurse @ns1.example.com example.com",
+            "desc": "Ask an authoritative server directly without recursion"
+          },
+          {
+            "cmd": "tcpdump -ni any port 53",
+            "desc": "Watch live DNS traffic: are queries leaving, are replies coming back?"
+          }
+        ]
+      },
+      {
+        "id": "dns-dig",
+        "title": "dig Recipes",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "dig example.com",
+            "desc": "Standard lookup with full response header"
+          },
+          {
+            "cmd": "dig +short example.com",
+            "desc": "Answer only"
+          },
+          {
+            "cmd": "dig +noall +answer +ttlunits example.com",
+            "desc": "Answer section with human-readable TTLs"
+          },
+          {
+            "cmd": "dig +trace example.com",
+            "desc": "Walk the delegation from the root servers down"
+          },
+          {
+            "cmd": "dig +nssearch example.com",
+            "desc": "Ask every authoritative NS for the SOA: compare serials to find out-of-sync secondaries"
+          },
+          {
+            "cmd": "dig example.com SOA +short",
+            "desc": "SOA record: primary NS, contact, serial, refresh/retry/expire/minimum"
+          },
+          {
+            "cmd": "dig -x 192.0.2.10",
+            "desc": "Reverse (PTR) lookup"
+          },
+          {
+            "cmd": "dig example.com ANY +noall +answer",
+            "desc": "Everything the server is willing to return (many servers now limit ANY)"
+          },
+          {
+            "cmd": "dig example.com AXFR @ns1.example.com",
+            "desc": "Request a zone transfer (should be refused unless you are an allowed secondary)"
+          },
+          {
+            "cmd": "dig @ns1.example.com version.bind CH TXT",
+            "desc": "Ask a BIND server for its version string"
+          },
+          {
+            "cmd": "dig +bufsize=1232 example.com",
+            "desc": "Limit the EDNS buffer size to avoid UDP fragmentation"
+          },
+          {
+            "cmd": "dig +noedns example.com",
+            "desc": "Disable EDNS to find broken middleboxes"
+          },
+          {
+            "cmd": "dig +subnet=203.0.113.0/24 example.com",
+            "desc": "Send an EDNS client subnet to test geo/GeoDNS answers"
+          },
+          {
+            "cmd": "drill -DT example.com",
+            "desc": "ldns drill: trace with DNSSEC chain check"
+          }
+        ]
+      },
+      {
+        "id": "dns-zone",
+        "title": "Zone Changes & TTL",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "dig +noall +answer example.com A",
+            "desc": "Read the current TTL: lower it at least one old TTL before a planned change"
+          },
+          {
+            "cmd": "named-checkconf -z",
+            "desc": "Validate named.conf and load every configured zone"
+          },
+          {
+            "cmd": "named-checkzone example.com /etc/bind/db.example.com",
+            "desc": "Syntax and consistency check of a zone file"
+          },
+          {
+            "cmd": "date +%Y%m%d01",
+            "desc": "New SOA serial in YYYYMMDDnn form; it must increase or secondaries ignore the change"
+          },
+          {
+            "cmd": "dig +short SOA example.com @ns1.example.com",
+            "desc": "Serial on the primary"
+          },
+          {
+            "cmd": "dig +short SOA example.com @ns2.example.com",
+            "desc": "Serial on a secondary: lower than the primary means transfer is broken"
+          },
+          {
+            "cmd": "rndc reload example.com",
+            "desc": "Reload one zone after editing the file"
+          },
+          {
+            "cmd": "rndc zonestatus example.com",
+            "desc": "Serial, loaded time, next refresh and transfer state"
+          },
+          {
+            "cmd": "rndc notify example.com",
+            "desc": "Send NOTIFY to the secondaries"
+          },
+          {
+            "cmd": "rndc retransfer example.com",
+            "desc": "Force a secondary to pull the zone again"
+          },
+          {
+            "cmd": "rndc freeze example.com && rndc thaw example.com",
+            "desc": "Freeze a dynamic zone for manual edits, then thaw"
+          }
+        ]
+      },
+      {
+        "id": "dns-bind",
+        "title": "BIND (named)",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "named -V",
+            "desc": "Version and compile-time options"
+          },
+          {
+            "cmd": "rndc status",
+            "desc": "Server state, zone count, recursive clients and query logging"
+          },
+          {
+            "cmd": "rndc reconfig",
+            "desc": "Load new zones from named.conf without reloading existing ones"
+          },
+          {
+            "cmd": "rndc flush",
+            "desc": "Flush the whole resolver cache"
+          },
+          {
+            "cmd": "rndc flushname example.com",
+            "desc": "Flush one name from the cache"
+          },
+          {
+            "cmd": "rndc dumpdb -cache",
+            "desc": "Dump the cache to named_dump.db for inspection"
+          },
+          {
+            "cmd": "rndc stats",
+            "desc": "Write counters to named.stats"
+          },
+          {
+            "cmd": "rndc querylog on",
+            "desc": "Turn query logging on temporarily (turn off again: rndc querylog off)"
+          },
+          {
+            "cmd": "rndc recursing",
+            "desc": "List the queries currently being resolved (stuck lookups)"
+          },
+          {
+            "cmd": "named-checkconf -p",
+            "desc": "Print the effective, fully expanded configuration"
+          },
+          {
+            "cmd": "journalctl -u named -f",
+            "desc": "Follow BIND logs (unit is bind9 on some Debian/Ubuntu releases)"
+          }
+        ]
+      },
+      {
+        "id": "dns-pdns",
+        "title": "PowerDNS (Authoritative & Recursor)",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "pdnsutil list-all-zones",
+            "desc": "All zones in the backend"
+          },
+          {
+            "cmd": "pdnsutil check-zone example.com",
+            "desc": "Validate one zone"
+          },
+          {
+            "cmd": "pdnsutil check-all-zones",
+            "desc": "Validate every zone"
+          },
+          {
+            "cmd": "pdnsutil list-zone example.com",
+            "desc": "Print the records of a zone"
+          },
+          {
+            "cmd": "pdnsutil show-zone example.com",
+            "desc": "Zone metadata, DNSSEC keys and DS records"
+          },
+          {
+            "cmd": "pdnsutil increase-serial example.com",
+            "desc": "Bump the SOA serial"
+          },
+          {
+            "cmd": "pdnsutil rectify-zone example.com",
+            "desc": "Fix ordername/auth fields after edits (needed for DNSSEC)"
+          },
+          {
+            "cmd": "pdnsutil secure-zone example.com",
+            "desc": "Enable DNSSEC signing for a zone"
+          },
+          {
+            "cmd": "pdns_control ping",
+            "desc": "Is the authoritative server alive?"
+          },
+          {
+            "cmd": "pdns_control show \"*\"",
+            "desc": "All runtime counters"
+          },
+          {
+            "cmd": "pdns_control purge example.com",
+            "desc": "Purge the packet cache for a name"
+          },
+          {
+            "cmd": "rec_control ping",
+            "desc": "Is the recursor alive?"
+          },
+          {
+            "cmd": "rec_control wipe-cache example.com$",
+            "desc": "Flush a name and everything below it (the $ means the whole subtree)"
+          },
+          {
+            "cmd": "rec_control get-all",
+            "desc": "Recursor counters (cache hits, timeouts, servfails)"
+          },
+          {
+            "cmd": "rec_control top-queries",
+            "desc": "Most frequent queries"
+          },
+          {
+            "cmd": "rec_control dump-cache /tmp/cache.dump",
+            "desc": "Dump the recursor cache to a file"
+          }
+        ]
+      },
+      {
+        "id": "dns-unbound",
+        "title": "Unbound",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "unbound-checkconf",
+            "desc": "Validate unbound.conf before reload"
+          },
+          {
+            "cmd": "unbound-control status",
+            "desc": "Is it running, version, uptime"
+          },
+          {
+            "cmd": "unbound-control stats_noreset",
+            "desc": "Statistics without clearing counters"
+          },
+          {
+            "cmd": "unbound-control lookup example.com",
+            "desc": "Show which servers Unbound would ask and their RTT"
+          },
+          {
+            "cmd": "unbound-control flush example.com",
+            "desc": "Flush one name from the cache"
+          },
+          {
+            "cmd": "unbound-control flush_zone example.com",
+            "desc": "Flush a name and everything below it"
+          },
+          {
+            "cmd": "unbound-control dump_cache > cache.txt",
+            "desc": "Dump the cache to a file (reload it with load_cache)"
+          },
+          {
+            "cmd": "unbound-control list_forwards",
+            "desc": "Configured forward zones"
+          },
+          {
+            "cmd": "unbound-control reload",
+            "desc": "Reload configuration"
+          },
+          {
+            "cmd": "unbound-host -C /etc/unbound/unbound.conf -v example.com",
+            "desc": "Resolve with validation details using the real config"
+          }
+        ]
+      },
+      {
+        "id": "dns-dnssec",
+        "title": "DNSSEC & Delegation",
+        "color": "#ff9f6b",
+        "cmds": [
+          {
+            "cmd": "dig +dnssec +multi example.com DNSKEY",
+            "desc": "Show the zone signing keys"
+          },
+          {
+            "cmd": "delv example.com",
+            "desc": "Validating lookup that explains why validation passes or fails"
+          },
+          {
+            "cmd": "dig +cd example.com",
+            "desc": "Disable checking: if this works but a normal query is SERVFAIL, DNSSEC validation is the cause"
+          },
+          {
+            "cmd": "dig DS example.com @a.gtld-servers.net",
+            "desc": "DS record at the parent: must match a DNSKEY in the child (swap in the correct TLD server)"
+          },
+          {
+            "cmd": "dig +trace +dnssec example.com",
+            "desc": "Delegation chain with signatures"
+          },
+          {
+            "cmd": "dig NS example.com @a.gtld-servers.net +norec",
+            "desc": "NS records the parent actually publishes (lame delegation check)"
+          },
+          {
+            "cmd": "dnssec-keygen -a ECDSAP256SHA256 -n ZONE example.com",
+            "desc": "Generate a signing key (BIND tools)"
+          },
+          {
+            "cmd": "dnssec-dsfromkey Kexample.com.+013+12345.key",
+            "desc": "Create the DS record to publish at the registrar"
+          },
+          {
+            "cmd": "dnssec-verify -o example.com db.example.com.signed",
+            "desc": "Verify a signed zone file"
+          }
+        ]
+      },
+      {
+        "id": "dns-fail",
+        "title": "Failure Patterns",
+        "color": "#c075f0",
+        "cmds": [
+          {
+            "cmd": "dig example.com | grep -E \"status:|ANSWER:|Query time\"",
+            "desc": "NOERROR with ANSWER 0 = no data; NXDOMAIN = name does not exist; SERVFAIL = server could not answer"
+          },
+          {
+            "cmd": "dig +time=2 +tries=1 example.com",
+            "desc": "A timeout (no response at all) is a third failure type; fail fast to test it"
+          },
+          {
+            "cmd": "for ns in $(dig +short NS example.com); do echo $ns; dig +short +time=2 +tries=1 @$ns example.com; done",
+            "desc": "Query each authoritative server separately to find the broken one"
+          },
+          {
+            "cmd": "ss -ulpn | grep \":53 \"",
+            "desc": "Is anything listening on UDP 53, and which process?"
+          },
+          {
+            "cmd": "journalctl -u systemd-resolved --since \"10 min ago\"",
+            "desc": "Resolver errors, DNSSEC failures, upstream switching"
+          },
+          {
+            "cmd": "nstat -az UdpInErrors UdpRcvbufErrors",
+            "desc": "UDP receive errors: the resolver cannot keep up with its socket buffer"
+          },
+          {
+            "cmd": "sysctl net.netfilter.nf_conntrack_count net.netfilter.nf_conntrack_max",
+            "desc": "Full conntrack table silently drops DNS queries"
+          },
+          {
+            "cmd": "dig +short chaos txt hostname.bind @ns1.example.com",
+            "desc": "Which node of an anycast/load-balanced DNS pool answered?"
+          }
+        ]
+      }
+    ]
+  },
+  "lb": {
+    "name": "Load Balancers & HA",
+    "icon": "⚖",
+    "iconBg": "#10b981",
+    "subtitle": "HAProxy, nginx, keepalived & IPVS",
+    "meta": "haproxy, nginx, keepalived",
+    "sections": [
+      {
+        "id": "lb-haproxy",
+        "title": "HAProxy",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "haproxy -c -f /etc/haproxy/haproxy.cfg",
+            "desc": "Validate the configuration (always before reload)"
+          },
+          {
+            "cmd": "systemctl reload haproxy",
+            "desc": "Graceful reload: new processes take new connections, old ones finish"
+          },
+          {
+            "cmd": "haproxy -vv",
+            "desc": "Version and build options (TLS library, Lua, PCRE...)"
+          },
+          {
+            "cmd": "echo \"show info\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Process info: uptime, current connections, limits (socket path comes from \"stats socket\")"
+          },
+          {
+            "cmd": "echo \"show stat\" | socat stdio /run/haproxy/admin.sock | cut -d, -f1,2,5,18,19",
+            "desc": "Per-server status: current sessions (scur) and UP/DOWN state"
+          },
+          {
+            "cmd": "echo \"show servers state\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Admin and operational state of every server"
+          },
+          {
+            "cmd": "echo \"set server be_app/web1 state drain\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Drain a backend: finish existing sessions, accept no new ones"
+          },
+          {
+            "cmd": "echo \"set server be_app/web1 state ready\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Put a drained/maintenance server back into rotation"
+          },
+          {
+            "cmd": "echo \"set server be_app/web1 state maint\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Take a server out of rotation completely"
+          },
+          {
+            "cmd": "echo \"show errors\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Last invalid requests/responses seen (parse errors, bad headers)"
+          },
+          {
+            "cmd": "echo \"show sess\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Active sessions"
+          },
+          {
+            "cmd": "echo \"show table st_src_global\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Stick-table contents (rate limiting, abuse tracking)"
+          },
+          {
+            "cmd": "grep -E \" (502|503|504) \" /var/log/haproxy.log | tail",
+            "desc": "Recent gateway errors; the termination flags (sH--, SC--, cD--) say who closed and when"
+          },
+          {
+            "cmd": "journalctl -u haproxy -f",
+            "desc": "Follow HAProxy logs"
+          }
+        ]
+      },
+      {
+        "id": "lb-nginx",
+        "title": "nginx",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "nginx -t",
+            "desc": "Test the configuration"
+          },
+          {
+            "cmd": "nginx -T | less",
+            "desc": "Dump the full effective configuration including includes"
+          },
+          {
+            "cmd": "nginx -s reload",
+            "desc": "Graceful reload"
+          },
+          {
+            "cmd": "nginx -V 2>&1 | tr \" \" \"\\n\"",
+            "desc": "Compile flags and modules, one per line"
+          },
+          {
+            "cmd": "curl -s http://127.0.0.1/nginx_status",
+            "desc": "stub_status: active connections, accepts, handled, requests, reading/writing/waiting"
+          },
+          {
+            "cmd": "tail -f /var/log/nginx/error.log",
+            "desc": "Upstream errors (connect refused, timed out, no live upstreams)"
+          },
+          {
+            "cmd": "awk '{print $9}' /var/log/nginx/access.log | sort | uniq -c | sort -rn",
+            "desc": "Count of responses by HTTP status"
+          },
+          {
+            "cmd": "awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head",
+            "desc": "Top client IPs"
+          },
+          {
+            "cmd": "ss -tnp | grep nginx",
+            "desc": "Connections held by nginx workers (clients and upstreams)"
+          }
+        ]
+      },
+      {
+        "id": "lb-keepalived",
+        "title": "keepalived & VRRP",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "keepalived -t -f /etc/keepalived/keepalived.conf",
+            "desc": "Test the configuration (keepalived 2.x)"
+          },
+          {
+            "cmd": "systemctl status keepalived",
+            "desc": "State and last transitions (MASTER/BACKUP/FAULT)"
+          },
+          {
+            "cmd": "journalctl -u keepalived -f",
+            "desc": "Follow state changes and health-check script results"
+          },
+          {
+            "cmd": "ip -br addr show",
+            "desc": "Which node currently holds the virtual IP?"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 vrrp",
+            "desc": "Watch VRRP advertisements: who is advertising, at what priority?"
+          },
+          {
+            "cmd": "kill -USR1 $(cat /run/keepalived.pid) && cat /tmp/keepalived.data",
+            "desc": "Dump internal state (VRRP instances, checkers) to /tmp/keepalived.data"
+          },
+          {
+            "cmd": "arping -c 3 -A -I eth0 192.0.2.100",
+            "desc": "Send gratuitous ARP for the VIP to refresh switch/neighbour caches after failover"
+          },
+          {
+            "cmd": "arping -D -I eth0 -c 2 192.0.2.100",
+            "desc": "Duplicate address detection: does anyone else already own this IP?"
+          },
+          {
+            "cmd": "ip neigh show 192.0.2.100",
+            "desc": "Which MAC does this host currently think owns the VIP?"
+          },
+          {
+            "cmd": "sysctl net.ipv4.ip_nonlocal_bind",
+            "desc": "Must be 1 for a service to bind to a VIP the node does not hold yet"
+          },
+          {
+            "cmd": "systemctl stop keepalived",
+            "desc": "Failover test: stop on the MASTER and watch the VIP move (do this in a maintenance window)"
+          }
+        ]
+      },
+      {
+        "id": "lb-ipvs",
+        "title": "LVS / IPVS",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "ipvsadm -Ln",
+            "desc": "Virtual services and real servers (numeric)"
+          },
+          {
+            "cmd": "ipvsadm -Ln --stats",
+            "desc": "Connection, packet and byte counters per service/server"
+          },
+          {
+            "cmd": "ipvsadm -Ln --rate",
+            "desc": "Current rates per second"
+          },
+          {
+            "cmd": "ipvsadm -lnc",
+            "desc": "Connection table with state and expiry"
+          },
+          {
+            "cmd": "ipvsadm -A -t 192.0.2.100:80 -s rr",
+            "desc": "Add a TCP virtual service with round robin"
+          },
+          {
+            "cmd": "ipvsadm -a -t 192.0.2.100:80 -r 10.0.0.11:80 -g",
+            "desc": "Add a real server in direct-routing mode"
+          },
+          {
+            "cmd": "modprobe ip_vs",
+            "desc": "Load the IPVS kernel module"
+          }
+        ]
+      },
+      {
+        "id": "lb-test",
+        "title": "Backend & Health Checks",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "curl -sv -o /dev/null http://10.0.0.11:8080/health",
+            "desc": "Hit a backend directly, bypassing the load balancer"
+          },
+          {
+            "cmd": "curl -s -o /dev/null -w \"%{http_code} connect=%{time_connect} ttfb=%{time_starttransfer} total=%{time_total}\\n\" http://app.example.com/",
+            "desc": "Status and timing breakdown: slow connect = network, slow ttfb = backend"
+          },
+          {
+            "cmd": "curl --resolve app.example.com:443:192.0.2.10 https://app.example.com/",
+            "desc": "Test one specific node/VIP with the correct SNI and Host header"
+          },
+          {
+            "cmd": "curl -H \"Host: app.example.com\" http://192.0.2.10/",
+            "desc": "Test virtual-host routing against an IP"
+          },
+          {
+            "cmd": "for i in $(seq 1 20); do curl -s http://app.example.com/whoami; echo; done | sort | uniq -c",
+            "desc": "Check balancing distribution (needs an endpoint that returns the backend name)"
+          },
+          {
+            "cmd": "ab -n 1000 -c 20 http://app.example.com/",
+            "desc": "Quick load test with ApacheBench"
+          },
+          {
+            "cmd": "wrk -t4 -c64 -d30s http://app.example.com/",
+            "desc": "Sustained load test with latency percentiles"
+          }
+        ]
+      },
+      {
+        "id": "lb-502",
+        "title": "Why 502 / 503 / 504?",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "ss -ltn",
+            "desc": "Listening sockets: a non-zero Recv-Q means the accept queue is filling up"
+          },
+          {
+            "cmd": "nstat -az TcpExtListenOverflows TcpExtListenDrops",
+            "desc": "Accept-queue overflows: backend cannot accept fast enough"
+          },
+          {
+            "cmd": "sysctl net.core.somaxconn net.ipv4.tcp_max_syn_backlog",
+            "desc": "Queue limits that cap the listen backlog"
+          },
+          {
+            "cmd": "cat /proc/$(pidof -s haproxy)/limits | grep \"open files\"",
+            "desc": "File descriptor limit: too low = refused connections under load"
+          },
+          {
+            "cmd": "ss -s",
+            "desc": "Socket totals including time-wait and orphaned connections"
+          },
+          {
+            "cmd": "dmesg -T | grep -iE \"conntrack|nf_conntrack: table full\"",
+            "desc": "Conntrack table full drops new connections"
+          },
+          {
+            "cmd": "systemctl status app --no-pager",
+            "desc": "Was the backend restarted? 502 during deploy = LB still sends traffic to a restarting backend: drain first, use health checks"
+          }
+        ]
+      }
+    ]
+  },
+  "tls": {
+    "name": "TLS & Certificates",
+    "icon": "🔒",
+    "iconBg": "#8b5cf6",
+    "subtitle": "Inspect, verify, renew and troubleshoot",
+    "meta": "openssl, certbot, cert-manager",
+    "sections": [
+      {
+        "id": "tls-inspect",
+        "title": "Inspect a Server",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host </dev/null",
+            "desc": "Full handshake with SNI: the -servername flag is required for virtual hosts"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host </dev/null 2>/dev/null | openssl x509 -noout -dates -subject -issuer",
+            "desc": "Validity dates, subject and issuer of the served certificate"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -showcerts </dev/null",
+            "desc": "Show the whole chain the server sends (missing intermediate?)"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -verify_return_error </dev/null",
+            "desc": "Fail loudly if the chain does not verify"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -tls1_2 </dev/null",
+            "desc": "Test one protocol version (also -tls1_3)"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -alpn h2 </dev/null",
+            "desc": "Check ALPN negotiation (HTTP/2)"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -status </dev/null",
+            "desc": "Request an OCSP-stapled response"
+          },
+          {
+            "cmd": "openssl s_client -starttls smtp -connect mail.example.com:587",
+            "desc": "Inspect TLS on a STARTTLS protocol (smtp, imap, pop3, ftp)"
+          },
+          {
+            "cmd": "echo | openssl s_client -connect host:443 -servername host 2>/dev/null | openssl x509 -noout -ext subjectAltName",
+            "desc": "Names the certificate is valid for"
+          },
+          {
+            "cmd": "nmap --script ssl-enum-ciphers -p 443 host",
+            "desc": "Enumerate supported protocols and ciphers with grades"
+          },
+          {
+            "cmd": "curl -vI https://host 2>&1 | grep -E \"SSL|subject|issuer|expire\"",
+            "desc": "What curl negotiated and verified"
+          }
+        ]
+      },
+      {
+        "id": "tls-files",
+        "title": "Certificate Files",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -text",
+            "desc": "Everything in the certificate"
+          },
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -dates -subject -issuer",
+            "desc": "Dates, subject and issuer"
+          },
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -fingerprint -sha256",
+            "desc": "SHA-256 fingerprint"
+          },
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -checkend 2592000",
+            "desc": "Exit code 1 if it expires within 30 days (2592000 seconds)"
+          },
+          {
+            "cmd": "openssl verify -CAfile ca.pem -untrusted intermediate.pem cert.pem",
+            "desc": "Verify a certificate against a CA and intermediate"
+          },
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -pubkey | openssl md5",
+            "desc": "Certificate public key hash: must equal the key and CSR hashes below"
+          },
+          {
+            "cmd": "openssl pkey -in key.pem -pubout | openssl md5",
+            "desc": "Private key public-part hash"
+          },
+          {
+            "cmd": "openssl req -in req.csr -noout -pubkey | openssl md5",
+            "desc": "CSR public key hash"
+          },
+          {
+            "cmd": "openssl req -in req.csr -noout -text -verify",
+            "desc": "Inspect a CSR and verify its signature"
+          },
+          {
+            "cmd": "openssl pkcs12 -in bundle.pfx -nodes -out all.pem",
+            "desc": "Convert PFX/PKCS#12 to PEM (the output holds an unencrypted key)"
+          },
+          {
+            "cmd": "openssl x509 -inform DER -in cert.der -out cert.pem",
+            "desc": "DER to PEM"
+          },
+          {
+            "cmd": "awk '/BEGIN CERT/{n++} {print > \"cert-\" n \".pem\"}' chain.pem",
+            "desc": "Split a chain file into one file per certificate"
+          }
+        ]
+      },
+      {
+        "id": "tls-gen",
+        "title": "Create Keys, CSRs & Test Certs",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out key.pem",
+            "desc": "EC P-256 private key"
+          },
+          {
+            "cmd": "openssl genrsa -out key.pem 3072",
+            "desc": "RSA 3072-bit private key"
+          },
+          {
+            "cmd": "openssl req -new -key key.pem -out req.csr -subj \"/CN=host.example.com\" -addext \"subjectAltName=DNS:host.example.com\"",
+            "desc": "CSR with a SAN (browsers ignore the CN)"
+          },
+          {
+            "cmd": "openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -keyout key.pem -out cert.pem -days 365 -subj \"/CN=host.local\" -addext \"subjectAltName=DNS:host.local\"",
+            "desc": "Self-signed certificate for testing"
+          },
+          {
+            "cmd": "chmod 600 key.pem",
+            "desc": "Private keys must not be readable by anyone else"
+          }
+        ]
+      },
+      {
+        "id": "tls-acme",
+        "title": "certbot & cert-manager",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "certbot certificates",
+            "desc": "Certificates certbot manages and when they expire"
+          },
+          {
+            "cmd": "certbot renew --dry-run",
+            "desc": "Test renewal against the staging CA without changing anything"
+          },
+          {
+            "cmd": "certbot renew",
+            "desc": "Renew everything that is due"
+          },
+          {
+            "cmd": "certbot certonly --standalone -d example.com",
+            "desc": "Issue a certificate with a temporary web server on port 80"
+          },
+          {
+            "cmd": "certbot certonly --webroot -w /var/www/html -d example.com",
+            "desc": "Issue using an existing web root"
+          },
+          {
+            "cmd": "certbot certonly --manual --preferred-challenges dns -d example.com",
+            "desc": "DNS-01 challenge (wildcards and servers not reachable on port 80)"
+          },
+          {
+            "cmd": "systemctl list-timers | grep certbot",
+            "desc": "Is the renewal timer scheduled?"
+          },
+          {
+            "cmd": "ls -l /etc/letsencrypt/live/example.com/",
+            "desc": "Symlinks to the current files; services must read these, not the archive"
+          },
+          {
+            "cmd": "kubectl get certificate -A",
+            "desc": "cert-manager: Ready state of every certificate"
+          },
+          {
+            "cmd": "kubectl describe certificate NAME -n NAMESPACE",
+            "desc": "Why a certificate is not Ready"
+          },
+          {
+            "cmd": "kubectl get certificaterequest,order,challenge -A",
+            "desc": "Follow an ACME issuance step by step"
+          }
+        ]
+      },
+      {
+        "id": "tls-problems",
+        "title": "Common Symptoms",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "curl -v https://host 2>&1 | grep -i \"unable to get local issuer\"",
+            "desc": "Works in a browser but fails in curl/Java = server is not sending the intermediate certificate"
+          },
+          {
+            "cmd": "openssl s_client -connect 192.0.2.10:443 -servername host </dev/null 2>/dev/null | openssl x509 -noout -subject",
+            "desc": "Hostname mismatch: check what a specific node serves for the right SNI"
+          },
+          {
+            "cmd": "openssl x509 -in cert.pem -noout -checkend 0 && echo valid || echo expired",
+            "desc": "Has it expired right now?"
+          },
+          {
+            "cmd": "timedatectl",
+            "desc": "Wrong system clock makes valid certificates look expired or not yet valid"
+          },
+          {
+            "cmd": "update-ca-certificates",
+            "desc": "Rebuild the trust store on Debian/Ubuntu (add .crt files to /usr/local/share/ca-certificates)"
+          },
+          {
+            "cmd": "update-ca-trust",
+            "desc": "Rebuild the trust store on RHEL/Fedora (add files to /etc/pki/ca-trust/source/anchors)"
+          },
+          {
+            "cmd": "curl --cacert ca.pem https://host",
+            "desc": "Trust one specific CA for a single request"
+          },
+          {
+            "cmd": "curl -k https://host",
+            "desc": "Skip verification (diagnosis only: proves the problem is trust, never use as a fix)"
+          }
+        ]
+      },
+      {
+        "id": "tls-monitor",
+        "title": "Expiry Monitoring",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "for h in a.example.com b.example.com; do echo -n \"$h \"; echo | openssl s_client -connect $h:443 -servername $h 2>/dev/null | openssl x509 -noout -enddate; done",
+            "desc": "Expiry date of several hosts"
+          },
+          {
+            "cmd": "echo | openssl s_client -connect host:443 -servername host 2>/dev/null | openssl x509 -noout -checkend 1209600 && echo OK || echo EXPIRING",
+            "desc": "Alert-friendly check: expires within 14 days?"
+          },
+          {
+            "cmd": "find /etc/ssl /etc/letsencrypt -name \"*.pem\" -exec openssl x509 -noout -enddate -in {} \\; 2>/dev/null",
+            "desc": "Expiry dates of certificates stored on this host"
+          }
+        ]
+      }
+    ]
+  },
+  "netdiag": {
+    "name": "Network Troubleshooting",
+    "icon": "⌁",
+    "iconBg": "#f59e0b",
+    "subtitle": "Sockets, packets, MTU, conntrack & bandwidth",
+    "meta": "ss, ip, nft, tcpdump",
+    "sections": [
+      {
+        "id": "nd-sockets",
+        "title": "Sockets & Connections (ss)",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "ss -s",
+            "desc": "Socket summary: totals by state"
+          },
+          {
+            "cmd": "ss -tulpn",
+            "desc": "Listening TCP/UDP sockets with owning process"
+          },
+          {
+            "cmd": "ss -tan | awk 'NR>1{print $1}' | sort | uniq -c | sort -rn",
+            "desc": "Count of TCP connections by state"
+          },
+          {
+            "cmd": "ss -tn state syn-recv | wc -l",
+            "desc": "Half-open connections: a large number suggests a SYN flood or an overloaded backlog"
+          },
+          {
+            "cmd": "ss -ltn",
+            "desc": "On listeners, Recv-Q is the current accept queue and Send-Q its limit"
+          },
+          {
+            "cmd": "ss -ti dst 192.0.2.10",
+            "desc": "TCP internals for a peer: rtt, cwnd, retransmits, bytes sent"
+          },
+          {
+            "cmd": "ss -tnp state established | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -rn | head",
+            "desc": "Top remote peers by connection count"
+          },
+          {
+            "cmd": "ss -o state established '( sport = :443 )'",
+            "desc": "Connections with keepalive and retransmit timers"
+          },
+          {
+            "cmd": "ss -tunap | grep -v 127.0.0.1",
+            "desc": "Everything that is not loopback, with process names"
+          },
+          {
+            "cmd": "lsof -i :443",
+            "desc": "Which process owns a port"
+          }
+        ]
+      },
+      {
+        "id": "nd-iface",
+        "title": "Interfaces, Links & Drops",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "ip -br link",
+            "desc": "Brief link state"
+          },
+          {
+            "cmd": "ip -br addr",
+            "desc": "Brief addresses"
+          },
+          {
+            "cmd": "ip -s link show eth0",
+            "desc": "Interface counters: errors, drops, overruns, carrier"
+          },
+          {
+            "cmd": "ip route get 1.1.1.1",
+            "desc": "Which route, interface and source address will be used?"
+          },
+          {
+            "cmd": "ip rule show",
+            "desc": "Policy routing rules (multi-homed hosts, VPNs, Tailscale)"
+          },
+          {
+            "cmd": "ip neigh",
+            "desc": "ARP/NDP cache: stale or FAILED entries explain intermittent reachability"
+          },
+          {
+            "cmd": "ethtool eth0",
+            "desc": "Link speed, duplex and detected link"
+          },
+          {
+            "cmd": "ethtool -S eth0 | grep -iE \"err|drop|miss\"",
+            "desc": "NIC-level error and drop counters"
+          },
+          {
+            "cmd": "ethtool -i eth0",
+            "desc": "Driver and firmware version"
+          },
+          {
+            "cmd": "nstat -az | grep -iE \"retrans|drop|overflow\"",
+            "desc": "Kernel protocol counters that indicate trouble"
+          },
+          {
+            "cmd": "networkctl status",
+            "desc": "systemd-networkd link overview"
+          },
+          {
+            "cmd": "nmcli device status",
+            "desc": "NetworkManager device overview"
+          },
+          {
+            "cmd": "ip monitor",
+            "desc": "Watch link, address and route changes live"
+          }
+        ]
+      },
+      {
+        "id": "nd-fw",
+        "title": "Firewall, NAT & conntrack",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "nft list ruleset",
+            "desc": "Entire nftables ruleset"
+          },
+          {
+            "cmd": "iptables -S",
+            "desc": "iptables rules as commands"
+          },
+          {
+            "cmd": "iptables -L -n -v --line-numbers",
+            "desc": "Rules with packet/byte counters: a rule with a growing counter is matching"
+          },
+          {
+            "cmd": "iptables -t nat -L -n -v",
+            "desc": "NAT table"
+          },
+          {
+            "cmd": "ufw status verbose",
+            "desc": "ufw rules and default policies"
+          },
+          {
+            "cmd": "firewall-cmd --list-all",
+            "desc": "firewalld active zone configuration"
+          },
+          {
+            "cmd": "sysctl net.ipv4.ip_forward",
+            "desc": "Is routing/forwarding enabled?"
+          },
+          {
+            "cmd": "conntrack -C",
+            "desc": "Number of tracked connections"
+          },
+          {
+            "cmd": "conntrack -S",
+            "desc": "Per-CPU stats: insert_failed and drop are bad signs"
+          },
+          {
+            "cmd": "conntrack -L | head",
+            "desc": "Sample of tracked flows"
+          },
+          {
+            "cmd": "conntrack -L -d 192.0.2.10",
+            "desc": "Flows towards one destination"
+          },
+          {
+            "cmd": "sysctl net.netfilter.nf_conntrack_max net.netfilter.nf_conntrack_count",
+            "desc": "Table limit versus current use"
+          },
+          {
+            "cmd": "dmesg -T | grep -i \"nf_conntrack: table full\"",
+            "desc": "The table filled and packets were dropped"
+          }
+        ]
+      },
+      {
+        "id": "nd-mtu",
+        "title": "MTU & Fragmentation",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "ping -M do -s 1472 host",
+            "desc": "Path MTU probe for 1500: 1472 bytes payload + 28 header, fragmentation forbidden"
+          },
+          {
+            "cmd": "tracepath host",
+            "desc": "Discover the path MTU hop by hop"
+          },
+          {
+            "cmd": "ip link show eth0 | grep mtu",
+            "desc": "Configured interface MTU"
+          },
+          {
+            "cmd": "ip route get host | grep mtu",
+            "desc": "MTU cached on the route"
+          },
+          {
+            "cmd": "tcpdump -ni any 'icmp[icmptype]=3 and icmp[icmpcode]=4'",
+            "desc": "ICMP \"fragmentation needed\" messages: if they never arrive, PMTU discovery is broken"
+          },
+          {
+            "cmd": "iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu",
+            "desc": "Clamp MSS on a router/VPN so large TCP transfers stop hanging"
+          },
+          {
+            "cmd": "sysctl net.ipv4.tcp_mtu_probing",
+            "desc": "1 or 2 lets TCP discover a working size when ICMP is blocked"
+          },
+          {
+            "cmd": "ip link set dev eth0 mtu 1450",
+            "desc": "Temporarily lower the MTU to test (small requests work, big ones hang = MTU)"
+          }
+        ]
+      },
+      {
+        "id": "nd-tcpdump",
+        "title": "tcpdump Recipes",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "tcpdump -ni any port 53",
+            "desc": "DNS queries and replies"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 host 192.0.2.10 and port 443",
+            "desc": "One peer and port"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) == tcp-syn'",
+            "desc": "New connection attempts (SYN without ACK)"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 'tcp[tcpflags] & tcp-rst != 0'",
+            "desc": "Connection resets: who is rejecting or tearing down connections?"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 icmp",
+            "desc": "Ping, unreachable and time-exceeded messages"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 -c 1000 -w /tmp/capture.pcap",
+            "desc": "Capture 1000 packets to a file for Wireshark"
+          },
+          {
+            "cmd": "tcpdump -nr /tmp/capture.pcap | head",
+            "desc": "Read a capture back"
+          },
+          {
+            "cmd": "tcpdump -nni eth0 -c 5000 | awk '{print $3}' | cut -d. -f1-4 | sort | uniq -c | sort -rn | head",
+            "desc": "Top source addresses in 5000 packets"
+          },
+          {
+            "cmd": "tcpdump -nni eth0 -c 2000 udp | awk '{print $5}' | sort | uniq -c | sort -rn | head",
+            "desc": "Top UDP destinations: a single peer with thousands of packets is a flood"
+          }
+        ]
+      },
+      {
+        "id": "nd-bw",
+        "title": "Bandwidth & Top Talkers",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "iftop -i eth0 -nNP",
+            "desc": "Live per-connection bandwidth"
+          },
+          {
+            "cmd": "nethogs eth0",
+            "desc": "Live bandwidth per process"
+          },
+          {
+            "cmd": "nload eth0",
+            "desc": "Live in/out graph"
+          },
+          {
+            "cmd": "vnstat -i eth0 -h",
+            "desc": "Hourly traffic history"
+          },
+          {
+            "cmd": "sar -n DEV 1 5",
+            "desc": "Interface throughput per second (needs sysstat)"
+          },
+          {
+            "cmd": "a=$(cat /sys/class/net/eth0/statistics/tx_bytes); sleep 5; b=$(cat /sys/class/net/eth0/statistics/tx_bytes); echo $(( (b-a)*8/5/1000 )) kbps",
+            "desc": "Outbound rate right now, no extra tools needed"
+          },
+          {
+            "cmd": "iperf3 -s",
+            "desc": "Start an iperf3 server on one end"
+          },
+          {
+            "cmd": "iperf3 -c host -t 10 -P 4",
+            "desc": "Throughput test with 4 parallel streams"
+          },
+          {
+            "cmd": "iperf3 -c host -R",
+            "desc": "Reverse direction test"
+          }
+        ]
+      },
+      {
+        "id": "nd-path",
+        "title": "Path & Latency",
+        "color": "#ff9f6b",
+        "cmds": [
+          {
+            "cmd": "mtr -rwbzc 100 host",
+            "desc": "Report-mode mtr: loss and latency per hop with AS numbers"
+          },
+          {
+            "cmd": "traceroute -T -p 443 host",
+            "desc": "Trace using TCP/443 (passes firewalls that block ICMP/UDP)"
+          },
+          {
+            "cmd": "traceroute -I host",
+            "desc": "Trace using ICMP"
+          },
+          {
+            "cmd": "ping -c 100 -i 0.2 host | tail -3",
+            "desc": "Packet loss and jitter over 100 probes"
+          },
+          {
+            "cmd": "ping -I eth0 host",
+            "desc": "Force the source interface (multi-homed hosts)"
+          },
+          {
+            "cmd": "hping3 -S -p 443 -c 5 host",
+            "desc": "TCP SYN probes: tests a port path when ping is filtered"
+          }
+        ]
+      }
+    ]
+  },
+  "perf": {
+    "name": "Performance Troubleshooting",
+    "icon": "⚡",
+    "iconBg": "#ef4444",
+    "subtitle": "CPU, memory, disk, tracing & history",
+    "meta": "vmstat, iostat, strace, perf",
+    "sections": [
+      {
+        "id": "pf-first",
+        "title": "First 60 Seconds",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "uptime",
+            "desc": "Load averages for 1, 5 and 15 minutes: rising or falling?"
+          },
+          {
+            "cmd": "dmesg -T | tail -30",
+            "desc": "Recent kernel messages: OOM kills, disk errors, link flaps"
+          },
+          {
+            "cmd": "vmstat 1 5",
+            "desc": "Run queue (r), blocked (b), swap in/out (si/so), CPU split"
+          },
+          {
+            "cmd": "mpstat -P ALL 1 3",
+            "desc": "Per-CPU use: one hot CPU means a single-threaded bottleneck"
+          },
+          {
+            "cmd": "pidstat 1 3",
+            "desc": "CPU use per process over time"
+          },
+          {
+            "cmd": "iostat -xz 1 3",
+            "desc": "Disk latency (await) and utilisation (%util)"
+          },
+          {
+            "cmd": "free -m",
+            "desc": "Memory: look at \"available\", not \"free\""
+          },
+          {
+            "cmd": "sar -n DEV 1 3",
+            "desc": "Network throughput per interface"
+          },
+          {
+            "cmd": "sar -n TCP,ETCP 1 3",
+            "desc": "TCP connection rates and retransmits"
+          },
+          {
+            "cmd": "top -bn1 | head -20",
+            "desc": "Snapshot of the busiest processes"
+          },
+          {
+            "cmd": "ps aux --sort=-%cpu | head",
+            "desc": "Top CPU consumers"
+          },
+          {
+            "cmd": "ps aux --sort=-%mem | head",
+            "desc": "Top memory consumers"
+          },
+          {
+            "cmd": "systemd-cgtop",
+            "desc": "CPU, memory and I/O per systemd unit/cgroup"
+          },
+          {
+            "cmd": "journalctl -p err -b --no-pager | tail -30",
+            "desc": "Errors since boot"
+          }
+        ]
+      },
+      {
+        "id": "pf-cpu",
+        "title": "CPU & Load",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "cat /proc/loadavg",
+            "desc": "Load = runnable tasks plus tasks in uninterruptible sleep (state D)"
+          },
+          {
+            "cmd": "ps -eo state,pid,comm | awk '$1==\"D\"'",
+            "desc": "Tasks in state D: blocked on I/O and unkillable until it returns"
+          },
+          {
+            "cmd": "ps -eo pid,ppid,stat,wchan:32,comm | awk '$3 ~ /D/'",
+            "desc": "D-state tasks and the kernel function they wait in"
+          },
+          {
+            "cmd": "cat /proc/pressure/cpu",
+            "desc": "PSI: share of time tasks waited for CPU"
+          },
+          {
+            "cmd": "cat /proc/pressure/io",
+            "desc": "PSI: share of time tasks waited for I/O"
+          },
+          {
+            "cmd": "cat /proc/pressure/memory",
+            "desc": "PSI: share of time tasks waited for memory"
+          },
+          {
+            "cmd": "top -H -p PID",
+            "desc": "Per-thread CPU of one process"
+          },
+          {
+            "cmd": "perf top",
+            "desc": "Live view of hot functions"
+          },
+          {
+            "cmd": "perf record -F 99 -a -g -- sleep 30",
+            "desc": "Sample all CPUs with call graphs for 30 seconds"
+          },
+          {
+            "cmd": "perf report",
+            "desc": "Browse the recorded profile"
+          },
+          {
+            "cmd": "cat /sys/fs/cgroup/system.slice/SERVICE.service/cpu.stat",
+            "desc": "nr_throttled > 0 means the service hit its CPU quota"
+          },
+          {
+            "cmd": "lscpu",
+            "desc": "CPU model, cores, threads, caches"
+          }
+        ]
+      },
+      {
+        "id": "pf-mem",
+        "title": "Memory & OOM",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "free -h",
+            "desc": "\"free\" is untouched memory; \"available\" estimates what applications can get including reclaimable cache"
+          },
+          {
+            "cmd": "grep -E \"MemAvailable|Cached|Slab|Dirty|SwapCached|SwapFree\" /proc/meminfo",
+            "desc": "The meminfo lines that matter"
+          },
+          {
+            "cmd": "vmstat -SM 1 5",
+            "desc": "si/so above zero means actively swapping"
+          },
+          {
+            "cmd": "ps aux --sort=-rss | head",
+            "desc": "Largest resident processes"
+          },
+          {
+            "cmd": "dmesg -T | grep -iE \"out of memory|oom-kill|killed process\"",
+            "desc": "Evidence of the OOM killer"
+          },
+          {
+            "cmd": "journalctl -k | grep -i oom",
+            "desc": "Same from the journal across reboots"
+          },
+          {
+            "cmd": "grep -E \"VmRSS|VmSwap\" /proc/PID/status",
+            "desc": "Resident and swapped memory of one process"
+          },
+          {
+            "cmd": "slabtop -o | head",
+            "desc": "Kernel slab usage (dentry/inode cache growth)"
+          },
+          {
+            "cmd": "sysctl vm.swappiness vm.overcommit_memory",
+            "desc": "Swap tendency and overcommit policy"
+          },
+          {
+            "cmd": "systemctl show SERVICE -p MemoryCurrent -p MemoryMax",
+            "desc": "Memory used and limit of a service cgroup"
+          },
+          {
+            "cmd": "kill -l $((137-128))",
+            "desc": "Exit code 137 = 128 + 9 = SIGKILL, typically the OOM killer or an out-of-memory container"
+          }
+        ]
+      },
+      {
+        "id": "pf-io",
+        "title": "Disk I/O",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "iostat -xz 1",
+            "desc": "await (latency) and %util: high both = saturated device"
+          },
+          {
+            "cmd": "iotop -oPa",
+            "desc": "Processes actually doing I/O, accumulated"
+          },
+          {
+            "cmd": "pidstat -d 1",
+            "desc": "Per-process read/write rates"
+          },
+          {
+            "cmd": "lsblk -o NAME,ROTA,SCHED,SIZE,MOUNTPOINT",
+            "desc": "Device type (rotational?), scheduler and mounts"
+          },
+          {
+            "cmd": "smartctl -a /dev/sda",
+            "desc": "SMART health and error log"
+          },
+          {
+            "cmd": "nvme smart-log /dev/nvme0n1",
+            "desc": "NVMe health: media errors, percentage used, temperature"
+          },
+          {
+            "cmd": "dmesg -T | grep -iE \"i/o error|blk_update_request|ata[0-9]\"",
+            "desc": "Storage errors reported by the kernel"
+          },
+          {
+            "cmd": "fio --name=randread --rw=randread --bs=4k --size=1G --iodepth=32 --runtime=30 --time_based --filename=/tmp/fio.test",
+            "desc": "Random read benchmark (delete /tmp/fio.test afterwards)"
+          },
+          {
+            "cmd": "dd if=/dev/zero of=/tmp/test.bin bs=1M count=1024 oflag=direct",
+            "desc": "Rough sequential write speed bypassing cache (delete the file afterwards)"
+          },
+          {
+            "cmd": "lsof +L1",
+            "desc": "Files that are deleted but still held open (space not freed)"
+          }
+        ]
+      },
+      {
+        "id": "pf-trace",
+        "title": "Tracing a Process",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "strace -f -tt -T -p PID",
+            "desc": "Attach: every syscall with timestamps and time spent in each"
+          },
+          {
+            "cmd": "strace -c -p PID",
+            "desc": "Summary of syscalls by count and time (Ctrl-C to print)"
+          },
+          {
+            "cmd": "strace -f -e trace=network -p PID",
+            "desc": "Only network syscalls: connect, sendto, recvfrom"
+          },
+          {
+            "cmd": "strace -f -e trace=%file -s 200 command",
+            "desc": "Which files does a command open or fail to find?"
+          },
+          {
+            "cmd": "lsof -p PID",
+            "desc": "Open files and sockets of one process"
+          },
+          {
+            "cmd": "ls -l /proc/PID/fd",
+            "desc": "File descriptors (watch for descriptor leaks)"
+          },
+          {
+            "cmd": "cat /proc/PID/stack",
+            "desc": "Kernel stack of a stuck process (root)"
+          },
+          {
+            "cmd": "cat /proc/PID/wchan",
+            "desc": "Kernel function a sleeping process waits in"
+          },
+          {
+            "cmd": "readlink /proc/PID/exe",
+            "desc": "Executable path; \"(deleted)\" means the binary was removed while running"
+          },
+          {
+            "cmd": "tr \"\\0\" \" \" < /proc/PID/cmdline",
+            "desc": "Full command line"
+          },
+          {
+            "cmd": "tr \"\\0\" \"\\n\" < /proc/PID/environ",
+            "desc": "Environment of the process (may contain secrets)"
+          },
+          {
+            "cmd": "cat /proc/PID/limits",
+            "desc": "Resource limits actually applied"
+          },
+          {
+            "cmd": "execsnoop-bpfcc",
+            "desc": "Trace every new process system-wide (bpfcc-tools)"
+          },
+          {
+            "cmd": "opensnoop-bpfcc",
+            "desc": "Trace every file open system-wide"
+          },
+          {
+            "cmd": "tcpconnect-bpfcc",
+            "desc": "Trace every outgoing TCP connection with PID"
+          },
+          {
+            "cmd": "tcplife-bpfcc",
+            "desc": "TCP session lifespans with bytes transferred per process"
+          },
+          {
+            "cmd": "biolatency-bpfcc",
+            "desc": "Block I/O latency histogram"
+          }
+        ]
+      },
+      {
+        "id": "pf-sar",
+        "title": "History & sar",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "systemctl enable --now sysstat",
+            "desc": "Start collecting history (sar data in /var/log/sysstat)"
+          },
+          {
+            "cmd": "sar -u",
+            "desc": "CPU history for today"
+          },
+          {
+            "cmd": "sar -r",
+            "desc": "Memory history for today"
+          },
+          {
+            "cmd": "sar -q",
+            "desc": "Load and run-queue history"
+          },
+          {
+            "cmd": "sar -d -p",
+            "desc": "Disk history with device names"
+          },
+          {
+            "cmd": "sar -n DEV",
+            "desc": "Network history per interface"
+          },
+          {
+            "cmd": "sar -f /var/log/sysstat/sa20",
+            "desc": "Read an older day (sa + day of month)"
+          },
+          {
+            "cmd": "uptime -s",
+            "desc": "Last boot time"
+          },
+          {
+            "cmd": "last -x | head",
+            "desc": "Reboot and shutdown history"
+          },
+          {
+            "cmd": "journalctl --since \"1 hour ago\" -p warning",
+            "desc": "Warnings in the last hour"
+          }
+        ]
+      },
+      {
+        "id": "pf-signal",
+        "title": "Exit Codes, Signals & Crashes",
+        "color": "#ff9f6b",
+        "cmds": [
+          {
+            "cmd": "kill -l",
+            "desc": "Signal names and numbers"
+          },
+          {
+            "cmd": "echo $?",
+            "desc": "Exit code of the last command: 126 not executable, 127 not found, 137 SIGKILL, 139 SIGSEGV, 143 SIGTERM"
+          },
+          {
+            "cmd": "systemctl show SERVICE -p Result,ExecMainStatus",
+            "desc": "How a service last exited"
+          },
+          {
+            "cmd": "journalctl -u SERVICE -n 50 --no-pager",
+            "desc": "Last log lines of a service"
+          },
+          {
+            "cmd": "dmesg -T | grep -i segfault",
+            "desc": "Crashes reported by the kernel with faulting address and library"
+          },
+          {
+            "cmd": "coredumpctl list",
+            "desc": "Recorded core dumps"
+          },
+          {
+            "cmd": "coredumpctl info PID",
+            "desc": "Details and backtrace of a crash"
+          },
+          {
+            "cmd": "ps -eo pid,ppid,stat,comm | awk '$3 ~ /Z/'",
+            "desc": "Zombies: already dead, cannot be killed; restart or fix the parent"
+          },
+          {
+            "cmd": "ulimit -a",
+            "desc": "Limits of the current shell"
+          }
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "name": "Storage & Boot",
+    "icon": "▤",
+    "iconBg": "#14b8a6",
+    "subtitle": "LVM, filesystems, RAID, NFS, GRUB & initramfs",
+    "meta": "lvm, xfs, ext4, mdadm",
+    "sections": [
+      {
+        "id": "st-lvm",
+        "title": "LVM",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "lsblk -f",
+            "desc": "Block devices, filesystems, labels and mount points"
+          },
+          {
+            "cmd": "pvs; vgs; lvs",
+            "desc": "Physical volumes, volume groups and logical volumes at a glance"
+          },
+          {
+            "cmd": "vgs -o +vg_free",
+            "desc": "Free space per volume group"
+          },
+          {
+            "cmd": "lvs -a -o +devices",
+            "desc": "Which physical device holds which logical volume"
+          },
+          {
+            "cmd": "pvcreate /dev/sdb",
+            "desc": "Initialise a disk for LVM"
+          },
+          {
+            "cmd": "vgextend vg0 /dev/sdb",
+            "desc": "Add the disk to a volume group"
+          },
+          {
+            "cmd": "lvcreate -L 20G -n data vg0",
+            "desc": "Create a 20 GB logical volume"
+          },
+          {
+            "cmd": "lvextend -r -L +10G /dev/vg0/data",
+            "desc": "Grow the LV and its filesystem in one step (-r runs the right resize tool)"
+          },
+          {
+            "cmd": "lvextend -r -l +100%FREE /dev/vg0/data",
+            "desc": "Grow into all free space"
+          },
+          {
+            "cmd": "lvcreate -s -L 5G -n data_snap /dev/vg0/data",
+            "desc": "Snapshot before a risky change"
+          },
+          {
+            "cmd": "lvremove /dev/vg0/data_snap",
+            "desc": "Remove the snapshot afterwards (full snapshots become invalid)"
+          },
+          {
+            "cmd": "pvmove /dev/sdb /dev/sdc",
+            "desc": "Move data off a disk online before removing it"
+          }
+        ]
+      },
+      {
+        "id": "st-fs",
+        "title": "Filesystems: grow, check, repair",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "xfs_growfs /mnt/data",
+            "desc": "Grow XFS (online). XFS can only grow, never shrink"
+          },
+          {
+            "cmd": "resize2fs /dev/vg0/data",
+            "desc": "Grow ext4 to fill the device (online)"
+          },
+          {
+            "cmd": "resize2fs /dev/vg0/data 50G",
+            "desc": "Shrink ext4: unmount and e2fsck -f first"
+          },
+          {
+            "cmd": "e2fsck -f /dev/vg0/data",
+            "desc": "Check an unmounted ext4 filesystem"
+          },
+          {
+            "cmd": "xfs_repair -n /dev/vg0/data",
+            "desc": "Dry-run XFS repair (unmounted)"
+          },
+          {
+            "cmd": "xfs_info /mnt/data",
+            "desc": "XFS geometry"
+          },
+          {
+            "cmd": "tune2fs -l /dev/sda1 | grep -iE \"state|mount count|features\"",
+            "desc": "ext4 state and features"
+          },
+          {
+            "cmd": "tune2fs -m 1 /dev/vg0/data",
+            "desc": "Lower reserved blocks from 5% to 1% on a data volume"
+          },
+          {
+            "cmd": "blkid",
+            "desc": "UUIDs and filesystem types"
+          },
+          {
+            "cmd": "findmnt",
+            "desc": "Mount tree"
+          },
+          {
+            "cmd": "findmnt --verify",
+            "desc": "Validate /etc/fstab before rebooting"
+          },
+          {
+            "cmd": "growpart /dev/sda 1",
+            "desc": "Grow a partition into new disk space (cloud-utils)"
+          },
+          {
+            "cmd": "fstrim -av",
+            "desc": "Discard unused blocks on all mounted filesystems"
+          },
+          {
+            "cmd": "mount -o remount,ro /",
+            "desc": "Remount read-only (for a safe check or after errors)"
+          }
+        ]
+      },
+      {
+        "id": "st-full",
+        "title": "Disk Full Triage",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "df -hT",
+            "desc": "Usage by filesystem"
+          },
+          {
+            "cmd": "df -i",
+            "desc": "Inode usage: 100% IUse with free space = too many small files"
+          },
+          {
+            "cmd": "du -xhd1 /var | sort -h",
+            "desc": "Largest directories on one filesystem"
+          },
+          {
+            "cmd": "ncdu -x /",
+            "desc": "Interactive size explorer"
+          },
+          {
+            "cmd": "lsof +L1",
+            "desc": "Deleted files still held open by a process: restart it to free the space"
+          },
+          {
+            "cmd": "find / -xdev -type f -size +500M -exec ls -lh {} \\; 2>/dev/null",
+            "desc": "Files over 500 MB"
+          },
+          {
+            "cmd": "find / -xdev -printf \"%h\\n\" | sort | uniq -c | sort -rn | head",
+            "desc": "Directories with the most files (inode hogs)"
+          },
+          {
+            "cmd": "mount --bind / /mnt/rootview && du -sh /mnt/rootview/*",
+            "desc": "See files hidden underneath other mounts (umount /mnt/rootview afterwards)"
+          },
+          {
+            "cmd": "journalctl --disk-usage",
+            "desc": "Space used by the journal"
+          },
+          {
+            "cmd": "journalctl --vacuum-size=500M",
+            "desc": "Shrink the journal to 500 MB"
+          },
+          {
+            "cmd": "docker system df",
+            "desc": "Space used by images, containers and volumes"
+          },
+          {
+            "cmd": "apt-get clean",
+            "desc": "Remove cached package files"
+          },
+          {
+            "cmd": ": > /var/log/big.log",
+            "desc": "Truncate a log in place (frees space even while a process holds it open)"
+          }
+        ]
+      },
+      {
+        "id": "st-raid",
+        "title": "RAID, SMART & ZFS/Btrfs",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "cat /proc/mdstat",
+            "desc": "Software RAID status and rebuild progress"
+          },
+          {
+            "cmd": "mdadm --detail /dev/md0",
+            "desc": "Array state and member disks"
+          },
+          {
+            "cmd": "mdadm --examine /dev/sda1",
+            "desc": "RAID metadata on a member"
+          },
+          {
+            "cmd": "mdadm /dev/md0 --fail /dev/sdb1 --remove /dev/sdb1",
+            "desc": "Fail and remove a disk"
+          },
+          {
+            "cmd": "mdadm /dev/md0 --add /dev/sdc1",
+            "desc": "Add a replacement disk"
+          },
+          {
+            "cmd": "smartctl -H /dev/sda",
+            "desc": "Quick SMART pass/fail"
+          },
+          {
+            "cmd": "smartctl -t short /dev/sda",
+            "desc": "Start a short self-test"
+          },
+          {
+            "cmd": "zpool status -x",
+            "desc": "Only unhealthy ZFS pools"
+          },
+          {
+            "cmd": "zpool scrub tank",
+            "desc": "Verify all data checksums"
+          },
+          {
+            "cmd": "zfs list",
+            "desc": "ZFS datasets and usage"
+          },
+          {
+            "cmd": "btrfs filesystem usage /",
+            "desc": "Btrfs real allocation and free space"
+          },
+          {
+            "cmd": "btrfs scrub start /",
+            "desc": "Verify Btrfs checksums"
+          }
+        ]
+      },
+      {
+        "id": "st-boot",
+        "title": "Boot, GRUB & initramfs",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "cat /proc/cmdline",
+            "desc": "Kernel command line of the running system"
+          },
+          {
+            "cmd": "lsinitramfs /boot/initrd.img-$(uname -r) | head",
+            "desc": "Contents of the initramfs (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "update-initramfs -u -k all",
+            "desc": "Rebuild initramfs for all kernels (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "dracut -f",
+            "desc": "Rebuild initramfs (RHEL/Fedora)"
+          },
+          {
+            "cmd": "update-grub",
+            "desc": "Regenerate grub.cfg (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "grub2-mkconfig -o /boot/grub2/grub.cfg",
+            "desc": "Regenerate grub.cfg (RHEL/Fedora)"
+          },
+          {
+            "cmd": "grub-install /dev/sda",
+            "desc": "Reinstall the boot loader (BIOS)"
+          },
+          {
+            "cmd": "efibootmgr -v",
+            "desc": "UEFI boot entries and order"
+          },
+          {
+            "cmd": "systemd-analyze blame",
+            "desc": "Slowest units during boot"
+          },
+          {
+            "cmd": "systemd-analyze critical-chain",
+            "desc": "The chain of units that delayed boot"
+          },
+          {
+            "cmd": "journalctl --list-boots",
+            "desc": "Boots recorded in the journal"
+          },
+          {
+            "cmd": "journalctl -b -1 -p err",
+            "desc": "Errors from the previous boot (why did it crash?)"
+          },
+          {
+            "cmd": "systemctl --failed",
+            "desc": "Units that failed to start"
+          },
+          {
+            "cmd": "for d in dev proc sys; do mount --rbind /$d /mnt/$d; done && chroot /mnt",
+            "desc": "Rescue: bind-mount the virtual filesystems and chroot into the installed system"
+          }
+        ]
+      },
+      {
+        "id": "st-nfs",
+        "title": "NFS & Mounts",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "showmount -e nas",
+            "desc": "Exports offered by an NFS server"
+          },
+          {
+            "cmd": "mount -t nfs nas:/export /mnt/nas",
+            "desc": "Mount an NFS export"
+          },
+          {
+            "cmd": "findmnt -t nfs,nfs4",
+            "desc": "Mounted NFS filesystems"
+          },
+          {
+            "cmd": "nfsstat -m",
+            "desc": "Mount options actually negotiated"
+          },
+          {
+            "cmd": "rpcinfo -p nas",
+            "desc": "RPC services on the server (portmapper, mountd, nfs)"
+          },
+          {
+            "cmd": "exportfs -v",
+            "desc": "On the server: what is exported and to whom"
+          },
+          {
+            "cmd": "nfsiostat 1",
+            "desc": "Per-mount NFS latency and throughput"
+          },
+          {
+            "cmd": "umount -f -l /mnt/nas",
+            "desc": "Lazy force-unmount of a hung NFS mount"
+          }
+        ]
+      }
+    ]
+  },
+  "secaudit": {
+    "name": "Security Audit & Hardening",
+    "icon": "🛡",
+    "iconBg": "#dc2626",
+    "subtitle": "SSH, exposure, compromise triage, auditd & SELinux",
+    "meta": "read-only checks first",
+    "sections": [
+      {
+        "id": "sa-ssh",
+        "title": "SSH & Logins",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "sshd -T | grep -E \"permitrootlogin|passwordauthentication|allowusers|maxauthtries|x11forwarding\"",
+            "desc": "Effective SSH server settings (not just what the file says)"
+          },
+          {
+            "cmd": "sshd -t",
+            "desc": "Test sshd configuration before restarting"
+          },
+          {
+            "cmd": "ssh-keygen -lf ~/.ssh/authorized_keys",
+            "desc": "Fingerprints of authorized keys: any you do not recognise?"
+          },
+          {
+            "cmd": "last -i | head -20",
+            "desc": "Recent logins with source IPs"
+          },
+          {
+            "cmd": "lastb | head",
+            "desc": "Recent failed logins"
+          },
+          {
+            "cmd": "journalctl -u ssh --since today | grep -E \"Failed|Accepted\"",
+            "desc": "Today's SSH successes and failures (unit is sshd on RHEL)"
+          },
+          {
+            "cmd": "grep \"Failed password\" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | head",
+            "desc": "Top sources of failed password attempts"
+          },
+          {
+            "cmd": "ss -tnp state established '( sport = :22 )'",
+            "desc": "Who is connected over SSH right now"
+          },
+          {
+            "cmd": "w",
+            "desc": "Logged-in users, idle time and what they run"
+          },
+          {
+            "cmd": "fail2ban-client status sshd",
+            "desc": "Jail status: banned IPs and totals"
+          },
+          {
+            "cmd": "fail2ban-client set sshd unbanip 192.0.2.5",
+            "desc": "Unban an address you locked out by mistake"
+          }
+        ]
+      },
+      {
+        "id": "sa-expose",
+        "title": "Exposure: what is reachable?",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "ss -tulpn | grep -v \"127.0.0.1\"",
+            "desc": "Everything listening on a non-loopback address"
+          },
+          {
+            "cmd": "ufw status verbose",
+            "desc": "Firewall rules and default policies"
+          },
+          {
+            "cmd": "ufw allow from 192.168.1.0/24 to any port 22 proto tcp",
+            "desc": "Allow a service from one network only"
+          },
+          {
+            "cmd": "ufw delete allow 32400/tcp",
+            "desc": "Remove a rule that opened a port to everyone"
+          },
+          {
+            "cmd": "upnpc -l",
+            "desc": "UPnP port mappings your router currently holds: applications can open ports to the internet by themselves"
+          },
+          {
+            "cmd": "nmap -Pn -p- --open 192.0.2.10",
+            "desc": "Scan all ports of a host you own"
+          },
+          {
+            "cmd": "kubectl get svc -A | grep -E \"NodePort|LoadBalancer\"",
+            "desc": "Kubernetes services reachable from outside the cluster"
+          },
+          {
+            "cmd": "kubectl get ingress -A",
+            "desc": "Hostnames routed into the cluster"
+          }
+        ]
+      },
+      {
+        "id": "sa-ir",
+        "title": "Compromise Triage (read-only)",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "ps -eo user,pid,ppid,lstart,cmd --sort=lstart | tail -30",
+            "desc": "Newest processes with start times"
+          },
+          {
+            "cmd": "ls -l /proc/*/exe 2>/dev/null | grep deleted",
+            "desc": "Processes running from a deleted binary: a classic malware tell (package upgrades also cause a few)"
+          },
+          {
+            "cmd": "find /tmp /var/tmp /dev/shm -type f -perm /111 2>/dev/null",
+            "desc": "Executables in temporary directories"
+          },
+          {
+            "cmd": "find / -xdev -type f -newermt \"2 days ago\" -perm /111 2>/dev/null | head",
+            "desc": "Executables created in the last two days"
+          },
+          {
+            "cmd": "ss -tunap | grep -v \"127.0.0.1\"",
+            "desc": "Non-local connections with owning process"
+          },
+          {
+            "cmd": "ss -tnp state established | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -rn | head",
+            "desc": "Remote addresses by connection count"
+          },
+          {
+            "cmd": "ls -l /proc/PID/exe /proc/PID/cwd",
+            "desc": "Where a suspicious process runs from"
+          },
+          {
+            "cmd": "cat /proc/PID/cgroup",
+            "desc": "Which container or systemd unit a process belongs to"
+          },
+          {
+            "cmd": "cp /proc/PID/exe /root/evidence.bin && chmod 000 /root/evidence.bin && sha256sum /root/evidence.bin",
+            "desc": "Preserve a deleted binary as evidence (never execute it) and record its hash"
+          },
+          {
+            "cmd": "crontab -l; ls -la /etc/cron.* /var/spool/cron/crontabs",
+            "desc": "Scheduled-job persistence"
+          },
+          {
+            "cmd": "systemctl list-timers --all",
+            "desc": "systemd timers (cron alternative)"
+          },
+          {
+            "cmd": "systemctl list-unit-files --state=enabled",
+            "desc": "Everything set to start at boot"
+          },
+          {
+            "cmd": "find /etc /usr/bin /usr/sbin /bin /sbin -newermt \"7 days ago\" -type f 2>/dev/null",
+            "desc": "System files changed in the last week"
+          },
+          {
+            "cmd": "debsums -c",
+            "desc": "Package files that differ from the package (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "rpm -Va",
+            "desc": "Package files that differ from the package (RHEL/Fedora)"
+          },
+          {
+            "cmd": "getent passwd | awk -F: '$3==0'",
+            "desc": "Accounts with UID 0 (should be only root)"
+          },
+          {
+            "cmd": "awk -F: '($2==\"\")' /etc/shadow",
+            "desc": "Accounts with an empty password"
+          },
+          {
+            "cmd": "cat /root/.ssh/authorized_keys ~/.ssh/authorized_keys",
+            "desc": "SSH keys that grant access"
+          },
+          {
+            "cmd": "rkhunter --check --sk",
+            "desc": "Rootkit and common-backdoor scan"
+          },
+          {
+            "cmd": "tcpdump -nni eth0 -c 2000 udp | awk '{print $5}' | sort | uniq -c | sort -rn | head",
+            "desc": "Outbound UDP flood check: one destination with thousands of identical packets"
+          }
+        ]
+      },
+      {
+        "id": "sa-k8s",
+        "title": "Kubernetes Security Checks",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.hostNetwork==true) | .metadata.namespace+\"/\"+.metadata.name'",
+            "desc": "Pods on the host network (they see and use the host's interfaces)"
+          },
+          {
+            "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.containers[].securityContext.privileged==true) | .metadata.namespace+\"/\"+.metadata.name'",
+            "desc": "Privileged containers"
+          },
+          {
+            "cmd": "kubectl get pods -A -o json | jq -r '.items[] | select(.spec.volumes[]?.hostPath) | .metadata.namespace+\"/\"+.metadata.name'",
+            "desc": "Pods mounting host paths"
+          },
+          {
+            "cmd": "kubectl get clusterrolebindings -o wide | grep cluster-admin",
+            "desc": "Who has full cluster control"
+          },
+          {
+            "cmd": "kubectl auth can-i --list --as=system:serviceaccount:NAMESPACE:SERVICEACCOUNT",
+            "desc": "What a service account may do"
+          },
+          {
+            "cmd": "kubectl get networkpolicy -A",
+            "desc": "No policies means any pod can reach any other pod"
+          },
+          {
+            "cmd": "kubectl exec POD -n NAMESPACE -- ps -eo pid,user,lstart,args",
+            "desc": "Processes inside a container: anything you do not recognise?"
+          },
+          {
+            "cmd": "kubectl get secrets -A",
+            "desc": "Secrets in the cluster (names only; values are not shown)"
+          }
+        ]
+      },
+      {
+        "id": "sa-audit",
+        "title": "auditd & Authentication Logs",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "auditctl -l",
+            "desc": "Active audit rules"
+          },
+          {
+            "cmd": "auditctl -w /etc/passwd -p wa -k passwd_changes",
+            "desc": "Watch writes and attribute changes to a file"
+          },
+          {
+            "cmd": "ausearch -k passwd_changes -i",
+            "desc": "Events for a rule key, human readable"
+          },
+          {
+            "cmd": "ausearch -m USER_LOGIN --success no -i",
+            "desc": "Failed login events"
+          },
+          {
+            "cmd": "aureport --summary",
+            "desc": "Audit summary report"
+          },
+          {
+            "cmd": "aureport -au",
+            "desc": "Authentication report"
+          },
+          {
+            "cmd": "journalctl _COMM=sudo --since today",
+            "desc": "sudo activity today"
+          },
+          {
+            "cmd": "lastlog",
+            "desc": "Last login per account"
+          },
+          {
+            "cmd": "chage -l alex",
+            "desc": "Password ageing for a user"
+          },
+          {
+            "cmd": "passwd -S alex",
+            "desc": "Password status: locked, no password, usable"
+          }
+        ]
+      },
+      {
+        "id": "sa-lsm",
+        "title": "SELinux & AppArmor",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "getenforce",
+            "desc": "Enforcing, Permissive or Disabled"
+          },
+          {
+            "cmd": "sestatus",
+            "desc": "Full SELinux status"
+          },
+          {
+            "cmd": "setenforce 0",
+            "desc": "Temporarily permissive: if the problem disappears, SELinux was blocking it (turn back on with setenforce 1)"
+          },
+          {
+            "cmd": "ausearch -m avc -ts recent",
+            "desc": "Recent SELinux denials"
+          },
+          {
+            "cmd": "audit2why < /var/log/audit/audit.log",
+            "desc": "Explain denials and suggest boolean or context fixes"
+          },
+          {
+            "cmd": "ls -Z /var/www",
+            "desc": "Security contexts of files"
+          },
+          {
+            "cmd": "restorecon -Rv /var/www",
+            "desc": "Reset file contexts to the policy default"
+          },
+          {
+            "cmd": "semanage fcontext -a -t httpd_sys_content_t \"/srv/web(/.*)?\"",
+            "desc": "Persistently label a custom web directory"
+          },
+          {
+            "cmd": "setsebool -P httpd_can_network_connect on",
+            "desc": "Allow the web server to make outgoing connections (persistent)"
+          },
+          {
+            "cmd": "aa-status",
+            "desc": "AppArmor profiles and their modes"
+          },
+          {
+            "cmd": "aa-complain /usr/sbin/nginx",
+            "desc": "Put a profile into complain mode while debugging"
+          }
+        ]
+      },
+      {
+        "id": "sa-harden",
+        "title": "Hardening Quick Checks",
+        "color": "#ff9f6b",
+        "cmds": [
+          {
+            "cmd": "lynis audit system",
+            "desc": "Broad hardening audit with a score and suggestions"
+          },
+          {
+            "cmd": "systemd-analyze security SERVICE",
+            "desc": "Exposure score of a service and which sandboxing options it lacks"
+          },
+          {
+            "cmd": "sysctl net.ipv4.tcp_syncookies net.ipv4.conf.all.rp_filter net.ipv4.conf.all.accept_redirects",
+            "desc": "Network hardening settings"
+          },
+          {
+            "cmd": "find / -xdev -perm -4000 -type f 2>/dev/null",
+            "desc": "SUID programs"
+          },
+          {
+            "cmd": "find / -xdev -type f -perm -0002 2>/dev/null",
+            "desc": "World-writable files"
+          },
+          {
+            "cmd": "getcap -r / 2>/dev/null",
+            "desc": "Files with elevated capabilities"
+          },
+          {
+            "cmd": "mount | grep -E \"nosuid|noexec\"",
+            "desc": "Which mounts restrict execution"
+          },
+          {
+            "cmd": "apt list --upgradable 2>/dev/null | grep -i security",
+            "desc": "Pending security updates (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "unattended-upgrade --dry-run -d",
+            "desc": "What automatic updates would do"
+          }
+        ]
+      }
+    ]
+  },
+  "patching": {
+    "name": "Patching & Kernel Lifecycle",
+    "icon": "⟳",
+    "iconBg": "#6366f1",
+    "subtitle": "Find, apply, verify and roll back updates",
+    "meta": "apt, dnf, needrestart, ansible",
+    "sections": [
+      {
+        "id": "pt-status",
+        "title": "What Is Pending, What Is Running",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "uname -r",
+            "desc": "The kernel you are running right now"
+          },
+          {
+            "cmd": "uptime -p",
+            "desc": "Time since last boot: very long uptime = unpatched kernel"
+          },
+          {
+            "cmd": "dpkg -l \"linux-image-*\" | awk '/^ii/{print $2,$3}'",
+            "desc": "Installed kernels (Debian/Ubuntu)"
+          },
+          {
+            "cmd": "rpm -q kernel",
+            "desc": "Installed kernels (RHEL/Fedora)"
+          },
+          {
+            "cmd": "apt-cache policy linux-generic",
+            "desc": "Is the kernel meta-package installed and what version would it install? (not installed = kernel updates never arrive)"
+          },
+          {
+            "cmd": "apt list --upgradable 2>/dev/null",
+            "desc": "All pending updates"
+          },
+          {
+            "cmd": "apt list --upgradable 2>/dev/null | grep -i security",
+            "desc": "Pending security updates"
+          },
+          {
+            "cmd": "dnf check-update --security",
+            "desc": "Pending security updates (RHEL/Fedora)"
+          },
+          {
+            "cmd": "cat /var/run/reboot-required /var/run/reboot-required.pkgs",
+            "desc": "Reboot needed and which packages asked for it"
+          },
+          {
+            "cmd": "needrestart -b",
+            "desc": "Services running old libraries (machine-readable)"
+          },
+          {
+            "cmd": "needrestart -r l",
+            "desc": "List services needing restart without restarting them"
+          },
+          {
+            "cmd": "dnf needs-restarting -r",
+            "desc": "Is a reboot needed? (RHEL/Fedora)"
+          },
+          {
+            "cmd": "ls -l /proc/*/exe 2>/dev/null | grep -c deleted",
+            "desc": "Count of processes running replaced binaries (restart or reboot to load the update)"
+          },
+          {
+            "cmd": "canonical-livepatch status",
+            "desc": "Livepatch state (Ubuntu Pro)"
+          },
+          {
+            "cmd": "systemctl status unattended-upgrades",
+            "desc": "Automatic updates: enabled and running?"
+          },
+          {
+            "cmd": "tail /var/log/unattended-upgrades/unattended-upgrades.log",
+            "desc": "What automatic updates did and why they skipped things"
+          },
+          {
+            "cmd": "apt-mark showhold",
+            "desc": "Packages held back"
+          }
+        ]
+      },
+      {
+        "id": "pt-apply",
+        "title": "Applying Updates Safely",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "apt update && apt full-upgrade",
+            "desc": "Update the index and apply everything (full-upgrade handles dependency changes)"
+          },
+          {
+            "cmd": "apt-get -s full-upgrade | grep -E \"^(Inst|Remv)\"",
+            "desc": "Simulate first: what is installed and, importantly, removed"
+          },
+          {
+            "cmd": "apt install --only-upgrade PACKAGE",
+            "desc": "Upgrade a single installed package"
+          },
+          {
+            "cmd": "apt install linux-generic",
+            "desc": "Make sure the kernel meta-package follows security kernels"
+          },
+          {
+            "cmd": "apt-mark hold PACKAGE",
+            "desc": "Pin a package version"
+          },
+          {
+            "cmd": "apt autoremove --purge",
+            "desc": "Remove unneeded packages and old kernels"
+          },
+          {
+            "cmd": "dpkg --configure -a",
+            "desc": "Finish an interrupted installation"
+          },
+          {
+            "cmd": "apt --fix-broken install",
+            "desc": "Repair broken dependencies"
+          },
+          {
+            "cmd": "dnf upgrade --refresh",
+            "desc": "Update everything (RHEL/Fedora)"
+          },
+          {
+            "cmd": "dnf history",
+            "desc": "Transaction history"
+          },
+          {
+            "cmd": "dnf history undo last",
+            "desc": "Roll back the last transaction"
+          },
+          {
+            "cmd": "dnf versionlock add PACKAGE",
+            "desc": "Pin a package version (RHEL/Fedora)"
+          }
+        ]
+      },
+      {
+        "id": "pt-kernel",
+        "title": "Kernel & Boot Fallback",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "dkms status",
+            "desc": "Out-of-tree modules (NVIDIA, ZFS...): confirm they are built for the new kernel before rebooting"
+          },
+          {
+            "cmd": "dpkg --list | grep -E \"linux-(image|headers|modules)\"",
+            "desc": "Kernel packages installed"
+          },
+          {
+            "cmd": "grep -E \"menuentry |submenu \" /boot/grub/grub.cfg | cut -d\"'\" -f2",
+            "desc": "Boot menu entries (to pick the old kernel if the new one fails)"
+          },
+          {
+            "cmd": "grubby --default-kernel",
+            "desc": "Default kernel (RHEL/Fedora)"
+          },
+          {
+            "cmd": "grubby --set-default /boot/vmlinuz-KERNELVERSION",
+            "desc": "Change the default kernel (RHEL/Fedora)"
+          },
+          {
+            "cmd": "apt remove --purge linux-image-OLDVERSION",
+            "desc": "Remove an old kernel only after the new one boots cleanly"
+          },
+          {
+            "cmd": "journalctl -b -1 -k | tail",
+            "desc": "Kernel messages from the previous boot"
+          },
+          {
+            "cmd": "last -x reboot | head",
+            "desc": "Reboot history"
+          },
+          {
+            "cmd": "systemctl reboot",
+            "desc": "Reboot"
+          }
+        ]
+      },
+      {
+        "id": "pt-rolling",
+        "title": "Rolling Patching & Reboots",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "kubectl cordon NODE",
+            "desc": "Mark a Kubernetes node unschedulable"
+          },
+          {
+            "cmd": "kubectl drain NODE --ignore-daemonsets --delete-emptydir-data",
+            "desc": "Evict pods gracefully before patching a node"
+          },
+          {
+            "cmd": "kubectl uncordon NODE",
+            "desc": "Allow scheduling again after the node is back"
+          },
+          {
+            "cmd": "kubectl get nodes -o wide",
+            "desc": "Node status, OS image and kernel version"
+          },
+          {
+            "cmd": "echo \"set server be_app/web1 state drain\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "Drain a server out of HAProxy before patching (wait for scur to reach 0)"
+          },
+          {
+            "cmd": "until ssh host true; do sleep 5; done",
+            "desc": "Wait for a host to return after reboot"
+          },
+          {
+            "cmd": "ansible web -b -m reboot -a \"reboot_timeout=600\" -f 1",
+            "desc": "Reboot hosts one at a time and wait for each"
+          },
+          {
+            "cmd": "ansible all -m command -a \"uname -r\" -o",
+            "desc": "Confirm every host runs the expected kernel"
+          },
+          {
+            "cmd": "ansible-playbook patch.yml --limit canary",
+            "desc": "Patch a canary ring first, then widen to the rest"
+          }
+        ]
+      }
+    ]
+  },
+  "puppet": {
+    "name": "Puppet & Config Management",
+    "icon": "◈",
+    "iconBg": "#f97316",
+    "subtitle": "Agent runs, validation, Hiera & idempotency",
+    "meta": "puppet, pdk, r10k, ansible-lint",
+    "sections": [
+      {
+        "id": "pp-agent",
+        "title": "Agent & Server",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "puppet --version",
+            "desc": "Installed version"
+          },
+          {
+            "cmd": "puppet agent -t",
+            "desc": "Run once, in the foreground, verbosely"
+          },
+          {
+            "cmd": "puppet agent -t --noop",
+            "desc": "Dry run: report what would change"
+          },
+          {
+            "cmd": "puppet agent -t --detailed-exitcodes; echo $?",
+            "desc": "Exit codes: 0 no change, 2 changes, 4 failures, 6 changes and failures"
+          },
+          {
+            "cmd": "puppet agent --disable \"maintenance until 14:00\"",
+            "desc": "Pause agent runs with a reason"
+          },
+          {
+            "cmd": "puppet agent --enable",
+            "desc": "Resume agent runs"
+          },
+          {
+            "cmd": "puppet config print server certname environment",
+            "desc": "Where this agent connects and who it is"
+          },
+          {
+            "cmd": "puppet ssl bootstrap",
+            "desc": "Request and install a certificate from the server"
+          },
+          {
+            "cmd": "puppetserver ca list",
+            "desc": "Pending certificate requests"
+          },
+          {
+            "cmd": "puppetserver ca sign --certname web01.example.com",
+            "desc": "Sign a request"
+          },
+          {
+            "cmd": "puppetserver ca clean --certname web01.example.com",
+            "desc": "Revoke and remove a node certificate (before reinstalling it)"
+          },
+          {
+            "cmd": "facter os.release.full",
+            "desc": "One fact"
+          },
+          {
+            "cmd": "facter --json",
+            "desc": "All facts as JSON"
+          },
+          {
+            "cmd": "journalctl -u puppetserver -f",
+            "desc": "Follow Puppet Server logs"
+          }
+        ]
+      },
+      {
+        "id": "pp-validate",
+        "title": "Validate & Test Code",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "puppet parser validate manifests/site.pp",
+            "desc": "Syntax check"
+          },
+          {
+            "cmd": "puppet-lint --fix manifests/",
+            "desc": "Style check with automatic fixes"
+          },
+          {
+            "cmd": "pdk validate",
+            "desc": "Syntax, metadata and lint for a module"
+          },
+          {
+            "cmd": "pdk test unit",
+            "desc": "Run rspec-puppet unit tests"
+          },
+          {
+            "cmd": "pdk new class profile::base",
+            "desc": "Generate a class with its test"
+          },
+          {
+            "cmd": "puppet apply --noop manifests/site.pp",
+            "desc": "Dry-run a manifest locally without a server"
+          },
+          {
+            "cmd": "puppet apply -e \"include profile::base\" --modulepath=./modules --noop",
+            "desc": "Dry-run one class from a module path"
+          },
+          {
+            "cmd": "puppet resource service sshd",
+            "desc": "Show a resource as Puppet sees it (also: puppet resource package nginx)"
+          },
+          {
+            "cmd": "puppet describe file",
+            "desc": "Documentation of a resource type"
+          },
+          {
+            "cmd": "puppet lookup profile::base::packages --explain",
+            "desc": "Hiera: which value wins and from which layer"
+          },
+          {
+            "cmd": "puppet module list --tree",
+            "desc": "Installed modules and dependencies"
+          },
+          {
+            "cmd": "r10k deploy environment -p",
+            "desc": "Deploy environments and modules from Git and the Puppetfile"
+          }
+        ]
+      },
+      {
+        "id": "pp-debug",
+        "title": "Debugging Runs",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "puppet agent -t --debug",
+            "desc": "Verbose debug output"
+          },
+          {
+            "cmd": "puppet agent -t --trace",
+            "desc": "Stack traces for errors"
+          },
+          {
+            "cmd": "puppet agent -t --evaltrace",
+            "desc": "Time every resource evaluation"
+          },
+          {
+            "cmd": "puppet agent -t --tags nginx",
+            "desc": "Apply only resources with a tag"
+          },
+          {
+            "cmd": "puppet agent -t --environment testing",
+            "desc": "Run against another environment (test branches)"
+          },
+          {
+            "cmd": "cat /opt/puppetlabs/puppet/cache/state/last_run_summary.yaml",
+            "desc": "Result and timing of the last run"
+          },
+          {
+            "cmd": "cat /opt/puppetlabs/puppet/cache/state/last_run_report.yaml | head -50",
+            "desc": "Detailed report of the last run"
+          },
+          {
+            "cmd": "openssl x509 -in $(puppet config print hostcert) -noout -dates -subject",
+            "desc": "Is the agent certificate valid?"
+          },
+          {
+            "cmd": "tail -f /var/log/puppetlabs/puppetserver/puppetserver.log",
+            "desc": "Server-side compile errors"
+          }
+        ]
+      },
+      {
+        "id": "pp-quality",
+        "title": "Idempotency & Config Quality (Puppet and Ansible)",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "puppet agent -t; puppet agent -t --detailed-exitcodes; echo $?",
+            "desc": "Idempotency test: the second run must exit 0 (no changes)"
+          },
+          {
+            "cmd": "ansible-playbook site.yml --check --diff",
+            "desc": "Preview changes without applying them"
+          },
+          {
+            "cmd": "ansible-playbook site.yml | grep -E \"changed=[1-9]\"",
+            "desc": "Run it twice: any line printed on the second run is a task that is not idempotent"
+          },
+          {
+            "cmd": "ansible-lint site.yml",
+            "desc": "Lint playbooks for bad practice"
+          },
+          {
+            "cmd": "yamllint .",
+            "desc": "YAML syntax and style"
+          },
+          {
+            "cmd": "molecule converge",
+            "desc": "Apply a role in a disposable test instance"
+          },
+          {
+            "cmd": "molecule idempotence",
+            "desc": "Apply twice and fail if anything changes the second time"
+          },
+          {
+            "cmd": "molecule test",
+            "desc": "Full create, converge, idempotence, verify, destroy cycle"
+          }
+        ]
+      }
+    ]
+  },
+  "runbooks": {
+    "name": "Incident Runbooks",
+    "icon": "📋",
+    "iconBg": "#0d9488",
+    "subtitle": "Ordered checklists: stabilise, diagnose, fix, document",
+    "meta": "follow in order",
+    "sections": [
+      {
+        "id": "rb-dns",
+        "title": "DNS is slow or failing",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "dig example.com | grep -E \"status:|Query time|SERVER\"",
+            "desc": "1. Status, latency and which resolver answered"
+          },
+          {
+            "cmd": "dig @1.1.1.1 example.com | grep -E \"status:|Query time\"",
+            "desc": "2. Same query against a public resolver: slow too = path or ISP; fast = your resolver"
+          },
+          {
+            "cmd": "dig +tcp example.com | grep -E \"status:|Query time\"",
+            "desc": "3. Works over TCP but not UDP = fragmentation, MTU or UDP/53 filtering"
+          },
+          {
+            "cmd": "dig +cd example.com | grep status",
+            "desc": "4. Works with checking disabled but SERVFAIL otherwise = DNSSEC validation problem"
+          },
+          {
+            "cmd": "ss -ulpn | grep \":53 \"",
+            "desc": "5. Is the resolver listening, and which process?"
+          },
+          {
+            "cmd": "journalctl -u named -u unbound -u systemd-resolved --since \"15 min ago\" | tail -50",
+            "desc": "6. Resolver logs for timeouts and upstream errors"
+          },
+          {
+            "cmd": "for ns in $(dig +short NS example.com); do echo $ns; dig +short +time=2 +tries=1 @$ns example.com; done",
+            "desc": "7. Test each authoritative server: one dead server causes intermittent failures"
+          },
+          {
+            "cmd": "sysctl net.netfilter.nf_conntrack_count net.netfilter.nf_conntrack_max",
+            "desc": "8. A full conntrack table drops UDP queries"
+          },
+          {
+            "cmd": "ip -s link show eth0",
+            "desc": "9. Interface errors and drops"
+          },
+          {
+            "cmd": "a=$(cat /sys/class/net/eth0/statistics/tx_bytes); sleep 5; b=$(cat /sys/class/net/eth0/statistics/tx_bytes); echo $(( (b-a)*8/5/1000 )) kbps",
+            "desc": "10. Outbound rate: a saturated uplink drops DNS replies. If it is far above normal, find the sender with ss -tunap and tcpdump top talkers"
+          }
+        ]
+      },
+      {
+        "id": "rb-502",
+        "title": "502 / 503 / 504 after deploy",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "curl -sI https://app.example.com | head -1",
+            "desc": "1. Confirm the symptom and the status code"
+          },
+          {
+            "cmd": "echo \"show stat\" | socat stdio /run/haproxy/admin.sock | cut -d, -f1,2,18,19",
+            "desc": "2. Which backend servers does the load balancer consider UP or DOWN?"
+          },
+          {
+            "cmd": "grep -E \" (502|503|504) \" /var/log/haproxy.log | tail",
+            "desc": "3. Termination flags: sH = backend headers timeout, SC = connect failed, cD = client timeout"
+          },
+          {
+            "cmd": "systemctl status app --no-pager",
+            "desc": "4. Is the application running and recently restarted?"
+          },
+          {
+            "cmd": "curl -s http://127.0.0.1:8080/health",
+            "desc": "5. Does the backend answer its health check locally?"
+          },
+          {
+            "cmd": "ss -ltn",
+            "desc": "6. Recv-Q on the app listener: a full accept queue refuses connections"
+          },
+          {
+            "cmd": "nstat -az TcpExtListenOverflows",
+            "desc": "7. Accept-queue overflows since boot"
+          },
+          {
+            "cmd": "echo \"set server be_app/web1 state drain\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "8. Drain the bad node so users stop hitting it"
+          },
+          {
+            "cmd": "kubectl rollout undo deployment/app",
+            "desc": "9. Kubernetes: roll back to the last working revision"
+          },
+          {
+            "cmd": "kubectl rollout status deployment/app",
+            "desc": "10. Wait until the rollout is healthy again"
+          }
+        ]
+      },
+      {
+        "id": "rb-disk",
+        "title": "Disk full",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "df -hT",
+            "desc": "1. Which filesystem is full?"
+          },
+          {
+            "cmd": "df -i",
+            "desc": "2. Inodes full instead? (free space but cannot create files)"
+          },
+          {
+            "cmd": "du -xhd1 /var | sort -h",
+            "desc": "3. Find the biggest directory, then repeat one level down"
+          },
+          {
+            "cmd": "lsof +L1",
+            "desc": "4. Deleted files still open: restart the holding process to release space"
+          },
+          {
+            "cmd": "journalctl --vacuum-size=500M",
+            "desc": "5. Shrink the journal"
+          },
+          {
+            "cmd": "docker system df",
+            "desc": "6. Container images, layers and volumes"
+          },
+          {
+            "cmd": "find / -xdev -type f -size +500M -exec ls -lh {} \\; 2>/dev/null",
+            "desc": "7. Single large files"
+          },
+          {
+            "cmd": "mount --bind / /mnt/rootview && du -sh /mnt/rootview/*",
+            "desc": "8. Files hidden underneath a mount point (umount /mnt/rootview afterwards)"
+          },
+          {
+            "cmd": ": > /var/log/big.log",
+            "desc": "9. Truncate a runaway log in place, then fix the logging/rotation"
+          }
+        ]
+      },
+      {
+        "id": "rb-ssh",
+        "title": "Can't SSH in",
+        "color": "#f76c8e",
+        "cmds": [
+          {
+            "cmd": "nc -zv host 22",
+            "desc": "1. Is the port reachable at all? Refused = nothing listening; timeout = firewall or network"
+          },
+          {
+            "cmd": "ssh -vvv user@host",
+            "desc": "2. Client debug: where does it stop (connect, key exchange, auth)?"
+          },
+          {
+            "cmd": "systemctl status ssh",
+            "desc": "3. On the console: is sshd running?"
+          },
+          {
+            "cmd": "sshd -t",
+            "desc": "4. A config error prevents sshd from starting"
+          },
+          {
+            "cmd": "ss -tlnp | grep \":22 \"",
+            "desc": "5. Is it listening on the expected address?"
+          },
+          {
+            "cmd": "journalctl -u ssh -n 50 --no-pager",
+            "desc": "6. Server log of the failed attempt"
+          },
+          {
+            "cmd": "ufw status",
+            "desc": "7. Firewall rules"
+          },
+          {
+            "cmd": "fail2ban-client status sshd",
+            "desc": "8. Is your address banned?"
+          },
+          {
+            "cmd": "df -h /",
+            "desc": "9. A full root filesystem breaks logins"
+          },
+          {
+            "cmd": "ls -ld ~ ~/.ssh ~/.ssh/authorized_keys",
+            "desc": "10. Permissions: home must not be group/world-writable, .ssh 700, keys 600"
+          },
+          {
+            "cmd": "ssh-keygen -R host",
+            "desc": "11. Client side: remove a stale host key after a reinstall"
+          }
+        ]
+      },
+      {
+        "id": "rb-slow",
+        "title": "Server is slow / high load",
+        "color": "#a07cf0",
+        "cmds": [
+          {
+            "cmd": "uptime",
+            "desc": "1. Load trend: rising, steady or falling?"
+          },
+          {
+            "cmd": "vmstat 1 5",
+            "desc": "2. CPU-bound (r high), I/O-bound (b high, wa high) or swapping (si/so)?"
+          },
+          {
+            "cmd": "ps -eo state,pid,comm | awk '$1==\"D\"'",
+            "desc": "3. Tasks stuck in uninterruptible sleep point at storage or NFS"
+          },
+          {
+            "cmd": "iostat -xz 1 3",
+            "desc": "4. Disk latency and utilisation"
+          },
+          {
+            "cmd": "free -h",
+            "desc": "5. Available memory"
+          },
+          {
+            "cmd": "dmesg -T | grep -iE \"oom|i/o error|segfault\"",
+            "desc": "6. Kernel-reported problems"
+          },
+          {
+            "cmd": "top -bn1 | head -20",
+            "desc": "7. Top processes"
+          },
+          {
+            "cmd": "systemd-cgtop",
+            "desc": "8. Which service is responsible?"
+          },
+          {
+            "cmd": "cat /proc/pressure/cpu /proc/pressure/io /proc/pressure/memory",
+            "desc": "9. Pressure stall info: which resource are tasks waiting on?"
+          }
+        ]
+      },
+      {
+        "id": "rb-svc",
+        "title": "Service won't start",
+        "color": "#60c8e8",
+        "cmds": [
+          {
+            "cmd": "systemctl status SERVICE --no-pager -l",
+            "desc": "1. State and last log lines"
+          },
+          {
+            "cmd": "journalctl -xeu SERVICE --no-pager | tail -50",
+            "desc": "2. Full error with context"
+          },
+          {
+            "cmd": "systemctl cat SERVICE",
+            "desc": "3. The unit as systemd sees it, including overrides"
+          },
+          {
+            "cmd": "systemd-analyze verify /etc/systemd/system/SERVICE.service",
+            "desc": "4. Unit file mistakes"
+          },
+          {
+            "cmd": "ss -ltnp | grep \":PORT \"",
+            "desc": "5. Is the port already taken?"
+          },
+          {
+            "cmd": "namei -l /path/to/file",
+            "desc": "6. Permissions along a whole path"
+          },
+          {
+            "cmd": "ausearch -m avc -ts recent",
+            "desc": "7. SELinux denial?"
+          },
+          {
+            "cmd": "journalctl -b -p err --no-pager | tail -30",
+            "desc": "8. Related errors since boot"
+          },
+          {
+            "cmd": "systemctl reset-failed SERVICE && systemctl start SERVICE",
+            "desc": "9. Clear start-rate limiting and try again"
+          }
+        ]
+      },
+      {
+        "id": "rb-ha",
+        "title": "HA failover test",
+        "color": "#ff9f6b",
+        "cmds": [
+          {
+            "cmd": "ip -br addr | grep 192.0.2.100",
+            "desc": "1. Baseline: which node holds the virtual IP?"
+          },
+          {
+            "cmd": "while true; do date +%T; curl -s -m 1 -o /dev/null -w \"%{http_code}\\n\" http://192.0.2.100/; sleep 0.5; done",
+            "desc": "2. Terminal 1: continuous probe to measure the outage window"
+          },
+          {
+            "cmd": "tcpdump -ni eth0 vrrp",
+            "desc": "3. Terminal 2: watch VRRP advertisements"
+          },
+          {
+            "cmd": "systemctl stop keepalived",
+            "desc": "4. On the MASTER: trigger the failover"
+          },
+          {
+            "cmd": "ip -br addr show | grep 192.0.2.100",
+            "desc": "5. On the BACKUP: did it take the VIP? How many probes failed?"
+          },
+          {
+            "cmd": "arping -c 3 -I eth0 192.0.2.100",
+            "desc": "6. From a client: does the MAC address change (switch has learned the move)?"
+          },
+          {
+            "cmd": "systemctl start keepalived",
+            "desc": "7. Restore the original node"
+          },
+          {
+            "cmd": "journalctl -u keepalived -n 30",
+            "desc": "8. Check preempt behaviour and whether it flapped back"
+          }
+        ]
+      },
+      {
+        "id": "rb-flood",
+        "title": "Unexplained traffic / saturated uplink",
+        "color": "#c075f0",
+        "cmds": [
+          {
+            "cmd": "a=$(cat /sys/class/net/eth0/statistics/tx_bytes); sleep 5; b=$(cat /sys/class/net/eth0/statistics/tx_bytes); echo $(( (b-a)*8/5/1000 )) kbps",
+            "desc": "1. Measure outbound rate and compare with normal"
+          },
+          {
+            "cmd": "ss -tunap | grep -v \"127.0.0.1\"",
+            "desc": "2. Connections with owning process"
+          },
+          {
+            "cmd": "tcpdump -nni eth0 -c 2000 udp | awk '{print $5}' | sort | uniq -c | sort -rn | head",
+            "desc": "3. Top destinations: one peer with thousands of packets = flood"
+          },
+          {
+            "cmd": "ls -l /proc/PID/exe && cat /proc/PID/cgroup",
+            "desc": "4. What is the sender? Deleted binary or odd path, and which container?"
+          },
+          {
+            "cmd": "cp /proc/PID/exe /root/evidence.bin && chmod 000 /root/evidence.bin && sha256sum /root/evidence.bin",
+            "desc": "5. Preserve evidence before you remove anything"
+          },
+          {
+            "cmd": "iptables -I OUTPUT -d 192.0.2.50 -j DROP",
+            "desc": "6. Contain: block egress to the destination (or scale the workload to zero)"
+          },
+          {
+            "cmd": "kubectl scale statefulset NAME -n NAMESPACE --replicas=0",
+            "desc": "7. Contain a compromised pod and stop GitOps from restoring it (change replicas in Git too)"
+          },
+          {
+            "cmd": "upnpc -l",
+            "desc": "8. Check for UPnP port mappings that exposed the service"
+          },
+          {
+            "cmd": "ls -l /proc/*/exe 2>/dev/null | grep deleted",
+            "desc": "9. Hunt for other deleted-binary processes"
+          },
+          {
+            "cmd": "find / -xdev -type f -newermt \"3 days ago\" -perm /111 2>/dev/null",
+            "desc": "10. Executables dropped recently; also check config/plugin directories on persistent volumes"
+          }
+        ]
+      },
+      {
+        "id": "rb-cert",
+        "title": "Certificate expired / TLS error",
+        "color": "#f76c6c",
+        "cmds": [
+          {
+            "cmd": "echo | openssl s_client -connect host:443 -servername host 2>/dev/null | openssl x509 -noout -dates -subject -issuer",
+            "desc": "1. What certificate is actually served, and when does it expire?"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -showcerts </dev/null | grep -E \"s:|i:\"",
+            "desc": "2. Is the chain complete (leaf, intermediate)?"
+          },
+          {
+            "cmd": "timedatectl",
+            "desc": "3. Is the local clock correct?"
+          },
+          {
+            "cmd": "certbot certificates",
+            "desc": "4. Is the renewal working, and which cert does the service read?"
+          },
+          {
+            "cmd": "certbot renew --dry-run",
+            "desc": "5. Test renewal"
+          },
+          {
+            "cmd": "journalctl -u certbot --since \"7 days ago\"",
+            "desc": "6. Why did the last renewal fail?"
+          },
+          {
+            "cmd": "nginx -t && systemctl reload nginx",
+            "desc": "7. Reload the service so it picks up the new certificate"
+          },
+          {
+            "cmd": "kubectl describe certificate NAME -n NAMESPACE",
+            "desc": "8. cert-manager: events and conditions"
+          }
+        ]
+      },
+      {
+        "id": "rb-k8s",
+        "title": "Pod CrashLoop / Pending",
+        "color": "#4f8ef7",
+        "cmds": [
+          {
+            "cmd": "kubectl get pods -A | grep -v -E \"Running|Completed\"",
+            "desc": "1. Everything that is not healthy"
+          },
+          {
+            "cmd": "kubectl describe pod POD -n NAMESPACE",
+            "desc": "2. Events: image pull, scheduling, probes, OOM"
+          },
+          {
+            "cmd": "kubectl logs POD -n NAMESPACE --previous",
+            "desc": "3. Logs of the crashed container"
+          },
+          {
+            "cmd": "kubectl get events -A --sort-by=.lastTimestamp | tail -30",
+            "desc": "4. Recent cluster events"
+          },
+          {
+            "cmd": "kubectl top nodes && kubectl top pods -A --sort-by=memory | head",
+            "desc": "5. Resource pressure"
+          },
+          {
+            "cmd": "kubectl describe node NODE | grep -A8 Conditions",
+            "desc": "6. Node conditions: MemoryPressure, DiskPressure"
+          },
+          {
+            "cmd": "kubectl get pvc -A | grep -v Bound",
+            "desc": "7. Unbound volume claims keep pods Pending"
+          },
+          {
+            "cmd": "kubectl rollout undo deployment/NAME -n NAMESPACE",
+            "desc": "8. Roll back a bad release"
+          },
+          {
+            "cmd": "kubectl get pod POD -n NAMESPACE -o jsonpath=\"{.status.containerStatuses[*].lastState}\"",
+            "desc": "9. Last termination reason and exit code (137 = OOMKilled)"
+          }
+        ]
+      },
+      {
+        "id": "rb-patch",
+        "title": "Patch day checklist",
+        "color": "#38d9a9",
+        "cmds": [
+          {
+            "cmd": "apt list --upgradable 2>/dev/null | grep -i security",
+            "desc": "1. What is pending?"
+          },
+          {
+            "cmd": "apt-get -s full-upgrade | grep -E \"^(Inst|Remv)\"",
+            "desc": "2. Simulate: any removals or kernel changes?"
+          },
+          {
+            "cmd": "dkms status",
+            "desc": "3. Out-of-tree modules will rebuild for the new kernel?"
+          },
+          {
+            "cmd": "kubectl drain NODE --ignore-daemonsets --delete-emptydir-data",
+            "desc": "4. Move workloads off (or drain the server from the load balancer)"
+          },
+          {
+            "cmd": "apt update && apt full-upgrade",
+            "desc": "5. Apply updates"
+          },
+          {
+            "cmd": "systemctl reboot",
+            "desc": "6. Reboot"
+          },
+          {
+            "cmd": "uname -r && systemctl --failed",
+            "desc": "7. New kernel running and no failed units?"
+          },
+          {
+            "cmd": "kubectl uncordon NODE",
+            "desc": "8. Return the node to service"
+          },
+          {
+            "cmd": "needrestart -r l",
+            "desc": "9. Any services still on old libraries?"
+          }
+        ]
+      },
+      {
+        "id": "rb-quick",
+        "title": "Concept Quickies (interview rapid-fire)",
+        "color": "#f7c948",
+        "cmds": [
+          {
+            "cmd": "cat /proc/loadavg",
+            "desc": "Load average counts runnable tasks plus tasks in uninterruptible sleep (state D)"
+          },
+          {
+            "cmd": "free -h",
+            "desc": "Free is untouched memory; available estimates what applications can get, including reclaimable cache"
+          },
+          {
+            "cmd": "ps -eo state,pid,comm | awk '$1==\"D\"'",
+            "desc": "State D: uninterruptible sleep, usually blocked on I/O; cannot be killed until the I/O returns"
+          },
+          {
+            "cmd": "ps -eo pid,ppid,stat,comm | awk '$3 ~ /Z/'",
+            "desc": "A zombie is already dead: fix or restart the parent"
+          },
+          {
+            "cmd": "kill -l $((137-128))",
+            "desc": "Exit code 137 is 128+9: killed by SIGKILL, typically the OOM killer"
+          },
+          {
+            "cmd": "lsinitramfs /boot/initrd.img-$(uname -r) | head",
+            "desc": "initramfs: small temporary root filesystem with the drivers needed to find and mount the real root"
+          },
+          {
+            "cmd": "systemctl show -p After,Wants nginx",
+            "desc": "After is ordering only; Wants pulls the other unit in"
+          },
+          {
+            "cmd": "df -i",
+            "desc": "Disk full but du disagrees: inodes exhausted, deleted files held open (lsof +L1), or a mount hiding files"
+          },
+          {
+            "cmd": "xfs_growfs /mnt/data",
+            "desc": "XFS can grow but never shrink"
+          },
+          {
+            "cmd": "sysctl net.ipv4.tcp_syncookies",
+            "desc": "SYN flood defence: SYN cookies, rate limiting, upstream filtering"
+          },
+          {
+            "cmd": "ping -M do -s 1472 host",
+            "desc": "Small requests work but big ones hang: MTU or path MTU discovery with blocked ICMP; clamp the MSS"
+          },
+          {
+            "cmd": "dig example.com | grep status:",
+            "desc": "DNS failure types: SERVFAIL, NXDOMAIN and a timeout"
+          },
+          {
+            "cmd": "dig example.com SOA +short",
+            "desc": "Forgetting to bump the SOA serial means secondaries do not pick up the change"
+          },
+          {
+            "cmd": "dig +noall +answer example.com",
+            "desc": "Before a planned DNS change, lower the TTL at least one old TTL ahead"
+          },
+          {
+            "cmd": "openssl s_client -connect host:443 -servername host -showcerts </dev/null",
+            "desc": "Missing intermediate certificate: works on some clients, fails on others"
+          },
+          {
+            "cmd": "echo \"show stat\" | socat stdio /run/haproxy/admin.sock",
+            "desc": "TLS termination decrypts at the load balancer so it can inspect and route; passthrough forwards encrypted bytes untouched"
+          },
+          {
+            "cmd": "ansible web -b -m reboot -f 1",
+            "desc": "Patch a kernel at scale in rings: test, canary, rolling waves, drain from the load balancer, health checks, rollback plan"
+          },
+          {
+            "cmd": "ansible-playbook site.yml | grep -E \"changed=[1-9]\"",
+            "desc": "Idempotent: running it again changes nothing once the desired state is reached"
+          }
+        ]
+      }
+    ]
   }
 };
 
@@ -50257,6 +55258,76 @@ const DK_GUIDES = {
     'npm --version\nnpm run\nnpm ls --depth=0',
     'https://docs.npmjs.com/cli/v11/configuring-npm/package-json/',
   ],
+  dns: [
+    'Resolve, compare, isolate',
+    'Query the host resolver, a public resolver and each authoritative server, then compare status, TTL and latency.',
+    'A local stub (127.0.0.53 or Tailscale 100.100.100.100) only forwards. dig bypasses nsswitch.conf; getent shows what applications get. Secondaries ignore a change unless the SOA serial increases. Lower TTLs before a planned change.',
+    'dig example.com\ndig @1.1.1.1 example.com\ngetent hosts example.com',
+    'https://bind9.readthedocs.io/en/latest/',
+  ],
+  lb: [
+    'Config, state, then traffic',
+    'Validate the configuration, read the runtime state of every backend, then test one node directly with the correct Host/SNI.',
+    'Always check the configuration before reload. Drain a backend before maintenance so sessions finish. 502/503/504 usually mean the load balancer could not use a backend: check health, accept queues and file-descriptor limits.',
+    'haproxy -c -f /etc/haproxy/haproxy.cfg\nnginx -t\nip -br addr show',
+    'https://docs.haproxy.org/',
+  ],
+  tls: [
+    'Inspect what is really served',
+    'Connect with the right SNI, read the chain and dates, then compare the certificate, key and CSR.',
+    'A missing intermediate works in some browsers and fails in curl or Java. A wrong clock breaks valid certificates. Never use curl -k as a fix. Private keys must stay mode 600.',
+    'openssl s_client -connect host:443 -servername host </dev/null\nopenssl x509 -in cert.pem -noout -dates',
+    'https://docs.openssl.org/master/man1/openssl-s_client/',
+  ],
+  netdiag: [
+    'Layer by layer',
+    'Check the link, address and route, then sockets and queues, then packets, and only then the application.',
+    'Counters answer "is it happening"; tcpdump answers "to whom". A full conntrack table and a blocked ICMP fragmentation-needed message both look like random hangs. Capture only what you need and protect pcap files.',
+    'ip -s link show\nss -s\nnstat -az | grep -iE "retrans|drop"',
+    'https://man7.org/linux/man-pages/man8/ss.8.html',
+  ],
+  perf: [
+    'Use the method, not guesses',
+    'Start with the 60-second checklist, find the saturated resource, then trace the process that uses it.',
+    'Load average includes processes waiting on I/O. "available" memory matters more than "free". strace slows the traced process; use it briefly in production. Exit code 137 usually means SIGKILL from the OOM killer.',
+    'uptime\nvmstat 1 5\niostat -xz 1 3',
+    'https://www.brendangregg.com/linuxperf.html',
+  ],
+  storage: [
+    'Snapshot, then change',
+    'Check usage and inodes, take a snapshot or backup, then grow or repair one layer at a time.',
+    'XFS can only grow. Shrinking ext4 needs an unmount and fsck. Disk full while du disagrees means inodes, deleted-but-open files or a mount hiding data. Validate /etc/fstab before rebooting.',
+    'lsblk -f\ndf -hT\ndf -i\nfindmnt --verify',
+    'https://man7.org/linux/man-pages/man8/lvm.8.html',
+  ],
+  secaudit: [
+    'Observe before you touch',
+    'Collect read-only evidence first, preserve it, then contain and clean up.',
+    'These commands only read. Never run a suspicious binary you copied out. A few deleted-binary processes appear after package upgrades; a process started from /tmp with outbound traffic is different. Rotate credentials after any compromise.',
+    'ss -tunap | grep -v 127.0.0.1\nls -l /proc/*/exe 2>/dev/null | grep deleted\nfind /tmp /var/tmp /dev/shm -type f -perm /111',
+    'https://man7.org/linux/man-pages/man8/auditd.8.html',
+  ],
+  patching: [
+    'Know what runs, then update in rings',
+    'Compare the running kernel with what is installed, simulate the upgrade, patch a canary, then roll through the rest.',
+    'A kernel update only takes effect after a reboot. A kernel meta-package that is not installed means security kernels never arrive. Check dkms modules before rebooting and keep the previous kernel until the new one is proven.',
+    'uname -r\napt list --upgradable 2>/dev/null\nneedrestart -b',
+    'https://ubuntu.com/server/docs/how-to/software/upgrade-your-release/',
+  ],
+  puppet: [
+    'Validate, dry-run, apply, repeat',
+    'Validate syntax, dry-run with --noop, apply, then run again to prove nothing changes.',
+    'Idempotence means a second run changes nothing. Puppet pulls on a schedule from an agent; Ansible pushes over SSH. Use placeholders for secrets and keep Hiera data separate from code.',
+    'puppet parser validate manifests/site.pp\npuppet agent -t --noop\npuppet lookup KEY --explain',
+    'https://www.puppet.com/docs/puppet/8/puppet_index.html',
+  ],
+  runbooks: [
+    'Stabilise, diagnose, fix, document',
+    'Follow the numbered steps in order, note what you find, and write a blameless post-mortem afterwards.',
+    'Stabilise first, communicate early, keep a timeline and fix the cause after the incident is under control. Preserve evidence before removing anything. Each step names the finding that points to the next one.',
+    'uptime\nsystemctl --failed\njournalctl -p err -b --no-pager | tail',
+    'https://sre.google/sre-book/effective-troubleshooting/',
+  ],
 };
 for (const [key, guide] of Object.entries(DK_GUIDES)) {
   const sheet = SHEETS[key];
@@ -51632,6 +56703,626 @@ dkRecipe(
   'vlan.txt',
   'Netgear ProSAFE syntax; not TP-Link Omada. This does not save startup configuration.',
   { reorder: false },
+);
+
+</script>
+    <script>
+/* Linux infrastructure recipes: DNS, load balancers, TLS, network, performance, storage, security, patching, Puppet and incident response. */
+const dkLines = (value) => (value || []).map((item) => String(item).trim()).filter(Boolean);
+
+dkRecipe(
+  'dns',
+  'triage',
+  'DNS triage script',
+  'Compare the local resolver, public resolvers and every authoritative server for one name.',
+  [
+    dkP('target', 'Name to test', 'The record you are investigating.', {
+      name: dkToken('Name', 'example.com'),
+      type: dkChoice('Record type', 'A', ['A', 'AAAA', 'MX', 'NS', 'TXT', 'SOA', 'CNAME', 'CAA']),
+    }),
+    dkP('resolvers', 'Resolvers to compare', 'Public resolvers give a known-good reference.', {
+      items: dkList('Resolvers', ['1.1.1.1', '9.9.9.9']),
+    }),
+  ],
+  (p) => {
+    const name = dkQ(p.target.name),
+      type = dkQ(p.target.type),
+      resolvers = dkLines(p.resolvers?.items);
+    return (
+      [
+        '#!/usr/bin/env bash',
+        '# DNS triage: read-only, safe to run on a production host.',
+        'name=' + name,
+        'type=' + type,
+        '',
+        'echo "== Resolver configuration =="',
+        'cat /etc/resolv.conf',
+        'resolvectl status 2>/dev/null | head -20',
+        '',
+        'echo "== What applications see (nsswitch) =="',
+        'getent hosts "$name"',
+        '',
+        'echo "== System resolver =="',
+        'dig "$name" "$type" +noall +answer +comments +stats | grep -E "status:|Query time|SERVER|^[^;]"',
+        ...resolvers.flatMap((r) => [
+          '',
+          'echo "== Resolver ' + r.replace(/[^A-Za-z0-9.:_-]/g, '') + ' =="',
+          'dig @' +
+            dkQ(r) +
+            ' "$name" "$type" +noall +answer +comments +stats | grep -E "status:|Query time|^[^;]"',
+        ]),
+        '',
+        'echo "== Over TCP =="',
+        'dig +tcp "$name" "$type" +noall +comments | grep "status:"',
+        '',
+        'echo "== DNSSEC checking disabled (SERVFAIL only without this means validation) =="',
+        'dig +cd "$name" "$type" +noall +comments | grep "status:"',
+        '',
+        'echo "== Each authoritative server =="',
+        'for ns in $(dig +short NS "$name"); do',
+        '  echo "-- $ns"',
+        '  dig +short +time=2 +tries=1 @"$ns" "$name" "$type"',
+        'done',
+        '',
+        'echo "== SOA serial on every authoritative server =="',
+        'dig +nssearch "$name"',
+      ].join('\n') + '\n'
+    );
+  },
+  'dns-triage.sh',
+  'bash -n dns-triage.sh',
+);
+
+dkRecipe(
+  'lb',
+  'haproxy-config',
+  'HAProxy load balancer',
+  'Create a frontend, a backend with health checks and a runtime admin socket.',
+  [
+    dkP(
+      'frontend',
+      'Frontend',
+      'The address and port clients connect to.',
+      {
+        name: dkToken('Frontend name', 'web'),
+        port: dkPort('Listen port', 80),
+        mode: dkChoice('Mode', 'http', ['http', 'tcp']),
+      },
+      true,
+    ),
+    dkP(
+      'backend',
+      'Backend',
+      'How requests are spread and how health is checked.',
+      {
+        name: dkToken('Backend name', 'be_app'),
+        balance: dkChoice('Algorithm', 'roundrobin', ['roundrobin', 'leastconn', 'source']),
+        path: dkText('Health check path (http mode)', '/health'),
+      },
+      true,
+    ),
+    dkP('servers', 'Servers', 'One "name address:port" per line.', {
+      items: dkList('Servers', ['web1 10.0.0.11:8080', 'web2 10.0.0.12:8080']),
+    }),
+  ],
+  (p) => {
+    const http = p.frontend.mode === 'http',
+      servers = dkLines(p.servers?.items);
+    return (
+      [
+        'global',
+        '    log /dev/log local0',
+        '    maxconn 4096',
+        '    stats socket /run/haproxy/admin.sock mode 660 level admin',
+        '',
+        'defaults',
+        '    log global',
+        '    mode ' + p.frontend.mode,
+        '    option ' + (http ? 'httplog' : 'tcplog'),
+        '    timeout connect 5s',
+        '    timeout client 30s',
+        '    timeout server 30s',
+        '    retries 3',
+        '',
+        'frontend ' + p.frontend.name,
+        '    bind *:' + p.frontend.port,
+        '    default_backend ' + p.backend.name,
+        '',
+        'backend ' + p.backend.name,
+        '    balance ' + p.backend.balance,
+        ...(http
+          ? ['    option httpchk GET ' + p.backend.path, '    http-check expect status 200']
+          : ['    option tcp-check']),
+        ...servers.map((s) => '    server ' + s + ' check inter 2s fall 3 rise 2'),
+      ].join('\n') + '\n'
+    );
+  },
+  'haproxy.cfg',
+  'haproxy -c -f haproxy.cfg',
+);
+
+dkRecipe(
+  'lb',
+  'keepalived-config',
+  'keepalived VRRP failover',
+  'Create a VRRP instance that moves a virtual IP and fails over when a health check fails.',
+  [
+    dkP(
+      'instance',
+      'VRRP instance',
+      'Both nodes use the same router ID and virtual IP; the highest priority wins.',
+      {
+        name: dkToken('Instance name', 'VI_1'),
+        interface: dkToken('Interface', 'eth0'),
+        state: dkChoice('Initial state', 'MASTER', ['MASTER', 'BACKUP']),
+        vrid: dkF('Router ID (1-255)', 'number', 51, 'Must match on both nodes.', {
+          min: 1,
+          max: 255,
+        }),
+        priority: dkF('Priority (1-254)', 'number', 100, 'Give the backup a lower number.', {
+          min: 1,
+          max: 254,
+        }),
+        vip: dkText('Virtual IP with prefix', '192.0.2.100/24'),
+      },
+      true,
+    ),
+    dkP('check', 'Health check', 'A script that exits 0 when the service is healthy.', {
+      script: dkText('Check script', '/usr/local/bin/check_app.sh'),
+      interval: dkF('Interval (seconds)', 'number', 2, '', { min: 1, max: 60 }),
+      weight: dkF(
+        'Priority change on failure',
+        'number',
+        -20,
+        'Make it larger than the priority gap.',
+        {
+          min: -253,
+          max: 253,
+        },
+      ),
+    }),
+  ],
+  (p) => {
+    const i = p.instance;
+    return (
+      [
+        'global_defs {',
+        '    enable_script_security',
+        '    script_user root',
+        '}',
+        '',
+        ...(p.check
+          ? [
+              'vrrp_script chk_app {',
+              '    script "' + p.check.script + '"',
+              '    interval ' + p.check.interval,
+              '    weight ' + p.check.weight,
+              '    fall 2',
+              '    rise 2',
+              '}',
+              '',
+            ]
+          : []),
+        'vrrp_instance ' + i.name + ' {',
+        '    state ' + i.state,
+        '    interface ' + i.interface,
+        '    virtual_router_id ' + i.vrid,
+        '    priority ' + i.priority,
+        '    advert_int 1',
+        '    virtual_ipaddress {',
+        '        ' + i.vip,
+        '    }',
+        ...(p.check ? ['    track_script {', '        chk_app', '    }'] : []),
+        '}',
+      ].join('\n') + '\n'
+    );
+  },
+  'keepalived.conf',
+  'keepalived -t -f keepalived.conf',
+);
+
+dkRecipe(
+  'tls',
+  'cert-check',
+  'Certificate expiry and chain check',
+  'Report days left and chain validity for several hosts; exit non-zero for monitoring.',
+  [
+    dkP('hosts', 'Hosts', 'One hostname per line.', {
+      items: dkList('Hosts', ['example.com', 'www.example.com']),
+      port: dkPort('Port', 443),
+    }),
+    dkP('limit', 'Warning threshold', 'Fail when fewer days remain.', {
+      days: dkF('Days', 'number', 21, '', { min: 1, max: 365 }),
+    }),
+  ],
+  (p) =>
+    [
+      '#!/usr/bin/env bash',
+      '# Certificate expiry and chain check. Exit code 1 if anything needs attention.',
+      'warn_days=' + (p.limit?.days ?? 21),
+      'port=' + (p.hosts.port ?? 443),
+      'status=0',
+      '',
+      'for host in ' + dkLines(p.hosts.items).map(dkQ).join(' ') + '; do',
+      '  out=$(echo | openssl s_client -connect "$host:$port" -servername "$host" 2>&1)',
+      '  end=$(printf "%s\\n" "$out" | openssl x509 -noout -enddate 2>/dev/null | cut -d= -f2)',
+      '  if [ -z "$end" ]; then echo "FAIL  $host: no certificate received"; status=1; continue; fi',
+      '  days=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))',
+      '  chain=$(printf "%s\\n" "$out" | grep -m1 -E "Verification|Verify return code")',
+      '  state=OK',
+      '  [ "$days" -lt "$warn_days" ] && { state=WARN; status=1; }',
+      '  printf "%s\\n" "$chain" | grep -qE "OK|\\(ok\\)" || { state=FAIL; status=1; }',
+      '  echo "$state  $host: $days days left (expires $end); $chain"',
+      'done',
+      'exit $status',
+    ].join('\n') + '\n',
+  'cert-check.sh',
+  'bash -n cert-check.sh',
+);
+
+dkRecipe(
+  'netdiag',
+  'snapshot',
+  'Network state snapshot',
+  'Collect interfaces, routes, sockets, counters, outbound rate and top talkers into one folder.',
+  [
+    dkP('scope', 'Scope', 'The interface to measure and where to save the evidence.', {
+      interface: dkToken('Interface', 'eth0'),
+      directory: dkText('Output directory', '/tmp/net-snapshot'),
+    }),
+    dkP(
+      'capture',
+      'Packet sample',
+      'A short capture identifies top talkers (needs root and tcpdump).',
+      {
+        packets: dkF('Packets to sample', 'number', 2000, '', { min: 100, max: 100000 }),
+      },
+    ),
+  ],
+  (p) => {
+    const dir = dkQ(p.scope.directory),
+      nic = dkQ(p.scope.interface),
+      n = p.capture ? p.capture.packets : 0;
+    return (
+      [
+        '#!/usr/bin/env bash',
+        '# Network snapshot: read-only except for writing files into the output directory.',
+        'dir=' + dir + '/$(date +%Y%m%d-%H%M%S)',
+        'nic=' + nic,
+        'mkdir -p "$dir"',
+        'ip -br addr > "$dir/addr.txt"',
+        'ip route > "$dir/routes.txt"',
+        'ip -s link show "$nic" > "$dir/link-stats.txt"',
+        'ss -s > "$dir/ss-summary.txt"',
+        'ss -tunap > "$dir/sockets.txt"',
+        'nstat -az > "$dir/nstat.txt" 2>&1',
+        'conntrack -C > "$dir/conntrack-count.txt" 2>&1',
+        'sysctl net.netfilter.nf_conntrack_max net.netfilter.nf_conntrack_count > "$dir/conntrack-limits.txt" 2>&1',
+        '',
+        '# Outbound and inbound rate over 5 seconds',
+        'tx1=$(cat /sys/class/net/$nic/statistics/tx_bytes); rx1=$(cat /sys/class/net/$nic/statistics/rx_bytes)',
+        'sleep 5',
+        'tx2=$(cat /sys/class/net/$nic/statistics/tx_bytes); rx2=$(cat /sys/class/net/$nic/statistics/rx_bytes)',
+        'echo "tx $(( (tx2-tx1)*8/5/1000 )) kbps, rx $(( (rx2-rx1)*8/5/1000 )) kbps" | tee "$dir/rate.txt"',
+        ...(n
+          ? [
+              '',
+              '# Top sources and destinations in a short sample',
+              'timeout 30 tcpdump -nni "$nic" -c ' + n + ' > "$dir/sample.txt" 2>/dev/null',
+              'awk \'{print $3}\' "$dir/sample.txt" | cut -d. -f1-4 | sort | uniq -c | sort -rn | head > "$dir/top-sources.txt"',
+              'awk \'{print $5}\' "$dir/sample.txt" | sed \'s/:$//\' | sort | uniq -c | sort -rn | head > "$dir/top-destinations.txt"',
+            ]
+          : []),
+        'echo "Saved to $dir"',
+      ].join('\n') + '\n'
+    );
+  },
+  'net-snapshot.sh',
+  'bash -n net-snapshot.sh',
+);
+
+dkRecipe(
+  'perf',
+  'snapshot',
+  'Performance snapshot (60 seconds)',
+  'Run the standard first-minute checklist and save every output for later comparison.',
+  [
+    dkP('output', 'Output', 'Where to save the results.', {
+      directory: dkText('Output directory', '/tmp/perf-snapshot'),
+      seconds: dkF('Sampling seconds', 'number', 5, 'Each sampling tool runs this long.', {
+        min: 1,
+        max: 60,
+      }),
+    }),
+  ],
+  (p) => {
+    const s = p.output.seconds;
+    return (
+      [
+        '#!/usr/bin/env bash',
+        '# Performance snapshot: read-only except for the output directory.',
+        'dir=' + dkQ(p.output.directory) + '/$(date +%Y%m%d-%H%M%S)',
+        'mkdir -p "$dir"',
+        'run() { name=$1; shift; { echo "# $*"; "$@"; } > "$dir/$name.txt" 2>&1; }',
+        'run uptime uptime',
+        'run dmesg dmesg -T --level=err,warn',
+        'run vmstat vmstat 1 ' + s,
+        'run mpstat mpstat -P ALL 1 ' + s,
+        'run pidstat pidstat 1 ' + s,
+        'run iostat iostat -xz 1 ' + s,
+        'run free free -m',
+        'run sar-net sar -n DEV 1 ' + s,
+        'run top-cpu bash -c "ps aux --sort=-%cpu | head -15"',
+        'run top-mem bash -c "ps aux --sort=-%mem | head -15"',
+        'run d-state bash -c "ps -eo state,pid,comm | awk \'\\$1==\\"D\\"\'"',
+        'run pressure bash -c "grep . /proc/pressure/*"',
+        "run oom bash -c \"journalctl -k --since '-1 day' | grep -iE 'out of memory|oom'\"",
+        'echo "Saved to $dir"',
+      ].join('\n') + '\n'
+    );
+  },
+  'perf-snapshot.sh',
+  'bash -n perf-snapshot.sh',
+);
+
+dkRecipe(
+  'storage',
+  'lvm-grow',
+  'Grow an LVM volume and filesystem',
+  'Check free space, extend the logical volume and grow XFS or ext4 online.',
+  [
+    dkP(
+      'volume',
+      'Logical volume',
+      'The volume to grow and its mount point.',
+      {
+        lv: dkText('Logical volume path', '/dev/vg0/data'),
+        mount: dkText('Mount point', '/mnt/data'),
+        size: dkText('Add size', '+10G', 'Use +10G or +100%FREE.'),
+        fs: dkChoice('Filesystem', 'xfs', ['xfs', 'ext4']),
+      },
+      true,
+    ),
+  ],
+  (p) => {
+    const v = p.volume;
+    return (
+      [
+        '#!/usr/bin/env bash',
+        'set -euo pipefail',
+        '# Grow a logical volume and its filesystem online.',
+        'lv=' + dkQ(v.lv),
+        'mount_point=' + dkQ(v.mount),
+        '',
+        'echo "Before:"; lvs "$lv"; vgs -o +vg_free; df -hT "$mount_point"',
+        'lvextend -L ' + dkQ(v.size) + ' "$lv"',
+        ...(v.fs === 'xfs' ? ['xfs_growfs "$mount_point"'] : ['resize2fs "$lv"']),
+        'echo "After:"; lvs "$lv"; df -hT "$mount_point"',
+      ].join('\n') + '\n'
+    );
+  },
+  'lvm-grow.sh',
+  'bash -n lvm-grow.sh',
+);
+
+dkRecipe(
+  'secaudit',
+  'triage',
+  'Read-only compromise triage',
+  'Collect process, network, persistence and change evidence without modifying the system.',
+  [
+    dkP('output', 'Evidence folder', 'Results are written here; nothing else is changed.', {
+      directory: dkText('Output directory', '/root/triage'),
+      days: dkF('Look back (days)', 'number', 3, 'For recently created executables.', {
+        min: 1,
+        max: 60,
+      }),
+    }),
+  ],
+  (p) => {
+    const d = p.output.days;
+    return (
+      [
+        '#!/usr/bin/env bash',
+        '# Read-only triage. Never execute anything you find; copy it and record its hash instead.',
+        'dir=' + dkQ(p.output.directory) + '/$(hostname)-$(date +%Y%m%d-%H%M%S)',
+        'mkdir -p "$dir"; chmod 700 "$dir"',
+        'run() { name=$1; shift; { echo "# $*"; "$@"; } > "$dir/$name.txt" 2>&1; }',
+        'run processes ps -eo user,pid,ppid,lstart,cmd --sort=lstart',
+        'run deleted-binaries bash -c "ls -l /proc/*/exe 2>/dev/null | grep deleted"',
+        'run tmp-executables find /tmp /var/tmp /dev/shm -type f -perm /111',
+        'run new-executables find / -xdev -type f -newermt "' + d + ' days ago" -perm /111',
+        'run sockets ss -tunap',
+        'run listening ss -tulpn',
+        'run cron bash -c "crontab -l; ls -la /etc/cron.* /var/spool/cron/crontabs"',
+        'run timers systemctl list-timers --all',
+        'run enabled-units systemctl list-unit-files --state=enabled',
+        'run uid0 bash -c "getent passwd | awk -F: \'\\$3==0\'"',
+        'run authorized-keys bash -c "for f in /root/.ssh/authorized_keys /home/*/.ssh/authorized_keys; do echo \\"== \\$f\\"; ssh-keygen -lf \\"\\$f\\"; done"',
+        'run recent-logins last -i -n 30',
+        'run failed-logins lastb -n 30',
+        'run sshd-config sshd -T',
+        'run changed-system-files find /etc /usr/bin /usr/sbin /bin /sbin -newermt "7 days ago" -type f',
+        'chmod -R go-rwx "$dir"',
+        'echo "Evidence saved to $dir"',
+      ].join('\n') + '\n'
+    );
+  },
+  'triage.sh',
+  'bash -n triage.sh',
+);
+
+dkRecipe(
+  'patching',
+  'rolling-reboot',
+  'Rolling patch & reboot playbook',
+  'Upgrade packages and reboot only when needed, a few hosts at a time, stopping on failure.',
+  [
+    dkP(
+      'target',
+      'Hosts',
+      'The inventory group to patch.',
+      {
+        group: dkToken('Group', 'web'),
+        serial: dkF('Hosts at a time', 'number', 1, 'Use 1 behind a load balancer.', {
+          min: 1,
+          max: 50,
+        }),
+      },
+      true,
+    ),
+    dkP('packages', 'Package upgrade', 'Debian/Ubuntu apt upgrade mode.', {
+      mode: dkChoice('Mode', 'dist', ['safe', 'full', 'dist']),
+    }),
+    dkP('reboot', 'Reboot', 'Wait for the host to return before moving on.', {
+      timeout: dkF('Timeout (seconds)', 'number', 600, '', { min: 60, max: 3600 }),
+    }),
+  ],
+  (p) =>
+    dkYaml([
+      {
+        name: 'Patch and reboot ' + p.target.group,
+        hosts: p.target.group,
+        become: true,
+        serial: Number(p.target.serial),
+        max_fail_percentage: 0,
+        tasks: [
+          {
+            name: 'Update the package index and upgrade',
+            'ansible.builtin.apt': {
+              update_cache: true,
+              upgrade: p.packages ? p.packages.mode : 'dist',
+            },
+          },
+          {
+            name: 'Check whether a reboot is required',
+            'ansible.builtin.stat': { path: '/var/run/reboot-required' },
+            register: 'reboot_required',
+          },
+          {
+            name: 'Reboot when required',
+            'ansible.builtin.reboot': {
+              reboot_timeout: Number(p.reboot ? p.reboot.timeout : 600),
+            },
+            when: 'reboot_required.stat.exists',
+          },
+          {
+            name: 'Read the running kernel',
+            'ansible.builtin.command': 'uname -r',
+            register: 'kernel',
+            changed_when: false,
+          },
+          {
+            name: 'Report the kernel',
+            'ansible.builtin.debug': {
+              msg: '{{ inventory_hostname }} runs {{ kernel.stdout }}',
+            },
+          },
+        ],
+      },
+    ]),
+  'patch.yml',
+  'ansible-playbook -i inventory.yml patch.yml --syntax-check',
+);
+
+dkRecipe(
+  'puppet',
+  'profile',
+  'Puppet profile class',
+  'Create a class that installs a package and keeps its service running.',
+  [
+    dkP(
+      'class',
+      'Class',
+      'Use the profile::name convention.',
+      {
+        name: dkToken('Class name', 'profile::webserver'),
+        package: dkToken('Package', 'nginx'),
+        service: dkToken('Service', 'nginx'),
+      },
+      true,
+    ),
+  ],
+  (p) =>
+    [
+      '# @summary Install and run ' + p.class.package,
+      'class ' + p.class.name + ' (',
+      "  String $package_name = '" + p.class.package + "',",
+      "  String $service_name = '" + p.class.service + "',",
+      ') {',
+      '  package { $package_name:',
+      '    ensure => installed,',
+      '  }',
+      '',
+      '  service { $service_name:',
+      '    ensure  => running,',
+      '    enable  => true,',
+      '    require => Package[$package_name],',
+      '  }',
+      '}',
+    ].join('\n') + '\n',
+  'manifest.pp',
+  'puppet parser validate manifest.pp',
+);
+
+dkRecipe(
+  'runbooks',
+  'postmortem',
+  'Blameless post-mortem',
+  'A structured write-up: impact, timeline, cause, what worked, and follow-up actions.',
+  [
+    dkP(
+      'incident',
+      'Incident',
+      'Facts first; no names or blame.',
+      {
+        title: dkText('Title', 'Intermittent DNS failures'),
+        severity: dkChoice('Severity', 'SEV2', ['SEV1', 'SEV2', 'SEV3']),
+        impact: dkText(
+          'Impact',
+          'Name resolution failed for about 20% of requests for 45 minutes.',
+        ),
+      },
+      true,
+    ),
+    dkP('timeline', 'Timeline', 'One entry per line: time - what happened.', {
+      items: dkList('Entries', [
+        '19:36 - First alert: DNS timeouts',
+        '19:41 - Outbound traffic found saturated',
+        '19:52 - Cause contained',
+      ]),
+    }),
+  ],
+  (p) =>
+    [
+      '# ' + p.incident.title,
+      '',
+      '**Severity:** ' + p.incident.severity,
+      '',
+      '## Impact',
+      p.incident.impact,
+      '',
+      '## Timeline',
+      ...dkLines(p.timeline?.items).map((l) => '- ' + l),
+      '',
+      '## Root cause',
+      '_What actually caused it, and how we know._',
+      '',
+      '## What went well',
+      '-',
+      '',
+      '## What went badly or by luck',
+      '-',
+      '',
+      '## Detection',
+      '_How was it noticed? How could it have been noticed sooner?_',
+      '',
+      '## Action items',
+      '| Action | Owner | Due |',
+      '| --- | --- | --- |',
+      '|  |  |  |',
+    ].join('\n') + '\n',
+  'postmortem.md',
 );
 
 </script>
@@ -66082,6 +71773,18 @@ const US_SHEET_TERMS = {
   python: 'automation scripting data excel api modules',
   sql: 'query database rows tables',
   terraform: 'infrastructure as code iac cloud provision',
+  dns: 'dns resolver bind powerdns unbound dig nameserver zone ttl soa dnssec servfail nxdomain',
+  lb: 'load balancer haproxy nginx keepalived vrrp vip ipvs failover health check 502 503 504 backend',
+  tls: 'tls ssl certificate openssl certbot letsencrypt cert-manager chain intermediate sni expiry',
+  netdiag:
+    'network troubleshooting ss tcpdump conntrack mtu firewall nftables iptables bandwidth latency packet',
+  perf: 'performance slow load cpu memory oom disk io iostat vmstat strace perf sar latency',
+  storage: 'storage disk lvm xfs ext4 raid mdadm smart nfs grub initramfs inode full mount fstab',
+  secaudit:
+    'security audit hardening ssh auditd selinux apparmor compromise malware incident exposure firewall',
+  patching: 'patch update upgrade kernel reboot needrestart apt dnf livepatch rolling drain',
+  puppet: 'puppet hiera facter pdk r10k idempotent configuration management molecule ansible-lint',
+  runbooks: 'incident runbook checklist outage troubleshooting playbook interview on call',
 };
 let usIndex = null,
   usById = new Map(),

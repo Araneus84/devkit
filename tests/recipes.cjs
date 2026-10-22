@@ -11,6 +11,7 @@ for (const file of [
   'src/reference-data.js',
   'src/tool-guides.js',
   'src/recipe-catalog.js',
+  'src/infra-recipes.js',
 ])
   vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), context, { filename: file });
 const report = vm.runInContext(
@@ -26,7 +27,7 @@ const report = vm.runInContext(
 })()`,
   context,
 );
-assert.equal(report.tools.length, 28);
+assert.equal(report.tools.length, 38);
 for (const tool of report.tools) {
   assert(report.guides.includes(tool), 'Missing guide ' + tool);
   assert(

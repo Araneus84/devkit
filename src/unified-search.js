@@ -62,6 +62,18 @@ const US_SHEET_TERMS = {
   python: 'automation scripting data excel api modules',
   sql: 'query database rows tables',
   terraform: 'infrastructure as code iac cloud provision',
+  dns: 'dns resolver bind powerdns unbound dig nameserver zone ttl soa dnssec servfail nxdomain',
+  lb: 'load balancer haproxy nginx keepalived vrrp vip ipvs failover health check 502 503 504 backend',
+  tls: 'tls ssl certificate openssl certbot letsencrypt cert-manager chain intermediate sni expiry',
+  netdiag:
+    'network troubleshooting ss tcpdump conntrack mtu firewall nftables iptables bandwidth latency packet',
+  perf: 'performance slow load cpu memory oom disk io iostat vmstat strace perf sar latency',
+  storage: 'storage disk lvm xfs ext4 raid mdadm smart nfs grub initramfs inode full mount fstab',
+  secaudit:
+    'security audit hardening ssh auditd selinux apparmor compromise malware incident exposure firewall',
+  patching: 'patch update upgrade kernel reboot needrestart apt dnf livepatch rolling drain',
+  puppet: 'puppet hiera facter pdk r10k idempotent configuration management molecule ansible-lint',
+  runbooks: 'incident runbook checklist outage troubleshooting playbook interview on call',
 };
 let usIndex = null,
   usById = new Map(),

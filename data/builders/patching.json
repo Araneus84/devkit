@@ -1,0 +1,84 @@
+{
+  "patching::kubectl drain NODE --ignore-daemonsets --delete-emptydir-data": {
+    "name": "kubectl drain",
+    "description": "Evict pods from a node before maintenance",
+    "base": "kubectl drain",
+    "args": [
+      {
+        "key": "node",
+        "label": "Node name",
+        "placeholder": "NODE",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--ignore-daemonsets",
+        "desc": "Do not evict DaemonSet pods",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--delete-emptydir-data",
+        "desc": "Allow deleting pods that use emptyDir volumes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--force",
+        "desc": "Also evict pods without a controller"
+      },
+      {
+        "flag": "--grace-period",
+        "desc": "Seconds pods get to stop",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "30"
+      },
+      {
+        "flag": "--timeout",
+        "desc": "Give up after",
+        "valuePrompt": "Duration",
+        "join": "=",
+        "valueDefault": "300s"
+      },
+      {
+        "flag": "--dry-run",
+        "desc": "Preview only",
+        "valuePrompt": "client or server",
+        "join": "=",
+        "valueDefault": "client"
+      }
+    ]
+  },
+  "patching::needrestart -b": {
+    "name": "needrestart",
+    "description": "Find services and kernels that need a restart",
+    "base": "needrestart",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-b",
+        "desc": "Batch (machine-readable) output",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-r",
+        "desc": "Restart mode",
+        "valuePrompt": "l (list), i (interactive), a (automatic)",
+        "join": " ",
+        "valueDefault": "l"
+      },
+      {
+        "flag": "-k",
+        "desc": "Check the kernel only"
+      },
+      {
+        "flag": "-l",
+        "desc": "Check libraries only"
+      },
+      {
+        "flag": "-v",
+        "desc": "Verbose"
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "lb::haproxy -c -f /etc/haproxy/haproxy.cfg": {
+    "name": "haproxy config check",
+    "description": "Validate a HAProxy configuration",
+    "base": "haproxy",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Check configuration only",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-f",
+        "desc": "Configuration file or directory",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/haproxy/haproxy.cfg",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: only print errors"
+      },
+      {
+        "flag": "-V",
+        "desc": "Verbose: print the loaded frontends and backends"
+      }
+    ]
+  },
+  "lb::nginx -t": {
+    "name": "nginx test",
+    "description": "Test an nginx configuration",
+    "base": "nginx",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test configuration",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-T",
+        "desc": "Test and dump the full configuration"
+      },
+      {
+        "flag": "-c",
+        "desc": "Use another configuration file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "/etc/nginx/nginx.conf"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet: suppress non-error messages"
+      }
+    ]
+  },
+  "lb::ipvsadm -Ln": {
+    "name": "ipvsadm",
+    "description": "List IPVS virtual services and real servers",
+    "base": "ipvsadm",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-Ln",
+        "desc": "List numerically",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--stats",
+        "desc": "Show counters"
+      },
+      {
+        "flag": "--rate",
+        "desc": "Show rates"
+      },
+      {
+        "flag": "-c",
+        "desc": "Show the connection table"
+      },
+      {
+        "flag": "--exact",
+        "desc": "Exact numbers instead of K/M units"
+      }
+    ]
+  },
+  "lb::arping -c 3 -A -I eth0 192.0.2.100": {
+    "name": "arping",
+    "description": "Send or test ARP requests and gratuitous ARP",
+    "base": "arping",
+    "args": [
+      {
+        "key": "ip",
+        "label": "Target IP",
+        "placeholder": "192.0.2.100",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-c",
+        "desc": "Number of packets",
+        "valuePrompt": "Count",
+        "join": " ",
+        "valueDefault": "3"
+      },
+      {
+        "flag": "-I",
+        "desc": "Interface",
+        "valuePrompt": "Interface",
+        "join": " ",
+        "valueDefault": "eth0",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-A",
+        "desc": "Gratuitous ARP reply (refresh neighbours after failover)"
+      },
+      {
+        "flag": "-U",
+        "desc": "Unsolicited ARP request"
+      },
+      {
+        "flag": "-D",
+        "desc": "Duplicate address detection: exits 0 if nobody answers"
+      },
+      {
+        "flag": "-q",
+        "desc": "Quiet"
+      }
+    ],
+    "argsAfterFlags": true
+  }
+}
