@@ -1,9 +1,11 @@
 name: Auto-merge when QA passes
 
-# Turns on GitHub auto-merge for pull requests opened by the repository owner
-# from a branch in this repository. GitHub then merges only after every branch
-# protection rule passes, including the required "DevKit QA gate" check.
-# If the gate fails, nothing merges.
+# Turns on GitHub auto-merge only when the repository owner both opened the pull
+# request and made the triggering push, from a branch in this repository. Pull
+# requests from forks, other accounts and bots (including Dependabot) are never
+# armed, so they wait for a manual merge by the owner. GitHub then merges only
+# after every branch protection rule passes, including the required
+# "DevKit QA gate" check. If the gate fails, nothing merges.
 
 on:
   pull_request:
@@ -22,7 +24,9 @@ jobs:
     if: >-
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login == github.repository_owner
+      github.event.pull_request.user.login == github.repository_owner &&
+      github.actor == github.repository_owner &&
+      github.triggering_actor == github.repository_owner
     steps:
       - name: Enable squash auto-merge
         env:
