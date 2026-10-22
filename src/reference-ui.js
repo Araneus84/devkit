@@ -31,92 +31,176 @@ function cmdId(sheetKey, cmd) {
 
 function renderSidebar() {
   const sb = document.getElementById('sidebar');
+  const hadFocus = document.activeElement && document.activeElement.id === 'nav-filter';
+  const builderCount = Object.keys(BUILDERS).length;
+  const active = state.activeSheet;
+  const item = (key, icon, label, count) =>
+    `<button type="button" class="nav-item ${active === key ? 'active' : ''}" onclick="setSheet('${key}', null, this)" ${active === key ? 'aria-current="page"' : ''}>
+      <span class="nav-icon">${icon}</span>
+      <span class="nav-label">${label}</span>
+      ${count === null ? '' : `<span class="nav-count">${count}</span>`}
+    </button>`;
+
+  sb.innerHTML = `<div class="sidebar-section nav-fixed">
+    ${item('__home', '◈', 'Home', null)}
+    ${item('__favorites', '⭐', 'Favorites', state.favorites.size)}
+    ${item('__builder', '⚙', 'Command Builder', builderCount)}
+    <div class="nav-filter-wrap">
+      <input type="search" id="nav-filter" class="nav-filter" placeholder="Filter tools…" aria-label="Filter tools in the sidebar" autocomplete="off" spellcheck="false" value="${escapeAttr(state.navFilter)}" oninput="setNavFilter(this.value)" />
+    </div>
+  </div>
+  <div id="nav-tree" class="nav-tree"></div>`;
+  renderNavTree();
+  if (hadFocus) {
+    const f = document.getElementById('nav-filter');
+    f.focus();
+    f.setSelectionRange(f.value.length, f.value.length);
+  }
+}
+
+function setNavFilter(value) {
+  state.navFilter = value;
+  renderNavTree();
+}
+
+function dkNavSheetHTML(key, hue, filtering) {
+  const sheet = SHEETS[key];
+  const cmdCount = dkSheetCommandCount(key);
+  const isActive = state.activeSheet === key;
+  const isExpanded = state.expandedSheets.has(key);
+  const pinned = state.pinnedSheets.has(key);
+  let html = `<div class="nav-group" style="--cat:${hue}">
+    <div class="nav-toggle ${isActive ? 'has-active' : ''} ${isExpanded ? 'expanded' : ''}" data-sheet="${key}">
+      <button type="button" class="nav-sheet-btn" onclick="openSheetFromNav('${key}', event)" ${isActive ? 'aria-current="page"' : ''}>
+        <span class="nav-icon">${sheet.icon}</span>
+        <span class="nav-label">${escapeHTML(sheet.name)}</span>
+        <span class="nav-count">${cmdCount}</span>
+      </button>
+      <button type="button" class="nav-pin ${pinned ? 'on' : ''}" onclick="togglePinSheet('${key}', event)" title="${pinned ? 'Unpin' : 'Pin to top'}" aria-label="${pinned ? 'Unpin' : 'Pin'} ${escapeAttr(sheet.name)}" aria-pressed="${pinned}">★</button>
+      <button type="button" class="nav-chevron" onclick="toggleSheetExpand('${key}', event)" aria-label="Show sections of ${escapeAttr(sheet.name)}" aria-expanded="${isExpanded}"><span class="chevron">▶</span></button>
+    </div>
+    <div class="nav-sub">
+      <div class="nav-sub-item all-sections ${isActive && !state.activeSection ? 'active' : ''}" onclick="setSheet('${key}', null, this)">
+        <span class="sub-label">All sections</span>
+        <span class="sub-count">${cmdCount}</span>
+      </div>`;
+  sheet.sections.forEach((section) => {
+    const secActive = isActive && state.activeSection === section.id;
+    html += `<div class="nav-sub-item ${secActive ? 'active' : ''}" onclick="setSheet('${key}', '${section.id}', this)">
+      <span class="sub-dot" style="background:${section.color}"></span>
+      <span class="sub-label">${escapeHTML(section.title)}</span>
+      <span class="sub-count">${section.cmds.length}</span>
+    </div>`;
+  });
+  return html + '</div></div>';
+}
+
+function renderNavTree() {
+  const host = document.getElementById('nav-tree');
+  if (!host) return;
+  const f = state.navFilter.trim().toLowerCase();
+  const filtering = f.length > 0;
+  const match = (key) => {
+    const sh = SHEETS[key];
+    return !filtering || `${sh.name} ${key} ${sh.subtitle || ''}`.toLowerCase().includes(f);
+  };
+  const cats = dkCategoryList();
+  const activeCat = dkCategoryOf(state.activeSheet);
   let html = '';
 
-  // Special pages section
-  const builderCount = Object.keys(BUILDERS).length;
-  html += '<div class="sidebar-section">';
-  html += '<div class="sidebar-label">Special</div>';
-  html += `<div class="nav-item ${state.activeSheet === '__favorites' ? 'active' : ''}" onclick="setSheet('__favorites', null, this)">
-    <span class="nav-icon">⭐</span>
-    <span class="nav-label">Favorites</span>
-    <span class="nav-count">${state.favorites.size}</span>
-  </div>`;
-  html += `<div class="nav-item ${state.activeSheet === '__builder' ? 'active' : ''}" onclick="setSheet('__builder', null, this)">
-    <span class="nav-icon">⚙</span>
-    <span class="nav-label">Command Builder</span>
-    <span class="nav-count">${builderCount}</span>
-  </div>`;
-  html += '</div>';
-
-  // Cheatsheets section — now expandable
-  html += '<div class="sidebar-section">';
-  html += `<div class="sidebar-label">
-    <span class="label-text">Cheatsheets</span>
-    <span class="label-actions">
-      <button class="label-btn" onclick="expandAllSheets(event)" title="Expand all">＋</button>
-      <button class="label-btn" onclick="collapseAllSheets(event)" title="Collapse all">−</button>
-    </span>
-  </div>`;
-
-  for (const [key, sheet] of Object.entries(SHEETS)) {
-    const cmdCount = sheet.sections.reduce((sum, s) => sum + s.cmds.length, 0);
-    const isActive = state.activeSheet === key;
-    const isExpanded = state.expandedSheets.has(key);
-
-    html += `<div class="nav-group">
-      <div class="nav-toggle ${isActive ? 'has-active' : ''} ${isExpanded ? 'expanded' : ''}" onclick="toggleSheetExpand('${key}', event)">
-        <span class="chevron">▶</span>
-        <span class="nav-icon">${sheet.icon}</span>
-        <span class="nav-label">${sheet.name}</span>
-        <span class="nav-count">${cmdCount}</span>
-      </div>
-      <div class="nav-sub">
-        <div class="nav-sub-item all-sections ${isActive && !state.activeSection ? 'active' : ''}" onclick="setSheet('${key}', null, this)">
-          <span class="sub-label">All sections</span>
-          <span class="sub-count">${cmdCount}</span>
-        </div>`;
-
-    sheet.sections.forEach((section) => {
-      const secActive = isActive && state.activeSection === section.id;
-      html += `<div class="nav-sub-item ${secActive ? 'active' : ''}" onclick="setSheet('${key}', '${section.id}', this)">
-        <span class="sub-dot" style="background:${section.color}"></span>
-        <span class="sub-label">${section.title}</span>
-        <span class="sub-count">${section.cmds.length}</span>
-      </div>`;
+  const pinned = [...state.pinnedSheets].filter((k) => SHEETS[k] && match(k));
+  if (pinned.length) {
+    html += `<div class="nav-cat pinned-cat open" style="--cat:var(--accent)"><div class="nav-cat-head static"><span class="nav-cat-chip">★</span><span class="nav-cat-name">Pinned</span><span class="nav-cat-count">${pinned.length}</span></div><div class="nav-cat-body">`;
+    pinned.forEach((k) => {
+      html += dkNavSheetHTML(k, (dkCategoryOf(k) || {}).hue || 'var(--accent)', filtering);
     });
-
-    html += `</div>
-    </div>`;
+    html += '</div></div>';
   }
-  html += '</div>';
 
-  sb.innerHTML = html;
+  let shown = 0;
+  cats.forEach((cat) => {
+    const sheets = cat.sheets.filter(match);
+    if (!sheets.length) return;
+    shown += sheets.length;
+    const open =
+      filtering || state.openCategories.has(cat.id) || (activeCat && activeCat.id === cat.id);
+    html += `<div class="nav-cat ${open ? 'open' : ''} ${activeCat && activeCat.id === cat.id ? 'has-active' : ''}" data-cat="${cat.id}" style="--cat:${cat.hue}">
+      <button type="button" class="nav-cat-head" onclick="toggleCategory('${cat.id}')" aria-expanded="${open}">
+        <span class="nav-cat-chip">${cat.icon}</span>
+        <span class="nav-cat-name">${escapeHTML(cat.name)}</span>
+        <span class="nav-cat-count">${sheets.length}</span>
+        <span class="nav-cat-arrow">▸</span>
+      </button>
+      <div class="nav-cat-body">`;
+    sheets.forEach((k) => {
+      html += dkNavSheetHTML(k, cat.hue, filtering);
+    });
+    html += '</div></div>';
+  });
+  if (filtering && !shown)
+    html += '<div class="nav-empty">No tools match “' + escapeHTML(state.navFilter) + '”.</div>';
+  host.innerHTML = html;
+}
+
+function toggleCategory(id) {
+  if (state.openCategories.has(id)) state.openCategories.delete(id);
+  else state.openCategories.add(id);
+  save('openCategories');
+  renderNavTree();
+}
+
+function togglePinSheet(key, event) {
+  event.stopPropagation();
+  if (state.pinnedSheets.has(key)) state.pinnedSheets.delete(key);
+  else state.pinnedSheets.add(key);
+  save('pinnedSheets');
+  renderNavTree();
+  if (state.activeSheet === '__home') renderMain();
+}
+
+function openSheetFromNav(key, event) {
+  if (event) event.stopPropagation();
+  if (state.activeSheet !== key || state.activeSection) {
+    setSheet(key, null);
+  } else {
+    toggleSheetExpand(key, event);
+  }
 }
 
 function toggleSheetExpand(key, event) {
-  event.stopPropagation();
+  if (event) event.stopPropagation();
   if (state.expandedSheets.has(key)) {
     state.expandedSheets.delete(key);
   } else {
     state.expandedSheets.add(key);
   }
   save('expandedSheets');
-  renderSidebar();
+  renderNavTree();
 }
 
 function expandAllSheets(event) {
   if (event) event.stopPropagation();
   Object.keys(SHEETS).forEach((key) => state.expandedSheets.add(key));
   save('expandedSheets');
-  renderSidebar();
+  renderNavTree();
 }
 
 function collapseAllSheets(event) {
   if (event) event.stopPropagation();
   state.expandedSheets.clear();
   save('expandedSheets');
-  renderSidebar();
+  renderNavTree();
+}
+
+function dkTrackVisit(key, sectionId) {
+  if (!SHEETS[key]) return;
+  state.sheetVisits[key] = (state.sheetVisits[key] || 0) + 1;
+  state.recentSheets = [
+    { sheet: key, section: sectionId || null, time: Date.now() },
+    ...state.recentSheets.filter((r) => r.sheet !== key),
+  ].slice(0, 8);
+  save('sheetVisits');
+  save('recentSheets');
 }
 
 function setSheet(key, sectionId, navElement) {
@@ -135,11 +219,12 @@ function setSheet(key, sectionId, navElement) {
   document.getElementById('search').value = '';
 
   // Expand the sheet if not already expanded (only for real sheets)
-  const specialPages = ['__favorites', '__builder'];
+  const specialPages = ['__favorites', '__builder', '__home'];
   if (!specialPages.includes(key) && !state.expandedSheets.has(key)) {
     state.expandedSheets.add(key);
     save('expandedSheets');
   }
+  dkTrackVisit(key, sectionId);
 
   save('activeSheet');
   save('activeSection');
@@ -169,7 +254,10 @@ function renderMain() {
     return;
   }
 
-  if (state.activeSheet === '__favorites') {
+  main.style.setProperty('--cat', (dkCategoryOf(state.activeSheet) || {}).hue || 'var(--accent)');
+  if (state.activeSheet === '__home') {
+    renderHome();
+  } else if (state.activeSheet === '__favorites') {
     renderFavorites(q);
   } else if (state.activeSheet === '__builder') {
     renderBuilderPage(q);
@@ -901,6 +989,10 @@ function addToHistory(cmd) {
   // Remove duplicates
   state.history = state.history.filter((h) => h.cmd !== cmd);
   state.history.unshift({ cmd: cmd, time: Date.now() });
+  state.cmdUse[cmd] = (state.cmdUse[cmd] || 0) + 1;
+  const used = Object.entries(state.cmdUse).sort((a, b) => b[1] - a[1]);
+  if (used.length > 200) state.cmdUse = Object.fromEntries(used.slice(0, 200));
+  save('cmdUse');
   // Keep last 50
   if (state.history.length > 50) state.history = state.history.slice(0, 50);
   save('history');
@@ -1056,8 +1148,11 @@ if (state.activeSection && SHEETS[state.activeSheet]) {
   }
 }
 // If activeSheet no longer exists in SHEETS, reset
-if (!['__favorites', '__builder'].includes(state.activeSheet) && !SHEETS[state.activeSheet]) {
-  state.activeSheet = 'gam7';
+if (
+  !['__favorites', '__builder', '__home'].includes(state.activeSheet) &&
+  !SHEETS[state.activeSheet]
+) {
+  state.activeSheet = '__home';
   state.activeSection = null;
   save('activeSheet');
   save('activeSection');

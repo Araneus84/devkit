@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="styles/cicd-graph.css" />
     <link rel="stylesheet" href="styles/recipe-packs.css" />
     <link rel="stylesheet" href="styles/local-companion.css" />
+    <link rel="stylesheet" href="styles/modern.css" />
   </head>
   <body>
     <!-- HEADER -->
@@ -43,10 +44,16 @@
       >
         ☰
       </button>
-      <div class="logo-wrap">
+      <button
+        type="button"
+        class="logo-wrap"
+        onclick="setSheet('__home', null)"
+        aria-label="DevKit home"
+        title="Home"
+      >
         <div class="logo-icon">⌘</div>
-        <div class="logo-text">DevKit <span>/ commands</span></div>
-      </div>
+        <div class="logo-text">DevKit <span>/ workbench</span></div>
+      </button>
 
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
@@ -227,6 +234,7 @@
     <script defer src="src/state.js"></script>
     <script defer src="src/command-definitions.js"></script>
     <script defer src="src/reference-data.js"></script>
+    <script defer src="src/categories.js"></script>
     <script defer src="src/cicd-data.js"></script>
     <script defer src="src/reference-ui.js"></script>
     <script defer src="src/ansible-extension.js"></script>
@@ -265,6 +273,7 @@
     <script defer src="src/editor-modes.js"></script>
     <script defer src="src/local-companion.js"></script>
     <script defer src="src/unified-search.js"></script>
+    <script defer src="src/home-ui.js"></script>
     <script defer src="src/start.js"></script>
   </body>
 </html>

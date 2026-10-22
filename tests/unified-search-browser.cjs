@@ -139,7 +139,7 @@ const { chromium } = require(process.env.DEVKIT_PLAYWRIGHT || 'playwright'),
       );
       await page.evaluate(() => dkClose());
       await search.fill('pipeline');
-      await page.getByRole('button', { name: /Builder \d+/ }).click();
+      await page.locator('.us-filter', { hasText: /Builder \d+/ }).click();
       assert((await page.locator('.us-result').count()) > 0);
       assert.equal(await page.locator('.us-result .us-kind').first().innerText(), 'Builder');
       await search.focus();
