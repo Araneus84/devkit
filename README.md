@@ -57,6 +57,8 @@ The Ansible section provides Ansible Core 2.21 guides, built-in module and plugi
 
 The Terraform section provides the Terraform 1.17 language and CLI documentation. Load it online or select `documentation-packs/terraform-1.17.json` offline. Provider and registry documentation are not included; the pack retains its separate Business Source License.
 
+The Git section includes a November 2026 snapshot of the Git manual pages and user manual. Load it online or select `documentation-packs/git-2026-11.json` offline. This is a development snapshot, so check the original manual for version-specific behavior.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

@@ -36,5 +36,9 @@ Third-party libraries retain their separate licenses:
   License 1.1. The separate converted pack retains the complete license and
   source revision; its own use terms apply independently from DevKit's license.
   Source: https://github.com/hashicorp/web-unified-docs
+- Git manual pages: GNU General Public License version 2. The converted pack
+  includes the license and identifies its source revision. Original prebuilt
+  manual pages: https://github.com/git/htmldocs; corresponding source:
+  https://github.com/git/git
 
 These third-party components are not relicensed under DevKit's terms.

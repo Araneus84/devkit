@@ -76,6 +76,16 @@ const { pathToFileURL } = require('node:url');
         .first();
       await ansibleCard.getByRole('button', { name: 'Read page' }).click();
       assert.match(await page.locator('#dk-root pre').innerText(), /EXAMPLES/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('git', null));
+      await page.getByRole('button', { name: 'Search full Git documentation' }).click();
+      await page
+        .getByLabel('Choose Git documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/git-2026-11.json'));
+      await page.getByLabel('Search Git documentation').fill('git-commit');
+      const gitCard = page.locator('.dk-guide').filter({ hasText: 'git-commit(1)' }).first();
+      await gitCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /--amend/);
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -111,6 +121,12 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search Ansible documentation').fill('ansible.builtin.apt');
       await page.locator('.dk-guide').filter({ hasText: 'ansible.builtin.apt' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('git', null));
+      await page.getByRole('button', { name: 'Search full Git documentation' }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Git documentation').fill('git-commit');
+      await page.locator('.dk-guide').filter({ hasText: 'git-commit(1)' }).first().waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('terraform', null));
       await page

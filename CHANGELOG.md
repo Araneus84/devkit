@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.29.0
+
+- Added searchable Git manual pages and the Git user manual from a November 2026 documentation snapshot.
+
 ## 3.28.0
 
 - Added a searchable Terraform 1.17 language and CLI documentation pack.
