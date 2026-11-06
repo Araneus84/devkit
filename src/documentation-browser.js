@@ -1,6 +1,24 @@
 /* Documentation is rendered as text, never as executable third-party HTML. */
 let dbPack = null;
 let dbQuery = '';
+let dbSheet = 'python';
+const DB_PACKS = new Map();
+const DB_MANUALS = {
+  python: {
+    id: 'python-3.15',
+    name: 'Python 3.15',
+    filename: 'python-3.15.json',
+    source: 'https://docs.python.org/3.15/',
+    example: 'sorted, pathlib, exceptions',
+  },
+  bash: {
+    id: 'bash-5.3',
+    name: 'GNU Bash 5.3',
+    filename: 'bash-5.3.json',
+    source: 'https://www.gnu.org/software/bash/manual/',
+    example: 'quoting, arrays, pipelines',
+  },
+};
 
 function dbFind(text, query) {
   const lower = text.toLowerCase();
@@ -15,7 +33,7 @@ function dbValidate(pack) {
     !pack ||
     pack.format !== 'devkit-documentation-pack' ||
     pack.version !== 1 ||
-    pack.id !== 'python-3.15' ||
+    pack.id !== DB_MANUALS[dbSheet].id ||
     !Array.isArray(pack.pages) ||
     pack.pages.length > 2000 ||
     pack.pages.some(
@@ -23,24 +41,30 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^[a-zA-Z0-9_./-]+\.html$/.test(page.path) ||
+        !/^[a-zA-Z0-9_./-]+\.html(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
         page.path.split('/').includes('..') ||
         typeof page.text !== 'string' ||
         page.text.length > 3000000,
     )
   ) {
-    throw new Error('This is not a supported Python documentation pack.');
+    throw new Error('This pack does not match the selected manual.');
   }
   return pack;
 }
 
-function dbAddEntry(main) {
-  const button = dkBtn('Search full Python documentation', () => dbOpen(), 'dk-btn primary');
+function dbAddEntry(main, sheet) {
+  const button = dkBtn(
+    'Search full ' + SHEETS[sheet].name + ' documentation',
+    () => dbOpen('', sheet),
+    'dk-btn primary',
+  );
   button.style.marginBottom = '1rem';
   main.querySelector('.page-header')?.after(button);
 }
 
-function dbOpen(initialQuery = '') {
+function dbOpen(initialQuery = '', sheet = 'python') {
+  dbSheet = sheet;
+  dbPack = DB_PACKS.get(sheet) || null;
   dbQuery = initialQuery;
   dkStopTest();
   dkShow();
@@ -48,15 +72,18 @@ function dbOpen(initialQuery = '') {
 }
 
 async function dbLoadOnline(status) {
-  status.textContent = 'Loading Python documentation…';
+  status.textContent = 'Loading documentation…';
   try {
     const base = new URL(location.href);
     if (base.pathname.endsWith('/dist/devkit.html'))
       base.pathname = base.pathname.replace(/dist\/devkit\.html$/, '');
     else base.pathname = base.pathname.replace(/[^/]*$/, '');
-    const response = await fetch(new URL('documentation-packs/python-3.15.json', base));
+    const response = await fetch(
+      new URL('documentation-packs/' + DB_MANUALS[dbSheet].filename, base),
+    );
     if (!response.ok) throw new Error(`Download failed (${response.status}).`);
     dbPack = dbValidate(await response.json());
+    DB_PACKS.set(dbSheet, dbPack);
     dbRender();
   } catch (error) {
     status.textContent = `Could not load the online manual: ${error.message}`;
@@ -69,8 +96,8 @@ function dbRender() {
   const header = dkEl('header', 'dk-header');
   const title = dkEl('div');
   title.append(
-    dkEl('h2', '', 'Python 3.15 documentation'),
-    dkEl('p', 'dk-help', 'Search the Python language and standard library manual.'),
+    dkEl('h2', '', DB_MANUALS[dbSheet].name + ' documentation'),
+    dkEl('p', 'dk-help', 'Search the official reference manual.'),
   );
   header.append(title, dkBtn('Close ✕', dkClose));
   root.append(header);
@@ -82,16 +109,17 @@ function dbRender() {
     if (location.protocol === 'https:' || location.protocol === 'http:') {
       body.append(dkBtn('Load online manual', () => dbLoadOnline(status), 'dk-btn primary'));
     }
-    const label = dkEl('label', 'dk-help', ' Or choose a downloaded Python documentation pack: ');
+    const label = dkEl('label', 'dk-help', ' Or choose a downloaded documentation pack: ');
     const input = dkEl('input');
     input.type = 'file';
     input.accept = '.json,application/json';
-    input.setAttribute('aria-label', 'Choose Python documentation pack');
+    input.setAttribute('aria-label', 'Choose ' + SHEETS[dbSheet].name + ' documentation pack');
     input.onchange = async () => {
       try {
         const file = input.files[0];
         if (!file || file.size > 30000000) throw new Error('Choose a pack smaller than 30 MB.');
         dbPack = dbValidate(JSON.parse(await file.text()));
+        DB_PACKS.set(dbSheet, dbPack);
         dbRender();
       } catch (error) {
         status.textContent = `Could not load the pack: ${error.message}`;
@@ -103,8 +131,8 @@ function dbRender() {
   }
   const input = dkEl('input', 'dk-input');
   input.type = 'search';
-  input.placeholder = 'Search documentation, e.g. sorted, pathlib, exceptions';
-  input.setAttribute('aria-label', 'Search Python documentation');
+  input.placeholder = 'Search documentation, e.g. ' + DB_MANUALS[dbSheet].example;
+  input.setAttribute('aria-label', 'Search ' + SHEETS[dbSheet].name + ' documentation');
   input.value = dbQuery;
   body.append(input);
   const results = dkEl('div');
@@ -152,8 +180,8 @@ function dbRead(page, query) {
     dkBtn('Close ✕', dkClose),
   );
   const body = dkEl('div', 'dk-home');
-  const source = dkEl('a', '', 'Official Python documentation ↗');
-  source.href = 'https://docs.python.org/3.15/' + page.path;
+  const source = dkEl('a', '', 'Official documentation ↗');
+  source.href = DB_MANUALS[dbSheet].source + page.path;
   source.target = '_blank';
   source.rel = 'noopener noreferrer';
   const text = dkEl('pre');

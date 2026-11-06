@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.25.0
+
+- Added a searchable GNU Bash 5.3 reference manual pack for online and offline use.
+
 ## 3.24.0
 
 - Added a searchable Python 3.15 documentation pack, with online loading and local-file import for offline use.
