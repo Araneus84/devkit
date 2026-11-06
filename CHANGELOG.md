@@ -2,6 +2,11 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.22.0
+
+- Added a searchable Python 3.15 documentation pack, with online loading and local-file import for offline use.
+- Added practical `sorted()` examples to the Python reference.
+
 ## 3.21.0
 
 - Added a fast project check for manifest integrity, source syntax, text hygiene, and stale standalone builds.

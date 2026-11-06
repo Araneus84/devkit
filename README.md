@@ -47,6 +47,8 @@ npm run build
 
 Reference sheets and legacy command builders are maintained as domain files under `data/`. The build generates their browser-compatible runtime files and verifies the portable edition.
 
+The Python section also includes a searchable Python 3.15 manual. On the hosted site, choose **Search full Python documentation** and load it online. For offline use, download `documentation-packs/python-3.15.json` from the repository or its ZIP, open the same control in DevKit, and select that file. The pack is a converted text edition of the official manual; it preserves examples and includes the original license and copyright pages. Other modules currently provide DevKit's own reference entries rather than full manuals.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

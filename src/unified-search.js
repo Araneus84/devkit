@@ -543,6 +543,13 @@ function usRenderSearch(query) {
   ])
     examples.append(dkBtn(text, () => usSetQuery(text), 'us-query'));
   main.append(examples);
+  const documentation = dkBtn(
+    'Search Python manual for “' + query + '”',
+    () => dbOpen(query),
+    'us-query',
+  );
+  documentation.style.marginBottom = '1rem';
+  main.append(documentation);
   if (!ranked.length) {
     const empty = dkEl('div', 'empty');
     empty.append(

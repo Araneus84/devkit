@@ -388,6 +388,22 @@ const SHEETS = {
             "desc": "Sort list — sorted returns new, .sort modifies in place"
           },
           {
+            "cmd": "sorted([3, 1, 2])  # [1, 2, 3]",
+            "desc": "sorted(iterable, *, key=None, reverse=False) returns a new sorted list without changing the input; accepts any iterable."
+          },
+          {
+            "cmd": "sorted(['pear', 'fig', 'apple'], key=len)  # ['fig', 'pear', 'apple']",
+            "desc": "Sort using a key function; equal keys retain their original order (stable sort)."
+          },
+          {
+            "cmd": "sorted([3, 1, 2], reverse=True)  # [3, 2, 1]",
+            "desc": "Sort in descending order; key and reverse are keyword-only arguments."
+          },
+          {
+            "cmd": "sorted(users, key=lambda user: user['name'].casefold())",
+            "desc": "Sort dictionaries by name without changing the original list; casefold provides case-insensitive comparison."
+          },
+          {
             "cmd": "[x*2 for x in lst if x > 0]",
             "desc": "List comprehension with filter"
           },
