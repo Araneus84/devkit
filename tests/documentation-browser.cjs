@@ -28,6 +28,16 @@ const { pathToFileURL } = require('node:url');
       const text = await page.locator('#dk-root pre').innerText();
       assert.match(text, /sorted\(iterable/);
       assert.match(text, /reverse/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('bash', null));
+      await page.getByRole('button', { name: 'Search full Bash documentation' }).click();
+      await page
+        .getByLabel('Choose Bash documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/bash-5.3.json'));
+      await page.getByLabel('Search Bash documentation').fill('quoting');
+      const bashCard = page.locator('.dk-guide').filter({ hasText: '3.1.2 Quoting' }).first();
+      await bashCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /special meaning/);
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -45,6 +55,12 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search Python documentation').fill('sorted(');
       await page.locator('.dk-guide').filter({ hasText: 'Built-in functions' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('bash', null));
+      await page.getByRole('button', { name: 'Search full Bash documentation' }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Bash documentation').fill('quoting');
+      await page.locator('.dk-guide').filter({ hasText: '3.1.2 Quoting' }).first().waitFor();
       await page.close();
     }
     console.log(

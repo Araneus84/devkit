@@ -16,5 +16,10 @@ Third-party libraries retain their separate licenses:
   contains converted text from the official Python HTML documentation; its
   copyright and complete license pages are included in the pack. Original:
   https://docs.python.org/3.15/; license: https://docs.python.org/3.15/license.html
+- GNU Bash Reference Manual, edition 5.3: Copyright 1988–2025 Free Software
+  Foundation, Inc. The converted documentation pack is distributed under the
+  GNU Free Documentation License, version 1.3 or later, with no invariant
+  sections or cover texts. The complete license is included in the pack.
+  Original and transparent HTML: https://www.gnu.org/software/bash/manual/bash.html
 
 These third-party components are not relicensed under DevKit's terms.

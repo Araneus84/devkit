@@ -563,6 +563,13 @@ function usRenderSearch(query) {
   );
   documentation.style.marginBottom = '1rem';
   main.append(documentation);
+  const bashDocumentation = dkBtn(
+    'Search Bash manual for “' + query + '”',
+    () => dbOpen(query, 'bash'),
+    'us-query',
+  );
+  bashDocumentation.style.marginBottom = '1rem';
+  main.append(bashDocumentation);
   if (!ranked.length) {
     const empty = dkEl('div', 'empty');
     empty.append(
