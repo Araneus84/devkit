@@ -48,6 +48,14 @@ const DB_MANUALS = {
     example: 'sort, variables, providers',
     licensePage: 'LICENSE',
   },
+  git: {
+    id: 'git-2026-11',
+    name: 'Git manual snapshot (November 2026)',
+    filename: 'git-2026-11.json',
+    source: 'https://git.github.io/htmldocs/',
+    example: 'commit, rebase, reset',
+    licensePage: 'COPYING',
+  },
 };
 
 function dbFind(text, query) {
@@ -71,7 +79,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|LICENSE)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -231,7 +239,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'ansible') {
+  if (dbSheet === 'git' && page.path === 'COPYING') {
+    source.href = 'https://github.com/git/git/blob/master/COPYING';
+  } else if (dbSheet === 'ansible') {
     const isCore = page.path.startsWith('core/');
     source.href =
       (isCore ? DB_MANUALS.ansible.coreSource : DB_MANUALS.ansible.source) +

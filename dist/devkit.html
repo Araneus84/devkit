@@ -52135,7 +52135,8 @@ function renderSheet(key, q) {
     key === 'bash' ||
     key === 'powershell' ||
     key === 'ansible' ||
-    key === 'terraform'
+    key === 'terraform' ||
+    key === 'git'
   )
     dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);
@@ -72936,6 +72937,14 @@ const DB_MANUALS = {
     example: 'sort, variables, providers',
     licensePage: 'LICENSE',
   },
+  git: {
+    id: 'git-2026-11',
+    name: 'Git manual snapshot (November 2026)',
+    filename: 'git-2026-11.json',
+    source: 'https://git.github.io/htmldocs/',
+    example: 'commit, rebase, reset',
+    licensePage: 'COPYING',
+  },
 };
 
 function dbFind(text, query) {
@@ -72959,7 +72968,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|LICENSE)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -73119,7 +73128,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'ansible') {
+  if (dbSheet === 'git' && page.path === 'COPYING') {
+    source.href = 'https://github.com/git/git/blob/master/COPYING';
+  } else if (dbSheet === 'ansible') {
     const isCore = page.path.startsWith('core/');
     source.href =
       (isCore ? DB_MANUALS.ansible.coreSource : DB_MANUALS.ansible.source) +
@@ -74146,6 +74157,10 @@ Third-party libraries retain their separate licenses:
   License 1.1. The separate converted pack retains the complete license and
   source revision; its own use terms apply independently from DevKit's license.
   Source: https://github.com/hashicorp/web-unified-docs
+- Git manual pages: GNU General Public License version 2. The converted pack
+  includes the license and identifies its source revision. Original prebuilt
+  manual pages: https://github.com/git/htmldocs; corresponding source:
+  https://github.com/git/git
 
 These third-party components are not relicensed under DevKit's terms.
 
