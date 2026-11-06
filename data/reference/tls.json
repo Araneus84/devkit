@@ -1,0 +1,251 @@
+{
+  "name": "TLS & Certificates",
+  "icon": "🔒",
+  "iconBg": "#8b5cf6",
+  "subtitle": "Inspect, verify, renew and troubleshoot",
+  "meta": "openssl, certbot, cert-manager",
+  "sections": [
+    {
+      "id": "tls-inspect",
+      "title": "Inspect a Server",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host </dev/null",
+          "desc": "Full handshake with SNI: the -servername flag is required for virtual hosts"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host </dev/null 2>/dev/null | openssl x509 -noout -dates -subject -issuer",
+          "desc": "Validity dates, subject and issuer of the served certificate"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host -showcerts </dev/null",
+          "desc": "Show the whole chain the server sends (missing intermediate?)"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host -verify_return_error </dev/null",
+          "desc": "Fail loudly if the chain does not verify"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host -tls1_2 </dev/null",
+          "desc": "Test one protocol version (also -tls1_3)"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host -alpn h2 </dev/null",
+          "desc": "Check ALPN negotiation (HTTP/2)"
+        },
+        {
+          "cmd": "openssl s_client -connect host:443 -servername host -status </dev/null",
+          "desc": "Request an OCSP-stapled response"
+        },
+        {
+          "cmd": "openssl s_client -starttls smtp -connect mail.example.com:587",
+          "desc": "Inspect TLS on a STARTTLS protocol (smtp, imap, pop3, ftp)"
+        },
+        {
+          "cmd": "echo | openssl s_client -connect host:443 -servername host 2>/dev/null | openssl x509 -noout -ext subjectAltName",
+          "desc": "Names the certificate is valid for"
+        },
+        {
+          "cmd": "nmap --script ssl-enum-ciphers -p 443 host",
+          "desc": "Enumerate supported protocols and ciphers with grades"
+        },
+        {
+          "cmd": "curl -vI https://host 2>&1 | grep -E \"SSL|subject|issuer|expire\"",
+          "desc": "What curl negotiated and verified"
+        }
+      ]
+    },
+    {
+      "id": "tls-files",
+      "title": "Certificate Files",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -text",
+          "desc": "Everything in the certificate"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -dates -subject -issuer",
+          "desc": "Dates, subject and issuer"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -fingerprint -sha256",
+          "desc": "SHA-256 fingerprint"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -checkend 2592000",
+          "desc": "Exit code 1 if it expires within 30 days (2592000 seconds)"
+        },
+        {
+          "cmd": "openssl verify -CAfile ca.pem -untrusted intermediate.pem cert.pem",
+          "desc": "Verify a certificate against a CA and intermediate"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -pubkey | openssl md5",
+          "desc": "Certificate public key hash: must equal the key and CSR hashes below"
+        },
+        {
+          "cmd": "openssl pkey -in key.pem -pubout | openssl md5",
+          "desc": "Private key public-part hash"
+        },
+        {
+          "cmd": "openssl req -in req.csr -noout -pubkey | openssl md5",
+          "desc": "CSR public key hash"
+        },
+        {
+          "cmd": "openssl req -in req.csr -noout -text -verify",
+          "desc": "Inspect a CSR and verify its signature"
+        },
+        {
+          "cmd": "openssl pkcs12 -in bundle.pfx -nodes -out all.pem",
+          "desc": "Convert PFX/PKCS#12 to PEM (the output holds an unencrypted key)"
+        },
+        {
+          "cmd": "openssl x509 -inform DER -in cert.der -out cert.pem",
+          "desc": "DER to PEM"
+        },
+        {
+          "cmd": "awk '/BEGIN CERT/{n++} {print > \"cert-\" n \".pem\"}' chain.pem",
+          "desc": "Split a chain file into one file per certificate"
+        }
+      ]
+    },
+    {
+      "id": "tls-gen",
+      "title": "Create Keys, CSRs & Test Certs",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out key.pem",
+          "desc": "EC P-256 private key"
+        },
+        {
+          "cmd": "openssl genrsa -out key.pem 3072",
+          "desc": "RSA 3072-bit private key"
+        },
+        {
+          "cmd": "openssl req -new -key key.pem -out req.csr -subj \"/CN=host.example.com\" -addext \"subjectAltName=DNS:host.example.com\"",
+          "desc": "CSR with a SAN (browsers ignore the CN)"
+        },
+        {
+          "cmd": "openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -keyout key.pem -out cert.pem -days 365 -subj \"/CN=host.local\" -addext \"subjectAltName=DNS:host.local\"",
+          "desc": "Self-signed certificate for testing"
+        },
+        {
+          "cmd": "chmod 600 key.pem",
+          "desc": "Private keys must not be readable by anyone else"
+        }
+      ]
+    },
+    {
+      "id": "tls-acme",
+      "title": "certbot & cert-manager",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "certbot certificates",
+          "desc": "Certificates certbot manages and when they expire"
+        },
+        {
+          "cmd": "certbot renew --dry-run",
+          "desc": "Test renewal against the staging CA without changing anything"
+        },
+        {
+          "cmd": "certbot renew",
+          "desc": "Renew everything that is due"
+        },
+        {
+          "cmd": "certbot certonly --standalone -d example.com",
+          "desc": "Issue a certificate with a temporary web server on port 80"
+        },
+        {
+          "cmd": "certbot certonly --webroot -w /var/www/html -d example.com",
+          "desc": "Issue using an existing web root"
+        },
+        {
+          "cmd": "certbot certonly --manual --preferred-challenges dns -d example.com",
+          "desc": "DNS-01 challenge (wildcards and servers not reachable on port 80)"
+        },
+        {
+          "cmd": "systemctl list-timers | grep certbot",
+          "desc": "Is the renewal timer scheduled?"
+        },
+        {
+          "cmd": "ls -l /etc/letsencrypt/live/example.com/",
+          "desc": "Symlinks to the current files; services must read these, not the archive"
+        },
+        {
+          "cmd": "kubectl get certificate -A",
+          "desc": "cert-manager: Ready state of every certificate"
+        },
+        {
+          "cmd": "kubectl describe certificate NAME -n NAMESPACE",
+          "desc": "Why a certificate is not Ready"
+        },
+        {
+          "cmd": "kubectl get certificaterequest,order,challenge -A",
+          "desc": "Follow an ACME issuance step by step"
+        }
+      ]
+    },
+    {
+      "id": "tls-problems",
+      "title": "Common Symptoms",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "curl -v https://host 2>&1 | grep -i \"unable to get local issuer\"",
+          "desc": "Works in a browser but fails in curl/Java = server is not sending the intermediate certificate"
+        },
+        {
+          "cmd": "openssl s_client -connect 192.0.2.10:443 -servername host </dev/null 2>/dev/null | openssl x509 -noout -subject",
+          "desc": "Hostname mismatch: check what a specific node serves for the right SNI"
+        },
+        {
+          "cmd": "openssl x509 -in cert.pem -noout -checkend 0 && echo valid || echo expired",
+          "desc": "Has it expired right now?"
+        },
+        {
+          "cmd": "timedatectl",
+          "desc": "Wrong system clock makes valid certificates look expired or not yet valid"
+        },
+        {
+          "cmd": "update-ca-certificates",
+          "desc": "Rebuild the trust store on Debian/Ubuntu (add .crt files to /usr/local/share/ca-certificates)"
+        },
+        {
+          "cmd": "update-ca-trust",
+          "desc": "Rebuild the trust store on RHEL/Fedora (add files to /etc/pki/ca-trust/source/anchors)"
+        },
+        {
+          "cmd": "curl --cacert ca.pem https://host",
+          "desc": "Trust one specific CA for a single request"
+        },
+        {
+          "cmd": "curl -k https://host",
+          "desc": "Skip verification (diagnosis only: proves the problem is trust, never use as a fix)"
+        }
+      ]
+    },
+    {
+      "id": "tls-monitor",
+      "title": "Expiry Monitoring",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "for h in a.example.com b.example.com; do echo -n \"$h \"; echo | openssl s_client -connect $h:443 -servername $h 2>/dev/null | openssl x509 -noout -enddate; done",
+          "desc": "Expiry date of several hosts"
+        },
+        {
+          "cmd": "echo | openssl s_client -connect host:443 -servername host 2>/dev/null | openssl x509 -noout -checkend 1209600 && echo OK || echo EXPIRING",
+          "desc": "Alert-friendly check: expires within 14 days?"
+        },
+        {
+          "cmd": "find /etc/ssl /etc/letsencrypt -name \"*.pem\" -exec openssl x509 -noout -enddate -in {} \\; 2>/dev/null",
+          "desc": "Expiry dates of certificates stored on this host"
+        }
+      ]
+    }
+  ]
+}

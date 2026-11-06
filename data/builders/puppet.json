@@ -1,0 +1,147 @@
+{
+  "puppet::puppet agent -t": {
+    "name": "puppet agent",
+    "description": "Run the Puppet agent",
+    "base": "puppet agent",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-t",
+        "desc": "Test run: foreground, verbose, detailed exit codes",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--noop",
+        "desc": "Report changes without applying them"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug output"
+      },
+      {
+        "flag": "--trace",
+        "desc": "Stack traces for errors"
+      },
+      {
+        "flag": "--evaltrace",
+        "desc": "Time every resource"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      },
+      {
+        "flag": "--tags",
+        "desc": "Only these tags",
+        "valuePrompt": "Tag",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--server",
+        "desc": "Puppet server",
+        "valuePrompt": "Hostname",
+        "join": " "
+      }
+    ]
+  },
+  "puppet::puppet apply --noop manifests/site.pp": {
+    "name": "puppet apply",
+    "description": "Apply or dry-run a manifest without a server",
+    "base": "puppet apply",
+    "args": [
+      {
+        "key": "file",
+        "label": "Manifest",
+        "placeholder": "manifests/site.pp",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--noop",
+        "desc": "Dry run",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--modulepath",
+        "desc": "Module directories",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "./modules"
+      },
+      {
+        "flag": "-e",
+        "desc": "Inline code instead of a file",
+        "valuePrompt": "Puppet code",
+        "join": " ",
+        "quote": true
+      },
+      {
+        "flag": "--verbose",
+        "desc": "Verbose"
+      },
+      {
+        "flag": "--debug",
+        "desc": "Debug"
+      },
+      {
+        "flag": "--detailed-exitcodes",
+        "desc": "Exit 2 on changes, 4 on failures"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "puppet::puppet lookup profile::base::packages --explain": {
+    "name": "puppet lookup",
+    "description": "Query Hiera data",
+    "base": "puppet lookup",
+    "args": [
+      {
+        "key": "key",
+        "label": "Key",
+        "placeholder": "profile::base::packages",
+        "required": true
+      }
+    ],
+    "flags": [
+      {
+        "flag": "--explain",
+        "desc": "Explain which layer supplied the value",
+        "alwaysOn": true
+      },
+      {
+        "flag": "--node",
+        "desc": "Node name",
+        "valuePrompt": "Certname",
+        "join": " "
+      },
+      {
+        "flag": "--facts",
+        "desc": "Facts file",
+        "valuePrompt": "facts.yaml",
+        "join": " "
+      },
+      {
+        "flag": "--environment",
+        "desc": "Environment",
+        "valuePrompt": "Name",
+        "join": " ",
+        "valueDefault": "production"
+      },
+      {
+        "flag": "--merge",
+        "desc": "Merge strategy",
+        "valuePrompt": "first, unique, hash or deep",
+        "join": " ",
+        "valueDefault": "first"
+      }
+    ]
+  }
+}

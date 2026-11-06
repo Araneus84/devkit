@@ -1,0 +1,343 @@
+{
+  "name": "Storage & Boot",
+  "icon": "▤",
+  "iconBg": "#14b8a6",
+  "subtitle": "LVM, filesystems, RAID, NFS, GRUB & initramfs",
+  "meta": "lvm, xfs, ext4, mdadm",
+  "sections": [
+    {
+      "id": "st-lvm",
+      "title": "LVM",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "lsblk -f",
+          "desc": "Block devices, filesystems, labels and mount points"
+        },
+        {
+          "cmd": "pvs; vgs; lvs",
+          "desc": "Physical volumes, volume groups and logical volumes at a glance"
+        },
+        {
+          "cmd": "vgs -o +vg_free",
+          "desc": "Free space per volume group"
+        },
+        {
+          "cmd": "lvs -a -o +devices",
+          "desc": "Which physical device holds which logical volume"
+        },
+        {
+          "cmd": "pvcreate /dev/sdb",
+          "desc": "Initialise a disk for LVM"
+        },
+        {
+          "cmd": "vgextend vg0 /dev/sdb",
+          "desc": "Add the disk to a volume group"
+        },
+        {
+          "cmd": "lvcreate -L 20G -n data vg0",
+          "desc": "Create a 20 GB logical volume"
+        },
+        {
+          "cmd": "lvextend -r -L +10G /dev/vg0/data",
+          "desc": "Grow the LV and its filesystem in one step (-r runs the right resize tool)"
+        },
+        {
+          "cmd": "lvextend -r -l +100%FREE /dev/vg0/data",
+          "desc": "Grow into all free space"
+        },
+        {
+          "cmd": "lvcreate -s -L 5G -n data_snap /dev/vg0/data",
+          "desc": "Snapshot before a risky change"
+        },
+        {
+          "cmd": "lvremove /dev/vg0/data_snap",
+          "desc": "Remove the snapshot afterwards (full snapshots become invalid)"
+        },
+        {
+          "cmd": "pvmove /dev/sdb /dev/sdc",
+          "desc": "Move data off a disk online before removing it"
+        }
+      ]
+    },
+    {
+      "id": "st-fs",
+      "title": "Filesystems: grow, check, repair",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "xfs_growfs /mnt/data",
+          "desc": "Grow XFS (online). XFS can only grow, never shrink"
+        },
+        {
+          "cmd": "resize2fs /dev/vg0/data",
+          "desc": "Grow ext4 to fill the device (online)"
+        },
+        {
+          "cmd": "resize2fs /dev/vg0/data 50G",
+          "desc": "Shrink ext4: unmount and e2fsck -f first"
+        },
+        {
+          "cmd": "e2fsck -f /dev/vg0/data",
+          "desc": "Check an unmounted ext4 filesystem"
+        },
+        {
+          "cmd": "xfs_repair -n /dev/vg0/data",
+          "desc": "Dry-run XFS repair (unmounted)"
+        },
+        {
+          "cmd": "xfs_info /mnt/data",
+          "desc": "XFS geometry"
+        },
+        {
+          "cmd": "tune2fs -l /dev/sda1 | grep -iE \"state|mount count|features\"",
+          "desc": "ext4 state and features"
+        },
+        {
+          "cmd": "tune2fs -m 1 /dev/vg0/data",
+          "desc": "Lower reserved blocks from 5% to 1% on a data volume"
+        },
+        {
+          "cmd": "blkid",
+          "desc": "UUIDs and filesystem types"
+        },
+        {
+          "cmd": "findmnt",
+          "desc": "Mount tree"
+        },
+        {
+          "cmd": "findmnt --verify",
+          "desc": "Validate /etc/fstab before rebooting"
+        },
+        {
+          "cmd": "growpart /dev/sda 1",
+          "desc": "Grow a partition into new disk space (cloud-utils)"
+        },
+        {
+          "cmd": "fstrim -av",
+          "desc": "Discard unused blocks on all mounted filesystems"
+        },
+        {
+          "cmd": "mount -o remount,ro /",
+          "desc": "Remount read-only (for a safe check or after errors)"
+        }
+      ]
+    },
+    {
+      "id": "st-full",
+      "title": "Disk Full Triage",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "df -hT",
+          "desc": "Usage by filesystem"
+        },
+        {
+          "cmd": "df -i",
+          "desc": "Inode usage: 100% IUse with free space = too many small files"
+        },
+        {
+          "cmd": "du -xhd1 /var | sort -h",
+          "desc": "Largest directories on one filesystem"
+        },
+        {
+          "cmd": "ncdu -x /",
+          "desc": "Interactive size explorer"
+        },
+        {
+          "cmd": "lsof +L1",
+          "desc": "Deleted files still held open by a process: restart it to free the space"
+        },
+        {
+          "cmd": "find / -xdev -type f -size +500M -exec ls -lh {} \\; 2>/dev/null",
+          "desc": "Files over 500 MB"
+        },
+        {
+          "cmd": "find / -xdev -printf \"%h\\n\" | sort | uniq -c | sort -rn | head",
+          "desc": "Directories with the most files (inode hogs)"
+        },
+        {
+          "cmd": "mount --bind / /mnt/rootview && du -sh /mnt/rootview/*",
+          "desc": "See files hidden underneath other mounts (umount /mnt/rootview afterwards)"
+        },
+        {
+          "cmd": "journalctl --disk-usage",
+          "desc": "Space used by the journal"
+        },
+        {
+          "cmd": "journalctl --vacuum-size=500M",
+          "desc": "Shrink the journal to 500 MB"
+        },
+        {
+          "cmd": "docker system df",
+          "desc": "Space used by images, containers and volumes"
+        },
+        {
+          "cmd": "apt-get clean",
+          "desc": "Remove cached package files"
+        },
+        {
+          "cmd": ": > /var/log/big.log",
+          "desc": "Truncate a log in place (frees space even while a process holds it open)"
+        }
+      ]
+    },
+    {
+      "id": "st-raid",
+      "title": "RAID, SMART & ZFS/Btrfs",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "cat /proc/mdstat",
+          "desc": "Software RAID status and rebuild progress"
+        },
+        {
+          "cmd": "mdadm --detail /dev/md0",
+          "desc": "Array state and member disks"
+        },
+        {
+          "cmd": "mdadm --examine /dev/sda1",
+          "desc": "RAID metadata on a member"
+        },
+        {
+          "cmd": "mdadm /dev/md0 --fail /dev/sdb1 --remove /dev/sdb1",
+          "desc": "Fail and remove a disk"
+        },
+        {
+          "cmd": "mdadm /dev/md0 --add /dev/sdc1",
+          "desc": "Add a replacement disk"
+        },
+        {
+          "cmd": "smartctl -H /dev/sda",
+          "desc": "Quick SMART pass/fail"
+        },
+        {
+          "cmd": "smartctl -t short /dev/sda",
+          "desc": "Start a short self-test"
+        },
+        {
+          "cmd": "zpool status -x",
+          "desc": "Only unhealthy ZFS pools"
+        },
+        {
+          "cmd": "zpool scrub tank",
+          "desc": "Verify all data checksums"
+        },
+        {
+          "cmd": "zfs list",
+          "desc": "ZFS datasets and usage"
+        },
+        {
+          "cmd": "btrfs filesystem usage /",
+          "desc": "Btrfs real allocation and free space"
+        },
+        {
+          "cmd": "btrfs scrub start /",
+          "desc": "Verify Btrfs checksums"
+        }
+      ]
+    },
+    {
+      "id": "st-boot",
+      "title": "Boot, GRUB & initramfs",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "cat /proc/cmdline",
+          "desc": "Kernel command line of the running system"
+        },
+        {
+          "cmd": "lsinitramfs /boot/initrd.img-$(uname -r) | head",
+          "desc": "Contents of the initramfs (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "update-initramfs -u -k all",
+          "desc": "Rebuild initramfs for all kernels (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "dracut -f",
+          "desc": "Rebuild initramfs (RHEL/Fedora)"
+        },
+        {
+          "cmd": "update-grub",
+          "desc": "Regenerate grub.cfg (Debian/Ubuntu)"
+        },
+        {
+          "cmd": "grub2-mkconfig -o /boot/grub2/grub.cfg",
+          "desc": "Regenerate grub.cfg (RHEL/Fedora)"
+        },
+        {
+          "cmd": "grub-install /dev/sda",
+          "desc": "Reinstall the boot loader (BIOS)"
+        },
+        {
+          "cmd": "efibootmgr -v",
+          "desc": "UEFI boot entries and order"
+        },
+        {
+          "cmd": "systemd-analyze blame",
+          "desc": "Slowest units during boot"
+        },
+        {
+          "cmd": "systemd-analyze critical-chain",
+          "desc": "The chain of units that delayed boot"
+        },
+        {
+          "cmd": "journalctl --list-boots",
+          "desc": "Boots recorded in the journal"
+        },
+        {
+          "cmd": "journalctl -b -1 -p err",
+          "desc": "Errors from the previous boot (why did it crash?)"
+        },
+        {
+          "cmd": "systemctl --failed",
+          "desc": "Units that failed to start"
+        },
+        {
+          "cmd": "for d in dev proc sys; do mount --rbind /$d /mnt/$d; done && chroot /mnt",
+          "desc": "Rescue: bind-mount the virtual filesystems and chroot into the installed system"
+        }
+      ]
+    },
+    {
+      "id": "st-nfs",
+      "title": "NFS & Mounts",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "showmount -e nas",
+          "desc": "Exports offered by an NFS server"
+        },
+        {
+          "cmd": "mount -t nfs nas:/export /mnt/nas",
+          "desc": "Mount an NFS export"
+        },
+        {
+          "cmd": "findmnt -t nfs,nfs4",
+          "desc": "Mounted NFS filesystems"
+        },
+        {
+          "cmd": "nfsstat -m",
+          "desc": "Mount options actually negotiated"
+        },
+        {
+          "cmd": "rpcinfo -p nas",
+          "desc": "RPC services on the server (portmapper, mountd, nfs)"
+        },
+        {
+          "cmd": "exportfs -v",
+          "desc": "On the server: what is exported and to whom"
+        },
+        {
+          "cmd": "nfsiostat 1",
+          "desc": "Per-mount NFS latency and throughput"
+        },
+        {
+          "cmd": "umount -f -l /mnt/nas",
+          "desc": "Lazy force-unmount of a hung NFS mount"
+        }
+      ]
+    }
+  ]
+}

@@ -17,8 +17,9 @@ const { chromium } = require(process.env.DEVKIT_PLAYWRIGHT || 'playwright'),
     });
     for (const entry of ['index.html', 'dist/devkit.html']) {
       await page.goto(pathToFileURL(path.resolve(__dirname, '..', entry)).href);
+      await page.locator('.nav-filter').fill('CI/CD');
       if (!(await page.locator('.nav-sub-item').filter({ hasText: 'GitHub Actions' }).isVisible()))
-        await page.locator('.nav-toggle').filter({ hasText: 'CI/CD' }).click();
+        await page.locator('.nav-sheet-btn').filter({ hasText: 'CI/CD' }).click();
       await page.locator('.nav-sub-item').filter({ hasText: 'GitHub Actions' }).click();
       await page
         .getByRole('button', { name: 'Build GitHub Actions →', exact: true })

@@ -8,7 +8,7 @@ The app runs entirely in the browser. It has no account, backend, analytics, or 
 
 ## What it includes
 
-- Searchable references for common infrastructure and operations tools
+- Searchable references for common infrastructure and operations tools, including Linux DNS, load balancer, TLS, network, performance, storage, security, patching, Puppet and incident-runbook guides
 - Connected source and block editors for YAML, JSON, Bash, PowerShell, Python, SQL, Terraform, Docker, and related formats
 - Specialized Ansible, Python, GitHub Actions, GitLab CI, and Jenkins builders
 - Context-aware completion, diagnostics, repairs, syntax highlighting, and optional Vim controls

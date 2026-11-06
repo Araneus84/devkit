@@ -1,0 +1,308 @@
+{
+  "dns::dig example.com": {
+    "name": "dig",
+    "description": "Build a DNS lookup command",
+    "base": "dig",
+    "args": [
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": true
+      },
+      {
+        "key": "type",
+        "label": "Record type",
+        "type": "select",
+        "required": true,
+        "default": "A",
+        "options": [
+          {
+            "value": "A",
+            "label": "A"
+          },
+          {
+            "value": "AAAA",
+            "label": "AAAA"
+          },
+          {
+            "value": "MX",
+            "label": "MX"
+          },
+          {
+            "value": "NS",
+            "label": "NS"
+          },
+          {
+            "value": "TXT",
+            "label": "TXT"
+          },
+          {
+            "value": "SOA",
+            "label": "SOA"
+          },
+          {
+            "value": "CNAME",
+            "label": "CNAME"
+          },
+          {
+            "value": "PTR",
+            "label": "PTR"
+          },
+          {
+            "value": "SRV",
+            "label": "SRV"
+          },
+          {
+            "value": "CAA",
+            "label": "CAA"
+          },
+          {
+            "value": "DNSKEY",
+            "label": "DNSKEY"
+          },
+          {
+            "value": "DS",
+            "label": "DS"
+          },
+          {
+            "value": "ANY",
+            "label": "ANY"
+          }
+        ]
+      }
+    ],
+    "flags": [
+      {
+        "flag": "@",
+        "desc": "Query a specific server",
+        "valuePrompt": "Server (e.g. 1.1.1.1 or ns1.example.com)",
+        "join": ""
+      },
+      {
+        "flag": "+short",
+        "desc": "Answer only"
+      },
+      {
+        "flag": "+noall +answer",
+        "desc": "Answer section only, with TTLs"
+      },
+      {
+        "flag": "+trace",
+        "desc": "Trace from the root servers"
+      },
+      {
+        "flag": "+tcp",
+        "desc": "Use TCP instead of UDP"
+      },
+      {
+        "flag": "+dnssec",
+        "desc": "Request DNSSEC records"
+      },
+      {
+        "flag": "+cd",
+        "desc": "Disable DNSSEC validation (diagnose SERVFAIL)"
+      },
+      {
+        "flag": "+norecurse",
+        "desc": "Do not ask for recursion (authoritative query)"
+      },
+      {
+        "flag": "+nssearch",
+        "desc": "Ask every authoritative server for the SOA"
+      },
+      {
+        "flag": "+noedns",
+        "desc": "Disable EDNS"
+      },
+      {
+        "flag": "+bufsize",
+        "desc": "EDNS UDP buffer size",
+        "valuePrompt": "Bytes",
+        "join": "=",
+        "valueDefault": "1232"
+      },
+      {
+        "flag": "+time",
+        "desc": "Timeout in seconds",
+        "valuePrompt": "Seconds",
+        "join": "=",
+        "valueDefault": "2"
+      },
+      {
+        "flag": "+tries",
+        "desc": "Number of attempts",
+        "valuePrompt": "Tries",
+        "join": "=",
+        "valueDefault": "1"
+      },
+      {
+        "flag": "+subnet",
+        "desc": "EDNS client subnet",
+        "valuePrompt": "Prefix (e.g. 203.0.113.0/24)",
+        "join": "="
+      }
+    ]
+  },
+  "dns::rndc reload example.com": {
+    "name": "rndc",
+    "description": "Control a BIND server",
+    "base": "rndc",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "reload",
+        "options": [
+          {
+            "value": "reload",
+            "label": "reload - reload a zone"
+          },
+          {
+            "value": "reconfig",
+            "label": "reconfig - load new zones"
+          },
+          {
+            "value": "flush",
+            "label": "flush - clear the cache"
+          },
+          {
+            "value": "flushname",
+            "label": "flushname - clear one name"
+          },
+          {
+            "value": "retransfer",
+            "label": "retransfer - pull zone again"
+          },
+          {
+            "value": "notify",
+            "label": "notify - tell secondaries"
+          },
+          {
+            "value": "zonestatus",
+            "label": "zonestatus - serial and state"
+          },
+          {
+            "value": "freeze",
+            "label": "freeze - freeze a dynamic zone"
+          },
+          {
+            "value": "thaw",
+            "label": "thaw - unfreeze"
+          },
+          {
+            "value": "status",
+            "label": "status - server state"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone or name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::unbound-control flush example.com": {
+    "name": "unbound-control",
+    "description": "Control an Unbound resolver",
+    "base": "unbound-control",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "flush",
+        "options": [
+          {
+            "value": "flush",
+            "label": "flush - one name"
+          },
+          {
+            "value": "flush_zone",
+            "label": "flush_zone - name and below"
+          },
+          {
+            "value": "lookup",
+            "label": "lookup - show servers asked"
+          },
+          {
+            "value": "status",
+            "label": "status - running state"
+          },
+          {
+            "value": "stats_noreset",
+            "label": "stats_noreset - statistics"
+          },
+          {
+            "value": "list_forwards",
+            "label": "list_forwards - forward zones"
+          },
+          {
+            "value": "reload",
+            "label": "reload - reload config"
+          }
+        ]
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "placeholder": "example.com",
+        "required": false
+      }
+    ],
+    "flags": []
+  },
+  "dns::pdnsutil check-zone example.com": {
+    "name": "pdnsutil",
+    "description": "Manage PowerDNS zones",
+    "base": "pdnsutil",
+    "args": [
+      {
+        "key": "action",
+        "label": "Action",
+        "type": "select",
+        "required": true,
+        "default": "check-zone",
+        "options": [
+          {
+            "value": "check-zone",
+            "label": "check-zone - validate"
+          },
+          {
+            "value": "list-zone",
+            "label": "list-zone - show records"
+          },
+          {
+            "value": "show-zone",
+            "label": "show-zone - metadata and keys"
+          },
+          {
+            "value": "increase-serial",
+            "label": "increase-serial - bump SOA"
+          },
+          {
+            "value": "rectify-zone",
+            "label": "rectify-zone - fix ordering"
+          },
+          {
+            "value": "secure-zone",
+            "label": "secure-zone - enable DNSSEC"
+          }
+        ]
+      },
+      {
+        "key": "zone",
+        "label": "Zone",
+        "placeholder": "example.com",
+        "required": true
+      }
+    ],
+    "flags": []
+  }
+}

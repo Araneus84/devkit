@@ -1,0 +1,390 @@
+{
+  "name": "Performance Troubleshooting",
+  "icon": "⚡",
+  "iconBg": "#ef4444",
+  "subtitle": "CPU, memory, disk, tracing & history",
+  "meta": "vmstat, iostat, strace, perf",
+  "sections": [
+    {
+      "id": "pf-first",
+      "title": "First 60 Seconds",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "uptime",
+          "desc": "Load averages for 1, 5 and 15 minutes: rising or falling?"
+        },
+        {
+          "cmd": "dmesg -T | tail -30",
+          "desc": "Recent kernel messages: OOM kills, disk errors, link flaps"
+        },
+        {
+          "cmd": "vmstat 1 5",
+          "desc": "Run queue (r), blocked (b), swap in/out (si/so), CPU split"
+        },
+        {
+          "cmd": "mpstat -P ALL 1 3",
+          "desc": "Per-CPU use: one hot CPU means a single-threaded bottleneck"
+        },
+        {
+          "cmd": "pidstat 1 3",
+          "desc": "CPU use per process over time"
+        },
+        {
+          "cmd": "iostat -xz 1 3",
+          "desc": "Disk latency (await) and utilisation (%util)"
+        },
+        {
+          "cmd": "free -m",
+          "desc": "Memory: look at \"available\", not \"free\""
+        },
+        {
+          "cmd": "sar -n DEV 1 3",
+          "desc": "Network throughput per interface"
+        },
+        {
+          "cmd": "sar -n TCP,ETCP 1 3",
+          "desc": "TCP connection rates and retransmits"
+        },
+        {
+          "cmd": "top -bn1 | head -20",
+          "desc": "Snapshot of the busiest processes"
+        },
+        {
+          "cmd": "ps aux --sort=-%cpu | head",
+          "desc": "Top CPU consumers"
+        },
+        {
+          "cmd": "ps aux --sort=-%mem | head",
+          "desc": "Top memory consumers"
+        },
+        {
+          "cmd": "systemd-cgtop",
+          "desc": "CPU, memory and I/O per systemd unit/cgroup"
+        },
+        {
+          "cmd": "journalctl -p err -b --no-pager | tail -30",
+          "desc": "Errors since boot"
+        }
+      ]
+    },
+    {
+      "id": "pf-cpu",
+      "title": "CPU & Load",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "cat /proc/loadavg",
+          "desc": "Load = runnable tasks plus tasks in uninterruptible sleep (state D)"
+        },
+        {
+          "cmd": "ps -eo state,pid,comm | awk '$1==\"D\"'",
+          "desc": "Tasks in state D: blocked on I/O and unkillable until it returns"
+        },
+        {
+          "cmd": "ps -eo pid,ppid,stat,wchan:32,comm | awk '$3 ~ /D/'",
+          "desc": "D-state tasks and the kernel function they wait in"
+        },
+        {
+          "cmd": "cat /proc/pressure/cpu",
+          "desc": "PSI: share of time tasks waited for CPU"
+        },
+        {
+          "cmd": "cat /proc/pressure/io",
+          "desc": "PSI: share of time tasks waited for I/O"
+        },
+        {
+          "cmd": "cat /proc/pressure/memory",
+          "desc": "PSI: share of time tasks waited for memory"
+        },
+        {
+          "cmd": "top -H -p PID",
+          "desc": "Per-thread CPU of one process"
+        },
+        {
+          "cmd": "perf top",
+          "desc": "Live view of hot functions"
+        },
+        {
+          "cmd": "perf record -F 99 -a -g -- sleep 30",
+          "desc": "Sample all CPUs with call graphs for 30 seconds"
+        },
+        {
+          "cmd": "perf report",
+          "desc": "Browse the recorded profile"
+        },
+        {
+          "cmd": "cat /sys/fs/cgroup/system.slice/SERVICE.service/cpu.stat",
+          "desc": "nr_throttled > 0 means the service hit its CPU quota"
+        },
+        {
+          "cmd": "lscpu",
+          "desc": "CPU model, cores, threads, caches"
+        }
+      ]
+    },
+    {
+      "id": "pf-mem",
+      "title": "Memory & OOM",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "free -h",
+          "desc": "\"free\" is untouched memory; \"available\" estimates what applications can get including reclaimable cache"
+        },
+        {
+          "cmd": "grep -E \"MemAvailable|Cached|Slab|Dirty|SwapCached|SwapFree\" /proc/meminfo",
+          "desc": "The meminfo lines that matter"
+        },
+        {
+          "cmd": "vmstat -SM 1 5",
+          "desc": "si/so above zero means actively swapping"
+        },
+        {
+          "cmd": "ps aux --sort=-rss | head",
+          "desc": "Largest resident processes"
+        },
+        {
+          "cmd": "dmesg -T | grep -iE \"out of memory|oom-kill|killed process\"",
+          "desc": "Evidence of the OOM killer"
+        },
+        {
+          "cmd": "journalctl -k | grep -i oom",
+          "desc": "Same from the journal across reboots"
+        },
+        {
+          "cmd": "grep -E \"VmRSS|VmSwap\" /proc/PID/status",
+          "desc": "Resident and swapped memory of one process"
+        },
+        {
+          "cmd": "slabtop -o | head",
+          "desc": "Kernel slab usage (dentry/inode cache growth)"
+        },
+        {
+          "cmd": "sysctl vm.swappiness vm.overcommit_memory",
+          "desc": "Swap tendency and overcommit policy"
+        },
+        {
+          "cmd": "systemctl show SERVICE -p MemoryCurrent -p MemoryMax",
+          "desc": "Memory used and limit of a service cgroup"
+        },
+        {
+          "cmd": "kill -l $((137-128))",
+          "desc": "Exit code 137 = 128 + 9 = SIGKILL, typically the OOM killer or an out-of-memory container"
+        }
+      ]
+    },
+    {
+      "id": "pf-io",
+      "title": "Disk I/O",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "iostat -xz 1",
+          "desc": "await (latency) and %util: high both = saturated device"
+        },
+        {
+          "cmd": "iotop -oPa",
+          "desc": "Processes actually doing I/O, accumulated"
+        },
+        {
+          "cmd": "pidstat -d 1",
+          "desc": "Per-process read/write rates"
+        },
+        {
+          "cmd": "lsblk -o NAME,ROTA,SCHED,SIZE,MOUNTPOINT",
+          "desc": "Device type (rotational?), scheduler and mounts"
+        },
+        {
+          "cmd": "smartctl -a /dev/sda",
+          "desc": "SMART health and error log"
+        },
+        {
+          "cmd": "nvme smart-log /dev/nvme0n1",
+          "desc": "NVMe health: media errors, percentage used, temperature"
+        },
+        {
+          "cmd": "dmesg -T | grep -iE \"i/o error|blk_update_request|ata[0-9]\"",
+          "desc": "Storage errors reported by the kernel"
+        },
+        {
+          "cmd": "fio --name=randread --rw=randread --bs=4k --size=1G --iodepth=32 --runtime=30 --time_based --filename=/tmp/fio.test",
+          "desc": "Random read benchmark (delete /tmp/fio.test afterwards)"
+        },
+        {
+          "cmd": "dd if=/dev/zero of=/tmp/test.bin bs=1M count=1024 oflag=direct",
+          "desc": "Rough sequential write speed bypassing cache (delete the file afterwards)"
+        },
+        {
+          "cmd": "lsof +L1",
+          "desc": "Files that are deleted but still held open (space not freed)"
+        }
+      ]
+    },
+    {
+      "id": "pf-trace",
+      "title": "Tracing a Process",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "strace -f -tt -T -p PID",
+          "desc": "Attach: every syscall with timestamps and time spent in each"
+        },
+        {
+          "cmd": "strace -c -p PID",
+          "desc": "Summary of syscalls by count and time (Ctrl-C to print)"
+        },
+        {
+          "cmd": "strace -f -e trace=network -p PID",
+          "desc": "Only network syscalls: connect, sendto, recvfrom"
+        },
+        {
+          "cmd": "strace -f -e trace=%file -s 200 command",
+          "desc": "Which files does a command open or fail to find?"
+        },
+        {
+          "cmd": "lsof -p PID",
+          "desc": "Open files and sockets of one process"
+        },
+        {
+          "cmd": "ls -l /proc/PID/fd",
+          "desc": "File descriptors (watch for descriptor leaks)"
+        },
+        {
+          "cmd": "cat /proc/PID/stack",
+          "desc": "Kernel stack of a stuck process (root)"
+        },
+        {
+          "cmd": "cat /proc/PID/wchan",
+          "desc": "Kernel function a sleeping process waits in"
+        },
+        {
+          "cmd": "readlink /proc/PID/exe",
+          "desc": "Executable path; \"(deleted)\" means the binary was removed while running"
+        },
+        {
+          "cmd": "tr \"\\0\" \" \" < /proc/PID/cmdline",
+          "desc": "Full command line"
+        },
+        {
+          "cmd": "tr \"\\0\" \"\\n\" < /proc/PID/environ",
+          "desc": "Environment of the process (may contain secrets)"
+        },
+        {
+          "cmd": "cat /proc/PID/limits",
+          "desc": "Resource limits actually applied"
+        },
+        {
+          "cmd": "execsnoop-bpfcc",
+          "desc": "Trace every new process system-wide (bpfcc-tools)"
+        },
+        {
+          "cmd": "opensnoop-bpfcc",
+          "desc": "Trace every file open system-wide"
+        },
+        {
+          "cmd": "tcpconnect-bpfcc",
+          "desc": "Trace every outgoing TCP connection with PID"
+        },
+        {
+          "cmd": "tcplife-bpfcc",
+          "desc": "TCP session lifespans with bytes transferred per process"
+        },
+        {
+          "cmd": "biolatency-bpfcc",
+          "desc": "Block I/O latency histogram"
+        }
+      ]
+    },
+    {
+      "id": "pf-sar",
+      "title": "History & sar",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "systemctl enable --now sysstat",
+          "desc": "Start collecting history (sar data in /var/log/sysstat)"
+        },
+        {
+          "cmd": "sar -u",
+          "desc": "CPU history for today"
+        },
+        {
+          "cmd": "sar -r",
+          "desc": "Memory history for today"
+        },
+        {
+          "cmd": "sar -q",
+          "desc": "Load and run-queue history"
+        },
+        {
+          "cmd": "sar -d -p",
+          "desc": "Disk history with device names"
+        },
+        {
+          "cmd": "sar -n DEV",
+          "desc": "Network history per interface"
+        },
+        {
+          "cmd": "sar -f /var/log/sysstat/sa20",
+          "desc": "Read an older day (sa + day of month)"
+        },
+        {
+          "cmd": "uptime -s",
+          "desc": "Last boot time"
+        },
+        {
+          "cmd": "last -x | head",
+          "desc": "Reboot and shutdown history"
+        },
+        {
+          "cmd": "journalctl --since \"1 hour ago\" -p warning",
+          "desc": "Warnings in the last hour"
+        }
+      ]
+    },
+    {
+      "id": "pf-signal",
+      "title": "Exit Codes, Signals & Crashes",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "kill -l",
+          "desc": "Signal names and numbers"
+        },
+        {
+          "cmd": "echo $?",
+          "desc": "Exit code of the last command: 126 not executable, 127 not found, 137 SIGKILL, 139 SIGSEGV, 143 SIGTERM"
+        },
+        {
+          "cmd": "systemctl show SERVICE -p Result,ExecMainStatus",
+          "desc": "How a service last exited"
+        },
+        {
+          "cmd": "journalctl -u SERVICE -n 50 --no-pager",
+          "desc": "Last log lines of a service"
+        },
+        {
+          "cmd": "dmesg -T | grep -i segfault",
+          "desc": "Crashes reported by the kernel with faulting address and library"
+        },
+        {
+          "cmd": "coredumpctl list",
+          "desc": "Recorded core dumps"
+        },
+        {
+          "cmd": "coredumpctl info PID",
+          "desc": "Details and backtrace of a crash"
+        },
+        {
+          "cmd": "ps -eo pid,ppid,stat,comm | awk '$3 ~ /Z/'",
+          "desc": "Zombies: already dead, cannot be killed; restart or fix the parent"
+        },
+        {
+          "cmd": "ulimit -a",
+          "desc": "Limits of the current shell"
+        }
+      ]
+    }
+  ]
+}

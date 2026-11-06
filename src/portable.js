@@ -49,7 +49,7 @@ function dkValidateBackup(value) {
       if (
         key === 'devkit:activeSheet' &&
         !SHEETS[raw] &&
-        !['__builder', '__favorites'].includes(raw)
+        !['__builder', '__favorites', '__home'].includes(raw)
       )
         throw Error('Unknown active sheet.');
       if (key === 'devkit:fontSize' && (!/^\d+$/.test(raw) || +raw < 8 || +raw > 30))
@@ -65,7 +65,12 @@ function dkValidateBackup(value) {
       }
       checkTree(parsed);
       if (
-        ['devkit:favorites', 'devkit:expandedSheets'].includes(key) &&
+        [
+          'devkit:favorites',
+          'devkit:expandedSheets',
+          'devkit:pinnedSheets',
+          'devkit:openCategories',
+        ].includes(key) &&
         (!Array.isArray(parsed) || parsed.some((x) => typeof x !== 'string'))
       )
         throw Error('Invalid list in backup.');

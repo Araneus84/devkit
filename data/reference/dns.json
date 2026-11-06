@@ -1,0 +1,429 @@
+{
+  "name": "DNS Operations",
+  "icon": "◎",
+  "iconBg": "#0ea5e9",
+  "subtitle": "Resolvers, authoritative servers & DNSSEC",
+  "meta": "dig, BIND, PowerDNS, Unbound",
+  "sections": [
+    {
+      "id": "dns-resolve",
+      "title": "Resolver Triage",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "cat /etc/resolv.conf",
+          "desc": "Which resolver does this host use? 127.0.0.53 (systemd-resolved) or 100.100.100.100 (Tailscale) are only local forwarders"
+        },
+        {
+          "cmd": "resolvectl status",
+          "desc": "Per-link DNS servers, search domains and DNSSEC state (systemd-resolved)"
+        },
+        {
+          "cmd": "resolvectl query example.com",
+          "desc": "Resolve through the system resolver and show which link and protocol answered"
+        },
+        {
+          "cmd": "resolvectl statistics",
+          "desc": "Cache size, hits, misses and DNSSEC verdict counters"
+        },
+        {
+          "cmd": "resolvectl flush-caches",
+          "desc": "Clear the systemd-resolved cache"
+        },
+        {
+          "cmd": "getent hosts example.com",
+          "desc": "What applications actually get (follows nsswitch.conf; dig bypasses it)"
+        },
+        {
+          "cmd": "grep ^hosts /etc/nsswitch.conf",
+          "desc": "Lookup order: files, dns, mdns... a wrong order explains \"dig works, app fails\""
+        },
+        {
+          "cmd": "dig @127.0.0.53 example.com",
+          "desc": "Query the local stub resolver directly"
+        },
+        {
+          "cmd": "dig @1.1.1.1 example.com",
+          "desc": "Compare with a known-good public resolver: same slowness means path/ISP, fast means your resolver"
+        },
+        {
+          "cmd": "dig +tcp example.com",
+          "desc": "Force TCP. Works over TCP but not UDP = fragmentation, MTU or UDP/53 filtering"
+        },
+        {
+          "cmd": "dig +norecurse @ns1.example.com example.com",
+          "desc": "Ask an authoritative server directly without recursion"
+        },
+        {
+          "cmd": "tcpdump -ni any port 53",
+          "desc": "Watch live DNS traffic: are queries leaving, are replies coming back?"
+        }
+      ]
+    },
+    {
+      "id": "dns-dig",
+      "title": "dig Recipes",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "dig example.com",
+          "desc": "Standard lookup with full response header"
+        },
+        {
+          "cmd": "dig +short example.com",
+          "desc": "Answer only"
+        },
+        {
+          "cmd": "dig +noall +answer +ttlunits example.com",
+          "desc": "Answer section with human-readable TTLs"
+        },
+        {
+          "cmd": "dig +trace example.com",
+          "desc": "Walk the delegation from the root servers down"
+        },
+        {
+          "cmd": "dig +nssearch example.com",
+          "desc": "Ask every authoritative NS for the SOA: compare serials to find out-of-sync secondaries"
+        },
+        {
+          "cmd": "dig example.com SOA +short",
+          "desc": "SOA record: primary NS, contact, serial, refresh/retry/expire/minimum"
+        },
+        {
+          "cmd": "dig -x 192.0.2.10",
+          "desc": "Reverse (PTR) lookup"
+        },
+        {
+          "cmd": "dig example.com ANY +noall +answer",
+          "desc": "Everything the server is willing to return (many servers now limit ANY)"
+        },
+        {
+          "cmd": "dig example.com AXFR @ns1.example.com",
+          "desc": "Request a zone transfer (should be refused unless you are an allowed secondary)"
+        },
+        {
+          "cmd": "dig @ns1.example.com version.bind CH TXT",
+          "desc": "Ask a BIND server for its version string"
+        },
+        {
+          "cmd": "dig +bufsize=1232 example.com",
+          "desc": "Limit the EDNS buffer size to avoid UDP fragmentation"
+        },
+        {
+          "cmd": "dig +noedns example.com",
+          "desc": "Disable EDNS to find broken middleboxes"
+        },
+        {
+          "cmd": "dig +subnet=203.0.113.0/24 example.com",
+          "desc": "Send an EDNS client subnet to test geo/GeoDNS answers"
+        },
+        {
+          "cmd": "drill -DT example.com",
+          "desc": "ldns drill: trace with DNSSEC chain check"
+        }
+      ]
+    },
+    {
+      "id": "dns-zone",
+      "title": "Zone Changes & TTL",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "dig +noall +answer example.com A",
+          "desc": "Read the current TTL: lower it at least one old TTL before a planned change"
+        },
+        {
+          "cmd": "named-checkconf -z",
+          "desc": "Validate named.conf and load every configured zone"
+        },
+        {
+          "cmd": "named-checkzone example.com /etc/bind/db.example.com",
+          "desc": "Syntax and consistency check of a zone file"
+        },
+        {
+          "cmd": "date +%Y%m%d01",
+          "desc": "New SOA serial in YYYYMMDDnn form; it must increase or secondaries ignore the change"
+        },
+        {
+          "cmd": "dig +short SOA example.com @ns1.example.com",
+          "desc": "Serial on the primary"
+        },
+        {
+          "cmd": "dig +short SOA example.com @ns2.example.com",
+          "desc": "Serial on a secondary: lower than the primary means transfer is broken"
+        },
+        {
+          "cmd": "rndc reload example.com",
+          "desc": "Reload one zone after editing the file"
+        },
+        {
+          "cmd": "rndc zonestatus example.com",
+          "desc": "Serial, loaded time, next refresh and transfer state"
+        },
+        {
+          "cmd": "rndc notify example.com",
+          "desc": "Send NOTIFY to the secondaries"
+        },
+        {
+          "cmd": "rndc retransfer example.com",
+          "desc": "Force a secondary to pull the zone again"
+        },
+        {
+          "cmd": "rndc freeze example.com && rndc thaw example.com",
+          "desc": "Freeze a dynamic zone for manual edits, then thaw"
+        }
+      ]
+    },
+    {
+      "id": "dns-bind",
+      "title": "BIND (named)",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "named -V",
+          "desc": "Version and compile-time options"
+        },
+        {
+          "cmd": "rndc status",
+          "desc": "Server state, zone count, recursive clients and query logging"
+        },
+        {
+          "cmd": "rndc reconfig",
+          "desc": "Load new zones from named.conf without reloading existing ones"
+        },
+        {
+          "cmd": "rndc flush",
+          "desc": "Flush the whole resolver cache"
+        },
+        {
+          "cmd": "rndc flushname example.com",
+          "desc": "Flush one name from the cache"
+        },
+        {
+          "cmd": "rndc dumpdb -cache",
+          "desc": "Dump the cache to named_dump.db for inspection"
+        },
+        {
+          "cmd": "rndc stats",
+          "desc": "Write counters to named.stats"
+        },
+        {
+          "cmd": "rndc querylog on",
+          "desc": "Turn query logging on temporarily (turn off again: rndc querylog off)"
+        },
+        {
+          "cmd": "rndc recursing",
+          "desc": "List the queries currently being resolved (stuck lookups)"
+        },
+        {
+          "cmd": "named-checkconf -p",
+          "desc": "Print the effective, fully expanded configuration"
+        },
+        {
+          "cmd": "journalctl -u named -f",
+          "desc": "Follow BIND logs (unit is bind9 on some Debian/Ubuntu releases)"
+        }
+      ]
+    },
+    {
+      "id": "dns-pdns",
+      "title": "PowerDNS (Authoritative & Recursor)",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "pdnsutil list-all-zones",
+          "desc": "All zones in the backend"
+        },
+        {
+          "cmd": "pdnsutil check-zone example.com",
+          "desc": "Validate one zone"
+        },
+        {
+          "cmd": "pdnsutil check-all-zones",
+          "desc": "Validate every zone"
+        },
+        {
+          "cmd": "pdnsutil list-zone example.com",
+          "desc": "Print the records of a zone"
+        },
+        {
+          "cmd": "pdnsutil show-zone example.com",
+          "desc": "Zone metadata, DNSSEC keys and DS records"
+        },
+        {
+          "cmd": "pdnsutil increase-serial example.com",
+          "desc": "Bump the SOA serial"
+        },
+        {
+          "cmd": "pdnsutil rectify-zone example.com",
+          "desc": "Fix ordername/auth fields after edits (needed for DNSSEC)"
+        },
+        {
+          "cmd": "pdnsutil secure-zone example.com",
+          "desc": "Enable DNSSEC signing for a zone"
+        },
+        {
+          "cmd": "pdns_control ping",
+          "desc": "Is the authoritative server alive?"
+        },
+        {
+          "cmd": "pdns_control show \"*\"",
+          "desc": "All runtime counters"
+        },
+        {
+          "cmd": "pdns_control purge example.com",
+          "desc": "Purge the packet cache for a name"
+        },
+        {
+          "cmd": "rec_control ping",
+          "desc": "Is the recursor alive?"
+        },
+        {
+          "cmd": "rec_control wipe-cache example.com$",
+          "desc": "Flush a name and everything below it (the $ means the whole subtree)"
+        },
+        {
+          "cmd": "rec_control get-all",
+          "desc": "Recursor counters (cache hits, timeouts, servfails)"
+        },
+        {
+          "cmd": "rec_control top-queries",
+          "desc": "Most frequent queries"
+        },
+        {
+          "cmd": "rec_control dump-cache /tmp/cache.dump",
+          "desc": "Dump the recursor cache to a file"
+        }
+      ]
+    },
+    {
+      "id": "dns-unbound",
+      "title": "Unbound",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "unbound-checkconf",
+          "desc": "Validate unbound.conf before reload"
+        },
+        {
+          "cmd": "unbound-control status",
+          "desc": "Is it running, version, uptime"
+        },
+        {
+          "cmd": "unbound-control stats_noreset",
+          "desc": "Statistics without clearing counters"
+        },
+        {
+          "cmd": "unbound-control lookup example.com",
+          "desc": "Show which servers Unbound would ask and their RTT"
+        },
+        {
+          "cmd": "unbound-control flush example.com",
+          "desc": "Flush one name from the cache"
+        },
+        {
+          "cmd": "unbound-control flush_zone example.com",
+          "desc": "Flush a name and everything below it"
+        },
+        {
+          "cmd": "unbound-control dump_cache > cache.txt",
+          "desc": "Dump the cache to a file (reload it with load_cache)"
+        },
+        {
+          "cmd": "unbound-control list_forwards",
+          "desc": "Configured forward zones"
+        },
+        {
+          "cmd": "unbound-control reload",
+          "desc": "Reload configuration"
+        },
+        {
+          "cmd": "unbound-host -C /etc/unbound/unbound.conf -v example.com",
+          "desc": "Resolve with validation details using the real config"
+        }
+      ]
+    },
+    {
+      "id": "dns-dnssec",
+      "title": "DNSSEC & Delegation",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "dig +dnssec +multi example.com DNSKEY",
+          "desc": "Show the zone signing keys"
+        },
+        {
+          "cmd": "delv example.com",
+          "desc": "Validating lookup that explains why validation passes or fails"
+        },
+        {
+          "cmd": "dig +cd example.com",
+          "desc": "Disable checking: if this works but a normal query is SERVFAIL, DNSSEC validation is the cause"
+        },
+        {
+          "cmd": "dig DS example.com @a.gtld-servers.net",
+          "desc": "DS record at the parent: must match a DNSKEY in the child (swap in the correct TLD server)"
+        },
+        {
+          "cmd": "dig +trace +dnssec example.com",
+          "desc": "Delegation chain with signatures"
+        },
+        {
+          "cmd": "dig NS example.com @a.gtld-servers.net +norec",
+          "desc": "NS records the parent actually publishes (lame delegation check)"
+        },
+        {
+          "cmd": "dnssec-keygen -a ECDSAP256SHA256 -n ZONE example.com",
+          "desc": "Generate a signing key (BIND tools)"
+        },
+        {
+          "cmd": "dnssec-dsfromkey Kexample.com.+013+12345.key",
+          "desc": "Create the DS record to publish at the registrar"
+        },
+        {
+          "cmd": "dnssec-verify -o example.com db.example.com.signed",
+          "desc": "Verify a signed zone file"
+        }
+      ]
+    },
+    {
+      "id": "dns-fail",
+      "title": "Failure Patterns",
+      "color": "#c075f0",
+      "cmds": [
+        {
+          "cmd": "dig example.com | grep -E \"status:|ANSWER:|Query time\"",
+          "desc": "NOERROR with ANSWER 0 = no data; NXDOMAIN = name does not exist; SERVFAIL = server could not answer"
+        },
+        {
+          "cmd": "dig +time=2 +tries=1 example.com",
+          "desc": "A timeout (no response at all) is a third failure type; fail fast to test it"
+        },
+        {
+          "cmd": "for ns in $(dig +short NS example.com); do echo $ns; dig +short +time=2 +tries=1 @$ns example.com; done",
+          "desc": "Query each authoritative server separately to find the broken one"
+        },
+        {
+          "cmd": "ss -ulpn | grep \":53 \"",
+          "desc": "Is anything listening on UDP 53, and which process?"
+        },
+        {
+          "cmd": "journalctl -u systemd-resolved --since \"10 min ago\"",
+          "desc": "Resolver errors, DNSSEC failures, upstream switching"
+        },
+        {
+          "cmd": "nstat -az UdpInErrors UdpRcvbufErrors",
+          "desc": "UDP receive errors: the resolver cannot keep up with its socket buffer"
+        },
+        {
+          "cmd": "sysctl net.netfilter.nf_conntrack_count net.netfilter.nf_conntrack_max",
+          "desc": "Full conntrack table silently drops DNS queries"
+        },
+        {
+          "cmd": "dig +short chaos txt hostname.bind @ns1.example.com",
+          "desc": "Which node of an anycast/load-balanced DNS pool answered?"
+        }
+      ]
+    }
+  ]
+}

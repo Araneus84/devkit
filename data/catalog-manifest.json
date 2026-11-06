@@ -27,7 +27,17 @@
     "fortigate",
     "juniper",
     "netgear",
-    "npm"
+    "npm",
+    "dns",
+    "lb",
+    "tls",
+    "netdiag",
+    "perf",
+    "storage",
+    "secaudit",
+    "patching",
+    "puppet",
+    "runbooks"
   ],
   "builderGroups": [
     "cmd",
@@ -48,6 +58,15 @@
     "linux",
     "npm",
     "sql",
-    "python"
+    "python",
+    "dns",
+    "lb",
+    "tls",
+    "netdiag",
+    "perf",
+    "storage",
+    "secaudit",
+    "patching",
+    "puppet"
   ]
 }

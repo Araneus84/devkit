@@ -12,6 +12,11 @@ const STORAGE_KEYS = {
   viewMode: 'devkit:viewMode',
   fontSize: 'devkit:fontSize',
   sidebarWidth: 'devkit:sidebarWidth',
+  recentSheets: 'devkit:recentSheets',
+  pinnedSheets: 'devkit:pinnedSheets',
+  openCategories: 'devkit:openCategories',
+  sheetVisits: 'devkit:sheetVisits',
+  cmdUse: 'devkit:cmdUse',
 };
 
 function loadJSON(key, fallback) {
@@ -28,12 +33,18 @@ const state = {
   favorites: new Set(loadJSON(STORAGE_KEYS.favorites, [])),
   notes: loadJSON(STORAGE_KEYS.notes, {}),
   history: loadJSON(STORAGE_KEYS.history, []),
-  activeSheet: localStorage.getItem(STORAGE_KEYS.activeSheet) || 'gam7',
+  activeSheet: localStorage.getItem(STORAGE_KEYS.activeSheet) || '__home',
   expandedSheets: new Set(loadJSON(STORAGE_KEYS.expandedSheets, [])),
   activeSection: localStorage.getItem(STORAGE_KEYS.activeSection) || null,
   viewMode: localStorage.getItem(STORAGE_KEYS.viewMode) || 'comfortable',
   fontSize: parseInt(localStorage.getItem(STORAGE_KEYS.fontSize) || '13', 10),
-  sidebarWidth: parseInt(localStorage.getItem(STORAGE_KEYS.sidebarWidth) || '220', 10),
+  sidebarWidth: parseInt(localStorage.getItem(STORAGE_KEYS.sidebarWidth) || '276', 10),
+  recentSheets: loadJSON(STORAGE_KEYS.recentSheets, []),
+  pinnedSheets: new Set(loadJSON(STORAGE_KEYS.pinnedSheets, [])),
+  openCategories: new Set(loadJSON(STORAGE_KEYS.openCategories, [])),
+  sheetVisits: loadJSON(STORAGE_KEYS.sheetVisits, {}),
+  cmdUse: loadJSON(STORAGE_KEYS.cmdUse, {}),
+  navFilter: '',
   searchQuery: '',
   currentNoteId: null,
 };
@@ -52,6 +63,15 @@ function save(key) {
   if (key === 'viewMode') localStorage.setItem(STORAGE_KEYS.viewMode, state.viewMode);
   if (key === 'fontSize') localStorage.setItem(STORAGE_KEYS.fontSize, state.fontSize);
   if (key === 'sidebarWidth') localStorage.setItem(STORAGE_KEYS.sidebarWidth, state.sidebarWidth);
+  if (key === 'recentSheets')
+    localStorage.setItem(STORAGE_KEYS.recentSheets, JSON.stringify(state.recentSheets));
+  if (key === 'pinnedSheets')
+    localStorage.setItem(STORAGE_KEYS.pinnedSheets, JSON.stringify([...state.pinnedSheets]));
+  if (key === 'openCategories')
+    localStorage.setItem(STORAGE_KEYS.openCategories, JSON.stringify([...state.openCategories]));
+  if (key === 'sheetVisits')
+    localStorage.setItem(STORAGE_KEYS.sheetVisits, JSON.stringify(state.sheetVisits));
+  if (key === 'cmdUse') localStorage.setItem(STORAGE_KEYS.cmdUse, JSON.stringify(state.cmdUse));
 }
 
 /* ─────────────────────────────────────────

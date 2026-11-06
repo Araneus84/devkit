@@ -2,10 +2,26 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
-## 3.22.0
+## 3.24.0
 
 - Added a searchable Python 3.15 documentation pack, with online loading and local-file import for offline use.
 - Added practical `sorted()` examples to the Python reference.
+
+## 3.23.0
+
+- Redesigned the interface with a new warm-ink look, a per-category colour system and a refined light theme.
+- Grouped the sheets into seven collapsible categories in the sidebar: Languages & Shells, Linux & Systems, Networking & Security, Cloud & Containers, Automation & IaC, Data & Admin, and Runbooks & Incidents. The open state is remembered.
+- Added a sidebar filter, pinned sheets, and one-click sheet opening (the sheet name now opens the sheet; the arrow shows its sections).
+- Added a Home dashboard with an intent search box and quick searches, library stats, jump-back-in recents, most-used and recently copied commands, favorites, a runbook shortcut row and category cards. It is the landing page; the DevKit logo returns to it.
+- Usage tracking for the dashboard stays in this browser's local storage and is included in backups.
+- Added a regression test covering category coverage, the dashboard, pins, filter, recents and the mobile drawer.
+
+## 3.22.0
+
+- Added ten Linux infrastructure references: DNS Operations, Load Balancers & HA, TLS & Certificates, Network Troubleshooting, Performance Troubleshooting, Storage & Boot, Security Audit & Hardening, Patching & Kernel Lifecycle, Puppet & Config Management, and Incident Runbooks.
+- Added 31 command builders (dig, rndc, HAProxy, nginx, IPVS, arping, openssl, certbot, ping MTU probe, mtr, iperf3, tcpdump, strace, iostat, vmstat, perf, lvextend, df, smartctl, ausearch, ufw, kubectl drain, needrestart and Puppet) and eleven file and script recipes, including HAProxy and keepalived configurations, a rolling patch playbook and a post-mortem template.
+- Added ordered incident runbooks (DNS failures, 502/503/504 after deploy, disk full, SSH lockout, high load, service start failure, HA failover test, unexplained outbound traffic, certificate errors, Kubernetes crash loops and patch day) and a rapid-fire concept sheet.
+- Added a regression test for the new catalogs, builder keys, generated scripts and playbook.
 
 ## 3.21.0
 

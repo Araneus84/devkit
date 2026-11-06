@@ -1,0 +1,330 @@
+{
+  "name": "Network Troubleshooting",
+  "icon": "⌁",
+  "iconBg": "#f59e0b",
+  "subtitle": "Sockets, packets, MTU, conntrack & bandwidth",
+  "meta": "ss, ip, nft, tcpdump",
+  "sections": [
+    {
+      "id": "nd-sockets",
+      "title": "Sockets & Connections (ss)",
+      "color": "#4f8ef7",
+      "cmds": [
+        {
+          "cmd": "ss -s",
+          "desc": "Socket summary: totals by state"
+        },
+        {
+          "cmd": "ss -tulpn",
+          "desc": "Listening TCP/UDP sockets with owning process"
+        },
+        {
+          "cmd": "ss -tan | awk 'NR>1{print $1}' | sort | uniq -c | sort -rn",
+          "desc": "Count of TCP connections by state"
+        },
+        {
+          "cmd": "ss -tn state syn-recv | wc -l",
+          "desc": "Half-open connections: a large number suggests a SYN flood or an overloaded backlog"
+        },
+        {
+          "cmd": "ss -ltn",
+          "desc": "On listeners, Recv-Q is the current accept queue and Send-Q its limit"
+        },
+        {
+          "cmd": "ss -ti dst 192.0.2.10",
+          "desc": "TCP internals for a peer: rtt, cwnd, retransmits, bytes sent"
+        },
+        {
+          "cmd": "ss -tnp state established | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -rn | head",
+          "desc": "Top remote peers by connection count"
+        },
+        {
+          "cmd": "ss -o state established '( sport = :443 )'",
+          "desc": "Connections with keepalive and retransmit timers"
+        },
+        {
+          "cmd": "ss -tunap | grep -v 127.0.0.1",
+          "desc": "Everything that is not loopback, with process names"
+        },
+        {
+          "cmd": "lsof -i :443",
+          "desc": "Which process owns a port"
+        }
+      ]
+    },
+    {
+      "id": "nd-iface",
+      "title": "Interfaces, Links & Drops",
+      "color": "#38d9a9",
+      "cmds": [
+        {
+          "cmd": "ip -br link",
+          "desc": "Brief link state"
+        },
+        {
+          "cmd": "ip -br addr",
+          "desc": "Brief addresses"
+        },
+        {
+          "cmd": "ip -s link show eth0",
+          "desc": "Interface counters: errors, drops, overruns, carrier"
+        },
+        {
+          "cmd": "ip route get 1.1.1.1",
+          "desc": "Which route, interface and source address will be used?"
+        },
+        {
+          "cmd": "ip rule show",
+          "desc": "Policy routing rules (multi-homed hosts, VPNs, Tailscale)"
+        },
+        {
+          "cmd": "ip neigh",
+          "desc": "ARP/NDP cache: stale or FAILED entries explain intermittent reachability"
+        },
+        {
+          "cmd": "ethtool eth0",
+          "desc": "Link speed, duplex and detected link"
+        },
+        {
+          "cmd": "ethtool -S eth0 | grep -iE \"err|drop|miss\"",
+          "desc": "NIC-level error and drop counters"
+        },
+        {
+          "cmd": "ethtool -i eth0",
+          "desc": "Driver and firmware version"
+        },
+        {
+          "cmd": "nstat -az | grep -iE \"retrans|drop|overflow\"",
+          "desc": "Kernel protocol counters that indicate trouble"
+        },
+        {
+          "cmd": "networkctl status",
+          "desc": "systemd-networkd link overview"
+        },
+        {
+          "cmd": "nmcli device status",
+          "desc": "NetworkManager device overview"
+        },
+        {
+          "cmd": "ip monitor",
+          "desc": "Watch link, address and route changes live"
+        }
+      ]
+    },
+    {
+      "id": "nd-fw",
+      "title": "Firewall, NAT & conntrack",
+      "color": "#f7c948",
+      "cmds": [
+        {
+          "cmd": "nft list ruleset",
+          "desc": "Entire nftables ruleset"
+        },
+        {
+          "cmd": "iptables -S",
+          "desc": "iptables rules as commands"
+        },
+        {
+          "cmd": "iptables -L -n -v --line-numbers",
+          "desc": "Rules with packet/byte counters: a rule with a growing counter is matching"
+        },
+        {
+          "cmd": "iptables -t nat -L -n -v",
+          "desc": "NAT table"
+        },
+        {
+          "cmd": "ufw status verbose",
+          "desc": "ufw rules and default policies"
+        },
+        {
+          "cmd": "firewall-cmd --list-all",
+          "desc": "firewalld active zone configuration"
+        },
+        {
+          "cmd": "sysctl net.ipv4.ip_forward",
+          "desc": "Is routing/forwarding enabled?"
+        },
+        {
+          "cmd": "conntrack -C",
+          "desc": "Number of tracked connections"
+        },
+        {
+          "cmd": "conntrack -S",
+          "desc": "Per-CPU stats: insert_failed and drop are bad signs"
+        },
+        {
+          "cmd": "conntrack -L | head",
+          "desc": "Sample of tracked flows"
+        },
+        {
+          "cmd": "conntrack -L -d 192.0.2.10",
+          "desc": "Flows towards one destination"
+        },
+        {
+          "cmd": "sysctl net.netfilter.nf_conntrack_max net.netfilter.nf_conntrack_count",
+          "desc": "Table limit versus current use"
+        },
+        {
+          "cmd": "dmesg -T | grep -i \"nf_conntrack: table full\"",
+          "desc": "The table filled and packets were dropped"
+        }
+      ]
+    },
+    {
+      "id": "nd-mtu",
+      "title": "MTU & Fragmentation",
+      "color": "#f76c8e",
+      "cmds": [
+        {
+          "cmd": "ping -M do -s 1472 host",
+          "desc": "Path MTU probe for 1500: 1472 bytes payload + 28 header, fragmentation forbidden"
+        },
+        {
+          "cmd": "tracepath host",
+          "desc": "Discover the path MTU hop by hop"
+        },
+        {
+          "cmd": "ip link show eth0 | grep mtu",
+          "desc": "Configured interface MTU"
+        },
+        {
+          "cmd": "ip route get host | grep mtu",
+          "desc": "MTU cached on the route"
+        },
+        {
+          "cmd": "tcpdump -ni any 'icmp[icmptype]=3 and icmp[icmpcode]=4'",
+          "desc": "ICMP \"fragmentation needed\" messages: if they never arrive, PMTU discovery is broken"
+        },
+        {
+          "cmd": "iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu",
+          "desc": "Clamp MSS on a router/VPN so large TCP transfers stop hanging"
+        },
+        {
+          "cmd": "sysctl net.ipv4.tcp_mtu_probing",
+          "desc": "1 or 2 lets TCP discover a working size when ICMP is blocked"
+        },
+        {
+          "cmd": "ip link set dev eth0 mtu 1450",
+          "desc": "Temporarily lower the MTU to test (small requests work, big ones hang = MTU)"
+        }
+      ]
+    },
+    {
+      "id": "nd-tcpdump",
+      "title": "tcpdump Recipes",
+      "color": "#a07cf0",
+      "cmds": [
+        {
+          "cmd": "tcpdump -ni any port 53",
+          "desc": "DNS queries and replies"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 host 192.0.2.10 and port 443",
+          "desc": "One peer and port"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) == tcp-syn'",
+          "desc": "New connection attempts (SYN without ACK)"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 'tcp[tcpflags] & tcp-rst != 0'",
+          "desc": "Connection resets: who is rejecting or tearing down connections?"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 icmp",
+          "desc": "Ping, unreachable and time-exceeded messages"
+        },
+        {
+          "cmd": "tcpdump -ni eth0 -c 1000 -w /tmp/capture.pcap",
+          "desc": "Capture 1000 packets to a file for Wireshark"
+        },
+        {
+          "cmd": "tcpdump -nr /tmp/capture.pcap | head",
+          "desc": "Read a capture back"
+        },
+        {
+          "cmd": "tcpdump -nni eth0 -c 5000 | awk '{print $3}' | cut -d. -f1-4 | sort | uniq -c | sort -rn | head",
+          "desc": "Top source addresses in 5000 packets"
+        },
+        {
+          "cmd": "tcpdump -nni eth0 -c 2000 udp | awk '{print $5}' | sort | uniq -c | sort -rn | head",
+          "desc": "Top UDP destinations: a single peer with thousands of packets is a flood"
+        }
+      ]
+    },
+    {
+      "id": "nd-bw",
+      "title": "Bandwidth & Top Talkers",
+      "color": "#60c8e8",
+      "cmds": [
+        {
+          "cmd": "iftop -i eth0 -nNP",
+          "desc": "Live per-connection bandwidth"
+        },
+        {
+          "cmd": "nethogs eth0",
+          "desc": "Live bandwidth per process"
+        },
+        {
+          "cmd": "nload eth0",
+          "desc": "Live in/out graph"
+        },
+        {
+          "cmd": "vnstat -i eth0 -h",
+          "desc": "Hourly traffic history"
+        },
+        {
+          "cmd": "sar -n DEV 1 5",
+          "desc": "Interface throughput per second (needs sysstat)"
+        },
+        {
+          "cmd": "a=$(cat /sys/class/net/eth0/statistics/tx_bytes); sleep 5; b=$(cat /sys/class/net/eth0/statistics/tx_bytes); echo $(( (b-a)*8/5/1000 )) kbps",
+          "desc": "Outbound rate right now, no extra tools needed"
+        },
+        {
+          "cmd": "iperf3 -s",
+          "desc": "Start an iperf3 server on one end"
+        },
+        {
+          "cmd": "iperf3 -c host -t 10 -P 4",
+          "desc": "Throughput test with 4 parallel streams"
+        },
+        {
+          "cmd": "iperf3 -c host -R",
+          "desc": "Reverse direction test"
+        }
+      ]
+    },
+    {
+      "id": "nd-path",
+      "title": "Path & Latency",
+      "color": "#ff9f6b",
+      "cmds": [
+        {
+          "cmd": "mtr -rwbzc 100 host",
+          "desc": "Report-mode mtr: loss and latency per hop with AS numbers"
+        },
+        {
+          "cmd": "traceroute -T -p 443 host",
+          "desc": "Trace using TCP/443 (passes firewalls that block ICMP/UDP)"
+        },
+        {
+          "cmd": "traceroute -I host",
+          "desc": "Trace using ICMP"
+        },
+        {
+          "cmd": "ping -c 100 -i 0.2 host | tail -3",
+          "desc": "Packet loss and jitter over 100 probes"
+        },
+        {
+          "cmd": "ping -I eth0 host",
+          "desc": "Force the source interface (multi-homed hosts)"
+        },
+        {
+          "cmd": "hping3 -S -p 443 -c 5 host",
+          "desc": "TCP SYN probes: tests a port path when ping is filtered"
+        }
+      ]
+    }
+  ]
+}

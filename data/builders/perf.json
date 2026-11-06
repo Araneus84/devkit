@@ -1,0 +1,191 @@
+{
+  "perf::strace -f -tt -T -p PID": {
+    "name": "strace",
+    "description": "Trace the system calls of a process",
+    "base": "strace",
+    "args": [],
+    "flags": [
+      {
+        "flag": "-f",
+        "desc": "Follow child processes and threads"
+      },
+      {
+        "flag": "-tt",
+        "desc": "Timestamps with microseconds"
+      },
+      {
+        "flag": "-T",
+        "desc": "Time spent in each syscall"
+      },
+      {
+        "flag": "-c",
+        "desc": "Summary instead of the full trace"
+      },
+      {
+        "flag": "-p",
+        "desc": "Attach to a process",
+        "valuePrompt": "PID",
+        "join": " ",
+        "valueDefault": "PID",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-e",
+        "desc": "Filter",
+        "valuePrompt": "e.g. trace=network or trace=%file",
+        "join": " ",
+        "valueDefault": "trace=network"
+      },
+      {
+        "flag": "-s",
+        "desc": "Maximum string length",
+        "valuePrompt": "Characters",
+        "join": " ",
+        "valueDefault": "200"
+      },
+      {
+        "flag": "-o",
+        "desc": "Write to a file",
+        "valuePrompt": "Path",
+        "join": " "
+      }
+    ]
+  },
+  "perf::iostat -xz 1 3": {
+    "name": "iostat",
+    "description": "Disk latency and utilisation",
+    "base": "iostat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "3",
+        "required": true,
+        "default": "3"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-x",
+        "desc": "Extended statistics (await, %util)",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-z",
+        "desc": "Hide idle devices",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-d",
+        "desc": "Devices only, no CPU report"
+      },
+      {
+        "flag": "-m",
+        "desc": "Megabytes per second"
+      },
+      {
+        "flag": "-h",
+        "desc": "Human readable"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::vmstat 1 5": {
+    "name": "vmstat",
+    "description": "Run queue, memory, swap, I/O and CPU summary",
+    "base": "vmstat",
+    "args": [
+      {
+        "key": "interval",
+        "label": "Interval (seconds)",
+        "placeholder": "1",
+        "required": true,
+        "default": "1"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "placeholder": "5",
+        "required": true,
+        "default": "5"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-S",
+        "desc": "Units",
+        "valuePrompt": "k, K, m or M",
+        "join": " ",
+        "valueDefault": "M"
+      },
+      {
+        "flag": "-a",
+        "desc": "Active/inactive memory"
+      },
+      {
+        "flag": "-w",
+        "desc": "Wide output"
+      },
+      {
+        "flag": "-t",
+        "desc": "Timestamps"
+      }
+    ],
+    "argsAfterFlags": true
+  },
+  "perf::perf record -F 99 -a -g -- sleep 30": {
+    "name": "perf record",
+    "description": "Sample CPU stacks",
+    "base": "perf record",
+    "args": [
+      {
+        "key": "command",
+        "label": "What to run while sampling",
+        "placeholder": "-- sleep 30",
+        "required": true,
+        "default": "-- sleep 30"
+      }
+    ],
+    "flags": [
+      {
+        "flag": "-F",
+        "desc": "Samples per second",
+        "valuePrompt": "Hz",
+        "join": " ",
+        "valueDefault": "99",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-a",
+        "desc": "All CPUs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-g",
+        "desc": "Record call graphs",
+        "alwaysOn": true
+      },
+      {
+        "flag": "-p",
+        "desc": "One process only",
+        "valuePrompt": "PID",
+        "join": " "
+      },
+      {
+        "flag": "-o",
+        "desc": "Output file",
+        "valuePrompt": "Path",
+        "join": " ",
+        "valueDefault": "perf.data"
+      }
+    ],
+    "argsAfterFlags": true
+  }
+}
