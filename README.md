@@ -51,6 +51,8 @@ The Python section also includes a searchable Python 3.15 manual. On the hosted 
 
 The Bash section also provides the GNU Bash 5.3 reference manual. Load it online or select `documentation-packs/bash-5.3.json` offline. Its source and license are identified in [NOTICE](NOTICE).
 
+The PowerShell section provides the 7.6 command reference and language guides. Load it online or select `documentation-packs/powershell-7.6.json` offline. The pack preserves Microsoft's Markdown text and examples.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

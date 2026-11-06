@@ -18,6 +18,14 @@ const DB_MANUALS = {
     source: 'https://www.gnu.org/software/bash/manual/',
     example: 'quoting, arrays, pipelines',
   },
+  powershell: {
+    id: 'powershell-7.6',
+    name: 'PowerShell 7.6',
+    filename: 'powershell-7.6.json',
+    source:
+      'https://github.com/MicrosoftDocs/PowerShell-Docs/blob/ebaa235784a688ec72ab642186c4c17460fb438b/',
+    example: 'Get-ChildItem, pipelines, functions',
+  },
 };
 
 function dbFind(text, query) {
@@ -41,7 +49,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^[a-zA-Z0-9_./-]+\.html(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
+        !/^[a-zA-Z0-9_./-]+\.(?:html|md)(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
         page.path.split('/').includes('..') ||
         typeof page.text !== 'string' ||
         page.text.length > 3000000,

@@ -21,5 +21,11 @@ Third-party libraries retain their separate licenses:
   GNU Free Documentation License, version 1.3 or later, with no invariant
   sections or cover texts. The complete license is included in the pack.
   Original and transparent HTML: https://www.gnu.org/software/bash/manual/bash.html
+- PowerShell documentation: Copyright Microsoft and contributors, licensed under
+  Creative Commons Attribution 4.0 International. The text pack is converted
+  from the MicrosoftDocs/PowerShell-Docs source at commit
+  ebaa235784a688ec72ab642186c4c17460fb438b, with shared includes expanded and
+  front matter removed. The complete license is included in the pack.
+  Source: https://github.com/MicrosoftDocs/PowerShell-Docs
 
 These third-party components are not relicensed under DevKit's terms.
