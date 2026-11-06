@@ -55,6 +55,8 @@ The PowerShell section provides the 7.6 command reference and language guides. L
 
 The Ansible section provides Ansible Core 2.21 guides, built-in module and plugin documentation, examples, and documentation fragments. Load it online or select `documentation-packs/ansible-core-2.21.json` offline. Collection documentation outside Ansible Core is not included.
 
+The Terraform section provides the Terraform 1.17 language and CLI documentation. Load it online or select `documentation-packs/terraform-1.17.json` offline. Provider and registry documentation are not included; the pack retains its separate Business Source License.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:
