@@ -53,6 +53,8 @@ The Bash section also provides the GNU Bash 5.3 reference manual. Load it online
 
 The PowerShell section provides the 7.6 command reference and language guides. Load it online or select `documentation-packs/powershell-7.6.json` offline. The pack preserves Microsoft's Markdown text and examples.
 
+The Ansible section provides Ansible Core 2.21 guides, built-in module and plugin documentation, examples, and documentation fragments. Load it online or select `documentation-packs/ansible-core-2.21.json` offline. Collection documentation outside Ansible Core is not included.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

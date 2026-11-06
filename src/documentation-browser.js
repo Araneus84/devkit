@@ -26,6 +26,15 @@ const DB_MANUALS = {
       'https://github.com/MicrosoftDocs/PowerShell-Docs/blob/ebaa235784a688ec72ab642186c4c17460fb438b/',
     example: 'Get-ChildItem, pipelines, functions',
   },
+  ansible: {
+    id: 'ansible-core-2.21',
+    name: 'Ansible Core 2.21',
+    filename: 'ansible-core-2.21.json',
+    source:
+      'https://github.com/ansible/ansible-documentation/blob/00c4cb3eb344e2cbbdb8a81f25ee608db3fb6915/',
+    coreSource: 'https://github.com/ansible/ansible/blob/446d5bb415de5e40a0bf9b23f9ae2a7e2ad16835/',
+    example: 'apt, playbooks, variables',
+  },
 };
 
 function dbFind(text, query) {
@@ -49,7 +58,9 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^[a-zA-Z0-9_./-]+\.(?:html|md)(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING)$/.test(
+          page.path,
+        ) ||
         page.path.split('/').includes('..') ||
         typeof page.text !== 'string' ||
         page.text.length > 3000000,
@@ -62,7 +73,9 @@ function dbValidate(pack) {
 
 function dbAddEntry(main, sheet) {
   const button = dkBtn(
-    'Search full ' + SHEETS[sheet].name + ' documentation',
+    sheet === 'ansible'
+      ? 'Search Ansible Core documentation'
+      : 'Search full ' + SHEETS[sheet].name + ' documentation',
     () => dbOpen('', sheet),
     'dk-btn primary',
   );
@@ -189,7 +202,12 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  source.href = DB_MANUALS[dbSheet].source + page.path;
+  if (dbSheet === 'ansible') {
+    const isCore = page.path.startsWith('core/');
+    source.href =
+      (isCore ? DB_MANUALS.ansible.coreSource : DB_MANUALS.ansible.source) +
+      page.path.replace(/^(?:core|guides)\//, '');
+  } else source.href = DB_MANUALS[dbSheet].source + page.path;
   source.target = '_blank';
   source.rel = 'noopener noreferrer';
   const text = dkEl('pre');

@@ -48,6 +48,19 @@ const { pathToFileURL } = require('node:url');
       const psCard = page.locator('.dk-guide').filter({ hasText: 'Get-ChildItem' }).first();
       await psCard.getByRole('button', { name: 'Read page' }).click();
       assert.match(await page.locator('#dk-root pre').innerText(), /EXAMPLES/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('ansible', null));
+      await page.getByRole('button', { name: 'Search Ansible Core documentation' }).click();
+      await page
+        .getByLabel('Choose Ansible documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/ansible-core-2.21.json'));
+      await page.getByLabel('Search Ansible documentation').fill('ansible.builtin.apt');
+      const ansibleCard = page
+        .locator('.dk-guide')
+        .filter({ hasText: 'ansible.builtin.apt' })
+        .first();
+      await ansibleCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /EXAMPLES/);
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -77,6 +90,17 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search PowerShell documentation').fill('Get-ChildItem');
       await page.locator('.dk-guide').filter({ hasText: 'Get-ChildItem' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('ansible', null));
+      await page.getByRole('button', { name: 'Search Ansible Core documentation' }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Ansible documentation').fill('ansible.builtin.apt');
+      await page.locator('.dk-guide').filter({ hasText: 'ansible.builtin.apt' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.locator('#search').fill('ansible.builtin.apt');
+      await page.getByLabel('Documentation language').selectOption('ansible');
+      await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+      await page.locator('.dk-guide').filter({ hasText: 'ansible.builtin.apt' }).first().waitFor();
       await page.close();
     }
     console.log(

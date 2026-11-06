@@ -2,6 +2,11 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.27.0
+
+- Added searchable Ansible Core 2.21 guides, built-in module and plugin documentation, examples, and fragments.
+- Added a language selector for documentation searches.
+
 ## 3.26.0
 
 - Added a searchable PowerShell 7.6 documentation pack with reference and language-guide content.
