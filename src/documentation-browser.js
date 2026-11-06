@@ -10,6 +10,7 @@ const DB_MANUALS = {
     filename: 'python-3.15.json',
     source: 'https://docs.python.org/3.15/',
     example: 'sorted, pathlib, exceptions',
+    licensePage: 'license.html',
   },
   bash: {
     id: 'bash-5.3',
@@ -17,6 +18,7 @@ const DB_MANUALS = {
     filename: 'bash-5.3.json',
     source: 'https://www.gnu.org/software/bash/manual/',
     example: 'quoting, arrays, pipelines',
+    licenseTitle: 'Appendix C GNU Free Documentation License',
   },
   powershell: {
     id: 'powershell-7.6',
@@ -25,6 +27,7 @@ const DB_MANUALS = {
     source:
       'https://github.com/MicrosoftDocs/PowerShell-Docs/blob/ebaa235784a688ec72ab642186c4c17460fb438b/',
     example: 'Get-ChildItem, pipelines, functions',
+    licensePage: 'LICENSE.md',
   },
   ansible: {
     id: 'ansible-core-2.21',
@@ -34,6 +37,16 @@ const DB_MANUALS = {
       'https://github.com/ansible/ansible-documentation/blob/00c4cb3eb344e2cbbdb8a81f25ee608db3fb6915/',
     coreSource: 'https://github.com/ansible/ansible/blob/446d5bb415de5e40a0bf9b23f9ae2a7e2ad16835/',
     example: 'apt, playbooks, variables',
+    licensePage: 'guides/COPYING',
+  },
+  terraform: {
+    id: 'terraform-1.17',
+    name: 'Terraform 1.17',
+    filename: 'terraform-1.17.json',
+    source:
+      'https://github.com/hashicorp/web-unified-docs/blob/91cd77c2916730dbf8f922042462b0c0f22141e9/',
+    example: 'sort, variables, providers',
+    licensePage: 'LICENSE',
   },
 };
 
@@ -58,7 +71,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -75,7 +88,9 @@ function dbAddEntry(main, sheet) {
   const button = dkBtn(
     sheet === 'ansible'
       ? 'Search Ansible Core documentation'
-      : 'Search full ' + SHEETS[sheet].name + ' documentation',
+      : sheet === 'terraform'
+        ? 'Search Terraform language and CLI documentation'
+        : 'Search full ' + SHEETS[sheet].name + ' documentation',
     () => dbOpen('', sheet),
     'dk-btn primary',
   );
@@ -156,6 +171,20 @@ function dbRender() {
   input.setAttribute('aria-label', 'Search ' + SHEETS[dbSheet].name + ' documentation');
   input.value = dbQuery;
   body.append(input);
+  const terms = DB_MANUALS[dbSheet];
+  const licensePage = dbPack.pages.find(
+    (page) => page.path === terms.licensePage || page.title === terms.licenseTitle,
+  );
+  const attribution = dkEl(
+    'p',
+    'dk-help',
+    'Documentation by its original authors. Separate third-party license terms apply. ',
+  );
+  if (licensePage)
+    attribution.append(
+      dkBtn('Read documentation license', () => dbRead(licensePage, ''), 'us-query'),
+    );
+  body.append(attribution);
   const results = dkEl('div');
   body.append(results);
   function search() {

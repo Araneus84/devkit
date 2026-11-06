@@ -2,6 +2,11 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.28.0
+
+- Added a searchable Terraform 1.17 language and CLI documentation pack.
+- Added direct access to each documentation pack's separate license.
+
 ## 3.27.0
 
 - Added searchable Ansible Core 2.21 guides, built-in module and plugin documentation, examples, and fragments.

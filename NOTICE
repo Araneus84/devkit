@@ -32,5 +32,9 @@ Third-party libraries retain their separate licenses:
   its two source revisions are recorded in the pack. Original source:
   https://github.com/ansible/ansible-documentation and
   https://github.com/ansible/ansible
+- Terraform documentation: Copyright IBM and contributors, Business Source
+  License 1.1. The separate converted pack retains the complete license and
+  source revision; its own use terms apply independently from DevKit's license.
+  Source: https://github.com/hashicorp/web-unified-docs
 
 These third-party components are not relicensed under DevKit's terms.

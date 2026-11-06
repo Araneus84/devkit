@@ -49,6 +49,21 @@ const { pathToFileURL } = require('node:url');
       await psCard.getByRole('button', { name: 'Read page' }).click();
       assert.match(await page.locator('#dk-root pre').innerText(), /EXAMPLES/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('terraform', null));
+      await page
+        .getByRole('button', { name: 'Search Terraform language and CLI documentation' })
+        .click();
+      await page
+        .getByLabel('Choose Terraform documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/terraform-1.17.json'));
+      await page.getByLabel('Search Terraform documentation').fill('sort Function');
+      await page.getByRole('button', { name: 'Read documentation license' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /Business Source License/);
+      await page.getByRole('button', { name: 'Back to results' }).click();
+      const tfCard = page.locator('.dk-guide').filter({ hasText: 'sort Function' }).first();
+      await tfCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /sort\(\[/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('ansible', null));
       await page.getByRole('button', { name: 'Search Ansible Core documentation' }).click();
       await page
@@ -96,6 +111,14 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search Ansible documentation').fill('ansible.builtin.apt');
       await page.locator('.dk-guide').filter({ hasText: 'ansible.builtin.apt' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('terraform', null));
+      await page
+        .getByRole('button', { name: 'Search Terraform language and CLI documentation' })
+        .click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Terraform documentation').fill('sort Function');
+      await page.locator('.dk-guide').filter({ hasText: 'sort Function' }).first().waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.locator('#search').fill('ansible.builtin.apt');
       await page.getByLabel('Documentation language').selectOption('ansible');
