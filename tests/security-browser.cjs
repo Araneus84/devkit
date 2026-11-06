@@ -107,8 +107,8 @@ const { chromium } = require(process.env.DEVKIT_PLAYWRIGHT || 'playwright'),
         const policy = document.querySelector('meta[http-equiv="Content-Security-Policy"]').content,
           connect = policy.match(/(?:^|;)\s*connect-src\s+([^;]+)/)?.[1]?.trim();
         assert(
-          connect === 'http://127.0.0.1:* http://localhost:*',
-          'Loopback-only network policy missing',
+          connect === "'self' http://127.0.0.1:* http://localhost:*",
+          'Same-origin and loopback-only network policy missing',
         );
         await new Promise((resolve, reject) => {
           const url = URL.createObjectURL(

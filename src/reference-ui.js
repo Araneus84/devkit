@@ -367,6 +367,7 @@ function renderSheet(key, q) {
 
   html += sectionsHtml;
   main.innerHTML = html;
+  if (key === 'python') dbAddEntry(main);
   updateStatusCount(totalVisible, sheet.name);
 }
 

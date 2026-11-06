@@ -1,6 +1,6 @@
 {
   "name": "DevKit",
-  "version": "3.23.0",
+  "version": "3.24.0",
   "entry": "index.html",
   "javascript": [
     "vendor/js-yaml.min.js",
@@ -61,6 +61,7 @@
     "src/diagnostics.js",
     "src/editor-modes.js",
     "src/local-companion.js",
+    "src/documentation-browser.js",
     "src/unified-search.js",
     "src/home-ui.js",
     "src/start.js"

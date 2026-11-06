@@ -6,3 +6,4 @@ playwright-report/
 package-lock.json
 src/reference-data.js
 src/command-definitions.js
+documentation-packs/

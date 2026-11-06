@@ -10,5 +10,11 @@ Third-party libraries retain their separate licenses:
 - Lezer Python parser and supporting packages: vendor/LICENSE.lezer.txt
 - CodeMirror 5.65.21: vendor/codemirror/LICENSE
 - cm5-vim 0.0.6: vendor/codemirror/LICENSE.vim.txt
+- Python 3.15 documentation: Python Software Foundation License Version 2.
+  Copyright 2001-present Python Software Foundation; earlier portions copyright
+  BeOpen.com, CNRI, and Stichting Mathematisch Centrum. The documentation pack
+  contains converted text from the official Python HTML documentation; its
+  copyright and complete license pages are included in the pack. Original:
+  https://docs.python.org/3.15/; license: https://docs.python.org/3.15/license.html
 
 These third-party components are not relicensed under DevKit's terms.

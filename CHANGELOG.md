@@ -2,6 +2,11 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.24.0
+
+- Added a searchable Python 3.15 documentation pack, with online loading and local-file import for offline use.
+- Added practical `sorted()` examples to the Python reference.
+
 ## 3.23.0
 
 - Redesigned the interface with a new warm-ink look, a per-category colour system and a refined light theme.
