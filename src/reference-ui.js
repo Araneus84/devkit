@@ -367,7 +367,8 @@ function renderSheet(key, q) {
 
   html += sectionsHtml;
   main.innerHTML = html;
-  if (key === 'python' || key === 'bash' || key === 'powershell') dbAddEntry(main, key);
+  if (key === 'python' || key === 'bash' || key === 'powershell' || key === 'ansible')
+    dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);
 }
 

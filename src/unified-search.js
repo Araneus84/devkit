@@ -78,7 +78,8 @@ const US_SHEET_TERMS = {
 let usIndex = null,
   usById = new Map(),
   usFilter = 'All',
-  usLastQuery = '';
+  usLastQuery = '',
+  usDocumentationSheet = 'python';
 function usNormalize(value) {
   return String(value ?? '')
     .normalize('NFKD')
@@ -556,27 +557,24 @@ function usRenderSearch(query) {
   ])
     examples.append(dkBtn(text, () => usSetQuery(text), 'us-query'));
   main.append(examples);
-  const documentation = dkBtn(
-    'Search Python manual for “' + query + '”',
-    () => dbOpen(query),
-    'us-query',
+  const documentation = dkEl('div', 'us-examples');
+  const manualSelect = dkEl('select', 'dk-input');
+  manualSelect.setAttribute('aria-label', 'Documentation language');
+  for (const id of Object.keys(DB_MANUALS)) {
+    const option = dkEl('option', '', SHEETS[id].name);
+    option.value = id;
+    manualSelect.append(option);
+  }
+  manualSelect.value = usDocumentationSheet;
+  manualSelect.onchange = () => {
+    usDocumentationSheet = manualSelect.value;
+  };
+  documentation.append(
+    dkEl('span', '', 'Search full manual'),
+    manualSelect,
+    dkBtn('Search documentation', () => dbOpen(query, manualSelect.value), 'us-query'),
   );
-  documentation.style.marginBottom = '1rem';
   main.append(documentation);
-  const bashDocumentation = dkBtn(
-    'Search Bash manual for “' + query + '”',
-    () => dbOpen(query, 'bash'),
-    'us-query',
-  );
-  bashDocumentation.style.marginBottom = '1rem';
-  main.append(bashDocumentation);
-  const psDocumentation = dkBtn(
-    'Search PowerShell manual for “' + query + '”',
-    () => dbOpen(query, 'powershell'),
-    'us-query',
-  );
-  psDocumentation.style.marginBottom = '1rem';
-  main.append(psDocumentation);
   if (!ranked.length) {
     const empty = dkEl('div', 'empty');
     empty.append(

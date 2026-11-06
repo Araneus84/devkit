@@ -27,5 +27,10 @@ Third-party libraries retain their separate licenses:
   ebaa235784a688ec72ab642186c4c17460fb438b, with shared includes expanded and
   front matter removed. The complete license is included in the pack.
   Source: https://github.com/MicrosoftDocs/PowerShell-Docs
+- Ansible Core documentation and module documentation: GNU General Public
+  License version 3 or later. The converted pack includes the complete license;
+  its two source revisions are recorded in the pack. Original source:
+  https://github.com/ansible/ansible-documentation and
+  https://github.com/ansible/ansible
 
 These third-party components are not relicensed under DevKit's terms.
