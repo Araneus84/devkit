@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.26.0
+
+- Added a searchable PowerShell 7.6 documentation pack with reference and language-guide content.
+
 ## 3.25.0
 
 - Added a searchable GNU Bash 5.3 reference manual pack for online and offline use.

@@ -52130,7 +52130,7 @@ function renderSheet(key, q) {
 
   html += sectionsHtml;
   main.innerHTML = html;
-  if (key === 'python' || key === 'bash') dbAddEntry(main, key);
+  if (key === 'python' || key === 'bash' || key === 'powershell') dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);
 }
 
@@ -72899,6 +72899,14 @@ const DB_MANUALS = {
     source: 'https://www.gnu.org/software/bash/manual/',
     example: 'quoting, arrays, pipelines',
   },
+  powershell: {
+    id: 'powershell-7.6',
+    name: 'PowerShell 7.6',
+    filename: 'powershell-7.6.json',
+    source:
+      'https://github.com/MicrosoftDocs/PowerShell-Docs/blob/ebaa235784a688ec72ab642186c4c17460fb438b/',
+    example: 'Get-ChildItem, pipelines, functions',
+  },
 };
 
 function dbFind(text, query) {
@@ -72922,7 +72930,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^[a-zA-Z0-9_./-]+\.html(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
+        !/^[a-zA-Z0-9_./-]+\.(?:html|md)(?:#[a-zA-Z0-9_.-]+)?$/.test(page.path) ||
         page.path.split('/').includes('..') ||
         typeof page.text !== 'string' ||
         page.text.length > 3000000,
@@ -73652,6 +73660,13 @@ function usRenderSearch(query) {
   );
   bashDocumentation.style.marginBottom = '1rem';
   main.append(bashDocumentation);
+  const psDocumentation = dkBtn(
+    'Search PowerShell manual for “' + query + '”',
+    () => dbOpen(query, 'powershell'),
+    'us-query',
+  );
+  psDocumentation.style.marginBottom = '1rem';
+  main.append(psDocumentation);
   if (!ranked.length) {
     const empty = dkEl('div', 'empty');
     empty.append(
@@ -74064,6 +74079,12 @@ Third-party libraries retain their separate licenses:
   GNU Free Documentation License, version 1.3 or later, with no invariant
   sections or cover texts. The complete license is included in the pack.
   Original and transparent HTML: https://www.gnu.org/software/bash/manual/bash.html
+- PowerShell documentation: Copyright Microsoft and contributors, licensed under
+  Creative Commons Attribution 4.0 International. The text pack is converted
+  from the MicrosoftDocs/PowerShell-Docs source at commit
+  ebaa235784a688ec72ab642186c4c17460fb438b, with shared includes expanded and
+  front matter removed. The complete license is included in the pack.
+  Source: https://github.com/MicrosoftDocs/PowerShell-Docs
 
 These third-party components are not relicensed under DevKit's terms.
 

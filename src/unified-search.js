@@ -570,6 +570,13 @@ function usRenderSearch(query) {
   );
   bashDocumentation.style.marginBottom = '1rem';
   main.append(bashDocumentation);
+  const psDocumentation = dkBtn(
+    'Search PowerShell manual for “' + query + '”',
+    () => dbOpen(query, 'powershell'),
+    'us-query',
+  );
+  psDocumentation.style.marginBottom = '1rem';
+  main.append(psDocumentation);
   if (!ranked.length) {
     const empty = dkEl('div', 'empty');
     empty.append(
