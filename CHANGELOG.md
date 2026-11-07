@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.30.0
+
+- Added a searchable Docker documentation snapshot covering the CLI, Dockerfile, Compose, engine, and build guides.
+
 ## 3.29.0
 
 - Added searchable Git manual pages and the Git user manual from a November 2026 documentation snapshot.

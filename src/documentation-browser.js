@@ -56,6 +56,17 @@ const DB_MANUALS = {
     example: 'commit, rebase, reset',
     licensePage: 'COPYING',
   },
+  docker: {
+    id: 'docker-2026-11',
+    name: 'Docker documentation snapshot (November 2026)',
+    filename: 'docker-2026-11.json',
+    source: 'https://github.com/docker/docs/blob/16e452c8eaea26cec842cbf1065037fb2015001f/',
+    cliSource: 'https://github.com/docker/cli/blob/7c0f1b261a24b36ad39b6031db6ffe41e60bc7e7/',
+    buildkitSource:
+      'https://github.com/moby/buildkit/blob/cedaeca8850a2bb536bbd1db72419f3cf491bdb5/',
+    example: 'Dockerfile, docker run, compose',
+    licensePage: 'docs/LICENSE',
+  },
 };
 
 function dbFind(text, query) {
@@ -79,7 +90,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|COPYING|LICENSE)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|docs\/LICENSE|cli\/NOTICE|COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -98,7 +109,9 @@ function dbAddEntry(main, sheet) {
       ? 'Search Ansible Core documentation'
       : sheet === 'terraform'
         ? 'Search Terraform language and CLI documentation'
-        : 'Search full ' + SHEETS[sheet].name + ' documentation',
+        : sheet === 'docker'
+          ? 'Search Docker documentation'
+          : 'Search full ' + SHEETS[sheet].name + ' documentation',
     () => dbOpen('', sheet),
     'dk-btn primary',
   );
@@ -115,16 +128,18 @@ function dbOpen(initialQuery = '', sheet = 'python') {
   dbRender();
 }
 
+function dbPackUrl() {
+  const base = new URL(location.href);
+  if (base.pathname.endsWith('/dist/devkit.html'))
+    base.pathname = base.pathname.replace(/dist\/devkit\.html$/, '');
+  else base.pathname = base.pathname.replace(/[^/]*$/, '');
+  return new URL('documentation-packs/' + DB_MANUALS[dbSheet].filename, base);
+}
+
 async function dbLoadOnline(status) {
   status.textContent = 'Loading documentation…';
   try {
-    const base = new URL(location.href);
-    if (base.pathname.endsWith('/dist/devkit.html'))
-      base.pathname = base.pathname.replace(/dist\/devkit\.html$/, '');
-    else base.pathname = base.pathname.replace(/[^/]*$/, '');
-    const response = await fetch(
-      new URL('documentation-packs/' + DB_MANUALS[dbSheet].filename, base),
-    );
+    const response = await fetch(dbPackUrl());
     if (!response.ok) throw new Error(`Download failed (${response.status}).`);
     dbPack = dbValidate(await response.json());
     DB_PACKS.set(dbSheet, dbPack);
@@ -152,6 +167,10 @@ function dbRender() {
     body.append(status);
     if (location.protocol === 'https:' || location.protocol === 'http:') {
       body.append(dkBtn('Load online manual', () => dbLoadOnline(status), 'dk-btn primary'));
+      const download = dkEl('a', 'dk-btn', 'Download pack for offline use');
+      download.href = dbPackUrl().href;
+      download.download = DB_MANUALS[dbSheet].filename;
+      body.append(download);
     }
     const label = dkEl('label', 'dk-help', ' Or choose a downloaded documentation pack: ');
     const input = dkEl('input');
@@ -239,7 +258,15 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'git' && page.path === 'COPYING') {
+  if (dbSheet === 'docker') {
+    const [origin, ...parts] = page.path.split('/');
+    const bases = {
+      docs: DB_MANUALS.docker.source,
+      cli: DB_MANUALS.docker.cliSource,
+      buildkit: DB_MANUALS.docker.buildkitSource,
+    };
+    source.href = (bases[origin] || DB_MANUALS.docker.source) + parts.join('/');
+  } else if (dbSheet === 'git' && page.path === 'COPYING') {
     source.href = 'https://github.com/git/git/blob/master/COPYING';
   } else if (dbSheet === 'ansible') {
     const isCore = page.path.startsWith('core/');

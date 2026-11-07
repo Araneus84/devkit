@@ -40,5 +40,9 @@ Third-party libraries retain their separate licenses:
   includes the license and identifies its source revision. Original prebuilt
   manual pages: https://github.com/git/htmldocs; corresponding source:
   https://github.com/git/git
+- Docker, Docker CLI, and BuildKit documentation: Apache License 2.0. The
+  converted pack includes the license, Docker CLI notices, and source revisions.
+  Sources: https://github.com/docker/docs, https://github.com/docker/cli,
+  and https://github.com/moby/buildkit
 
 These third-party components are not relicensed under DevKit's terms.

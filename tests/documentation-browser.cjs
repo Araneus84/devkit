@@ -86,6 +86,16 @@ const { pathToFileURL } = require('node:url');
       const gitCard = page.locator('.dk-guide').filter({ hasText: 'git-commit(1)' }).first();
       await gitCard.getByRole('button', { name: 'Read page' }).click();
       assert.match(await page.locator('#dk-root pre').innerText(), /--amend/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('docker', null));
+      await page.getByRole('button', { name: 'Search Docker documentation' }).click();
+      await page
+        .getByLabel('Choose Docker documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/docker-2026-11.json'));
+      await page.getByLabel('Search Docker documentation').fill('docker run');
+      const dockerCard = page.locator('.dk-guide').filter({ hasText: 'docker run' }).first();
+      await dockerCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /container/i);
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -100,6 +110,12 @@ const { pathToFileURL } = require('node:url');
       await page.goto(`https://devkit.test/${edition}`);
       await page.evaluate(() => setSheet('python', null));
       await page.getByRole('button', { name: 'Search full Python documentation' }).click();
+      const download = page.getByRole('link', { name: 'Download pack for offline use' });
+      assert.equal(await download.getAttribute('download'), 'python-3.15.json');
+      assert.match(
+        await download.getAttribute('href'),
+        /\/documentation-packs\/python-3\.15\.json$/,
+      );
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search Python documentation').fill('sorted(');
       await page.locator('.dk-guide').filter({ hasText: 'Built-in functions' }).first().waitFor();
@@ -128,6 +144,12 @@ const { pathToFileURL } = require('node:url');
       await page.getByLabel('Search Git documentation').fill('git-commit');
       await page.locator('.dk-guide').filter({ hasText: 'git-commit(1)' }).first().waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('docker', null));
+      await page.getByRole('button', { name: 'Search Docker documentation' }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Docker documentation').fill('Dockerfile reference');
+      await page.locator('.dk-guide').filter({ hasText: 'Dockerfile reference' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('terraform', null));
       await page
         .getByRole('button', { name: 'Search Terraform language and CLI documentation' })
@@ -143,7 +165,7 @@ const { pathToFileURL } = require('node:url');
       await page.close();
     }
     console.log(
-      'PASS: Python manual pack loads, searches, and displays documentation in both editions.',
+      'PASS: Documentation packs load, search, and display in hosted and offline editions.',
     );
   } finally {
     await browser.close();
