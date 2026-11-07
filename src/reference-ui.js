@@ -377,9 +377,11 @@ function renderSheet(key, q) {
     key === 'docker' ||
     key === 'sql' ||
     key === 'k8s' ||
-    key === 'vim'
+    key === 'vim' ||
+    key === 'curl'
   )
     dbAddEntry(main, key);
+  if (key === 'curl') dbAddEntry(main, 'jq');
   updateStatusCount(totalVisible, sheet.name);
 }
 

@@ -151,6 +151,25 @@ const { pathToFileURL } = require('node:url');
       assert.match(kubeText, /Example: application\/deployment.yaml/);
       assert.match(kubeText, /kind: Deployment/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('curl', null));
+      for (const [tool, file, query, title, example] of [
+        ['curl', 'curl-2026-11.json', '--header', '--header (-H)', /curl -H/],
+        ['jq', 'jq-1.8.json', 'map(f)', 'map(f)', /Example filter:/],
+      ]) {
+        await page.getByRole('button', { name: `Search full ${tool} documentation` }).click();
+        await page
+          .getByLabel(`Choose ${tool} documentation pack`)
+          .setInputFiles(path.join(project, 'documentation-packs', file));
+        await page.getByLabel(`Search ${tool} documentation`).fill(query);
+        await page
+          .locator('.dk-guide')
+          .filter({ hasText: title })
+          .first()
+          .getByRole('button', { name: 'Read page' })
+          .click();
+        assert.match(await page.locator('#dk-root pre').innerText(), example);
+        await page.getByRole('button', { name: 'Close ✕' }).click();
+      }
       await page.evaluate(() => setSheet('vim', null));
       await page.getByRole('button', { name: 'Search full Vim documentation' }).click();
       await page
@@ -298,6 +317,17 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       assert.match(await page.locator('.dk-guide').first().innerText(), /editing\.txt/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      for (const [tool, query, title] of [
+        ['curl', '--header', '--header (-H)'],
+        ['jq', 'map(f)', 'map(f)'],
+      ]) {
+        await page.locator('#search').fill(query);
+        await page.getByLabel('Documentation language').selectOption(tool);
+        await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+        await page.getByRole('button', { name: 'Load online manual' }).click();
+        await page.locator('.dk-guide').filter({ hasText: title }).first().waitFor();
+        await page.getByRole('button', { name: 'Close ✕' }).click();
+      }
       await page.close();
     }
     console.log(

@@ -5,6 +5,24 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  curl: {
+    id: 'curl-2026-11',
+    name: 'curl documentation snapshot (November 2026)',
+    label: 'curl',
+    filename: 'curl-2026-11.json',
+    source: 'https://github.com/curl/curl/blob/155f6f76c7ba9d19b5656c4ab1f320a949a3ca4c/',
+    example: '--header, --retry, authentication',
+    licensePage: 'COPYING',
+  },
+  jq: {
+    id: 'jq-1.8',
+    name: 'jq 1.8',
+    label: 'jq',
+    filename: 'jq-1.8.json',
+    source: 'https://github.com/jqlang/jq/blob/5c001b18d7237cce1fdba63608732163f978dd23/',
+    example: 'map, select, sort_by',
+    licensePage: 'licenses/CC-BY-3.0.txt',
+  },
   vim: {
     id: 'vim-2026-11',
     name: 'Vim 9.2 help snapshot (November 2026)',
@@ -143,7 +161,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py|txt)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|docs\/LICENSE|cli\/NOTICE|COPYING|LICENSE)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py|txt|yml)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|docs\/LICENSE|cli\/NOTICE|COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -166,7 +184,7 @@ function dbAddEntry(main, sheet) {
           ? 'Search Terraform language and CLI documentation'
           : sheet === 'docker'
             ? 'Search Docker documentation'
-            : 'Search full ' + SHEETS[sheet].name + ' documentation',
+            : 'Search full ' + dbLabel(sheet) + ' documentation',
     () => dbOpen('', sheet),
     'dk-btn primary',
   );
@@ -320,7 +338,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'vim' && page.path === 'licenses/OPUBL-1.0.txt') {
+  if (dbSheet === 'jq' && page.path === 'licenses/CC-BY-3.0.txt') {
+    source.href = 'https://creativecommons.org/licenses/by/3.0/';
+  } else if (dbSheet === 'vim' && page.path === 'licenses/OPUBL-1.0.txt') {
     source.href = 'https://spdx.org/licenses/OPUBL-1.0.html';
   } else if (dbSheet === 'docker') {
     const [origin, ...parts] = page.path.split('/');
