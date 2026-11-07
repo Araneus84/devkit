@@ -6,6 +6,10 @@ This file records notable user-facing changes. Patch releases that only fix regr
 
 - Added the searchable PostgreSQL 18.6 manual to the SQL section.
 
+## 3.30.1
+
+- Replaced Docker Swarm token-shaped example values with placeholders and added a check to prevent their return.
+
 ## 3.30.0
 
 - Added a searchable Docker documentation snapshot covering the CLI, Dockerfile, Compose, engine, and build guides.

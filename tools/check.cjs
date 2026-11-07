@@ -53,6 +53,18 @@ function check() {
   assertIndexOrder(fs.readFileSync(INDEX_PATH, 'utf8'), manifest);
   for (const file of authoredFiles()) checkText(file);
   checkIgnoreFile();
+  const dockerPack = fs.readFileSync(
+    path.join(ROOT, 'documentation-packs/docker-2026-11.json'),
+    'utf8',
+  );
+  if (
+    /\bSWMTKN-1-[A-Za-z0-9]{50}-[A-Za-z0-9]{25}\b/.test(dockerPack) ||
+    /\bSWMKEY-1-[A-Za-z0-9+/=]{43}(?![A-Za-z0-9+/=])/.test(dockerPack)
+  ) {
+    throw new Error(
+      'Docker documentation contains a Swarm token or unlock key. Regenerate the documentation pack.',
+    );
+  }
   const catalogs = renderCatalogs();
   if (fs.readFileSync(REFERENCE_OUTPUT, 'utf8') !== catalogs.reference) {
     throw new Error('src/reference-data.js is stale. Run npm run build and commit it.');

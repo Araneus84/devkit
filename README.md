@@ -59,7 +59,7 @@ The Terraform section provides the Terraform 1.17 language and CLI documentation
 
 The Git section includes a November 2026 snapshot of the Git manual pages and user manual. Load it online or select `documentation-packs/git-2026-11.json` offline. This is a development snapshot, so check the original manual for version-specific behavior.
 
-The Docker section includes a November 2026 snapshot of the CLI, Dockerfile, Compose, engine, and build guides. Load it online or select `documentation-packs/docker-2026-11.json` offline. API specifications and other Docker product manuals are not included.
+The Docker section includes a November 2026 snapshot of the CLI, Dockerfile, Compose, engine, and build guides. Load it online or select `documentation-packs/docker-2026-11.json` offline. Example Swarm join tokens and unlock keys are replaced with placeholders. API specifications and other Docker product manuals are not included.
 
 The SQL section includes the PostgreSQL 18.6 manual, including SQL commands, examples, and database administration. Load it online or select `documentation-packs/postgresql-18.6.json` offline. SQL dialects differ; this pack describes PostgreSQL specifically.
 

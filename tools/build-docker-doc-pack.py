@@ -7,6 +7,17 @@ import pathlib
 import re
 import subprocess
 
+EXAMPLE_SECRET_PATTERNS = (
+    (re.compile(r'\bSWMTKN-1-[A-Za-z0-9]{50}-[A-Za-z0-9]{25}\b'), '<SWARM_JOIN_TOKEN>'),
+    (re.compile(r'\bSWMKEY-1-[A-Za-z0-9+/=]{43}(?![A-Za-z0-9+/=])'), '<SWARM_UNLOCK_KEY>'),
+)
+
+
+def redact_example_tokens(text):
+    for pattern, placeholder in EXAMPLE_SECRET_PATTERNS:
+        text = pattern.sub(placeholder, text)
+    return text
+
 
 def revision(root):
     return subprocess.check_output(['git', '-C', str(root), 'rev-parse', 'HEAD'], text=True).strip()
@@ -20,7 +31,7 @@ def page(file, root, prefix):
         title = next((line[6:].strip().strip('"\'') for line in frontmatter.splitlines() if line.startswith('title:')), title)
     else:
         title = next((line.lstrip('# ').strip() for line in text.splitlines() if line.startswith('# ')), title)
-    return {'path': prefix + '/' + file.relative_to(root).as_posix(), 'title': title, 'text': text.strip()}
+    return {'path': prefix + '/' + file.relative_to(root).as_posix(), 'title': title, 'text': redact_example_tokens(text.strip())}
 
 
 def main():
