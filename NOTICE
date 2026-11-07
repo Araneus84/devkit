@@ -59,5 +59,9 @@ Third-party libraries retain their separate licenses:
   Attribution 4.0 International. The converted pack records its source revision,
   includes the license, expands local examples and shared includes, and replaces
   sample private-key blocks. Source: https://github.com/kubernetes/website
+- Vim documentation: Copyright Bram Moolenaar and contributors, Open Publication
+  License v1.0 or later. The unmodified help files include their copyright notice
+  and Vim's license; the pack also includes the Open Publication License text.
+  Source: https://github.com/vim/vim
 
 These third-party components are not relicensed under DevKit's terms.
