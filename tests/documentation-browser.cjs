@@ -96,6 +96,34 @@ const { pathToFileURL } = require('node:url');
       const dockerCard = page.locator('.dk-guide').filter({ hasText: 'docker run' }).first();
       await dockerCard.getByRole('button', { name: 'Read page' }).click();
       assert.match(await page.locator('#dk-root pre').innerText(), /container/i);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('sql', null));
+      await page.getByRole('button', { name: 'Search PostgreSQL 18 documentation' }).click();
+      await page
+        .getByLabel('Choose SQL documentation pack')
+        .setInputFiles(path.resolve(__dirname, '../documentation-packs/postgresql-18.6.json'));
+      await page.getByLabel('Search SQL documentation').fill('SELECT');
+      const sqlCard = page
+        .locator('.dk-guide')
+        .filter({ hasText: /^SELECT/ })
+        .first();
+      await sqlCard.getByRole('button', { name: 'Read page' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /Examples/);
+      assert.match(await page.locator('#dk-root pre').innerText(), /WHERE/);
+      const rejectedPath = await page.evaluate(() => {
+        try {
+          dbValidate({
+            format: 'devkit-documentation-pack',
+            version: 1,
+            id: 'postgresql-18.6',
+            pages: [{ title: 'bad', path: '../escape.html', text: 'bad' }],
+          });
+          return false;
+        } catch {
+          return true;
+        }
+      });
+      assert.equal(rejectedPath, true, 'Documentation paths must reject traversal.');
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -149,6 +177,16 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.getByLabel('Search Docker documentation').fill('Dockerfile reference');
       await page.locator('.dk-guide').filter({ hasText: 'Dockerfile reference' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('sql', null));
+      await page.getByRole('button', { name: 'Search PostgreSQL 18 documentation' }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search SQL documentation').fill('SELECT');
+      await page
+        .locator('.dk-guide')
+        .filter({ hasText: /^SELECT/ })
+        .first()
+        .waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('terraform', null));
       await page

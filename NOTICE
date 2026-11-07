@@ -45,5 +45,9 @@ Third-party libraries retain their separate licenses:
   example Swarm join tokens and unlock keys are replaced with placeholders.
   Sources: https://github.com/docker/docs, https://github.com/docker/cli,
   and https://github.com/moby/buildkit
+- PostgreSQL 18.6 documentation: Copyright 1996–2026 The PostgreSQL Global
+  Development Group, PostgreSQL License. The converted pack includes the legal
+  notice and identifies the original archive by SHA-256. Original manual:
+  https://www.postgresql.org/docs/18/
 
 These third-party components are not relicensed under DevKit's terms.

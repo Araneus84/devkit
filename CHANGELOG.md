@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.31.0
+
+- Added the searchable PostgreSQL 18.6 manual to the SQL section.
+
 ## 3.30.1
 
 - Replaced Docker Swarm token-shaped example values with placeholders and added a check to prevent their return.

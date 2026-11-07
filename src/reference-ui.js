@@ -374,7 +374,8 @@ function renderSheet(key, q) {
     key === 'ansible' ||
     key === 'terraform' ||
     key === 'git' ||
-    key === 'docker'
+    key === 'docker' ||
+    key === 'sql'
   )
     dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);

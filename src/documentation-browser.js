@@ -67,6 +67,14 @@ const DB_MANUALS = {
     example: 'Dockerfile, docker run, compose',
     licensePage: 'docs/LICENSE',
   },
+  sql: {
+    id: 'postgresql-18.6',
+    name: 'PostgreSQL 18.6 SQL and database',
+    filename: 'postgresql-18.6.json',
+    source: 'https://www.postgresql.org/docs/18/',
+    example: 'SELECT, joins, window functions',
+    licensePage: 'legalnotice.html',
+  },
 };
 
 function dbFind(text, query) {
@@ -105,13 +113,15 @@ function dbValidate(pack) {
 
 function dbAddEntry(main, sheet) {
   const button = dkBtn(
-    sheet === 'ansible'
-      ? 'Search Ansible Core documentation'
-      : sheet === 'terraform'
-        ? 'Search Terraform language and CLI documentation'
-        : sheet === 'docker'
-          ? 'Search Docker documentation'
-          : 'Search full ' + SHEETS[sheet].name + ' documentation',
+    sheet === 'sql'
+      ? 'Search PostgreSQL 18 documentation'
+      : sheet === 'ansible'
+        ? 'Search Ansible Core documentation'
+        : sheet === 'terraform'
+          ? 'Search Terraform language and CLI documentation'
+          : sheet === 'docker'
+            ? 'Search Docker documentation'
+            : 'Search full ' + SHEETS[sheet].name + ' documentation',
     () => dbOpen('', sheet),
     'dk-btn primary',
   );

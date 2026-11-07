@@ -61,6 +61,8 @@ The Git section includes a November 2026 snapshot of the Git manual pages and us
 
 The Docker section includes a November 2026 snapshot of the CLI, Dockerfile, Compose, engine, and build guides. Load it online or select `documentation-packs/docker-2026-11.json` offline. Example Swarm join tokens and unlock keys are replaced with placeholders. API specifications and other Docker product manuals are not included.
 
+The SQL section includes the PostgreSQL 18.6 manual, including SQL commands, examples, and database administration. Load it online or select `documentation-packs/postgresql-18.6.json` offline. SQL dialects differ; this pack describes PostgreSQL specifically.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:
