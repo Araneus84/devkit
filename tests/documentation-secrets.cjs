@@ -20,6 +20,12 @@ assert.ok(
 );
 assert.doesNotMatch(joined, /\bSWMTKN-1-[A-Za-z0-9]{50}-[A-Za-z0-9]{25}\b/);
 assert.doesNotMatch(joined, /\bSWMKEY-1-[A-Za-z0-9+/=]{43}(?![A-Za-z0-9+/=])/);
+const kubernetes = fs.readFileSync(
+  path.join(root, 'documentation-packs/kubernetes-2026-11.json'),
+  'utf8',
+);
+assert.ok(kubernetes.includes('[PRIVATE KEY EXAMPLE REMOVED]'));
+assert.doesNotMatch(kubernetes, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
 
 const script = [
   'import importlib.util',

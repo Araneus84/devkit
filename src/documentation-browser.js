@@ -5,6 +5,14 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  k8s: {
+    id: 'kubernetes-2026-11',
+    name: 'Kubernetes documentation snapshot (November 2026)',
+    filename: 'kubernetes-2026-11.json',
+    source: 'https://github.com/kubernetes/website/blob/3ce2ad7b7a23560bc16e0f8d32d654a75bb98063/',
+    example: 'Deployment, Pod, kubectl',
+    licensePage: 'LICENSE',
+  },
   python: {
     id: 'python-3.15',
     name: 'Python 3.15',

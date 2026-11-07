@@ -65,6 +65,8 @@ The SQL section includes the PostgreSQL 18.6 manual, including SQL commands, exa
 
 The YAML and JSON builders and global documentation search offer the YAML 1.2.2 specification and JSON RFC 8259. Load them online or choose `documentation-packs/yaml-1.2.2.json` or `documentation-packs/json-rfc8259.json` offline. The YAML pack contains the original Markdown source, including its markup; the JSON pack contains the original RFC text.
 
+The Kubernetes section includes a November 2026 snapshot of the English documentation. Load it online or choose `documentation-packs/kubernetes-2026-11.json` offline. Local code samples and shared includes are expanded; some site-specific markup and links remain, images are not included, and generated API references may be incomplete. Example private-key blocks are replaced with placeholders.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

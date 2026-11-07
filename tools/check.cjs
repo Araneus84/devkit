@@ -65,6 +65,15 @@ function check() {
       'Docker documentation contains a Swarm token or unlock key. Regenerate the documentation pack.',
     );
   }
+  const kubernetesPack = fs.readFileSync(
+    path.join(ROOT, 'documentation-packs/kubernetes-2026-11.json'),
+    'utf8',
+  );
+  if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(kubernetesPack)) {
+    throw new Error(
+      'Kubernetes documentation contains a private key marker. Regenerate the documentation pack.',
+    );
+  }
   const catalogs = renderCatalogs();
   if (fs.readFileSync(REFERENCE_OUTPUT, 'utf8') !== catalogs.reference) {
     throw new Error('src/reference-data.js is stale. Run npm run build and commit it.');

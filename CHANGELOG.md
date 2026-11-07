@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.33.0
+
+- Added searchable Kubernetes documentation with embedded examples.
+
 ## 3.32.0
 
 - Added searchable YAML 1.2.2 and JSON RFC 8259 specifications, available from the builders and global search.

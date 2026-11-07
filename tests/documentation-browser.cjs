@@ -135,6 +135,22 @@ const { pathToFileURL } = require('node:url');
       });
       assert.equal(rejectedPath, true, 'Documentation paths must reject traversal.');
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('k8s', null));
+      await page.getByRole('button', { name: 'Search full Kubernetes documentation' }).click();
+      await page
+        .getByLabel('Choose Kubernetes documentation pack')
+        .setInputFiles(path.join(project, 'documentation-packs/kubernetes-2026-11.json'));
+      await page.getByLabel('Search Kubernetes documentation').fill('Objects In Kubernetes');
+      await page
+        .locator('.dk-guide')
+        .filter({ hasText: 'Objects In Kubernetes' })
+        .first()
+        .getByRole('button', { name: 'Read page' })
+        .click();
+      const kubeText = await page.locator('#dk-root pre').innerText();
+      assert.match(kubeText, /Example: application\/deployment.yaml/);
+      assert.match(kubeText, /kind: Deployment/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       for (const [id, term, title, file] of [
         ['yaml', 'anchors', 'YAML 1.2.2 specification', 'yaml-1.2.2.json'],
         ['json', 'Unicode', 'JSON RFC 8259', 'json-rfc8259.json'],
@@ -247,6 +263,16 @@ const { pathToFileURL } = require('node:url');
         await page.locator('.dk-guide').filter({ hasText: title }).first().waitFor();
         await page.getByRole('button', { name: 'Close ✕' }).click();
       }
+      await page.locator('#search').fill('Objects In Kubernetes');
+      await page.getByLabel('Documentation language').selectOption('k8s');
+      await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page
+        .locator('.dk-guide')
+        .filter({ hasText: 'Objects In Kubernetes' })
+        .first()
+        .waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.close();
     }
     console.log(

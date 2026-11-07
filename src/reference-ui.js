@@ -375,7 +375,8 @@ function renderSheet(key, q) {
     key === 'terraform' ||
     key === 'git' ||
     key === 'docker' ||
-    key === 'sql'
+    key === 'sql' ||
+    key === 'k8s'
   )
     dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);
