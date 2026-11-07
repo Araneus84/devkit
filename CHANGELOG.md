@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.34.0
+
+- Added searchable Vim 9.2 help files with exact, case-sensitive help-tag matching.
+
 ## 3.33.0
 
 - Added searchable Kubernetes documentation with embedded examples.

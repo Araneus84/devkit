@@ -5,6 +5,14 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  vim: {
+    id: 'vim-2026-11',
+    name: 'Vim 9.2 help snapshot (November 2026)',
+    filename: 'vim-2026-11.json',
+    source: 'https://github.com/vim/vim/blob/88d96a15f99851faca0cacbbbdcede3f8c25149b/',
+    example: ':w, CTRL-V, registers',
+    licensePage: 'licenses/OPUBL-1.0.txt',
+  },
   k8s: {
     id: 'kubernetes-2026-11',
     name: 'Kubernetes documentation snapshot (November 2026)',
@@ -110,6 +118,11 @@ function dbLabel(sheet) {
 }
 
 function dbFind(text, query) {
+  if (dbSheet === 'vim') {
+    const tag = text.indexOf('*' + query.trim() + '*');
+    if (tag >= 0) return tag + 1;
+    return text.indexOf(query.trim());
+  }
   const lower = text.toLowerCase();
   const term = query.trim().toLowerCase();
   const symbol = term.replace(/\(\)$/, '(');
@@ -262,7 +275,7 @@ function dbRender() {
   function search() {
     dbQuery = input.value;
     results.replaceChildren();
-    const query = dbQuery.trim().toLowerCase();
+    const query = dbQuery.trim();
     if (!query) {
       results.append(dkEl('p', 'dk-help', `${dbPack.pages.length} manual pages ready to search.`));
       return;
@@ -270,11 +283,15 @@ function dbRender() {
     const matches = dbPack.pages
       .map((page) => {
         const position = dbFind(page.text, query);
-        const titleMatch = page.title.toLowerCase().includes(query);
-        return { page, position, titleMatch };
+        const titleMatch = page.title.toLowerCase().includes(query.toLowerCase());
+        const tagMatch = dbSheet === 'vim' && page.text.includes('*' + query + '*');
+        return { page, position, titleMatch, tagMatch };
       })
       .filter((item) => item.position >= 0 || item.titleMatch)
-      .sort((a, b) => Number(b.titleMatch) - Number(a.titleMatch));
+      .sort(
+        (a, b) =>
+          Number(b.tagMatch) - Number(a.tagMatch) || Number(b.titleMatch) - Number(a.titleMatch),
+      );
     results.append(dkEl('p', 'dk-help', `${matches.length} pages found; showing up to 50.`));
     for (const item of matches.slice(0, 50)) {
       const card = dkEl('div', 'dk-guide');
@@ -303,7 +320,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'docker') {
+  if (dbSheet === 'vim' && page.path === 'licenses/OPUBL-1.0.txt') {
+    source.href = 'https://spdx.org/licenses/OPUBL-1.0.html';
+  } else if (dbSheet === 'docker') {
     const [origin, ...parts] = page.path.split('/');
     const bases = {
       docs: DB_MANUALS.docker.source,

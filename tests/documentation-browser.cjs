@@ -151,6 +151,25 @@ const { pathToFileURL } = require('node:url');
       assert.match(kubeText, /Example: application\/deployment.yaml/);
       assert.match(kubeText, /kind: Deployment/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('vim', null));
+      await page.getByRole('button', { name: 'Search full Vim documentation' }).click();
+      await page
+        .getByLabel('Choose Vim documentation pack')
+        .setInputFiles(path.join(project, 'documentation-packs/vim-2026-11.json'));
+      await page.getByLabel('Search Vim documentation').fill(':w');
+      const vimCard = page.locator('.dk-guide').first();
+      assert.match(await vimCard.innerText(), /editing\.txt/);
+      await vimCard.getByRole('button', { name: 'Read page' }).click();
+      assert.equal(await page.locator('#dk-root mark').innerText(), ':w');
+      assert.equal(
+        await page.evaluate(() => dbFind('*:w*', ':W')),
+        -1,
+        'Vim tags are case sensitive',
+      );
+      await page.getByRole('button', { name: 'Back to results' }).click();
+      await page.getByRole('button', { name: 'Read documentation license' }).click();
+      assert.match(await page.locator('#dk-root pre').innerText(), /Open Publication License/);
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       for (const [id, term, title, file] of [
         ['yaml', 'anchors', 'YAML 1.2.2 specification', 'yaml-1.2.2.json'],
         ['json', 'Unicode', 'JSON RFC 8259', 'json-rfc8259.json'],
@@ -272,6 +291,12 @@ const { pathToFileURL } = require('node:url');
         .filter({ hasText: 'Objects In Kubernetes' })
         .first()
         .waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.locator('#search').fill(':w');
+      await page.getByLabel('Documentation language').selectOption('vim');
+      await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      assert.match(await page.locator('.dk-guide').first().innerText(), /editing\.txt/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.close();
     }

@@ -376,7 +376,8 @@ function renderSheet(key, q) {
     key === 'git' ||
     key === 'docker' ||
     key === 'sql' ||
-    key === 'k8s'
+    key === 'k8s' ||
+    key === 'vim'
   )
     dbAddEntry(main, key);
   updateStatusCount(totalVisible, sheet.name);
