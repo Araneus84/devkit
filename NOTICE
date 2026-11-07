@@ -63,5 +63,11 @@ Third-party libraries retain their separate licenses:
   License v1.0 or later. The unmodified help files include their copyright notice
   and Vim's license; the pack also includes the Open Publication License text.
   Source: https://github.com/vim/vim
+- curl documentation: Copyright Daniel Stenberg and contributors, curl license.
+  The pack includes the permission notice and source revision; option metadata
+  and examples are converted into readable text. https://github.com/curl/curl
+- jq documentation: Copyright jq contributors, Creative Commons Attribution 3.0.
+  The pack includes the license, source revision, descriptions and examples
+  converted from the jq manual. https://github.com/jqlang/jq
 
 These third-party components are not relicensed under DevKit's terms.

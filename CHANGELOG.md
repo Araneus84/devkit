@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.35.0
+
+- Added searchable curl and jq documentation with examples.
+
 ## 3.34.0
 
 - Added searchable Vim 9.2 help files with exact, case-sensitive help-tag matching.
