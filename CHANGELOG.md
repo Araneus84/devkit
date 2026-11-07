@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.32.0
+
+- Added searchable YAML 1.2.2 and JSON RFC 8259 specifications, available from the builders and global search.
+
 ## 3.31.0
 
 - Added the searchable PostgreSQL 18.6 manual to the SQL section.

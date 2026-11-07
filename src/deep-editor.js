@@ -212,6 +212,11 @@ function ddRender() {
   root.append(header);
   const bar = dkEl('div', 'dk-toolbar');
   bar.append(dkBtn('← Workbench', () => dkHome(ddState.sheet)));
+  if (['yaml', 'json'].includes(p.id)) {
+    bar.append(
+      dkBtn('Search ' + p.id.toUpperCase() + ' documentation', () => dbOpen('', p.id, ddRender)),
+    );
+  }
   const save = dkEl('span', 'dk-muted', 'Draft saved in this browser');
   save.id = 'dd-save';
   bar.append(save);

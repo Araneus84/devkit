@@ -49,5 +49,11 @@ Third-party libraries retain their separate licenses:
   Development Group, PostgreSQL License. The converted pack includes the legal
   notice and identifies the original archive by SHA-256. Original manual:
   https://www.postgresql.org/docs/18/
+- YAML 1.2.2 specification: Copyright YAML Language Development Team and
+  original authors. The source text is copied without modification; its
+  copying terms are included in the document. https://yaml.org/spec/1.2.2/
+- JSON RFC 8259: Copyright IETF Trust and the identified authors. The full,
+  unmodified text includes its copyright notice and applicable terms.
+  https://www.rfc-editor.org/rfc/rfc8259.txt
 
 These third-party components are not relicensed under DevKit's terms.

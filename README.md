@@ -63,6 +63,8 @@ The Docker section includes a November 2026 snapshot of the CLI, Dockerfile, Com
 
 The SQL section includes the PostgreSQL 18.6 manual, including SQL commands, examples, and database administration. Load it online or select `documentation-packs/postgresql-18.6.json` offline. SQL dialects differ; this pack describes PostgreSQL specifically.
 
+The YAML and JSON builders and global documentation search offer the YAML 1.2.2 specification and JSON RFC 8259. Load them online or choose `documentation-packs/yaml-1.2.2.json` or `documentation-packs/json-rfc8259.json` offline. The YAML pack contains the original Markdown source, including its markup; the JSON pack contains the original RFC text.
+
 ## Optional local companion
 
 The companion can detect installed tools, inspect Git status, and run a fixed set of validators or formatters:

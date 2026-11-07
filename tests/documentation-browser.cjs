@@ -2,10 +2,20 @@ const { chromium } = require(process.env.DEVKIT_PLAYWRIGHT || 'playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const fs = require('node:fs');
+const crypto = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 
 (async () => {
   const project = path.resolve(__dirname, '..');
+  for (const file of ['yaml-1.2.2.json', 'json-rfc8259.json']) {
+    const pack = JSON.parse(
+      fs.readFileSync(path.join(project, 'documentation-packs', file), 'utf8'),
+    );
+    assert.equal(
+      crypto.createHash('sha256').update(pack.pages[0].text, 'utf8').digest('hex'),
+      pack.sourceSha256,
+    );
+  }
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.DEVKIT_CHROME ? { executablePath: process.env.DEVKIT_CHROME } : {}),
@@ -124,6 +134,31 @@ const { pathToFileURL } = require('node:url');
         }
       });
       assert.equal(rejectedPath, true, 'Documentation paths must reject traversal.');
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      for (const [id, term, title, file] of [
+        ['yaml', 'anchors', 'YAML 1.2.2 specification', 'yaml-1.2.2.json'],
+        ['json', 'Unicode', 'JSON RFC 8259', 'json-rfc8259.json'],
+      ]) {
+        await page.evaluate((profile) => ddOpen(profile, 'linux'), id);
+        const before = await page.evaluate(() => ddOutput().text);
+        await page
+          .getByRole('button', { name: `Search ${id.toUpperCase()} documentation` })
+          .click();
+        await page
+          .getByLabel(`Choose ${id.toUpperCase()} documentation pack`)
+          .setInputFiles(path.join(project, 'documentation-packs', file));
+        await page.getByLabel(`Search ${id.toUpperCase()} documentation`).fill(term);
+        await page
+          .locator('.dk-guide')
+          .filter({ hasText: title })
+          .getByRole('button', { name: 'Read page' })
+          .click();
+        assert.match(await page.locator('#dk-root pre').innerText(), new RegExp(term, 'i'));
+        await page.getByRole('button', { name: 'Back to results' }).click();
+        await page.getByRole('button', { name: '← Back to editor' }).click();
+        assert.equal(await page.evaluate(() => ddOutput().text), before);
+        await page.getByRole('button', { name: 'Close ✕' }).click();
+      }
       assert.deepEqual(errors, []);
       await page.close();
     }
@@ -200,6 +235,18 @@ const { pathToFileURL } = require('node:url');
       await page.getByLabel('Documentation language').selectOption('ansible');
       await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
       await page.locator('.dk-guide').filter({ hasText: 'ansible.builtin.apt' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      for (const [id, term, title] of [
+        ['yaml', 'anchors', 'YAML 1.2.2 specification'],
+        ['json', 'Unicode', 'JSON RFC 8259'],
+      ]) {
+        await page.locator('#search').fill(term);
+        await page.getByLabel('Documentation language').selectOption(id);
+        await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+        await page.getByRole('button', { name: 'Load online manual' }).click();
+        await page.locator('.dk-guide').filter({ hasText: title }).first().waitFor();
+        await page.getByRole('button', { name: 'Close ✕' }).click();
+      }
       await page.close();
     }
     console.log(
