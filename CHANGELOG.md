@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.31.0
+
+- Added the searchable PostgreSQL 18.6 manual to the SQL section.
+
 ## 3.30.0
 
 - Added a searchable Docker documentation snapshot covering the CLI, Dockerfile, Compose, engine, and build guides.
