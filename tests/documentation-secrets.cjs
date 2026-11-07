@@ -26,6 +26,9 @@ const kubernetes = fs.readFileSync(
 );
 assert.ok(kubernetes.includes('[PRIVATE KEY EXAMPLE REMOVED]'));
 assert.doesNotMatch(kubernetes, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
+const npmPack = fs.readFileSync(path.join(root, 'documentation-packs/npm-12.2.2.json'), 'utf8');
+assert.ok(npmPack.includes('[PRIVATE KEY EXAMPLE REMOVED]'));
+assert.doesNotMatch(npmPack, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
 
 const script = [
   'import importlib.util',

@@ -69,5 +69,9 @@ Third-party libraries retain their separate licenses:
 - jq documentation: Copyright jq contributors, Creative Commons Attribution 3.0.
   The pack includes the license, source revision, descriptions and examples
   converted from the jq manual. https://github.com/jqlang/jq
+- npm documentation: Copyright npm, Inc. and contributors, Artistic License
+  2.0. The pack converts the release HTML into plain text, removes a sample
+  private-key block, and includes the license. The original release package,
+  including documentation source, is https://registry.npmjs.org/npm/-/npm-12.2.2.tgz
 
 These third-party components are not relicensed under DevKit's terms.
