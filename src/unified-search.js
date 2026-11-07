@@ -561,7 +561,7 @@ function usRenderSearch(query) {
   const manualSelect = dkEl('select', 'dk-input');
   manualSelect.setAttribute('aria-label', 'Documentation language');
   for (const id of Object.keys(DB_MANUALS)) {
-    const option = dkEl('option', '', SHEETS[id].name);
+    const option = dkEl('option', '', dbLabel(id));
     option.value = id;
     manualSelect.append(option);
   }

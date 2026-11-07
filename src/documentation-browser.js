@@ -2,6 +2,7 @@
 let dbPack = null;
 let dbQuery = '';
 let dbSheet = 'python';
+let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
   python: {
@@ -75,7 +76,30 @@ const DB_MANUALS = {
     example: 'SELECT, joins, window functions',
     licensePage: 'legalnotice.html',
   },
+  yaml: {
+    id: 'yaml-1.2.2',
+    name: 'YAML 1.2.2',
+    label: 'YAML',
+    filename: 'yaml-1.2.2.json',
+    source: 'https://yaml.org/spec/1.2.2/',
+    sourceUrl: 'https://yaml.org/spec/1.2.2/',
+    example: 'anchors, indentation, mappings',
+    licensePage: 'spec.md',
+  },
+  json: {
+    id: 'json-rfc8259',
+    name: 'JSON RFC 8259',
+    label: 'JSON',
+    filename: 'json-rfc8259.json',
+    source: 'https://www.rfc-editor.org/rfc/',
+    example: 'arrays, objects, strings',
+    licensePage: 'rfc8259.txt',
+  },
 };
+
+function dbLabel(sheet) {
+  return DB_MANUALS[sheet].label || SHEETS[sheet].name;
+}
 
 function dbFind(text, query) {
   const lower = text.toLowerCase();
@@ -98,7 +122,7 @@ function dbValidate(pack) {
         !page ||
         typeof page.title !== 'string' ||
         typeof page.path !== 'string' ||
-        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|docs\/LICENSE|cli\/NOTICE|COPYING|LICENSE)$/.test(
+        !/^(?:[a-zA-Z0-9_./-]+\.(?:html|md|mdx|rst|py|txt)(?:#[a-zA-Z0-9_.-]+)?|guides\/COPYING|docs\/LICENSE|cli\/NOTICE|COPYING|LICENSE)$/.test(
           page.path,
         ) ||
         page.path.split('/').includes('..') ||
@@ -129,8 +153,9 @@ function dbAddEntry(main, sheet) {
   main.querySelector('.page-header')?.after(button);
 }
 
-function dbOpen(initialQuery = '', sheet = 'python') {
+function dbOpen(initialQuery = '', sheet = 'python', returnToEditor = null) {
   dbSheet = sheet;
+  dbReturn = returnToEditor;
   dbPack = DB_PACKS.get(sheet) || null;
   dbQuery = initialQuery;
   dkStopTest();
@@ -168,7 +193,9 @@ function dbRender() {
     dkEl('h2', '', DB_MANUALS[dbSheet].name + ' documentation'),
     dkEl('p', 'dk-help', 'Search the official reference manual.'),
   );
-  header.append(title, dkBtn('Close ✕', dkClose));
+  header.append(title);
+  if (dbReturn) header.append(dkBtn('← Back to editor', dbReturn));
+  header.append(dkBtn('Close ✕', dkClose));
   root.append(header);
   const body = dkEl('div', 'dk-home');
   root.append(body);
@@ -186,7 +213,7 @@ function dbRender() {
     const input = dkEl('input');
     input.type = 'file';
     input.accept = '.json,application/json';
-    input.setAttribute('aria-label', 'Choose ' + SHEETS[dbSheet].name + ' documentation pack');
+    input.setAttribute('aria-label', 'Choose ' + dbLabel(dbSheet) + ' documentation pack');
     input.onchange = async () => {
       try {
         const file = input.files[0];
@@ -205,7 +232,7 @@ function dbRender() {
   const input = dkEl('input', 'dk-input');
   input.type = 'search';
   input.placeholder = 'Search documentation, e.g. ' + DB_MANUALS[dbSheet].example;
-  input.setAttribute('aria-label', 'Search ' + SHEETS[dbSheet].name + ' documentation');
+  input.setAttribute('aria-label', 'Search ' + dbLabel(dbSheet) + ' documentation');
   input.value = dbQuery;
   body.append(input);
   const terms = DB_MANUALS[dbSheet];
@@ -283,7 +310,7 @@ function dbRead(page, query) {
     source.href =
       (isCore ? DB_MANUALS.ansible.coreSource : DB_MANUALS.ansible.source) +
       page.path.replace(/^(?:core|guides)\//, '');
-  } else source.href = DB_MANUALS[dbSheet].source + page.path;
+  } else source.href = DB_MANUALS[dbSheet].sourceUrl || DB_MANUALS[dbSheet].source + page.path;
   source.target = '_blank';
   source.rel = 'noopener noreferrer';
   const text = dkEl('pre');
