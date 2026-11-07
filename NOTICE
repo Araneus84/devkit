@@ -73,5 +73,9 @@ Third-party libraries retain their separate licenses:
   2.0. The pack converts the release HTML into plain text, removes a sample
   private-key block, and includes the license. The original release package,
   including documentation source, is https://registry.npmjs.org/npm/-/npm-12.2.2.tgz
+- Node.js API documentation: Copyright Node.js contributors, MIT License.
+  The pack converts the published structured reference to text, includes the
+  Node.js license file and identifies the source by SHA-256. Original:
+  https://nodejs.org/download/release/v26.13.0/docs/api/all.json
 
 These third-party components are not relicensed under DevKit's terms.

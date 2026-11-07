@@ -5,6 +5,15 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  node: {
+    id: 'node-26.13.0',
+    name: 'Node.js 26.13.0 API',
+    label: 'Node.js',
+    filename: 'node-26.13.0.json',
+    source: 'https://github.com/nodejs/node/blob/v26.13.0/',
+    example: 'fs.readFile, http.createServer, process',
+    licensePage: 'licenses/node-license.txt',
+  },
   npm: {
     id: 'npm-12.2.2',
     name: 'npm 12.2.2',
@@ -153,6 +162,10 @@ function dbFind(text, query) {
   const lower = text.toLowerCase();
   const term = query.trim().toLowerCase();
   const symbol = term.replace(/\(\)$/, '(');
+  if (dbSheet === 'node') {
+    const definition = lower.indexOf('\n`' + symbol);
+    if (definition >= 0) return definition + 2;
+  }
   const definition = lower.indexOf('\n ' + symbol);
   return definition >= 0 ? definition + 2 : lower.indexOf(term);
 }
@@ -347,7 +360,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'npm') {
+  if (dbSheet === 'node' && page.path === 'licenses/node-license.txt') {
+    source.href = 'https://github.com/nodejs/node/blob/v26.13.0/LICENSE';
+  } else if (dbSheet === 'npm') {
     source.href =
       page.path === 'LICENSE'
         ? 'https://github.com/npm/cli/blob/v12.2.2/LICENSE'

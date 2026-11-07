@@ -383,6 +383,7 @@ function renderSheet(key, q) {
   )
     dbAddEntry(main, key);
   if (key === 'curl') dbAddEntry(main, 'jq');
+  if (key === 'npm') dbAddEntry(main, 'node');
   updateStatusCount(totalVisible, sheet.name);
 }
 
