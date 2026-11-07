@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.37.0
+
+- Added a searchable Node.js 26.13.0 API reference with examples.
+
 ## 3.36.0
 
 - Added searchable npm 12.2.2 command and configuration documentation.

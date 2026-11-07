@@ -71,7 +71,7 @@ The Vim section includes the Vim 9.2 English help files, including the user and 
 
 The cURL & jq section offers separate searchable curl and jq 1.8 references with examples. Load them online or select `documentation-packs/curl-2026-11.json` and `documentation-packs/jq-1.8.json` offline. The curl snapshot covers command-line options and its tutorial; it does not include the separate libcurl API reference.
 
-The npm & Node section includes the npm 12.2.2 command, configuration and package documentation. Load it online or select `documentation-packs/npm-12.2.2.json` offline. The separate Node.js API documentation is not included in this pack. A private-key example is replaced with a placeholder.
+The npm & Node section includes separate references for npm 12.2.2 commands and Node.js 26.13.0 APIs. Load them online or select `documentation-packs/npm-12.2.2.json` and `documentation-packs/node-26.13.0.json` offline. The npm pack replaces a private-key example with a placeholder. The Node.js pack converts the official structured API to searchable text and preserves examples; links and rich formatting are simplified.
 
 ## Optional local companion
 

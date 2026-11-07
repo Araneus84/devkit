@@ -52146,6 +52146,7 @@ function renderSheet(key, q) {
   )
     dbAddEntry(main, key);
   if (key === 'curl') dbAddEntry(main, 'jq');
+  if (key === 'npm') dbAddEntry(main, 'node');
   updateStatusCount(totalVisible, sheet.name);
 }
 
@@ -72906,6 +72907,15 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  node: {
+    id: 'node-26.13.0',
+    name: 'Node.js 26.13.0 API',
+    label: 'Node.js',
+    filename: 'node-26.13.0.json',
+    source: 'https://github.com/nodejs/node/blob/v26.13.0/',
+    example: 'fs.readFile, http.createServer, process',
+    licensePage: 'licenses/node-license.txt',
+  },
   npm: {
     id: 'npm-12.2.2',
     name: 'npm 12.2.2',
@@ -73054,6 +73064,10 @@ function dbFind(text, query) {
   const lower = text.toLowerCase();
   const term = query.trim().toLowerCase();
   const symbol = term.replace(/\(\)$/, '(');
+  if (dbSheet === 'node') {
+    const definition = lower.indexOf('\n`' + symbol);
+    if (definition >= 0) return definition + 2;
+  }
   const definition = lower.indexOf('\n ' + symbol);
   return definition >= 0 ? definition + 2 : lower.indexOf(term);
 }
@@ -73248,7 +73262,9 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'npm') {
+  if (dbSheet === 'node' && page.path === 'licenses/node-license.txt') {
+    source.href = 'https://github.com/nodejs/node/blob/v26.13.0/LICENSE';
+  } else if (dbSheet === 'npm') {
     source.href =
       page.path === 'LICENSE'
         ? 'https://github.com/npm/cli/blob/v12.2.2/LICENSE'
@@ -74331,6 +74347,10 @@ Third-party libraries retain their separate licenses:
   2.0. The pack converts the release HTML into plain text, removes a sample
   private-key block, and includes the license. The original release package,
   including documentation source, is https://registry.npmjs.org/npm/-/npm-12.2.2.tgz
+- Node.js API documentation: Copyright Node.js contributors, MIT License.
+  The pack converts the published structured reference to text, includes the
+  Node.js license file and identifies the source by SHA-256. Original:
+  https://nodejs.org/download/release/v26.13.0/docs/api/all.json
 
 These third-party components are not relicensed under DevKit's terms.
 

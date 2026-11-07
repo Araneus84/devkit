@@ -171,6 +171,27 @@ const { pathToFileURL } = require('node:url');
         /docs\.npmjs\.com\/cli\/v12\/commands\/npm-ci\//,
       );
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.getByRole('button', { name: 'Search full Node.js documentation' }).click();
+      await page
+        .getByLabel('Choose Node.js documentation pack')
+        .setInputFiles(path.join(project, 'documentation-packs/node-26.13.0.json'));
+      await page.getByLabel('Search Node.js documentation').fill('fs.readFile(');
+      await page
+        .locator('.dk-guide')
+        .filter({ hasText: 'fs — Node.js API' })
+        .first()
+        .getByRole('button', { name: 'Read page' })
+        .click();
+      assert.match(
+        await page.locator('#dk-root pre').innerText(),
+        /Asynchronously reads the entire contents of a file/,
+      );
+      assert.equal(await page.locator('#dk-root mark').innerText(), 'fs.readFile(');
+      assert.match(
+        await page.getByRole('link', { name: 'Official documentation ↗' }).getAttribute('href'),
+        /nodejs\/node\/blob\/v26\.13\.0\/doc\/api\/fs\.md/,
+      );
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('curl', null));
       for (const [tool, file, query, title, example] of [
         ['curl', 'curl-2026-11.json', '--header', '--header (-H)', /curl -H/],
@@ -353,6 +374,12 @@ const { pathToFileURL } = require('node:url');
       await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
       await page.getByRole('button', { name: 'Load online manual' }).click();
       await page.locator('.dk-guide').filter({ hasText: 'npm-ci' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.locator('#search').fill('fs.readFile(');
+      await page.getByLabel('Documentation language').selectOption('node');
+      await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.locator('.dk-guide').filter({ hasText: 'fs — Node.js API' }).first().waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.close();
     }
