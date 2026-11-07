@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.30.1
+
+- Replaced Docker Swarm token-shaped example values with placeholders and added a check to prevent their return.
+
 ## 3.30.0
 
 - Added a searchable Docker documentation snapshot covering the CLI, Dockerfile, Compose, engine, and build guides.

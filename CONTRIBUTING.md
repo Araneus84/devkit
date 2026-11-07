@@ -10,7 +10,7 @@ npm ci
 npx playwright install chromium
 ```
 
-Node.js 22 is used in CI. The application itself remains a static browser app.
+Node.js 22 and Python 3 are used in CI; Python runs the documentation-pack redaction regression test. The application itself remains a static browser app.
 
 ## Make and verify a change
 
