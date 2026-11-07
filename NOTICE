@@ -55,5 +55,9 @@ Third-party libraries retain their separate licenses:
 - JSON RFC 8259: Copyright IETF Trust and the identified authors. The full,
   unmodified text includes its copyright notice and applicable terms.
   https://www.rfc-editor.org/rfc/rfc8259.txt
+- Kubernetes documentation: Copyright The Kubernetes Authors, Creative Commons
+  Attribution 4.0 International. The converted pack records its source revision,
+  includes the license, expands local examples and shared includes, and replaces
+  sample private-key blocks. Source: https://github.com/kubernetes/website
 
 These third-party components are not relicensed under DevKit's terms.
