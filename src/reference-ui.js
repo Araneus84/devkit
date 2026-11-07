@@ -378,7 +378,8 @@ function renderSheet(key, q) {
     key === 'sql' ||
     key === 'k8s' ||
     key === 'vim' ||
-    key === 'curl'
+    key === 'curl' ||
+    key === 'npm'
   )
     dbAddEntry(main, key);
   if (key === 'curl') dbAddEntry(main, 'jq');

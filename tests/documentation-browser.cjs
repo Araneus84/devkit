@@ -151,6 +151,26 @@ const { pathToFileURL } = require('node:url');
       assert.match(kubeText, /Example: application\/deployment.yaml/);
       assert.match(kubeText, /kind: Deployment/);
       await page.getByRole('button', { name: 'Close ✕' }).click();
+      await page.evaluate(() => setSheet('npm', null));
+      await page.getByRole('button', { name: 'Search full npm documentation' }).click();
+      await page
+        .getByLabel('Choose npm documentation pack')
+        .setInputFiles(path.join(project, 'documentation-packs/npm-12.2.2.json'));
+      await page.getByLabel('Search npm documentation').fill('npm-ci');
+      await page
+        .locator('.dk-guide')
+        .filter({ hasText: 'npm-ci' })
+        .first()
+        .getByRole('button', { name: 'Read page' })
+        .click();
+      const npmText = await page.locator('#dk-root pre').innerText();
+      assert.match(npmText, /npm ci/);
+      assert.match(npmText, /legacy-peer-deps/);
+      assert.match(
+        await page.getByRole('link', { name: 'Official documentation ↗' }).getAttribute('href'),
+        /docs\.npmjs\.com\/cli\/v12\/commands\/npm-ci\//,
+      );
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.evaluate(() => setSheet('curl', null));
       for (const [tool, file, query, title, example] of [
         ['curl', 'curl-2026-11.json', '--header', '--header (-H)', /curl -H/],
@@ -328,6 +348,12 @@ const { pathToFileURL } = require('node:url');
         await page.locator('.dk-guide').filter({ hasText: title }).first().waitFor();
         await page.getByRole('button', { name: 'Close ✕' }).click();
       }
+      await page.locator('#search').fill('npm-ci');
+      await page.getByLabel('Documentation language').selectOption('npm');
+      await page.getByRole('button', { name: 'Search documentation', exact: true }).click();
+      await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.locator('.dk-guide').filter({ hasText: 'npm-ci' }).first().waitFor();
+      await page.getByRole('button', { name: 'Close ✕' }).click();
       await page.close();
     }
     console.log(

@@ -52141,7 +52141,8 @@ function renderSheet(key, q) {
     key === 'sql' ||
     key === 'k8s' ||
     key === 'vim' ||
-    key === 'curl'
+    key === 'curl' ||
+    key === 'npm'
   )
     dbAddEntry(main, key);
   if (key === 'curl') dbAddEntry(main, 'jq');
@@ -72905,6 +72906,15 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  npm: {
+    id: 'npm-12.2.2',
+    name: 'npm 12.2.2',
+    label: 'npm',
+    filename: 'npm-12.2.2.json',
+    source: 'https://docs.npmjs.com/cli/v12/',
+    example: 'npm ci, package.json, workspaces',
+    licensePage: 'LICENSE',
+  },
   curl: {
     id: 'curl-2026-11',
     name: 'curl documentation snapshot (November 2026)',
@@ -73238,7 +73248,12 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'jq' && page.path === 'licenses/CC-BY-3.0.txt') {
+  if (dbSheet === 'npm') {
+    source.href =
+      page.path === 'LICENSE'
+        ? 'https://github.com/npm/cli/blob/v12.2.2/LICENSE'
+        : DB_MANUALS.npm.source + page.path.replace(/^docs\/output\//, '').replace(/\.html$/, '/');
+  } else if (dbSheet === 'jq' && page.path === 'licenses/CC-BY-3.0.txt') {
     source.href = 'https://creativecommons.org/licenses/by/3.0/';
   } else if (dbSheet === 'vim' && page.path === 'licenses/OPUBL-1.0.txt') {
     source.href = 'https://spdx.org/licenses/OPUBL-1.0.html';
@@ -74312,6 +74327,10 @@ Third-party libraries retain their separate licenses:
 - jq documentation: Copyright jq contributors, Creative Commons Attribution 3.0.
   The pack includes the license, source revision, descriptions and examples
   converted from the jq manual. https://github.com/jqlang/jq
+- npm documentation: Copyright npm, Inc. and contributors, Artistic License
+  2.0. The pack converts the release HTML into plain text, removes a sample
+  private-key block, and includes the license. The original release package,
+  including documentation source, is https://registry.npmjs.org/npm/-/npm-12.2.2.tgz
 
 These third-party components are not relicensed under DevKit's terms.
 

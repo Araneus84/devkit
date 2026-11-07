@@ -5,6 +5,15 @@ let dbSheet = 'python';
 let dbReturn = null;
 const DB_PACKS = new Map();
 const DB_MANUALS = {
+  npm: {
+    id: 'npm-12.2.2',
+    name: 'npm 12.2.2',
+    label: 'npm',
+    filename: 'npm-12.2.2.json',
+    source: 'https://docs.npmjs.com/cli/v12/',
+    example: 'npm ci, package.json, workspaces',
+    licensePage: 'LICENSE',
+  },
   curl: {
     id: 'curl-2026-11',
     name: 'curl documentation snapshot (November 2026)',
@@ -338,7 +347,12 @@ function dbRead(page, query) {
   );
   const body = dkEl('div', 'dk-home');
   const source = dkEl('a', '', 'Official documentation ↗');
-  if (dbSheet === 'jq' && page.path === 'licenses/CC-BY-3.0.txt') {
+  if (dbSheet === 'npm') {
+    source.href =
+      page.path === 'LICENSE'
+        ? 'https://github.com/npm/cli/blob/v12.2.2/LICENSE'
+        : DB_MANUALS.npm.source + page.path.replace(/^docs\/output\//, '').replace(/\.html$/, '/');
+  } else if (dbSheet === 'jq' && page.path === 'licenses/CC-BY-3.0.txt') {
     source.href = 'https://creativecommons.org/licenses/by/3.0/';
   } else if (dbSheet === 'vim' && page.path === 'licenses/OPUBL-1.0.txt') {
     source.href = 'https://spdx.org/licenses/OPUBL-1.0.html';

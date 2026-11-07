@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.36.0
+
+- Added searchable npm 12.2.2 command and configuration documentation.
+
 ## 3.35.0
 
 - Added searchable curl and jq documentation with examples.
