@@ -14,7 +14,7 @@
     "companion": "node companion/devkit-companion.cjs --root ."
   },
   "devDependencies": {
-    "playwright": "1.62.1",
+    "playwright": "1.64.1",
     "prettier": "3.9.6"
   }
 }
