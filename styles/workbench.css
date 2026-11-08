@@ -225,6 +225,37 @@
   border-radius: 6px;
   white-space: pre-wrap;
 }
+.db-suggestions {
+  margin: 4px 0 10px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+}
+.db-suggestions[hidden] {
+  display: none;
+}
+.db-suggestions-hint {
+  color: var(--text2);
+  font-size: 12px;
+  padding: 4px 8px;
+}
+.db-suggestion {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  padding: 7px 8px;
+  cursor: pointer;
+}
+.db-suggestion[aria-selected='true'],
+.db-suggestion:hover {
+  background: var(--surface2);
+  outline: 1px solid var(--accent);
+}
 .dk-field {
   display: flex;
   flex-direction: column;
