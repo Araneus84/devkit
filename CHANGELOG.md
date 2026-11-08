@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.39.0
+
+- Added direct documentation matches across available manuals and keyboard-accessible search suggestions.
+
 ## 3.38.0
 
 - Improved documentation search with concise, prioritized Python built-in entries, examples, and progressively revealed results.

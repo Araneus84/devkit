@@ -18,6 +18,8 @@ module.exports = {
     'Fix optional companion connection, local-tool UI, validation/formatting controls, search, standalone parity, or responsive layout.',
   'deep.cjs': 'Fix a deep-editor data model or generated syntax.',
   'documentation-browser.cjs': 'Fix Python documentation pack loading, search, or page rendering.',
+  'documentation-search-assist.cjs':
+    'Fix direct documentation matches, suggestions, or keyboard navigation in both editions.',
   'documentation-secrets.cjs': 'Fix Docker documentation token redaction or pack regeneration.',
   'diagnostics-browser.cjs':
     'Fix inline syntax/schema diagnostics, secret detection, repair actions, source ranges, or safe project variables.',

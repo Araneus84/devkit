@@ -190,6 +190,164 @@ function dbPythonEntry(page, query) {
   };
 }
 
+function dbAliases(page) {
+  const title = page.title
+    .replace(/`/g, '')
+    .replace(/^\d+(?:\.\d+)*\s+/, '')
+    .trim();
+  const aliases = [title];
+  const base = title.replace(/\s+Function$/i, '').replace(/\(\d+\)$/, '');
+  aliases.push(base);
+  if (/^(?:git|npm)-/.test(base)) aliases.push(base.replace('-', ' '));
+  if (base.startsWith('ansible.builtin.')) aliases.push(base.slice('ansible.builtin.'.length));
+  if (dbSheet === 'curl')
+    aliases.push(
+      ...(base.match(/--[a-z0-9-]+|\(-[A-Za-z0-9]\)/g) || []).map((x) => x.replace(/[()]/g, '')),
+    );
+  if (dbSheet === 'jq') {
+    for (const part of base.split(',')) {
+      const name = part.trim().match(/^([\w]+)\(/);
+      if (name) aliases.push(name[1], name[1] + '()');
+    }
+  }
+  return [...new Set(aliases.filter(Boolean))];
+}
+
+const DB_HEADING_CACHE = new WeakMap();
+function dbSpecHeadings(page, sheet) {
+  if (!['yaml', 'json'].includes(sheet)) return [];
+  const cached = DB_HEADING_CACHE.get(page);
+  if (cached) return cached;
+  const pattern =
+    sheet === 'yaml'
+      ? /^#{1,6}\s+(?:Chapter\s+)?(?:#\.\s*)?([^\n]+)$/gm
+      : /^\s*\d+(?:\.\d+)*\.\s+([A-Z][A-Za-z0-9 ,()/-]{2,90})\s*$/gm;
+  const headings = [];
+  for (const match of page.text.matchAll(pattern)) {
+    const name = match[1]
+      .replace(/\s*\{#[^}]+\}\s*$/, '')
+      .replace(/[`*]/g, '')
+      .trim();
+    if (name.length > 2 && name.length < 100)
+      headings.push({ name, start: match.index, after: match.index + match[0].length });
+  }
+  DB_HEADING_CACHE.set(page, headings);
+  return headings;
+}
+
+function dbDirectEntry(page, query) {
+  const python = dbPythonEntry(page, query);
+  if (python) return { ...python, label: 'Python built-in' };
+  const q = query.trim();
+  let signature = '';
+  let text = page.text;
+  if (dbSheet === 'python' && /^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+(?:\(\)?)?$/.test(q)) {
+    const name = q.replace(/\(\)?$/, '');
+    const index = text.indexOf('\n ' + name + '(');
+    if (index >= 0) {
+      const section = text.slice(index + 2);
+      const newline = section.indexOf('\n');
+      if (newline >= 0) {
+        signature = section
+          .slice(0, newline)
+          .replace(/[¶\uFFFD]/g, '')
+          .trim();
+        text = section.slice(newline + 1);
+      }
+    }
+  } else if (dbSheet === 'node' && /^[\w$]+\.[\w$]+(?:\(\)?)?$/.test(q)) {
+    const needle = q.replace(/\(\)$/, '(').toLowerCase();
+    const index = text.toLowerCase().indexOf('\n`' + needle);
+    if (index >= 0) {
+      const section = text.slice(index + 2);
+      const newline = section.indexOf('\n');
+      if (newline >= 0) {
+        signature = section.slice(0, newline).replace(/`/g, '');
+        text = section.slice(newline + 1);
+      }
+    }
+  } else if (dbSheet === 'vim' && text.includes('*' + q + '*')) {
+    signature = q;
+    text = text.slice(text.indexOf('*' + q + '*') + q.length + 2);
+  } else if (['yaml', 'json'].includes(dbSheet)) {
+    const headings = dbSpecHeadings(page, dbSheet);
+    const index = headings.findIndex((heading) => heading.name.toLowerCase() === q.toLowerCase());
+    if (index >= 0) {
+      signature = headings[index].name;
+      text = text.slice(headings[index].after, headings[index + 1]?.start);
+    }
+  } else if (dbAliases(page).some((alias) => alias.toLowerCase() === q.toLowerCase())) {
+    signature = page.title.replace(/`/g, '');
+  }
+  if (!signature && dbAliases(page).some((alias) => alias.toLowerCase() === q.toLowerCase())) {
+    signature = page.title.replace(/`/g, '');
+  }
+  if (!signature) return null;
+  const short = /^short_description:\s*(.+)$/m.exec(text);
+  const synopsis = /^##\s+SYNOPSIS\s*\n+([^\n#]+)/im.exec(text);
+  const description =
+    short?.[1] ||
+    synopsis?.[1] ||
+    text
+      .replace(/<!--(?:.|\n)*?-->/g, '')
+      .split(/\n\s*\n/)
+      .map((part) =>
+        part
+          .replace(/^#+\s*[^\n]*\n?/gm, '')
+          .replace(/[`*_]/g, '')
+          .trim(),
+      )
+      .find(
+        (part) =>
+          part &&
+          !/^(?:DOCUMENTATION|SYNOPSIS|NAME|Synopsis)$/i.test(part) &&
+          !part.startsWith('|'),
+      ) ||
+    '';
+  const exampleMatch =
+    /(?:^|\n)#{1,4}\s*examples?[^\n]*\n[\s\S]{0,2000}?```[^\n]*\n([\s\S]*?)```/i.exec(text) ||
+    /(?:^|\n)(Example filter:[\s\S]*?)(?:\n\s*\n|$)/i.exec(text);
+  return {
+    signature,
+    description,
+    example: exampleMatch ? exampleMatch[1].trim().slice(0, 800) : '',
+    label: dbLabel(dbSheet),
+  };
+}
+
+const DB_SUGGESTION_CACHE = new WeakMap();
+function dbSuggestionIndex(pack, sheet) {
+  const cached = DB_SUGGESTION_CACHE.get(pack);
+  if (cached) return cached;
+  const candidates = new Map();
+  function add(value, priority = 1) {
+    value = value.trim();
+    if (!value || value.length > 100) return;
+    const old = candidates.get(value);
+    if (old === undefined || priority < old) candidates.set(value, priority);
+  }
+  for (const page of pack.pages) {
+    for (const name of dbAliases(page)) add(name);
+    for (const heading of dbSpecHeadings(page, sheet)) add(heading.name, 0);
+    if (sheet === 'python') {
+      if (page.path === 'builtins/functions.html') {
+        for (const match of page.text.matchAll(/\n ([A-Za-z_]\w*)\(/g)) add(match[1] + '()', 0);
+      }
+      for (const match of page.text.matchAll(/\n ([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+)\(/g))
+        add(match[1] + '()', 1);
+    } else if (sheet === 'node') {
+      for (const match of page.text.matchAll(/\n`([\w$]+\.[\w$]+)\(/g)) add(match[1] + '()', 0);
+    } else if (sheet === 'vim') {
+      for (const match of page.text.matchAll(/\*([^\s*]{1,80})\*/g)) add(match[1], 0);
+    }
+  }
+  const index = [...candidates]
+    .sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))
+    .map(([name]) => name);
+  DB_SUGGESTION_CACHE.set(pack, index);
+  return index;
+}
+
 function dbSnippet(text, position) {
   let start = Math.max(0, position - 80);
   let end = Math.min(text.length, start + 220);
@@ -349,8 +507,18 @@ function dbRender() {
   input.type = 'search';
   input.placeholder = 'Search documentation, e.g. ' + DB_MANUALS[dbSheet].example;
   input.setAttribute('aria-label', 'Search ' + dbLabel(dbSheet) + ' documentation');
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-autocomplete', 'list');
+  input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-controls', 'db-suggestions');
   input.value = dbQuery;
   body.append(input);
+  const suggestions = dkEl('div', 'db-suggestions');
+  suggestions.id = 'db-suggestions';
+  suggestions.setAttribute('role', 'listbox');
+  suggestions.setAttribute('aria-label', 'Documentation suggestions');
+  suggestions.hidden = true;
+  body.append(suggestions);
   const terms = DB_MANUALS[dbSheet];
   const licensePage = dbPack.pages.find(
     (page) => page.path === terms.licensePage || page.title === terms.licenseTitle,
@@ -387,7 +555,7 @@ function dbRender() {
         const position = dbFind(page.text, query);
         const titleMatch = page.title.toLowerCase().includes(query.toLowerCase());
         const tagMatch = dbSheet === 'vim' && page.text.includes('*' + query + '*');
-        const entry = dbPythonEntry(page, query);
+        const entry = dbDirectEntry(page, query);
         const exactTitle = page.title.toLowerCase() === query.toLowerCase();
         const score =
           (entry ? 1000 : 0) +
@@ -396,7 +564,7 @@ function dbRender() {
           (titleMatch ? 100 : 0);
         return { page, position, titleMatch, entry, score };
       })
-      .filter((item) => item.position >= 0 || item.titleMatch)
+      .filter((item) => item.position >= 0 || item.titleMatch || item.entry)
       .sort((a, b) => b.score - a.score);
     if (!matches.length) {
       results.append(
@@ -415,7 +583,7 @@ function dbRender() {
         const card = dkEl('article', 'dk-guide db-result');
         if (item.entry) {
           card.classList.add('db-result-featured');
-          card.append(dkEl('span', 'db-result-label', 'Direct match · Python built-in'));
+          card.append(dkEl('span', 'db-result-label', 'Direct match · ' + item.entry.label));
           card.append(dkEl('h3', 'db-result-title', item.entry.signature));
           const description = item.entry.description.replace(/\s+/g, ' ');
           card.append(
@@ -446,7 +614,80 @@ function dbRender() {
     const more = dkBtn('Show more results', showMore);
     showMore();
   }
-  input.oninput = search;
+  let options = [];
+  let selected = 0;
+  function hideSuggestions() {
+    suggestions.hidden = true;
+    suggestions.replaceChildren();
+    options = [];
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+  }
+  function acceptSuggestion(value) {
+    input.value = value;
+    hideSuggestions();
+    search();
+    input.focus();
+  }
+  function drawSuggestions() {
+    suggestions.replaceChildren();
+    if (!options.length) return hideSuggestions();
+    const hint = dkEl(
+      'div',
+      'db-suggestions-hint',
+      '↑ ↓ choose · Tab or Enter completes · Esc dismisses',
+    );
+    hint.setAttribute('aria-hidden', 'true');
+    suggestions.append(hint);
+    options.forEach((value, index) => {
+      const option = dkBtn(value, () => acceptSuggestion(value), 'db-suggestion');
+      option.id = 'db-suggestion-' + index;
+      option.setAttribute('role', 'option');
+      option.setAttribute('aria-selected', String(index === selected));
+      option.onmousedown = (event) => event.preventDefault();
+      suggestions.append(option);
+    });
+    suggestions.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    input.setAttribute('aria-activedescendant', 'db-suggestion-' + selected);
+  }
+  input.oninput = () => {
+    search();
+    const prefix = input.value.trim();
+    if (!prefix) return hideSuggestions();
+    const compare = dbSheet === 'vim' ? (s) => s : (s) => s.toLowerCase();
+    const needle = compare(prefix);
+    options = dbSuggestionIndex(dbPack, dbSheet)
+      .filter(
+        (value) =>
+          compare(value) !== needle &&
+          (compare(value).startsWith(needle) ||
+            compare(value)
+              .split(/\s+/)
+              .some((word) => word.startsWith(needle))),
+      )
+      .sort((a, b) => Number(compare(b).startsWith(needle)) - Number(compare(a).startsWith(needle)))
+      .slice(0, 6);
+    selected = 0;
+    drawSuggestions();
+  };
+  input.onkeydown = (event) => {
+    if (!options.length) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      hideSuggestions();
+    } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      selected =
+        (selected + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+      drawSuggestions();
+    } else if (event.key === 'Tab' || event.key === 'Enter') {
+      if (event.key === 'Tab' && event.shiftKey) return;
+      event.preventDefault();
+      acceptSuggestion(options[selected]);
+    }
+  };
+  input.onblur = () => setTimeout(hideSuggestions, 150);
   search();
   input.focus();
 }
