@@ -2,6 +2,10 @@
 
 This file records notable user-facing changes. Patch releases that only fix regressions may be grouped with their minor release.
 
+## 3.38.0
+
+- Improved documentation search with concise, prioritized Python built-in entries, examples, and progressively revealed results.
+
 ## 3.37.0
 
 - Added a searchable Node.js 26.13.0 API reference with examples.
