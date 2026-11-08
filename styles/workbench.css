@@ -199,6 +199,32 @@
 .dk-guide a {
   color: var(--accent);
 }
+.db-result {
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.db-result-featured {
+  border-color: var(--accent);
+}
+.db-result-label {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+.db-result-title {
+  color: var(--text);
+  font-size: 17px;
+  margin: 6px 0;
+}
+.db-result-example {
+  margin: 6px 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
 .dk-field {
   display: flex;
   flex-direction: column;

@@ -153,6 +153,61 @@ function dbLabel(sheet) {
   return DB_MANUALS[sheet].label || SHEETS[sheet].name;
 }
 
+const DB_PYTHON_EXAMPLES = {
+  abs: 'abs(-8)  # 8\nabs(3.5)  # 3.5\nabs(3 + 4j)  # 5.0',
+  sorted: 'sorted([3, 1, 2])  # [1, 2, 3]\nsorted([3, 1, 2], reverse=True)  # [3, 2, 1]',
+  len: "len('hello')  # 5\nlen([10, 20, 30])  # 3",
+  sum: 'sum([1, 2, 3])  # 6',
+  min: 'min([3, 1, 2])  # 1',
+  max: 'max([3, 1, 2])  # 3',
+  range: 'list(range(4))  # [0, 1, 2, 3]',
+  enumerate: "list(enumerate(['a', 'b']))  # [(0, 'a'), (1, 'b')]",
+  zip: "list(zip(['a', 'b'], [1, 2]))  # [('a', 1), ('b', 2)]",
+  any: 'any([False, True])  # True',
+  all: 'all([True, False])  # False',
+};
+
+function dbPythonEntry(page, query) {
+  if (dbSheet !== 'python' || page.path !== 'builtins/functions.html') return null;
+  const match = /^([A-Za-z_]\w*)(?:\(\)?)?$/.exec(query.trim());
+  if (!match) return null;
+  const name = match[1];
+  const start = page.text.indexOf('\n ' + name + '(');
+  if (start < 0) return null;
+  const rest = page.text.slice(start + 2);
+  const end = /\n [A-Za-z_]\w*\([^\n]*\)[^\n]*\n/.exec(rest);
+  const entry = (end ? rest.slice(0, end.index) : rest).trim();
+  const newline = entry.indexOf('\n');
+  if (newline < 0) return null;
+  return {
+    name,
+    signature: entry
+      .slice(0, newline)
+      .replace(/[¶\uFFFD]/g, '')
+      .trim(),
+    description: entry.slice(newline).trim(),
+    example: DB_PYTHON_EXAMPLES[name] || '',
+  };
+}
+
+function dbSnippet(text, position) {
+  let start = Math.max(0, position - 80);
+  let end = Math.min(text.length, start + 220);
+  if (start) {
+    const next = text.indexOf(' ', start);
+    if (next >= 0 && next < position) start = next + 1;
+  }
+  if (end < text.length) {
+    const previous = text.lastIndexOf(' ', end);
+    if (previous > position) end = previous;
+  }
+  return (
+    (start ? '…' : '') +
+    text.slice(start, end).replace(/\s+/g, ' ').trim() +
+    (end < text.length ? '…' : '')
+  );
+}
+
 function dbFind(text, query) {
   if (dbSheet === 'vim') {
     const tag = text.indexOf('*' + query.trim() + '*');
@@ -309,15 +364,22 @@ function dbRender() {
     attribution.append(
       dkBtn('Read documentation license', () => dbRead(licensePage, ''), 'us-query'),
     );
-  body.append(attribution);
   const results = dkEl('div');
+  results.setAttribute('aria-live', 'polite');
   body.append(results);
+  body.append(attribution);
   function search() {
     dbQuery = input.value;
     results.replaceChildren();
     const query = dbQuery.trim();
     if (!query) {
-      results.append(dkEl('p', 'dk-help', `${dbPack.pages.length} manual pages ready to search.`));
+      results.append(
+        dkEl(
+          'p',
+          'dk-help',
+          `Type a function, command, or topic to search ${dbPack.pages.length} manual pages.`,
+        ),
+      );
       return;
     }
     const matches = dbPack.pages
@@ -325,24 +387,64 @@ function dbRender() {
         const position = dbFind(page.text, query);
         const titleMatch = page.title.toLowerCase().includes(query.toLowerCase());
         const tagMatch = dbSheet === 'vim' && page.text.includes('*' + query + '*');
-        return { page, position, titleMatch, tagMatch };
+        const entry = dbPythonEntry(page, query);
+        const exactTitle = page.title.toLowerCase() === query.toLowerCase();
+        const score =
+          (entry ? 1000 : 0) +
+          (tagMatch ? 500 : 0) +
+          (exactTitle ? 200 : 0) +
+          (titleMatch ? 100 : 0);
+        return { page, position, titleMatch, entry, score };
       })
       .filter((item) => item.position >= 0 || item.titleMatch)
-      .sort(
-        (a, b) =>
-          Number(b.tagMatch) - Number(a.tagMatch) || Number(b.titleMatch) - Number(a.titleMatch),
+      .sort((a, b) => b.score - a.score);
+    if (!matches.length) {
+      results.append(
+        dkEl('p', 'dk-help', 'No matches found. Try a shorter name or a related term.'),
       );
-    results.append(dkEl('p', 'dk-help', `${matches.length} pages found; showing up to 50.`));
-    for (const item of matches.slice(0, 50)) {
-      const card = dkEl('div', 'dk-guide');
-      const start = Math.max(0, item.position - 80);
-      card.append(
-        dkEl('strong', '', item.page.title),
-        dkEl('p', 'dk-help', item.page.text.slice(start, start + 220).replace(/\s+/g, ' ')),
-        dkBtn('Read page', () => dbRead(item.page, query)),
-      );
-      results.append(card);
+      return;
     }
+    const count = dkEl('p', 'dk-help');
+    const list = dkEl('div');
+    results.append(count, list);
+    let shown = 0;
+    function showMore() {
+      more.remove();
+      const limit = Math.min(shown + (shown ? 10 : 5), matches.length);
+      for (const item of matches.slice(shown, limit)) {
+        const card = dkEl('article', 'dk-guide db-result');
+        if (item.entry) {
+          card.classList.add('db-result-featured');
+          card.append(dkEl('span', 'db-result-label', 'Direct match · Python built-in'));
+          card.append(dkEl('h3', 'db-result-title', item.entry.signature));
+          const description = item.entry.description.replace(/\s+/g, ' ');
+          card.append(
+            dkEl(
+              'p',
+              '',
+              description.length > 600 ? description.slice(0, 600).trimEnd() + '…' : description,
+            ),
+          );
+          if (item.entry.example) {
+            card.append(
+              dkEl('strong', '', 'Examples'),
+              dkEl('pre', 'db-result-example', item.entry.example),
+            );
+          }
+          card.append(dkEl('p', 'dk-help', 'From ' + item.page.title));
+        } else {
+          card.append(dkEl('strong', '', item.page.title));
+          card.append(dkEl('p', '', dbSnippet(item.page.text, Math.max(0, item.position))));
+        }
+        card.append(dkBtn('Read page', () => dbRead(item.page, query)));
+        list.append(card);
+      }
+      shown = limit;
+      count.textContent = `Showing ${shown} of ${matches.length} matching pages, best matches first.`;
+      if (shown < matches.length) results.append(more);
+    }
+    const more = dkBtn('Show more results', showMore);
+    showMore();
   }
   input.oninput = search;
   search();
@@ -394,8 +496,13 @@ function dbRead(page, query) {
   const position = dbFind(page.text, query);
   if (position >= 0 && query) {
     text.append(document.createTextNode(page.text.slice(0, position)));
-    const mark = dkEl('mark', '', page.text.slice(position, position + query.length));
-    text.append(mark, document.createTextNode(page.text.slice(position + query.length)));
+    const length =
+      query.endsWith('()') &&
+      page.text.slice(position, position + query.length).toLowerCase() !== query.toLowerCase()
+        ? query.length - 1
+        : query.length;
+    const mark = dkEl('mark', '', page.text.slice(position, position + length));
+    text.append(mark, document.createTextNode(page.text.slice(position + length)));
     requestAnimationFrame(() => mark.scrollIntoView({ block: 'center' }));
   } else text.textContent = page.text;
   body.append(source, text);

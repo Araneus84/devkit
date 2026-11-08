@@ -31,7 +31,28 @@ const { pathToFileURL } = require('node:url');
       await page
         .getByLabel('Choose Python documentation pack')
         .setInputFiles(path.resolve(__dirname, '../documentation-packs/python-3.15.json'));
+      await page.getByLabel('Search Python documentation').fill('abs()');
+      const direct = page.locator('.db-result').first();
+      assert.match(await direct.innerText(), /Direct match.*Python built-in/s);
+      assert.match(await direct.innerText(), /abs\(number, \/\)/);
+      assert.doesNotMatch(await direct.locator('.db-result-title').innerText(), /¶/);
+      assert.match(await direct.innerText(), /absolute value of a number/i);
+      assert.match(await direct.innerText(), /abs\(-8\).*8/);
+      assert.ok((await page.locator('.db-result').count()) <= 5);
+      if (await page.getByRole('button', { name: 'Show more results' }).count()) {
+        await page.getByRole('button', { name: 'Show more results' }).click();
+        assert.ok((await page.locator('.db-result').count()) > 5);
+      }
+      await direct.getByRole('button', { name: 'Read page' }).click();
+      assert.equal(await page.locator('#dk-root mark').innerText(), 'abs(');
+      await page.getByRole('button', { name: 'Back to results' }).click();
+      await page.getByLabel('Search Python documentation').fill('abs');
+      assert.match(
+        await page.locator('.db-result').first().innerText(),
+        /absolute value of a number/i,
+      );
       await page.getByLabel('Search Python documentation').fill('sorted(');
+      assert.match(await page.locator('.db-result').first().innerText(), /reverse=True/);
       const card = page.locator('.dk-guide').filter({ hasText: 'Built-in functions' }).first();
       await card.getByRole('button', { name: 'Read page' }).click();
       await page.getByRole('heading', { name: 'Built-in functions' }).waitFor();
@@ -275,6 +296,11 @@ const { pathToFileURL } = require('node:url');
         /\/documentation-packs\/python-3\.15\.json$/,
       );
       await page.getByRole('button', { name: 'Load online manual' }).click();
+      await page.getByLabel('Search Python documentation').fill('abs()');
+      assert.match(
+        await page.locator('.db-result').first().innerText(),
+        /absolute value of a number/i,
+      );
       await page.getByLabel('Search Python documentation').fill('sorted(');
       await page.locator('.dk-guide').filter({ hasText: 'Built-in functions' }).first().waitFor();
       await page.getByRole('button', { name: 'Close ✕' }).click();
